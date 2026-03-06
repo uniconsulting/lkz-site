@@ -5,4 +5,3 @@ export const products = [
     description: "Временная карточка для foundation-сборки.",
   },
 ];
-
