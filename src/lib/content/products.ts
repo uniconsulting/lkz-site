@@ -1,15 +1,29 @@
-import type { ProductCard } from "@/types/catalog";
+import { notFound } from "next/navigation";
+import { products } from "@/lib/content/products";
 
-export const products: ProductCard[] = [
-  {
-    id: "demo-1",
-    slug: "rezinovaya-kraska-demo",
-    categorySlug: "vd-kraska",
-    name: "Резиновая краска Demo",
-    shortDescription: "Демо-карточка под будущую разработку каталога.",
-    variants: [
-      { id: "demo-1-v1", name: "1,4 кг", packSize: "1,4", packUnit: "кг" },
-      { id: "demo-1-v2", name: "3 кг", packSize: "3", packUnit: "кг" },
-    ],
-  },
-];
+export async function generateStaticParams() {
+  return products.map((product) => ({
+    slug: product.slug,
+  }));
+}
+
+export default async function CatalogProductPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+
+  const product = products.find((item) => item.slug === slug);
+
+  if (!product) {
+    notFound();
+  }
+
+  return (
+    <main>
+      <h1>{product.name}</h1>
+      <p>{product.description}</p>
+    </main>
+  );
+}
