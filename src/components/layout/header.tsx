@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Calculator } from "lucide-react";
@@ -40,20 +39,20 @@ export function Header() {
         <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
           <div className="min-w-0 rounded-[28px] bg-[var(--color-surface)] p-2">
             <div className="flex min-w-0 flex-col gap-2 md:flex-row md:items-center">
-<Link
-  href="/"
-  aria-label="На главную"
-  className={cn(
-    "inline-flex h-12 shrink-0 items-center rounded-[20px] bg-[var(--color-bg)] px-4 text-[14px] font-semibold text-[var(--color-text)]",
-    "md:min-w-[168px]",
-  )}
->
-  <img
-    src="/lkz-site/images/common/logo.svg"
-    alt="Логотип"
-    className="block h-auto max-h-[28px] w-auto max-w-[120px] object-contain"
-  />
-</Link>
+              <Link
+                href="/"
+                aria-label="На главную"
+                className={cn(
+                  "inline-flex h-12 shrink-0 items-center justify-start px-2",
+                  "md:min-w-[188px]",
+                )}
+              >
+                <img
+                  src="/lkz-site/images/common/logo.svg"
+                  alt="Логотип"
+                  className="block h-auto max-h-[36px] w-auto max-w-[148px] object-contain"
+                />
+              </Link>
 
               <nav
                 aria-label="Основная навигация"
