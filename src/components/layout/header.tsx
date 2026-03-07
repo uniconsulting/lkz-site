@@ -44,7 +44,7 @@ export function Header() {
                 aria-label="На главную"
                 className={cn(
                   "inline-flex h-12 shrink-0 items-center justify-start px-2",
-                  "md:min-w-[96px]",
+                  "md:min-w-[84px]",
                 )}
               >
                 <img
