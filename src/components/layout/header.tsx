@@ -44,7 +44,7 @@ export function Header() {
                 aria-label="На главную"
                 className={cn(
                   "inline-flex h-12 shrink-0 items-center justify-start px-2",
-                  "md:min-w-[132px]",
+                  "md:min-w-[120px]",
                 )}
               >
                 <img
@@ -54,7 +54,7 @@ export function Header() {
                 />
               </Link>
 
-              <div className="hidden h-8 w-px shrink-0 bg-white md:block" />
+              <div className="hidden h-8 w-[2px] shrink-0 bg-white md:block"/>
 
               <nav
                 aria-label="Основная навигация"
