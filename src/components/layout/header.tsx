@@ -50,7 +50,7 @@ export function Header() {
                 <img
                   src="/lkz-site/images/common/logo.svg"
                   alt="Логотип"
-                  className="block h-auto max-h-[36px] w-auto max-w-[148px] object-contain"
+                  cclassName="relative -top-[2px] block h-auto max-h-[36px] w-auto max-w-[148px] object-contain"
                 />
               </Link>
 
