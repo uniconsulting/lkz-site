@@ -23,7 +23,7 @@ function HeaderActionButton({
       aria-label={label}
       title={label}
       className={cn(
-        "inline-flex h-11 items-center justify-center rounded-[16px] bg-[var(--color-bg)] text-[var(--color-text)] transition duration-200 hover:opacity-90",
+        "inline-flex h-11 items-center justify-center rounded-[12px] bg-[var(--color-bg)] text-[var(--color-text)] transition duration-200 hover:opacity-90",
         className,
       )}
     >
@@ -54,7 +54,7 @@ export function Header() {
                 />
               </Link>
 
-              <div className="hidden h-8 w-[2px] shrink-0 bg-white md:block"/>
+              <div className="hidden h-8 w-[2px] shrink-0 bg-white md:block" />
 
               <nav
                 aria-label="Основная навигация"
@@ -85,8 +85,7 @@ export function Header() {
               <a
                 href="tel:+79648589910"
                 className={cn(
-                  "inline-flex h-11 items-center rounded-[16px] bg-[var(--color-bg)] px-4 text-[14px] font-semibold text-[var(--color-text)] transition duration-200 hover:opacity-90",
-                  "min-w-[188px]",
+                  "inline-flex h-11 items-center justify-center rounded-[12px] bg-[var(--color-bg)] px-5 text-center text-[14px] font-semibold text-[var(--color-text)] transition duration-200 hover:opacity-90 whitespace-nowrap",
                 )}
               >
                 +7 (964) 858-99-10
