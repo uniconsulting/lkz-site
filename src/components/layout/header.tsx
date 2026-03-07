@@ -4,6 +4,22 @@ import { Container } from "@/components/ui/container";
 import { headerNav } from "@/lib/constants/navigation";
 import { cn } from "@/lib/utils/cn";
 import { ThemeToggle } from "./theme-toggle";
+import Image from "next/image";
+import Link from "next/link";
+
+<Link
+  href="/"
+  className="inline-flex h-12 shrink-0 items-center rounded-[20px] bg-[var(--color-bg)] px-4 md:min-w-[168px]"
+>
+  <Image
+    src="/images/common/logo.svg"
+    alt="Логотип"
+    width={120}
+    height={28}
+    className="h-auto w-auto max-h-[28px] object-contain"
+    priority
+  />
+</Link>
 
 function HeaderActionButton({
   href,
