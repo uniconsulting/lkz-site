@@ -10,10 +10,10 @@
 
   --color-accent-1: #1ede7b;
   --color-accent-2: #2b2f33;
+  --color-accent-2-foreground: #ffffff;
   --color-accent-3: #8a8891;
 
   --radius-card: 28px;
-  --radius-card-inner: 20px;
   --radius-control: 16px;
   --radius-chip: 999px;
 }
@@ -28,6 +28,7 @@ html.dark {
 
   --color-accent-1: #1ede7b;
   --color-accent-2: #ffffff;
+  --color-accent-2-foreground: #2b2f33;
   --color-accent-3: #8a8891;
 }
 
@@ -95,12 +96,12 @@ html.dark .logo-dark {
 
   .interactive-lift-accent:hover {
     background-color: var(--color-accent-2);
-    color: #ffffff;
+    color: var(--color-accent-2-foreground);
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(43, 47, 51, 0.12);
   }
 
   .interactive-lift-accent:hover svg {
-    color: #ffffff;
+    color: var(--color-accent-2-foreground);
   }
 }
