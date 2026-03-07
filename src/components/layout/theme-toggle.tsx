@@ -32,9 +32,9 @@ export function ThemeToggle() {
       aria-label="Сменить тему"
       title="Сменить тему"
       className={cn(
-        "inline-flex h-11 w-11 items-center justify-center rounded-[18px] bg-[var(--color-bg)] text-[var(--color-text)] transition duration-200 hover:opacity-90",
-        !isReady && "opacity-0",
-      )}
+  "interactive-lift-accent inline-flex h-11 w-11 items-center justify-center rounded-[18px] bg-[var(--color-bg)] text-[var(--color-text)] transition duration-200",
+  !isReady && "opacity-0",
+)}
     >
       {isDark ? <SunMedium size={18} /> : <MoonStar size={18} />}
     </button>
