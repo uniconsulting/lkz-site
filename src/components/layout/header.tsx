@@ -39,20 +39,26 @@ export function Header() {
         <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
           <div className="min-w-0 rounded-[28px] bg-[var(--color-surface)] p-2">
             <div className="flex min-w-0 flex-col gap-2 md:flex-row md:items-center">
-              <Link
-                href="/"
-                aria-label="На главную"
-                className={cn(
-                  "inline-flex h-12 shrink-0 items-center justify-start px-2",
-                  "md:min-w-[78px]",
-                )}
-              >
-                <img
-                  src="/lkz-site/images/common/logo.svg"
-                  alt="Логотип"
-                  className="relative -top-[2px] block h-auto max-h-[36px] w-auto max-w-[148px] object-contain"
-                />
-              </Link>
+<Link
+  href="/"
+  aria-label="На главную"
+  className={cn(
+    "inline-flex h-12 shrink-0 items-center justify-start px-2",
+    "md:min-w-[78px]",
+  )}
+>
+  <img
+    src="/lkz-site/images/common/logo.svg"
+    alt="Логотип"
+    className="logo-light relative -top-[2px] block h-auto max-h-[36px] w-auto max-w-[148px] object-contain"
+  />
+
+  <img
+    src="/lkz-site/images/common/logo-dark.svg"
+    alt="Логотип"
+    className="logo-dark relative -top-[2px] hidden h-auto max-h-[36px] w-auto max-w-[148px] object-contain"
+  />
+</Link>
 
               <div className="hidden h-8 w-[2px] shrink-0 bg-white md:block" />
 
