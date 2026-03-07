@@ -23,7 +23,7 @@ function HeaderActionButton({
       aria-label={label}
       title={label}
       className={cn(
-        "inline-flex h-11 items-center justify-center rounded-[18px] bg-[var(--color-bg)] text-[var(--color-text)] transition duration-200 hover:opacity-90",
+        "interactive-lift-accent inline-flex h-11 items-center justify-center rounded-[18px] bg-[var(--color-bg)] text-[var(--color-text)] transition duration-200",
         className,
       )}
     >
@@ -91,7 +91,7 @@ export function Header() {
               <a
                 href="tel:+79648589910"
                 className={cn(
-                  "inline-flex h-11 items-center justify-center rounded-[18px] bg-[var(--color-bg)] px-5 text-center text-[14px] font-semibold text-[var(--color-text)] transition duration-200 hover:opacity-90 whitespace-nowrap",
+                  "interactive-lift-accent inline-flex h-11 items-center justify-center rounded-[18px] bg-[var(--color-bg)] px-5 text-center text-[14px] font-semibold text-[var(--color-text)] whitespace-nowrap transition duration-200",
                 )}
               >
                 +7 (964) 858-99-10
