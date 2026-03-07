@@ -1,25 +1,11 @@
+import Image from "next/image";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { Calculator } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { headerNav } from "@/lib/constants/navigation";
 import { cn } from "@/lib/utils/cn";
 import { ThemeToggle } from "./theme-toggle";
-import Image from "next/image";
-import Link from "next/link";
-
-<Link
-  href="/"
-  className="inline-flex h-12 shrink-0 items-center rounded-[20px] bg-[var(--color-bg)] px-4 md:min-w-[168px]"
->
-  <Image
-    src="/images/common/logo.svg"
-    alt="Логотип"
-    width={120}
-    height={28}
-    className="h-auto w-auto max-h-[28px] object-contain"
-    priority
-  />
-</Link>
 
 function HeaderActionButton({
   href,
@@ -29,7 +15,7 @@ function HeaderActionButton({
 }: {
   href: string;
   label: string;
-  icon?: React.ReactNode;
+  icon?: ReactNode;
   className?: string;
 }) {
   return (
@@ -56,12 +42,20 @@ export function Header() {
             <div className="flex min-w-0 flex-col gap-2 md:flex-row md:items-center">
               <Link
                 href="/"
+                aria-label="На главную"
                 className={cn(
                   "inline-flex h-12 shrink-0 items-center rounded-[20px] bg-[var(--color-bg)] px-4 text-[14px] font-semibold text-[var(--color-text)]",
                   "md:min-w-[168px]",
                 )}
               >
-                ЛОГО
+                <Image
+                  src="/images/common/logo.svg"
+                  alt="Логотип"
+                  width={120}
+                  height={28}
+                  priority
+                  className="h-auto w-auto max-h-[28px] max-w-[120px] object-contain"
+                />
               </Link>
 
               <nav
