@@ -32,7 +32,7 @@ export function ThemeToggle() {
       aria-label="Сменить тему"
       title="Сменить тему"
       className={cn(
-        "inline-flex h-11 w-11 items-center justify-center rounded-[16px] bg-[var(--color-bg)] text-[var(--color-text)] transition duration-200 hover:opacity-90",
+        "inline-flex h-11 w-11 items-center justify-center rounded-[12px] bg-[var(--color-bg)] text-[var(--color-text)] transition duration-200 hover:opacity-90",
         !isReady && "opacity-0",
       )}
     >
