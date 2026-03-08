@@ -162,7 +162,7 @@ export function Header() {
                         <a
                           href={item.href}
                           className={cn(
-                            "inline-flex h-12 items-center justify-center rounded-[20px] px-4 text-[14px] font-medium text-[var(--color-text)] transition duration-200",
+                            "inline-flex h-11 items-center justify-center rounded-[20px] px-4 text-[14px] font-medium text-[var(--color-text)] transition duration-200",
                             "bg-transparent hover:bg-[var(--color-bg)]",
                             "focus:outline-none",
                           )}
