@@ -209,17 +209,17 @@ export function Footer() {
             className="inline-flex items-center gap-2 text-[15px] leading-[1.35] text-[var(--footer-shell-text-muted)] transition duration-200 lg:hover:text-[var(--color-accent-1)]"
           >
             <span className="flex h-[14px] w-[21px] shrink-0 items-center justify-center opacity-70">
-              <img
-                src={`${basePath}/images/common/logo-uni-dark.svg`}
-                alt="ЮНИ.ai"
-                className="footer-uni-logo-on-dark block h-full w-full object-contain"
-              />
+<img
+  src={`${basePath}/images/common/logo-uni.svg`}
+  alt="ЮНИ.ai"
+  className="footer-uni-logo-on-light h-full w-full object-contain"
+/>
 
-              <img
-                src={`${basePath}/images/common/logo-uni.svg`}
-                alt="ЮНИ.ai"
-                className="footer-uni-logo-on-light hidden h-full w-full object-contain"
-              />
+<img
+  src={`${basePath}/images/common/logo-uni-dark.svg`}
+  alt="ЮНИ.ai"
+  className="footer-uni-logo-on-dark h-full w-full object-contain"
+/>
             </span>
 
             <span>Сайт разработан командой ЮНИ.ai</span>
