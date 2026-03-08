@@ -115,7 +115,7 @@ export function Footer() {
               <img
                 src={`${basePath}/images/common/logo-dark.svg`}
                 alt="Логотип"
-                className="footer-logo-on-dark block h-auto w-auto max-h-[126px] max-w-[260px] object-contain"
+                className="footer-logo-on-dark block h-auto w-auto max-h-[136px] max-w-[270px] object-contain"
               />
 
               <img
