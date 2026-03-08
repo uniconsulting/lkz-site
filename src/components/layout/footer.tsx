@@ -174,13 +174,21 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="self-start rounded-[32px] bg-[var(--footer-main-card-bg)] p-8 text-[var(--footer-main-card-text)] transition duration-200 lg:hover:bg-[var(--color-accent-1)] lg:hover:text-white xl:p-10">
+          <div className="self-start rounded-[32px] bg-[var(--footer-main-card-bg)] p-8 text-[var(--footer-main-card-text)] xl:p-10">
             <div className="grid items-start gap-8 md:grid-cols-[1fr_auto_1fr]">
-              <FooterList title="Компания" items={companyLinks} />
+              <FooterList
+                title="Компания"
+                items={companyLinks}
+                linkClassName="lg:hover:text-[var(--color-accent-1)]"
+              />
 
-              <div className="hidden h-full w-px bg-current/20 transition duration-200 md:block" />
+              <div className="hidden h-full w-px bg-current/20 md:block" />
 
-              <FooterList title="Каталог" items={catalogLinks} />
+              <FooterList
+                title="Каталог"
+                items={catalogLinks}
+                linkClassName="lg:hover:text-[var(--color-accent-1)]"
+              />
             </div>
           </div>
 
@@ -202,9 +210,15 @@ export function Footer() {
           >
             <span className="flex h-[14px] w-[21px] shrink-0 items-center justify-center opacity-70">
               <img
+                src={`${basePath}/images/common/logo-uni-dark.svg`}
+                alt="ЮНИ.ai"
+                className="footer-uni-logo-on-dark block h-full w-full object-contain"
+              />
+
+              <img
                 src={`${basePath}/images/common/logo-uni.svg`}
                 alt="ЮНИ.ai"
-                className="h-full w-full object-contain"
+                className="footer-uni-logo-on-light hidden h-full w-full object-contain"
               />
             </span>
 
