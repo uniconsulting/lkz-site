@@ -133,7 +133,7 @@ export function Header() {
                   href="/"
                   aria-label="На главную"
                   className={cn(
-                    "inline-flex h-12 shrink-0 items-center justify-start px-2",
+                    "inline-flex h-11 shrink-0 items-center justify-start px-2",
                     "min-w-[78px]",
                   )}
                 >
