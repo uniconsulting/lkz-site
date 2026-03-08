@@ -2,6 +2,7 @@ import { Header } from "@/components/layout/header";
 import { BentoCard } from "@/components/ui/bento-card";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
+import { Footer } from "@/components/layout/footer";
 
 function DemoSection({
   id,
@@ -22,6 +23,7 @@ function DemoSection({
         </BentoCard>
       </Container>
     </Section>
+    <Footer />
   );
 }
 
