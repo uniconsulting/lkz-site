@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { Phone, Mail, MapPin, Clock3, Sparkles } from "lucide-react";
+import { Phone, Mail, MapPin, Clock3 } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { cn } from "@/lib/utils/cn";
 
@@ -52,7 +52,7 @@ function FooterList({
             <a
               href={item.href}
               className={cn(
-                "text-[16px] leading-[1.35] transition duration-200 hover:opacity-75",
+                "text-[16px] leading-[1.35] transition duration-200",
                 linkClassName,
               )}
             >
@@ -69,17 +69,34 @@ function ContactRow({
   icon,
   children,
   href,
+  interactive = false,
 }: {
   icon: ReactNode;
   children: ReactNode;
   href?: string;
+  interactive?: boolean;
 }) {
   const content = (
     <span className="grid grid-cols-[24px_1fr] items-center gap-3">
-      <span className="flex h-6 w-6 items-center justify-center text-[var(--footer-shell-text-muted)]">
+      <span
+        className={cn(
+          "flex h-6 w-6 items-center justify-center transition duration-200",
+          interactive
+            ? "text-[var(--footer-shell-text-muted)] group-hover:text-[var(--color-accent-1)]"
+            : "text-[var(--footer-shell-text-muted)]",
+        )}
+      >
         {icon}
       </span>
-      <span>{children}</span>
+
+      <span
+        className={cn(
+          "transition duration-200",
+          interactive && "group-hover:text-[var(--color-accent-1)]",
+        )}
+      >
+        {children}
+      </span>
     </span>
   );
 
@@ -87,7 +104,10 @@ function ContactRow({
     return (
       <a
         href={href}
-        className="text-[16px] font-semibold leading-[1.35] text-[var(--footer-shell-text)] transition duration-200 hover:opacity-80"
+        className={cn(
+          "group text-[16px] font-semibold leading-[1.35] text-[var(--footer-shell-text)] transition duration-200",
+          interactive && "lg:hover:text-[var(--color-accent-1)]",
+        )}
       >
         {content}
       </a>
@@ -128,13 +148,18 @@ export function Footer() {
             <div className="mt-7 h-px bg-[var(--footer-shell-divider)]" />
 
             <div className="mt-7 flex flex-col gap-5">
-              <ContactRow icon={<Phone size={22} />} href="tel:+79648589910">
+              <ContactRow
+                icon={<Phone size={22} />}
+                href="tel:+79648589910"
+                interactive
+              >
                 +7 (964) 858-99-10
               </ContactRow>
 
               <ContactRow
                 icon={<Mail size={22} />}
                 href="mailto:simkraski@bk.ru"
+                interactive
               >
                 simkraski@bk.ru
               </ContactRow>
@@ -149,11 +174,11 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="self-start rounded-[32px] bg-[var(--footer-main-card-bg)] p-8 text-[var(--footer-main-card-text)] xl:p-10">
+          <div className="self-start rounded-[32px] bg-[var(--footer-main-card-bg)] p-8 text-[var(--footer-main-card-text)] transition duration-200 lg:hover:bg-[var(--color-accent-1)] lg:hover:text-white xl:p-10">
             <div className="grid items-start gap-8 md:grid-cols-[1fr_auto_1fr]">
               <FooterList title="Компания" items={companyLinks} />
 
-              <div className="hidden h-full w-px bg-[var(--footer-main-card-divider)] md:block" />
+              <div className="hidden h-full w-px bg-current/20 transition duration-200 md:block" />
 
               <FooterList title="Каталог" items={catalogLinks} />
             </div>
@@ -169,14 +194,31 @@ export function Footer() {
         </div>
 
         <div className="mt-10 flex flex-col gap-4 border-t border-[var(--footer-shell-divider)] py-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="inline-flex items-center gap-2 text-[15px] leading-[1.35] text-[var(--footer-shell-text-muted)]">
-            <Sparkles size={14} />
-            <span>Сайт разработан командой ЮНИ.ai</span>
-          </div>
+          <a
+            href="https://uniconsulting.github.io/uni.ai/"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 text-[15px] leading-[1.35] text-[var(--footer-shell-text-muted)] transition duration-200 lg:hover:text-[var(--color-accent-1)]"
+          >
+            <span className="flex h-[14px] w-[21px] shrink-0 items-center justify-center opacity-70">
+              <img
+                src={`${basePath}/images/common/logo-uni.svg`}
+                alt="ЮНИ.ai"
+                className="h-full w-full object-contain"
+              />
+            </span>
 
-          <p className="text-[15px] leading-[1.35] text-[var(--footer-shell-text-muted)] lg:text-right">
-            © 2015 – 2026 Симбирские краски | ИНН: 1234567890 | ОГРН: 1234567890123 |
-            Все права защищены.
+            <span>Сайт разработан командой ЮНИ.ai</span>
+          </a>
+
+          <p className="text-[15px] leading-[1.45] text-[var(--footer-shell-text-muted)] lg:text-right">
+            <span className="block lg:inline">© 2015 – 2026 Симбирские краски</span>
+            <span className="hidden lg:inline"> | </span>
+            <span className="block lg:inline">
+              ИНН: 1234567890 | ОГРН: 1234567890123
+            </span>
+            <span className="hidden lg:inline"> | </span>
+            <span className="block lg:inline">Все права защищены.</span>
           </p>
         </div>
       </Container>
