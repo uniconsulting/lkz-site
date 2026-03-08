@@ -121,7 +121,7 @@ export function Footer() {
               <img
                 src={`${basePath}/images/common/logo.svg`}
                 alt="Логотип"
-                className="footer-logo-on-light hidden h-auto w-auto max-h-[156px] max-w-[290px] object-contain"
+                className="footer-logo-on-light hidden h-auto w-auto max-h-[136px] max-w-[270px] object-contain"
               />
             </Link>
 
@@ -175,7 +175,7 @@ export function Footer() {
           </div>
 
           <p className="text-[15px] leading-[1.35] text-[var(--footer-shell-text-muted)] lg:text-right">
-            © 2024 Симбирские краски | ИНН: 1234567890 | ОГРН: 1234567890123 |
+            © 2015 – 2026 Симбирские краски | ИНН: 1234567890 | ОГРН: 1234567890123 |
             Все права защищены.
           </p>
         </div>
