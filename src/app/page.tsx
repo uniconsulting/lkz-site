@@ -23,7 +23,6 @@ function DemoSection({
         </BentoCard>
       </Container>
     </Section>
-    <Footer />
   );
 }
 
@@ -37,6 +36,8 @@ export default function HomePage() {
       <DemoSection id="certificates" title="Сертификаты" />
       <DemoSection id="contacts" title="Контакты" />
       <DemoSection id="calculator" title="Калькулятор" />
+      
+      <Footer />
     </main>
   );
 }
