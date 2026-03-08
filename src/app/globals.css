@@ -83,6 +83,22 @@ html.dark .logo-dark {
   display: block;
 }
 
+.footer-uni-logo-on-dark {
+  display: block;
+}
+
+.footer-uni-logo-on-light {
+  display: none;
+}
+
+html.dark .footer-uni-logo-on-dark {
+  display: none;
+}
+
+html.dark .footer-uni-logo-on-light {
+  display: block;
+}
+
 @media (hover: hover) and (pointer: fine) {
   .interactive-lift-accent {
     transition:
