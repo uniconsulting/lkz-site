@@ -105,3 +105,47 @@ html.dark .logo-dark {
     color: var(--color-accent-2-foreground);
   }
 }
+
+:root {
+  --footer-shell-bg: #2b2f33;
+  --footer-shell-text: #ffffff;
+  --footer-shell-text-muted: rgba(255, 255, 255, 0.72);
+  --footer-shell-divider: rgba(255, 255, 255, 0.1);
+
+  --footer-main-card-bg: #ffffff;
+  --footer-main-card-text: #2b2f33;
+  --footer-main-card-divider: rgba(43, 47, 51, 0.28);
+
+  --footer-accent-card-bg: #1ede7b;
+  --footer-accent-card-text: #ffffff;
+}
+
+html.dark {
+  --footer-shell-bg: #f5f5f7;
+  --footer-shell-text: #2b2f33;
+  --footer-shell-text-muted: rgba(43, 47, 51, 0.72);
+  --footer-shell-divider: rgba(43, 47, 51, 0.1);
+
+  --footer-main-card-bg: #2b2f33;
+  --footer-main-card-text: #ffffff;
+  --footer-main-card-divider: rgba(255, 255, 255, 0.28);
+
+  --footer-accent-card-bg: #1ede7b;
+  --footer-accent-card-text: #2b2f33;
+}
+
+.footer-logo-on-dark {
+  display: block;
+}
+
+.footer-logo-on-light {
+  display: none;
+}
+
+html.dark .footer-logo-on-dark {
+  display: none;
+}
+
+html.dark .footer-logo-on-light {
+  display: block;
+}
