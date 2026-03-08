@@ -89,7 +89,7 @@ export function Header() {
                 <Link
                   href="/"
                   aria-label="На главную"
-                  className="inline-flex h-12 items-center justify-start px-2"
+                  className="inline-flex h-11 items-center justify-start px-2"
                   onClick={closeMenu}
                 >
                   <img
@@ -229,7 +229,7 @@ export function Header() {
             <Link
               href="/"
               aria-label="На главную"
-              className="inline-flex h-12 items-center justify-start px-2"
+              className="inline-flex h-11 items-center justify-start px-2"
               onClick={closeMenu}
             >
 <img
@@ -273,16 +273,21 @@ export function Header() {
             </ul>
           </nav>
 
-          <div className="mt-8 h-px bg-white/80" />
+<div className="mt-8 h-px bg-white/80" />
 
-          <a
-            href="tel:+79648589910"
-            onClick={closeMenu}
-            className="mt-6 inline-flex h-12 w-full items-center justify-center rounded-[20px] bg-[var(--color-bg)] px-5 text-center text-[15px] font-semibold text-[var(--color-text)]"
-          >
-            +7 (964) 858-99-10
-          </a>
+<p className="mt-5 max-w-[290px] text-[14px] leading-[1.45] text-[var(--color-text-muted)]">
+  Симбирские краски — собственное производство лакокрасочной продукции для
+  надёжной и стабильной работы партнёров.
+</p>
 
+<a
+  href="tel:+79648589910"
+  onClick={closeMenu}
+  className="mt-5 inline-flex h-12 w-full items-center justify-center rounded-[20px] bg-[var(--color-bg)] px-5 text-center text-[15px] font-semibold text-[var(--color-text)]"
+>
+  +7 (964) 858-99-10
+</a>
+          
           <div className="mt-auto">
             <div className="mb-5 h-px bg-white/80" />
 
