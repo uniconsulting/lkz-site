@@ -1,12 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import {
-  Phone,
-  Mail,
-  MapPin,
-  Clock3,
-  Sparkles,
-} from "lucide-react";
+import { Phone, Mail, MapPin, Clock3, Sparkles } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { cn } from "@/lib/utils/cn";
 
@@ -81,19 +75,19 @@ function ContactRow({
   href?: string;
 }) {
   const content = (
-    <>
-      <span className="mt-[2px] shrink-0 text-[var(--footer-shell-text-muted)]">
+    <span className="grid grid-cols-[24px_1fr] items-center gap-3">
+      <span className="flex h-6 w-6 items-center justify-center text-[var(--footer-shell-text-muted)]">
         {icon}
       </span>
       <span>{children}</span>
-    </>
+    </span>
   );
 
   if (href) {
     return (
       <a
         href={href}
-        className="flex items-start gap-3 text-[16px] font-semibold leading-[1.35] text-[var(--footer-shell-text)] transition duration-200 hover:opacity-80"
+        className="text-[16px] font-semibold leading-[1.35] text-[var(--footer-shell-text)] transition duration-200 hover:opacity-80"
       >
         {content}
       </a>
@@ -101,7 +95,7 @@ function ContactRow({
   }
 
   return (
-    <div className="flex items-start gap-3 text-[16px] font-semibold leading-[1.35] text-[var(--footer-shell-text)]">
+    <div className="text-[16px] font-semibold leading-[1.35] text-[var(--footer-shell-text)]">
       {content}
     </div>
   );
@@ -110,9 +104,9 @@ function ContactRow({
 export function Footer() {
   return (
     <footer className="mt-16 bg-[var(--footer-shell-bg)] text-[var(--footer-shell-text)]">
-      <Container className="py-10 md:py-12 xl:py-14">
-        <div className="grid gap-8 xl:grid-cols-[0.95fr_1.08fr_0.9fr]">
-          <div className="flex flex-col">
+      <Container className="pt-10 md:pt-12 xl:pt-14">
+        <div className="grid items-start gap-8 xl:grid-cols-[0.95fr_1.08fr_0.9fr]">
+          <div className="flex flex-col self-start">
             <Link
               href="/"
               aria-label="На главную"
@@ -121,19 +115,19 @@ export function Footer() {
               <img
                 src={`${basePath}/images/common/logo-dark.svg`}
                 alt="Логотип"
-                className="footer-logo-on-dark block h-auto w-auto max-h-[180px] max-w-[300px] object-contain"
+                className="footer-logo-on-dark block h-auto w-auto max-h-[156px] max-w-[290px] object-contain"
               />
 
               <img
                 src={`${basePath}/images/common/logo.svg`}
                 alt="Логотип"
-                className="footer-logo-on-light hidden h-auto w-auto max-h-[180px] max-w-[300px] object-contain"
+                className="footer-logo-on-light hidden h-auto w-auto max-h-[156px] max-w-[290px] object-contain"
               />
             </Link>
 
-            <div className="mt-8 h-px bg-[var(--footer-shell-divider)]" />
+            <div className="mt-7 h-px bg-[var(--footer-shell-divider)]" />
 
-            <div className="mt-8 flex flex-col gap-5">
+            <div className="mt-7 flex flex-col gap-5">
               <ContactRow icon={<Phone size={22} />} href="tel:+79648589910">
                 +7 (964) 858-99-10
               </ContactRow>
@@ -155,8 +149,8 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="rounded-[32px] bg-[var(--footer-main-card-bg)] p-8 text-[var(--footer-main-card-text)] xl:p-10">
-            <div className="grid gap-8 md:grid-cols-[1fr_auto_1fr] md:items-start">
+          <div className="self-start rounded-[32px] bg-[var(--footer-main-card-bg)] p-8 text-[var(--footer-main-card-text)] xl:p-10">
+            <div className="grid items-start gap-8 md:grid-cols-[1fr_auto_1fr]">
               <FooterList title="Компания" items={companyLinks} />
 
               <div className="hidden h-full w-px bg-[var(--footer-main-card-divider)] md:block" />
@@ -165,7 +159,7 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="rounded-[32px] bg-[var(--footer-accent-card-bg)] p-8 text-[var(--footer-accent-card-text)] xl:p-10">
+          <div className="self-start rounded-[32px] bg-[var(--footer-accent-card-bg)] p-8 text-[var(--footer-accent-card-text)] xl:p-10">
             <FooterList
               title="Помощь и инфо"
               items={helpLinks}
@@ -174,7 +168,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col gap-4 border-t border-[var(--footer-shell-divider)] pt-5 lg:flex-row lg:items-center lg:justify-between">
+        <div className="mt-10 flex flex-col gap-4 border-t border-[var(--footer-shell-divider)] py-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="inline-flex items-center gap-2 text-[15px] leading-[1.35] text-[var(--footer-shell-text-muted)]">
             <Sparkles size={14} />
             <span>Сайт разработан командой ЮНИ.ai</span>
