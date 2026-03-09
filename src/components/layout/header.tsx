@@ -88,12 +88,12 @@ function DesktopSearch({
       document.addEventListener("mousedown", handleClickOutside);
       document.addEventListener("keydown", handleEscape);
 
-      const timeout = window.setTimeout(() => {
+      const raf = requestAnimationFrame(() => {
         inputRef.current?.focus();
-      }, 140);
+      });
 
       return () => {
-        window.clearTimeout(timeout);
+        cancelAnimationFrame(raf);
         document.removeEventListener("mousedown", handleClickOutside);
         document.removeEventListener("keydown", handleEscape);
       };
@@ -106,52 +106,59 @@ function DesktopSearch({
   }, [isOpen, onClose]);
 
   return (
-    <div ref={wrapperRef} className="flex items-center">
-      <div
+    <div
+      ref={wrapperRef}
+      data-open={isOpen ? "true" : "false"}
+      className={cn(
+        "search-shell relative h-11 shrink-0 rounded-[18px] bg-[var(--color-bg)]",
+        isOpen ? "w-[340px]" : "w-11",
+      )}
+    >
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-label={isOpen ? "Закрыть поиск" : "Открыть поиск"}
+        title={isOpen ? "Закрыть поиск" : "Открыть поиск"}
         className={cn(
-          "search-expand-shell overflow-hidden rounded-[18px] bg-[var(--color-bg)]",
-          isOpen ? "w-[340px] opacity-100" : "w-0 opacity-0",
+          "search-trigger absolute inset-0 z-[2] inline-flex h-11 w-11 items-center justify-center rounded-[18px] text-[var(--color-text)]",
+          isOpen
+            ? "pointer-events-none opacity-0"
+            : "pointer-events-auto opacity-100",
         )}
-        aria-hidden={!isOpen}
       >
-        <div
+        <Search size={18} />
+      </button>
+
+      <form
+        role="search"
+        onSubmit={(event) => event.preventDefault()}
+        className={cn(
+          "search-panel absolute inset-0 flex h-11 items-center overflow-hidden rounded-[18px]",
+          isOpen
+            ? "pointer-events-auto opacity-100"
+            : "pointer-events-none opacity-0",
+        )}
+      >
+        <input
+          ref={inputRef}
+          type="text"
+          placeholder="Напишите, что хотите найти"
           className={cn(
-            "flex h-11 items-center transition duration-300 ease-out",
-            isOpen
-              ? "translate-x-0 opacity-100"
-              : "translate-x-3 opacity-0",
+            "h-full w-full bg-transparent px-5 pr-3 text-[14px] text-[var(--color-text)] outline-none placeholder:text-[var(--color-text-muted)]",
+            isOpen ? "opacity-100" : "opacity-0",
           )}
-        >
-          <input
-            ref={inputRef}
-            type="text"
-            placeholder="Напишите, что хотите найти"
-            className="h-full w-full bg-transparent px-5 pr-3 text-[14px] text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] outline-none"
-          />
+        />
 
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Закрыть поиск"
-            title="Закрыть поиск"
-            className="inline-flex h-11 w-11 shrink-0 items-center justify-center text-[var(--color-text)] transition duration-200 hover:opacity-70"
-          >
-            <Search size={18} />
-          </button>
-        </div>
-      </div>
-
-      {!isOpen ? (
         <button
           type="button"
-          onClick={onToggle}
-          aria-label="Открыть поиск"
-          title="Открыть поиск"
-          className="interactive-lift-accent ml-2 inline-flex h-11 w-11 items-center justify-center rounded-[18px] bg-[var(--color-bg)] text-[var(--color-text)] transition duration-200"
+          onClick={onClose}
+          aria-label="Закрыть поиск"
+          title="Закрыть поиск"
+          className="inline-flex h-11 w-11 shrink-0 items-center justify-center text-[var(--color-text)]"
         >
           <Search size={18} />
         </button>
-      ) : null}
+      </form>
     </div>
   );
 }
@@ -285,8 +292,8 @@ export function Header() {
       <a
         href="tel:+79648589910"
         className={cn(
-          "phone-shift-shell interactive-lift-accent inline-flex h-11 items-center justify-center rounded-[18px] bg-[var(--color-bg)] px-5 text-center text-[14px] font-semibold text-[var(--color-text)] whitespace-nowrap transition duration-300",
-          isSearchOpen && "translate-x-[-4px]",
+          "phone-shift-shell interactive-lift-accent inline-flex h-11 items-center justify-center rounded-[18px] bg-[var(--color-bg)] px-5 text-center text-[14px] font-semibold text-[var(--color-text)] whitespace-nowrap",
+          isSearchOpen && "-translate-x-[4px]",
         )}
       >
         +7 (964) 858-99-10
