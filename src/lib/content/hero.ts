@@ -19,7 +19,7 @@ export const heroSlides: HeroSlide[] = [
     metricTop: "13",
     metricShellClassName: "w-[300px]",
     metricTopClassName: "relative -top-[6px] text-[172px] leading-[0.82] tracking-[-0.09em]",
-    contentGapClassName: "gap-[36px]",
+    contentGapClassName: "gap-[16px]",
     descriptionShellClassName: "max-w-[330px]",
     description: [
       "лет опыта в производстве",
@@ -37,7 +37,7 @@ export const heroSlides: HeroSlide[] = [
     metricTopClassName: "text-[48px] leading-[0.9] tracking-[-0.06em]",
     metricBottomClassName: "relative -top-[6px] text-[64px] leading-[0.88] tracking-[-0.08em]",
     metricDividerClassName: "h-[1px] w-[245px] my-[12px]",
-    contentGapClassName: "gap-[36px]",
+    contentGapClassName: "gap-[16px]",
     descriptionShellClassName: "max-w-[330px]",
     description: [
       "продукции мы производим",
@@ -55,7 +55,7 @@ export const heroSlides: HeroSlide[] = [
     metricTopClassName: "text-[86px] leading-[0.82] tracking-[-0.08em]",
     metricBottomClassName: "relative -top-[6px] text-[34px] leading-[0.94] tracking-[-0.05em]",
     metricDividerClassName: "h-[1px] w-[245px] my-[12px]",
-    contentGapClassName: "gap-[36px]",
+    contentGapClassName: "gap-[16px]",
     descriptionShellClassName: "max-w-[330px]",
     description: [
       "по всей России,",
