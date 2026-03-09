@@ -279,31 +279,36 @@ export function Header() {
               </div>
             </div>
 
-            <div className="rounded-[28px] bg-[var(--color-surface)] p-2">
-              <div className="flex items-center gap-2">
-                <a
-                  href="tel:+79648589910"
-                  className="interactive-lift-accent inline-flex h-11 items-center justify-center rounded-[18px] bg-[var(--color-bg)] px-5 text-center text-[14px] font-semibold text-[var(--color-text)] whitespace-nowrap transition duration-200"
-                >
-                  +7 (964) 858-99-10
-                </a>
+<div className="rounded-[28px] bg-[var(--color-surface)] p-2">
+  <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2">
+      <a
+        href="tel:+79648589910"
+        className={cn(
+          "phone-shift-shell interactive-lift-accent inline-flex h-11 items-center justify-center rounded-[18px] bg-[var(--color-bg)] px-5 text-center text-[14px] font-semibold text-[var(--color-text)] whitespace-nowrap transition duration-300",
+          isSearchOpen && "translate-x-[-4px]",
+        )}
+      >
+        +7 (964) 858-99-10
+      </a>
 
-                <DesktopSearch
-                  isOpen={isSearchOpen}
-                  onToggle={() => setIsSearchOpen(true)}
-                  onClose={closeSearch}
-                />
+      <DesktopSearch
+        isOpen={isSearchOpen}
+        onToggle={() => setIsSearchOpen((prev) => !prev)}
+        onClose={closeSearch}
+      />
+    </div>
 
-                <HeaderActionButton
-                  href="#calculator"
-                  label="Открыть калькулятор"
-                  icon={<Calculator size={18} />}
-                  className="w-11"
-                />
+    <HeaderActionButton
+      href="#calculator"
+      label="Открыть калькулятор"
+      icon={<Calculator size={18} />}
+      className="w-11"
+    />
 
-                <ThemeToggle />
-              </div>
-            </div>
+    <ThemeToggle />
+  </div>
+</div>
           </div>
         </Container>
       </header>
