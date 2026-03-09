@@ -68,6 +68,7 @@ function DesktopSearch({
   onClose: () => void;
 }) {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -86,6 +87,16 @@ function DesktopSearch({
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
       document.addEventListener("keydown", handleEscape);
+
+      const timeout = window.setTimeout(() => {
+        inputRef.current?.focus();
+      }, 140);
+
+      return () => {
+        window.clearTimeout(timeout);
+        document.removeEventListener("mousedown", handleClickOutside);
+        document.removeEventListener("keydown", handleEscape);
+      };
     }
 
     return () => {
@@ -98,30 +109,36 @@ function DesktopSearch({
     <div ref={wrapperRef} className="flex items-center">
       <div
         className={cn(
-          "overflow-hidden rounded-[18px] bg-[var(--color-bg)] transition-all duration-300 ease-out",
+          "search-expand-shell overflow-hidden rounded-[18px] bg-[var(--color-bg)]",
           isOpen ? "w-[340px] opacity-100" : "w-0 opacity-0",
         )}
         aria-hidden={!isOpen}
       >
-        <form
-          role="search"
-          onSubmit={(event) => event.preventDefault()}
-          className="flex h-11 items-center"
+        <div
+          className={cn(
+            "flex h-11 items-center transition duration-300 ease-out",
+            isOpen
+              ? "translate-x-0 opacity-100"
+              : "translate-x-3 opacity-0",
+          )}
         >
           <input
+            ref={inputRef}
             type="text"
             placeholder="Напишите, что хотите найти"
             className="h-full w-full bg-transparent px-5 pr-3 text-[14px] text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] outline-none"
           />
 
           <button
-            type="submit"
-            aria-label="Искать"
-            className="inline-flex h-11 w-11 shrink-0 items-center justify-center text-[var(--color-text)]"
+            type="button"
+            onClick={onClose}
+            aria-label="Закрыть поиск"
+            title="Закрыть поиск"
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center text-[var(--color-text)] transition duration-200 hover:opacity-70"
           >
             <Search size={18} />
           </button>
-        </form>
+        </div>
       </div>
 
       {!isOpen ? (
