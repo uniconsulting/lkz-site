@@ -30,7 +30,7 @@ function AnimatedMetricNumber({
 
   useEffect(() => {
     let frameId = 0;
-    const duration = 900;
+    const duration = 950;
     const startTime = performance.now();
 
     function tick(now: number) {
@@ -53,9 +53,14 @@ function AnimatedMetricNumber({
   }, [targetValue]);
 
   return (
-    <span className={className}>
+    <motion.span
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.34, ease: "easeOut" }}
+      className={className}
+    >
       {formatMetricValue(displayValue, value)}
-    </span>
+    </motion.span>
   );
 }
 
@@ -76,8 +81,8 @@ function ArrowFrameButton({
         aria-label={direction === "prev" ? "Предыдущий блок" : "Следующий блок"}
         className={cn(
           "inline-flex h-12 w-[128px] items-center justify-center rounded-[20px] bg-[var(--color-bg)] text-[var(--color-accent-3)]",
-          "transition-[transform,box-shadow,color] duration-200 ease-out",
-          "hover:-translate-y-[2px] hover:text-[var(--color-accent-1)] hover:shadow-[0_8px_18px_rgba(43,47,51,0.08)]",
+          "transition-[transform,box-shadow,color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+          "hover:-translate-y-[1px] hover:text-[var(--color-accent-1)] hover:shadow-[0_6px_14px_rgba(43,47,51,0.06)]",
         )}
       >
         <Icon size={22} strokeWidth={2.2} />
@@ -128,14 +133,17 @@ function HeroMetric({ slide }: { slide: HeroSlide }) {
         )}
       />
 
-      <span
+      <motion.span
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.34, ease: "easeOut", delay: 0.06 }}
         className={cn(
           "block font-heading text-[var(--color-accent-1)]",
           slide.metricBottomClassName,
         )}
       >
         {slide.metricBottom}
-      </span>
+      </motion.span>
     </div>
   );
 }
