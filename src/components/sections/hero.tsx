@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/container";
@@ -9,6 +9,55 @@ import { heroSlides, type HeroSlide } from "@/lib/content/hero";
 import { cn } from "@/lib/utils/cn";
 
 const indicatorMajorPositions = [0, 5, 10];
+
+function formatMetricValue(value: number, original: string) {
+  if (original.includes(".")) {
+    return new Intl.NumberFormat("de-DE").format(value);
+  }
+
+  return String(value);
+}
+
+function AnimatedMetricNumber({
+  value,
+  className,
+}: {
+  value: string;
+  className?: string;
+}) {
+  const targetValue = Number(value.replace(/\./g, ""));
+  const [displayValue, setDisplayValue] = useState(0);
+
+  useEffect(() => {
+    let frameId = 0;
+    const duration = 900;
+    const startTime = performance.now();
+
+    function tick(now: number) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const nextValue = Math.round(targetValue * eased);
+
+      setDisplayValue(nextValue);
+
+      if (progress < 1) {
+        frameId = requestAnimationFrame(tick);
+      }
+    }
+
+    setDisplayValue(0);
+    frameId = requestAnimationFrame(tick);
+
+    return () => cancelAnimationFrame(frameId);
+  }, [targetValue]);
+
+  return (
+    <span className={className}>
+      {formatMetricValue(displayValue, value)}
+    </span>
+  );
+}
 
 function ArrowFrameButton({
   direction,
@@ -25,7 +74,11 @@ function ArrowFrameButton({
         type="button"
         onClick={onClick}
         aria-label={direction === "prev" ? "Предыдущий блок" : "Следующий блок"}
-        className="inline-flex h-12 w-[128px] items-center justify-center rounded-[20px] bg-[var(--color-bg)] text-[var(--color-accent-3)] transition duration-200 hover:opacity-85"
+        className={cn(
+          "inline-flex h-12 w-[128px] items-center justify-center rounded-[20px] bg-[var(--color-bg)] text-[var(--color-accent-3)]",
+          "transition-[transform,box-shadow,color] duration-200 ease-out",
+          "hover:-translate-y-[2px] hover:text-[var(--color-accent-1)] hover:shadow-[0_8px_18px_rgba(43,47,51,0.08)]",
+        )}
       >
         <Icon size={22} strokeWidth={2.2} />
       </button>
@@ -42,14 +95,13 @@ function HeroMetric({ slide }: { slide: HeroSlide }) {
           slide.metricShellClassName,
         )}
       >
-        <span
+        <AnimatedMetricNumber
+          value={slide.metricTop}
           className={cn(
             "block font-heading text-[var(--color-accent-1)]",
             slide.metricTopClassName,
           )}
-        >
-          {slide.metricTop}
-        </span>
+        />
       </div>
     );
   }
@@ -61,14 +113,13 @@ function HeroMetric({ slide }: { slide: HeroSlide }) {
         slide.metricShellClassName,
       )}
     >
-      <span
+      <AnimatedMetricNumber
+        value={slide.metricTop}
         className={cn(
           "block font-heading text-[var(--color-accent-1)]",
           slide.metricTopClassName,
         )}
-      >
-        {slide.metricTop}
-      </span>
+      />
 
       <span
         className={cn(
