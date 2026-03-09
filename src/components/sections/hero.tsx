@@ -36,10 +36,15 @@ function ArrowFrameButton({
 function HeroMetric({ slide }: { slide: HeroSlide }) {
   if (slide.metricVariant === "single") {
     return (
-      <div className="inline-flex shrink-0 items-center">
+      <div
+        className={cn(
+          "shrink-0 self-center overflow-hidden",
+          slide.metricShellClassName,
+        )}
+      >
         <span
           className={cn(
-            "font-heading text-[var(--color-accent-1)]",
+            "block font-heading text-[var(--color-accent-1)]",
             slide.metricTopClassName,
           )}
         >
@@ -50,21 +55,26 @@ function HeroMetric({ slide }: { slide: HeroSlide }) {
   }
 
   return (
-    <div className="inline-flex shrink-0 flex-col items-start justify-center">
+    <div
+      className={cn(
+        "shrink-0 self-center overflow-hidden",
+        slide.metricShellClassName,
+      )}
+    >
       <span
         className={cn(
-          "font-heading text-[var(--color-accent-1)]",
+          "block font-heading text-[var(--color-accent-1)]",
           slide.metricTopClassName,
         )}
       >
         {slide.metricTop}
       </span>
 
-      <span className="my-[10px] h-[3px] w-full bg-[var(--color-accent-3)]/85" />
+      <span className="my-[12px] block h-[3px] w-full bg-[var(--color-accent-3)]/85" />
 
       <span
         className={cn(
-          "font-heading text-[var(--color-accent-1)]",
+          "block font-heading text-[var(--color-accent-1)]",
           slide.metricBottomClassName,
         )}
       >
@@ -140,19 +150,21 @@ export function Hero() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.24, ease: "easeOut" }}
-                  className="flex h-full items-center gap-[52px]"
+                  className="flex h-full items-center gap-[56px]"
                 >
                   <HeroMetric slide={activeSlide} />
 
-                  <div className="flex flex-col justify-center gap-[6px]">
-                    {activeSlide.description.map((line) => (
-                      <p
-                        key={line}
-                        className="text-[18px] leading-[1.42] tracking-[-0.02em] text-[var(--color-text)]"
-                      >
-                        {line}
-                      </p>
-                    ))}
+                  <div className="min-w-0 flex-1 self-center">
+                    <div className="flex flex-col gap-[10px]">
+                      {activeSlide.description.map((line) => (
+                        <p
+                          key={line}
+                          className="text-[18px] leading-[1.18] tracking-[-0.02em] text-[var(--color-text)]"
+                        >
+                          {line}
+                        </p>
+                      ))}
+                    </div>
                   </div>
                 </motion.div>
               </AnimatePresence>
