@@ -1,4 +1,5 @@
 import { Header } from "@/components/layout/header";
+import { Hero } from "@/components/sections/hero";
 import { BentoCard } from "@/components/ui/bento-card";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
@@ -30,6 +31,7 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
       <Header />
+      <Hero />
 
       <DemoSection id="products" title="Продукция" />
       <DemoSection id="how-to-buy" title="Как купить" />
