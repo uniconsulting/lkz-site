@@ -6,7 +6,7 @@ const basePath = process.env.NODE_ENV === "production" ? "/lkz-site" : "";
 
 export function CatalogTeaser() {
   return (
-    <Section className="pt-4 xl:pt-5">
+    <Section className="pt-2 xl:pt-3">
       <Container>
         <div className="h-[270px] rounded-[36px] bg-[var(--color-surface)] p-[15px]">
           <div className="flex h-full items-center justify-between gap-8">
@@ -26,7 +26,7 @@ export function CatalogTeaser() {
 </Link>
             </div>
 
-            <div className="flex h-full flex-1 items-center justify-end pr-[24px]">
+            <div className="flex h-full flex-1 items-center justify-end pr-[40px]">
               <h2 className="max-w-[820px] text-right font-heading text-[34px] leading-[1.08] tracking-[-0.05em] text-[var(--color-text)]">
                 <span className="block">Каталог продукции,</span>
                 <span className="block">с возможностью производства</span>
