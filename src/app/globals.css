@@ -172,3 +172,8 @@ html.dark .footer-logo-on-light {
     width 300ms ease,
     opacity 220ms ease;
 }
+
+.phone-shift-shell {
+  will-change: transform;
+  transition: transform 300ms ease;
+}
