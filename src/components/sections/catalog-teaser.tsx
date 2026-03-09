@@ -27,7 +27,7 @@ export function CatalogTeaser() {
             </div>
 
             <div className="flex h-full flex-1 items-center justify-end pr-[40px]">
-              <h2 className="max-w-[820px] text-right font-heading text-[34px] leading-[1.18] tracking-[-0.05em] text-[var(--color-text)]">
+              <h2 className="max-w-[820px] text-right font-heading text-[34px] leading-[1.28] tracking-[-0.05em] text-[var(--color-text)]">
                 <span className="block">Каталог продукции,</span>
                 <span className="block">с возможностью производства</span>
                 <span className="block">под Вашей торговой маркой</span>
