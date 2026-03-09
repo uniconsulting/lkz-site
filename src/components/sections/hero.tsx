@@ -36,7 +36,7 @@ function ArrowFrameButton({
 function HeroMetric({ slide }: { slide: HeroSlide }) {
   if (slide.metricVariant === "single") {
     return (
-      <div className="flex h-full w-[130px] items-center">
+      <div className="flex h-full w-[130px] items-center justify-start overflow-hidden">
         <span
           className={cn(
             "font-heading text-[var(--color-accent-1)]",
@@ -50,7 +50,7 @@ function HeroMetric({ slide }: { slide: HeroSlide }) {
   }
 
   return (
-    <div className="flex h-full w-[130px] flex-col items-start justify-center">
+    <div className="flex h-full w-[130px] flex-col items-start justify-center overflow-hidden">
       <span
         className={cn(
           "font-heading text-[var(--color-accent-1)]",
@@ -60,7 +60,7 @@ function HeroMetric({ slide }: { slide: HeroSlide }) {
         {slide.metricTop}
       </span>
 
-      <span className="my-2 h-[3px] w-full bg-[var(--color-accent-3)]/85" />
+      <span className="my-[10px] h-[3px] w-full bg-[var(--color-accent-3)]/85" />
 
       <span
         className={cn(
@@ -140,11 +140,11 @@ export function Hero() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.24, ease: "easeOut" }}
-                  className="grid h-full grid-cols-[130px_1fr] items-center gap-10"
+                  className="grid h-full grid-cols-[130px_340px] items-center gap-[34px]"
                 >
                   <HeroMetric slide={activeSlide} />
 
-                  <div className="flex flex-col gap-[8px]">
+                  <div className="flex h-full flex-col justify-center gap-[6px]">
                     {activeSlide.description.map((line) => (
                       <p
                         key={line}
@@ -160,9 +160,7 @@ export function Hero() {
 
             <div className="flex items-center justify-between gap-6">
               <ArrowFrameButton direction="prev" onClick={goPrev} />
-
               <HeroIndicators activeIndex={activeIndex} />
-
               <ArrowFrameButton direction="next" onClick={goNext} />
             </div>
           </div>
