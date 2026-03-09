@@ -9,6 +9,7 @@
   --color-border: rgba(43, 47, 51, 0.08);
 
   --color-accent-1: #1ede7b;
+  --color-accent-1-foreground: #ffffff;
   --color-accent-2: #2b2f33;
   --color-accent-2-foreground: #ffffff;
   --color-accent-3: #8a8891;
@@ -27,6 +28,7 @@ html.dark {
   --color-border: rgba(255, 255, 255, 0.08);
 
   --color-accent-1: #1ede7b;
+  --color-accent-1-foreground: #2b2f33;
   --color-accent-2: #ffffff;
   --color-accent-2-foreground: #2b2f33;
   --color-accent-3: #8a8891;
