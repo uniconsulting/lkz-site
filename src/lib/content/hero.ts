@@ -18,7 +18,7 @@ export const heroSlides: HeroSlide[] = [
     metricVariant: "single",
     metricTop: "13",
     metricShellClassName: "w-[300px]",
-    metricTopClassName: "relative -top-[2px] text-[172px] leading-[0.82] tracking-[-0.09em]",
+    metricTopClassName: "relative -top-[4px] text-[172px] leading-[0.82] tracking-[-0.09em]",
     contentGapClassName: "gap-[44px]",
     descriptionShellClassName: "max-w-[360px]",
     description: [
