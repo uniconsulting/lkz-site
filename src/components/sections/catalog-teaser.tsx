@@ -8,7 +8,7 @@ export function CatalogTeaser() {
   return (
     <Section className="pt-2 xl:pt-3">
       <Container>
-        <div className="h-[270px] rounded-[36px] bg-[var(--color-surface)] p-2">
+        <div className="h-[256px] rounded-[36px] bg-[var(--color-surface)] p-2">
           <div className="flex h-full items-center justify-between gap-8">
             <div className="relative h-[240px] w-[480px] shrink-0 overflow-hidden rounded-[28px] bg-[var(--color-bg)]/35">
               <img
