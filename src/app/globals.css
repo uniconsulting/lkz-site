@@ -165,3 +165,10 @@ html.dark .footer-logo-on-dark {
 html.dark .footer-logo-on-light {
   display: block;
 }
+
+.search-expand-shell {
+  will-change: width, opacity;
+  transition:
+    width 280ms ease,
+    opacity 220ms ease;
+}
