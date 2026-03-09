@@ -36,7 +36,7 @@ function ArrowFrameButton({
 function HeroMetric({ slide }: { slide: HeroSlide }) {
   if (slide.metricVariant === "single") {
     return (
-      <div className="flex h-full w-[180px] items-center justify-start overflow-hidden">
+      <div className="inline-flex shrink-0 items-center">
         <span
           className={cn(
             "font-heading text-[var(--color-accent-1)]",
@@ -50,7 +50,7 @@ function HeroMetric({ slide }: { slide: HeroSlide }) {
   }
 
   return (
-    <div className="flex h-full w-[180px] flex-col items-start justify-center overflow-hidden">
+    <div className="inline-flex shrink-0 flex-col items-start justify-center">
       <span
         className={cn(
           "font-heading text-[var(--color-accent-1)]",
@@ -128,7 +128,7 @@ export function Hero() {
       <Container>
         <div className="grid items-start gap-8 xl:grid-cols-[1fr_720px] xl:gap-10">
           <div className="flex h-[360px] flex-col justify-between">
-            <h1 className="font-heading whitespace-nowrap text-[40px] leading-[1] tracking-[-0.05em] text-[var(--color-text)]">
+            <h1 className="font-heading whitespace-nowrap text-[36px] leading-[1] tracking-[-0.05em] text-[var(--color-text)]">
               Симбирские краски
             </h1>
 
@@ -140,15 +140,15 @@ export function Hero() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.24, ease: "easeOut" }}
-                  className="grid h-full grid-cols-[130px_340px] items-center gap-[34px]"
+                  className="flex h-full items-center gap-[52px]"
                 >
                   <HeroMetric slide={activeSlide} />
 
-                  <div className="flex h-full flex-col justify-center gap-[6px]">
+                  <div className="flex flex-col justify-center gap-[6px]">
                     {activeSlide.description.map((line) => (
                       <p
                         key={line}
-                        className="text-[16px] leading-[1.45] tracking-[-0.02em] text-[var(--color-text)]"
+                        className="text-[18px] leading-[1.42] tracking-[-0.02em] text-[var(--color-text)]"
                       >
                         {line}
                       </p>
@@ -171,4 +171,3 @@ export function Hero() {
     </Section>
   );
 }
-
