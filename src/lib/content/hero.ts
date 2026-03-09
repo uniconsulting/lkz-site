@@ -36,7 +36,7 @@ export const heroSlides: HeroSlide[] = [
     metricShellClassName: "w-[300px]",
     metricTopClassName: "text-[48px] leading-[0.9] tracking-[-0.06em]",
     metricBottomClassName: "relative -top-[6px] text-[64px] leading-[0.88] tracking-[-0.08em]",
-    metricDividerClassName: "w-[260px] my-[12px]",
+    metricDividerClassName: "h-[2px] w-[260px] my-[12px]",
     contentGapClassName: "gap-[54px]",
     descriptionShellClassName: "max-w-[430px]",
     description: [
@@ -54,7 +54,7 @@ export const heroSlides: HeroSlide[] = [
     metricShellClassName: "w-[300px]",
     metricTopClassName: "text-[86px] leading-[0.82] tracking-[-0.08em]",
     metricBottomClassName: "relative -top-[6px] text-[34px] leading-[0.94] tracking-[-0.05em]",
-    metricDividerClassName: "w-[260px] my-[12px]",
+    metricDividerClassName: "h-[2px] w-[260px] my-[12px]",
     contentGapClassName: "gap-[58px]",
     descriptionShellClassName: "max-w-[420px]",
     description: [
