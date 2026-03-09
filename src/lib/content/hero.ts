@@ -13,7 +13,7 @@ export const heroSlides: HeroSlide[] = [
     id: "experience",
     metricVariant: "single",
     metricTop: "13",
-    metricTopClassName: "text-[122px] leading-[0.82] tracking-[-0.09em]",
+    metricTopClassName: "text-[172px] leading-[0.82] tracking-[-0.09em]",
     description: [
       "лет опыта в производстве",
       "лакокрасочной продукции",
@@ -26,8 +26,8 @@ export const heroSlides: HeroSlide[] = [
     metricVariant: "stacked",
     metricTop: "20.000",
     metricBottom: "ТОНН",
-    metricTopClassName: "text-[46px] leading-[0.9] tracking-[-0.06em]",
-    metricBottomClassName: "text-[58px] leading-[0.9] tracking-[-0.06em]",
+    metricTopClassName: "text-[76px] leading-[0.9] tracking-[-0.06em]",
+    metricBottomClassName: "text-[106px] leading-[0.88] tracking-[-0.08em]",
     description: [
       "продукции мы производим",
       "ежегодно, непрерывно",
@@ -40,8 +40,8 @@ export const heroSlides: HeroSlide[] = [
     metricVariant: "stacked",
     metricTop: "400",
     metricBottom: "партнёров",
-    metricTopClassName: "text-[104px] leading-[0.82] tracking-[-0.08em]",
-    metricBottomClassName: "text-[30px] leading-[0.96] tracking-[-0.04em]",
+    metricTopClassName: "text-[188px] leading-[0.8] tracking-[-0.08em]",
+    metricBottomClassName: "text-[64px] leading-[0.94] tracking-[-0.05em]",
     description: [
       "по всей России,",
       "которые ценят удобство",
