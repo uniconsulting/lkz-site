@@ -143,7 +143,7 @@ export function Hero() {
       <Container>
         <div className="grid items-start gap-8 xl:grid-cols-[1fr_720px] xl:gap-10">
           <div className="flex h-[360px] flex-col justify-between">
-            <h1 className="font-heading whitespace-nowrap text-[36px] leading-[1] tracking-[-0.05em] text-[var(--color-text)]">
+            <h1 className="font-heading whitespace-nowrap text-[44px] leading-[1] tracking-[-0.05em] text-[var(--color-text)]">
               Симбирские краски
             </h1>
 
