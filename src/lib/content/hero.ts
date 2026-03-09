@@ -6,6 +6,9 @@ export type HeroSlide = {
   metricShellClassName: string;
   metricTopClassName: string;
   metricBottomClassName?: string;
+  metricDividerClassName?: string;
+  contentGapClassName: string;
+  descriptionShellClassName: string;
   description: [string, string, string, string];
 };
 
@@ -14,8 +17,10 @@ export const heroSlides: HeroSlide[] = [
     id: "experience",
     metricVariant: "single",
     metricTop: "13",
-    metricShellClassName: "w-[250px]",
-    metricTopClassName: "text-[168px] leading-[0.82] tracking-[-0.09em]",
+    metricShellClassName: "w-[300px]",
+    metricTopClassName: "text-[172px] leading-[0.82] tracking-[-0.09em]",
+    contentGapClassName: "gap-[44px]",
+    descriptionShellClassName: "max-w-[360px]",
     description: [
       "лет опыта в производстве",
       "лакокрасочной продукции",
@@ -29,8 +34,11 @@ export const heroSlides: HeroSlide[] = [
     metricTop: "20.000",
     metricBottom: "ТОНН",
     metricShellClassName: "w-[300px]",
-    metricTopClassName: "text-[62px] leading-[0.9] tracking-[-0.06em]",
-    metricBottomClassName: "text-[102px] leading-[0.88] tracking-[-0.08em]",
+    metricTopClassName: "text-[64px] leading-[0.9] tracking-[-0.06em]",
+    metricBottomClassName: "text-[100px] leading-[0.88] tracking-[-0.08em]",
+    metricDividerClassName: "w-[260px] my-[12px]",
+    contentGapClassName: "gap-[54px]",
+    descriptionShellClassName: "max-w-[430px]",
     description: [
       "продукции мы производим",
       "ежегодно, непрерывно",
@@ -43,9 +51,12 @@ export const heroSlides: HeroSlide[] = [
     metricVariant: "stacked",
     metricTop: "400",
     metricBottom: "партнёров",
-    metricShellClassName: "w-[320px]",
+    metricShellClassName: "w-[300px]",
     metricTopClassName: "text-[154px] leading-[0.82] tracking-[-0.08em]",
     metricBottomClassName: "text-[58px] leading-[0.94] tracking-[-0.05em]",
+    metricDividerClassName: "w-[260px] my-[12px]",
+    contentGapClassName: "gap-[58px]",
+    descriptionShellClassName: "max-w-[420px]",
     description: [
       "по всей России,",
       "которые ценят удобство",
