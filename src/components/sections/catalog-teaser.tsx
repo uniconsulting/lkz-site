@@ -17,12 +17,13 @@ export function CatalogTeaser() {
                 className="h-full w-full object-cover"
               />
 
-              <Link
-                href="#products"
-                className="absolute left-4 top-4 inline-flex h-[52px] items-center justify-center rounded-[18px] bg-[var(--color-accent-1)] px-8 text-[18px] font-semibold text-[var(--color-accent-1-foreground)] transition duration-200 hover:opacity-90"
-              >
-                открыть весь каталог
-              </Link>
+<Link
+  href="#products"
+  style={{ color: "var(--color-accent-1-foreground)" }}
+  className="absolute left-4 top-4 inline-flex h-[52px] items-center justify-center rounded-[18px] bg-[var(--color-accent-1)] px-8 text-[18px] font-semibold transition duration-200 hover:opacity-90"
+>
+  открыть весь каталог
+</Link>
             </div>
 
             <div className="flex h-full flex-1 items-center justify-end pr-[24px]">
