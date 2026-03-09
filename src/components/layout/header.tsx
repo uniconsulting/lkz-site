@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { useEffect, useState } from "react";
-import { Calculator, Menu, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Calculator, Menu, Search, X } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { headerNav } from "@/lib/constants/navigation";
 import { cn } from "@/lib/utils/cn";
@@ -58,8 +58,90 @@ function MobileMenuButton({
   );
 }
 
+function DesktopSearch({
+  isOpen,
+  onToggle,
+  onClose,
+}: {
+  isOpen: boolean;
+  onToggle: () => void;
+  onClose: () => void;
+}) {
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (!wrapperRef.current) return;
+      if (!wrapperRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    }
+
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    }
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("keydown", handleEscape);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [isOpen, onClose]);
+
+  return (
+    <div ref={wrapperRef} className="flex items-center">
+      <div
+        className={cn(
+          "overflow-hidden rounded-[18px] bg-[var(--color-bg)] transition-all duration-300 ease-out",
+          isOpen ? "w-[340px] opacity-100" : "w-0 opacity-0",
+        )}
+        aria-hidden={!isOpen}
+      >
+        <form
+          role="search"
+          onSubmit={(event) => event.preventDefault()}
+          className="flex h-11 items-center"
+        >
+          <input
+            type="text"
+            placeholder="Напишите, что хотите найти"
+            className="h-full w-full bg-transparent px-5 pr-3 text-[14px] text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] outline-none"
+          />
+
+          <button
+            type="submit"
+            aria-label="Искать"
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center text-[var(--color-text)]"
+          >
+            <Search size={18} />
+          </button>
+        </form>
+      </div>
+
+      {!isOpen ? (
+        <button
+          type="button"
+          onClick={onToggle}
+          aria-label="Открыть поиск"
+          title="Открыть поиск"
+          className="interactive-lift-accent ml-2 inline-flex h-11 w-11 items-center justify-center rounded-[18px] bg-[var(--color-bg)] text-[var(--color-text)] transition duration-200"
+        >
+          <Search size={18} />
+        </button>
+      ) : null}
+    </div>
+  );
+}
+
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
@@ -79,6 +161,10 @@ export function Header() {
     setIsMenuOpen(false);
   }
 
+  function closeSearch() {
+    setIsSearchOpen(false);
+  }
+
   return (
     <>
       <header className="sticky top-0 z-50 py-4 md:py-5">
@@ -95,13 +181,13 @@ export function Header() {
                   <img
                     src={`${basePath}/images/common/logo.svg`}
                     alt="Логотип"
-                    className="logo-light relative -top-[2px] block h-auto max-h-[36px] w-auto max-w-[148px] object-contain"
+                    className="logo-light block h-[34px] w-auto object-contain md:relative md:-top-[2px] md:h-[36px]"
                   />
 
                   <img
                     src={`${basePath}/images/common/logo-dark.svg`}
                     alt="Логотип"
-                    className="logo-dark relative -top-[2px] hidden h-auto max-h-[36px] w-auto max-w-[148px] object-contain"
+                    className="logo-dark hidden h-[34px] w-auto object-contain md:relative md:-top-[2px] md:h-[36px]"
                   />
                 </Link>
               </div>
@@ -185,6 +271,12 @@ export function Header() {
                   +7 (964) 858-99-10
                 </a>
 
+                <DesktopSearch
+                  isOpen={isSearchOpen}
+                  onToggle={() => setIsSearchOpen(true)}
+                  onClose={closeSearch}
+                />
+
                 <HeaderActionButton
                   href="#calculator"
                   label="Открыть калькулятор"
@@ -232,17 +324,17 @@ export function Header() {
               className="inline-flex h-11 items-center justify-start px-2"
               onClick={closeMenu}
             >
-<img
-  src={`${basePath}/images/common/logo.svg`}
-  alt="Логотип"
-  className="logo-light block h-[34px] w-auto object-contain md:relative md:-top-[2px] md:h-[36px]"
-/>
+              <img
+                src={`${basePath}/images/common/logo.svg`}
+                alt="Логотип"
+                className="logo-light block h-[34px] w-auto object-contain md:relative md:-top-[2px] md:h-[36px]"
+              />
 
-<img
-  src={`${basePath}/images/common/logo-dark.svg`}
-  alt="Логотип"
-  className="logo-dark hidden h-[34px] w-auto object-contain md:relative md:-top-[2px] md:h-[36px]"
-/>
+              <img
+                src={`${basePath}/images/common/logo-dark.svg`}
+                alt="Логотип"
+                className="logo-dark hidden h-[34px] w-auto object-contain md:relative md:-top-[2px] md:h-[36px]"
+              />
             </Link>
 
             <button
@@ -256,6 +348,26 @@ export function Header() {
           </div>
 
           <div className="mt-6 h-px bg-white/80" />
+
+          <form
+            role="search"
+            onSubmit={(event) => event.preventDefault()}
+            className="mt-6 flex h-12 items-center rounded-[20px] bg-[var(--color-bg)]"
+          >
+            <input
+              type="text"
+              placeholder="Напишите, что хотите найти"
+              className="h-full w-full bg-transparent px-5 pr-3 text-[15px] text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] outline-none"
+            />
+
+            <button
+              type="submit"
+              aria-label="Искать"
+              className="inline-flex h-12 w-12 shrink-0 items-center justify-center text-[var(--color-text)]"
+            >
+              <Search size={20} />
+            </button>
+          </form>
 
           <nav aria-label="Мобильная навигация" className="mt-6">
             <ul className="flex flex-col gap-4">
@@ -273,21 +385,21 @@ export function Header() {
             </ul>
           </nav>
 
-<div className="mt-8 h-px bg-white/80" />
+          <div className="mt-8 h-px bg-white/80" />
 
-<p className="mt-5 max-w-[290px] text-[14px] leading-[1.45] text-[var(--color-text-muted)]">
-  Симбирские краски — собственное производство лакокрасочной продукции для
-  надёжной и стабильной работы партнёров.
-</p>
+          <p className="mt-5 max-w-[290px] text-[14px] leading-[1.45] text-[var(--color-text-muted)]">
+            Симбирские краски — собственное производство лакокрасочной
+            продукции для надёжной и стабильной работы партнёров.
+          </p>
 
-<a
-  href="tel:+79648589910"
-  onClick={closeMenu}
-  className="mt-5 inline-flex h-12 w-full items-center justify-center rounded-[20px] bg-[var(--color-bg)] px-5 text-center text-[15px] font-semibold text-[var(--color-text)]"
->
-  +7 (964) 858-99-10
-</a>
-          
+          <a
+            href="tel:+79648589910"
+            onClick={closeMenu}
+            className="mt-5 inline-flex h-12 w-full items-center justify-center rounded-[20px] bg-[var(--color-bg)] px-5 text-center text-[15px] font-semibold text-[var(--color-text)]"
+          >
+            +7 (964) 858-99-10
+          </a>
+
           <div className="mt-auto">
             <div className="mb-5 h-px bg-white/80" />
 
