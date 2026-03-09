@@ -53,7 +53,7 @@ export const heroSlides: HeroSlide[] = [
     metricBottom: "партнёров",
     metricShellClassName: "w-[300px]",
     metricTopClassName: "text-[86px] leading-[0.82] tracking-[-0.08em]",
-    metricBottomClassName: "text-[32px] leading-[0.94] tracking-[-0.05em]",
+    metricBottomClassName: "text-[34px] leading-[0.94] tracking-[-0.05em]",
     metricDividerClassName: "w-[260px] my-[12px]",
     contentGapClassName: "gap-[58px]",
     descriptionShellClassName: "max-w-[420px]",
