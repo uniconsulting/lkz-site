@@ -169,6 +169,6 @@ html.dark .footer-logo-on-light {
 .search-expand-shell {
   will-change: width, opacity;
   transition:
-    width 380ms ease,
-    opacity 320ms ease;
+    width 300ms ease,
+    opacity 220ms ease;
 }
