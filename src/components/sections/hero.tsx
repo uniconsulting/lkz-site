@@ -8,7 +8,7 @@ import { Section } from "@/components/ui/section";
 import { heroSlides, type HeroSlide } from "@/lib/content/hero";
 import { cn } from "@/lib/utils/cn";
 
-const indicatorMajorPositions = [0, 4, 8];
+const indicatorMajorPositions = [0, 5, 10];
 
 function ArrowFrameButton({
   direction,
@@ -25,9 +25,9 @@ function ArrowFrameButton({
         type="button"
         onClick={onClick}
         aria-label={direction === "prev" ? "Предыдущий блок" : "Следующий блок"}
-        className="inline-flex h-12 w-[150px] items-center justify-center rounded-[20px] bg-[var(--color-bg)] text-[var(--color-accent-3)] transition duration-200 hover:opacity-85"
+        className="inline-flex h-12 w-[128px] items-center justify-center rounded-[20px] bg-[var(--color-bg)] text-[var(--color-accent-3)] transition duration-200 hover:opacity-85"
       >
-        <Icon size={24} strokeWidth={2.2} />
+        <Icon size={22} strokeWidth={2.2} />
       </button>
     </div>
   );
@@ -36,8 +36,13 @@ function ArrowFrameButton({
 function HeroMetric({ slide }: { slide: HeroSlide }) {
   if (slide.metricVariant === "single") {
     return (
-      <div className="flex items-center">
-        <span className="font-heading text-[172px] leading-[0.84] tracking-[-0.08em] text-[var(--color-accent-1)]">
+      <div className="flex h-full w-[130px] items-center">
+        <span
+          className={cn(
+            "font-heading text-[var(--color-accent-1)]",
+            slide.metricTopClassName,
+          )}
+        >
           {slide.metricTop}
         </span>
       </div>
@@ -45,14 +50,24 @@ function HeroMetric({ slide }: { slide: HeroSlide }) {
   }
 
   return (
-    <div className="flex w-full max-w-[315px] flex-col items-start">
-      <span className="font-heading text-[78px] leading-[0.92] tracking-[-0.06em] text-[var(--color-accent-1)]">
+    <div className="flex h-full w-[130px] flex-col items-start justify-center">
+      <span
+        className={cn(
+          "font-heading text-[var(--color-accent-1)]",
+          slide.metricTopClassName,
+        )}
+      >
         {slide.metricTop}
       </span>
 
       <span className="my-2 h-[3px] w-full bg-[var(--color-accent-3)]/85" />
 
-      <span className="font-heading text-[74px] leading-[0.92] tracking-[-0.06em] text-[var(--color-accent-1)]">
+      <span
+        className={cn(
+          "font-heading text-[var(--color-accent-1)]",
+          slide.metricBottomClassName,
+        )}
+      >
         {slide.metricBottom}
       </span>
     </div>
@@ -63,8 +78,8 @@ function HeroIndicators({ activeIndex }: { activeIndex: number }) {
   const activeMajorIndex = indicatorMajorPositions[activeIndex] ?? 0;
 
   return (
-    <div className="flex items-end gap-[20px]">
-      {Array.from({ length: 9 }).map((_, index) => {
+    <div className="flex items-end gap-[12px]">
+      {Array.from({ length: 11 }).map((_, index) => {
         const isMajor = indicatorMajorPositions.includes(index);
         const isActive = index === activeMajorIndex;
 
@@ -73,9 +88,7 @@ function HeroIndicators({ activeIndex }: { activeIndex: number }) {
             key={index}
             className={cn(
               "block rounded-full transition duration-300",
-              isMajor
-                ? "h-[62px] w-[3px]"
-                : "h-[44px] w-[2px]",
+              isMajor ? "h-[54px] w-[3px]" : "h-[34px] w-[2px]",
               isActive
                 ? "bg-[var(--color-accent-1)]"
                 : isMajor
@@ -89,31 +102,11 @@ function HeroIndicators({ activeIndex }: { activeIndex: number }) {
   );
 }
 
-function HeroBanner({ slide }: { slide: HeroSlide }) {
-  const toneClassMap = {
-    dark: "bg-[var(--color-accent-2)] text-white",
-    muted: "bg-[var(--color-accent-3)]/85 text-white",
-    light: "bg-[var(--color-surface)] text-[var(--color-text)]",
-  } as const;
-
+function HeroBannerPlaceholder() {
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={slide.id}
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -12 }}
-        transition={{ duration: 0.28, ease: "easeOut" }}
-        className={cn(
-          "flex h-[360px] w-full items-center justify-center rounded-[36px]",
-          toneClassMap[slide.bannerTone],
-        )}
-      >
-        <span className="font-body text-[46px] tracking-[-0.03em]">
-          {slide.bannerLabel}
-        </span>
-      </motion.div>
-    </AnimatePresence>
+    <div className="flex h-[360px] w-full items-center justify-center rounded-[36px] bg-[var(--color-accent-2)] text-white">
+      <span className="font-body text-[44px] tracking-[-0.03em]">БАННЕР</span>
+    </div>
   );
 }
 
@@ -135,27 +128,27 @@ export function Hero() {
       <Container>
         <div className="grid items-start gap-8 xl:grid-cols-[1fr_720px] xl:gap-10">
           <div className="flex h-[360px] flex-col justify-between">
-            <h1 className="font-heading text-[62px] leading-[0.94] tracking-[-0.06em] text-[var(--color-text)]">
+            <h1 className="font-heading whitespace-nowrap text-[36px] leading-[1] tracking-[-0.05em] text-[var(--color-text)]">
               Симбирские краски
             </h1>
 
-            <div className="flex-1 py-5">
+            <div className="flex-1 py-4">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeSlide.id}
-                  initial={{ opacity: 0, y: 12 }}
+                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -12 }}
-                  transition={{ duration: 0.28, ease: "easeOut" }}
-                  className="grid h-full grid-cols-[340px_1fr] items-center gap-7"
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.24, ease: "easeOut" }}
+                  className="grid h-full grid-cols-[130px_1fr] items-center gap-10"
                 >
                   <HeroMetric slide={activeSlide} />
 
-                  <div className="flex flex-col gap-[6px]">
+                  <div className="flex flex-col gap-[8px]">
                     {activeSlide.description.map((line) => (
                       <p
                         key={line}
-                        className="text-[28px] leading-[1.4] tracking-[-0.03em] text-[var(--color-text)]"
+                        className="text-[16px] leading-[1.45] tracking-[-0.02em] text-[var(--color-text)]"
                       >
                         {line}
                       </p>
@@ -174,7 +167,7 @@ export function Hero() {
             </div>
           </div>
 
-          <HeroBanner slide={activeSlide} />
+          <HeroBannerPlaceholder />
         </div>
       </Container>
     </Section>
