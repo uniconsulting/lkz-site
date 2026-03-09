@@ -3,9 +3,9 @@ export type HeroSlide = {
   metricVariant: "single" | "stacked";
   metricTop: string;
   metricBottom?: string;
-  description: string[];
-  bannerTone: "dark" | "muted" | "light";
-  bannerLabel: string;
+  metricTopClassName: string;
+  metricBottomClassName?: string;
+  description: [string, string, string, string];
 };
 
 export const heroSlides: HeroSlide[] = [
@@ -13,41 +13,45 @@ export const heroSlides: HeroSlide[] = [
     id: "experience",
     metricVariant: "single",
     metricTop: "13",
+    metricTopClassName:
+      "text-[150px] leading-[0.82] tracking-[-0.09em]",
     description: [
       "лет опыта в производстве",
       "лакокрасочной продукции",
       "и построении надёжных",
       "отношений с партнёрами",
     ],
-    bannerTone: "dark",
-    bannerLabel: "БАННЕР",
   },
   {
     id: "volume",
     metricVariant: "stacked",
     metricTop: "20.000",
     metricBottom: "ТОНН",
+    metricTopClassName:
+      "text-[56px] leading-[0.9] tracking-[-0.06em]",
+    metricBottomClassName:
+      "text-[62px] leading-[0.9] tracking-[-0.06em]",
     description: [
       "продукции мы производим",
       "ежегодно, непрерывно",
       "улучшая лабораторию",
       "и инфраструктуру",
     ],
-    bannerTone: "muted",
-    bannerLabel: "БАННЕР",
   },
   {
     id: "partners",
     metricVariant: "stacked",
     metricTop: "400",
     metricBottom: "партнёров",
+    metricTopClassName:
+      "text-[132px] leading-[0.82] tracking-[-0.08em]",
+    metricBottomClassName:
+      "text-[42px] leading-[0.92] tracking-[-0.05em]",
     description: [
       "по всей России,",
       "которые ценят удобство",
       "коммуникации и качество",
       "нашей продукции",
     ],
-    bannerTone: "light",
-    bannerLabel: "БАННЕР",
   },
 ];
