@@ -29,7 +29,7 @@ const mobileMetricStyles: Record<
   },
   volume: {
     shell: "w-[142px]",
-    top: "text-[26px] leading-[0.9] tracking-[-0.05em]",
+    top: "text-[27px] leading-[0.9] tracking-[-0.05em]",
     bottom: "relative -top-[2px] text-[36px] leading-[0.88] tracking-[-0.06em]",
     divider: "h-px w-[132px] my-[8px]",
     gap: "gap-[28px]",
