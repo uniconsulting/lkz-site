@@ -24,7 +24,7 @@ const mobileMetricStyles: Record<
   experience: {
     shell: "w-[104px]",
     top: "relative -top-[2px] text-[74px] leading-[0.82] tracking-[-0.08em]",
-    gap: "gap-[18px]",
+    gap: "gap-[28px]",
     descriptionShell: "max-w-[208px]",
   },
   volume: {
@@ -40,7 +40,7 @@ const mobileMetricStyles: Record<
     top: "text-[42px] leading-[0.84] tracking-[-0.06em]",
     bottom: "relative -top-[2px] text-[17px] leading-[0.94] tracking-[-0.04em]",
     divider: "h-px w-[108px] my-[6px]",
-    gap: "gap-[18px]",
+    gap: "gap-[28px]",
     descriptionShell: "max-w-[200px]",
   },
 };
