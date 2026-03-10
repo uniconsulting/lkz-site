@@ -23,7 +23,7 @@ const mobileMetricStyles: Record<
 > = {
   experience: {
     shell: "w-[112px]",
-    top: "relative -top-[2px] text-[82px] leading-[0.82] tracking-[-0.08em]",
+    top: "relative -top-[2px] text-[90px] leading-[0.82] tracking-[-0.08em]",
     gap: "gap-[28px]",
     descriptionShell: "w-[220px]",
   },
@@ -31,15 +31,15 @@ const mobileMetricStyles: Record<
     shell: "w-[142px]",
     top: "text-[27px] leading-[0.9] tracking-[-0.05em]",
     bottom: "relative -top-[2px] text-[36px] leading-[0.88] tracking-[-0.06em]",
-    divider: "h-px w-[138px] my-[10px]",
+    divider: "h-px w-[138px] my-[12px]",
     gap: "gap-[28px]",
     descriptionShell: "w-[220px]",
   },
   partners: {
     shell: "w-[142px]",
-    top: "text-[46px] leading-[0.84] tracking-[-0.06em]",
+    top: "text-[47px] leading-[0.84] tracking-[-0.06em]",
     bottom: "relative -top-[2px] text-[19px] leading-[0.94] tracking-[-0.04em]",
-    divider: "h-px w-[138px] my-[10px]",
+    divider: "h-px w-[138px] my-[12px]",
     gap: "gap-[28px]",
     descriptionShell: "w-[240px]",
   },
