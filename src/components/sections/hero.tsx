@@ -22,8 +22,8 @@ const mobileMetricStyles: Record<
   }
 > = {
   experience: {
-    shell: "w-[112px]",
-    top: "relative -top-[2px] text-[90px] leading-[0.82] tracking-[-0.08em]",
+    shell: "w-[132px]",
+    top: "relative -top-[2px] text-[94px] leading-[0.82] tracking-[-0.08em]",
     gap: "gap-[28px]",
     descriptionShell: "w-[220px]",
   },
