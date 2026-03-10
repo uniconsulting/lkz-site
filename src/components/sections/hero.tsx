@@ -33,7 +33,7 @@ const mobileMetricStyles: Record<
     bottom: "relative -top-[2px] text-[30px] leading-[0.88] tracking-[-0.06em]",
     divider: "h-px w-[108px] my-[6px]",
     gap: "gap-[14px]",
-    descriptionShell: "max-w-[196px]",
+    descriptionShell: "max-w-[200px]",
   },
   partners: {
     shell: "w-[116px]",
