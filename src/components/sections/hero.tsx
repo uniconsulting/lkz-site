@@ -10,38 +10,28 @@ import { cn } from "@/lib/utils/cn";
 
 const indicatorMajorPositions = [0, 5, 10];
 
-const mobileMetricStyles: Record<
-  string,
-  {
-    shell: string;
-    top: string;
-    bottom?: string;
-    divider?: string;
-    gap: string;
-    descriptionShell: string;
-  }
-> = {
+const mobileMetricStyles = {
   experience: {
     shell: "w-[108px]",
     top: "relative -top-[2px] text-[74px] leading-[0.82] tracking-[-0.08em]",
-    gap: "gap-[10px]",
-    descriptionShell: "max-w-[198px]",
+    gap: "gap-[14px]",
+    descriptionShell: "max-w-[210px]",
   },
   volume: {
     shell: "w-[124px]",
     top: "text-[24px] leading-[0.9] tracking-[-0.05em]",
     bottom: "relative -top-[2px] text-[30px] leading-[0.88] tracking-[-0.06em]",
     divider: "h-px w-[108px] my-[6px]",
-    gap: "gap-[10px]",
-    descriptionShell: "max-w-[184px]",
+    gap: "gap-[14px]",
+    descriptionShell: "max-w-[196px]",
   },
   partners: {
     shell: "w-[118px]",
     top: "text-[42px] leading-[0.84] tracking-[-0.06em]",
     bottom: "relative -top-[2px] text-[17px] leading-[0.94] tracking-[-0.04em]",
     divider: "h-px w-[108px] my-[6px]",
-    gap: "gap-[10px]",
-    descriptionShell: "max-w-[190px]",
+    gap: "gap-[14px]",
+    descriptionShell: "max-w-[202px]",
   },
 };
 
@@ -292,7 +282,7 @@ export function Hero() {
                 Симбирские краски
               </h1>
 
-              <div className="flex-1 py-3">
+              <div className="flex-1 pt-5 pb-3">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={`mobile-${activeSlide.id}`}
