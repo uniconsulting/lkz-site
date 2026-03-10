@@ -25,7 +25,7 @@ const mobileMetricStyles: Record<
     shell: "w-[104px]",
     top: "relative -top-[2px] text-[74px] leading-[0.82] tracking-[-0.08em]",
     gap: "gap-[28px]",
-    descriptionShell: "max-w-[208px]",
+    descriptionShell: "w-[176px]",
   },
   volume: {
     shell: "w-[122px]",
@@ -33,7 +33,7 @@ const mobileMetricStyles: Record<
     bottom: "relative -top-[2px] text-[30px] leading-[0.88] tracking-[-0.06em]",
     divider: "h-px w-[108px] my-[6px]",
     gap: "gap-[28px]",
-    descriptionShell: "max-w-[200px]",
+    descriptionShell: "w-[200px]",
   },
   partners: {
     shell: "w-[116px]",
@@ -41,7 +41,7 @@ const mobileMetricStyles: Record<
     bottom: "relative -top-[2px] text-[17px] leading-[0.94] tracking-[-0.04em]",
     divider: "h-px w-[108px] my-[6px]",
     gap: "gap-[28px]",
-    descriptionShell: "max-w-[200px]",
+    descriptionShell: "w-[172px]",
   },
 };
 
@@ -298,12 +298,12 @@ export function Hero() {
                   >
                     <HeroMetric slide={activeSlide} mobile />
 
-                    <div
-                      className={cn(
-                        "min-w-0 flex-1 self-center",
-                        mobileStyle.descriptionShell,
-                      )}
-                    >
+<div
+  className={cn(
+    "shrink-0 self-center",
+    mobileStyle.descriptionShell,
+  )}
+>
                       <div className="flex flex-col gap-[6px]">
                         {activeSlide.description.map((line) => (
                           <p
