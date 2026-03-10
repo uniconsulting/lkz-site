@@ -36,7 +36,7 @@ const mobileMetricStyles: Record<
     descriptionShell: "w-[220px]",
   },
   partners: {
-    shell: "w-[136px]",
+    shell: "w-[140px]",
     top: "text-[46px] leading-[0.84] tracking-[-0.06em]",
     bottom: "relative -top-[2px] text-[20px] leading-[0.94] tracking-[-0.04em]",
     divider: "h-px w-[126px] my-[8px]",
