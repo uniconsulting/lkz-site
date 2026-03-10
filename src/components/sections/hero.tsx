@@ -283,7 +283,7 @@ export function Hero() {
                 Симбирские краски
               </h1>
 
-              <div className="flex-1 pt-8 pb-3">
+              <div className="flex-1 pt-10 pb-3">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={`mobile-${activeSlide.id}`}
