@@ -41,7 +41,7 @@ const mobileMetricStyles: Record<
     bottom: "relative -top-[2px] text-[17px] leading-[0.94] tracking-[-0.04em]",
     divider: "h-px w-[108px] my-[6px]",
     gap: "gap-[14px]",
-    descriptionShell: "max-w-[202px]",
+    descriptionShell: "max-w-[212px]",
   },
 };
 
