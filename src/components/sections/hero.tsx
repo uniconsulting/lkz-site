@@ -317,7 +317,7 @@ export function Hero() {
                         {activeSlide.description.map((line) => (
                           <p
                             key={line}
-                            className="text-[15px] leading-[1.16] tracking-[-0.02em] text-[var(--color-text)]"
+                            className="text-[12px] leading-[1.16] tracking-[-0.02em] text-[var(--color-text)]"
                           >
                             {line}
                           </p>
