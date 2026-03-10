@@ -10,15 +10,25 @@ import { cn } from "@/lib/utils/cn";
 
 const indicatorMajorPositions = [0, 5, 10];
 
-const mobileMetricStyles = {
+const mobileMetricStyles: Record<
+  string,
+  {
+    shell: string;
+    top: string;
+    bottom?: string;
+    divider?: string;
+    gap: string;
+    descriptionShell: string;
+  }
+> = {
   experience: {
-    shell: "w-[108px]",
+    shell: "w-[104px]",
     top: "relative -top-[2px] text-[74px] leading-[0.82] tracking-[-0.08em]",
     gap: "gap-[14px]",
-    descriptionShell: "max-w-[210px]",
+    descriptionShell: "max-w-[208px]",
   },
   volume: {
-    shell: "w-[124px]",
+    shell: "w-[122px]",
     top: "text-[24px] leading-[0.9] tracking-[-0.05em]",
     bottom: "relative -top-[2px] text-[30px] leading-[0.88] tracking-[-0.06em]",
     divider: "h-px w-[108px] my-[6px]",
@@ -26,7 +36,7 @@ const mobileMetricStyles = {
     descriptionShell: "max-w-[196px]",
   },
   partners: {
-    shell: "w-[118px]",
+    shell: "w-[116px]",
     top: "text-[42px] leading-[0.84] tracking-[-0.06em]",
     bottom: "relative -top-[2px] text-[17px] leading-[0.94] tracking-[-0.04em]",
     divider: "h-px w-[108px] my-[6px]",
@@ -125,18 +135,9 @@ function HeroMetric({
 }) {
   const mobileStyle = mobileMetricStyles[slide.id] ?? mobileMetricStyles.experience;
 
-  const shellClassName = mobile
-    ? mobileStyle.shell
-    : slide.metricShellClassName;
-
-  const topClassName = mobile
-    ? mobileStyle.top
-    : slide.metricTopClassName;
-
-  const bottomClassName = mobile
-    ? mobileStyle.bottom
-    : slide.metricBottomClassName;
-
+  const shellClassName = mobile ? mobileStyle.shell : slide.metricShellClassName;
+  const topClassName = mobile ? mobileStyle.top : slide.metricTopClassName;
+  const bottomClassName = mobile ? mobileStyle.bottom : slide.metricBottomClassName;
   const dividerClassName = mobile
     ? mobileStyle.divider
     : slide.metricDividerClassName;
@@ -277,8 +278,8 @@ export function Hero() {
       <Container>
         <div className="md:hidden">
           <div className="flex flex-col gap-4">
-            <div className="flex min-h-[248px] flex-col justify-between">
-              <h1 className="font-heading text-[26px] leading-[1] tracking-[-0.05em] text-[var(--color-text)]">
+            <div className="flex min-h-[252px] flex-col justify-between">
+              <h1 className="font-heading text-[28px] leading-[1] tracking-[-0.05em] text-[var(--color-text)]">
                 Симбирские краски
               </h1>
 
@@ -307,7 +308,7 @@ export function Hero() {
                         {activeSlide.description.map((line) => (
                           <p
                             key={line}
-                            className="text-[12px] leading-[1.16] tracking-[-0.02em] text-[var(--color-text)]"
+                            className="text-[15px] leading-[1.16] tracking-[-0.02em] text-[var(--color-text)]"
                           >
                             {line}
                           </p>
