@@ -22,26 +22,26 @@ const mobileMetricStyles: Record<
   }
 > = {
   experience: {
-    shell: "w-[118px]",
+    shell: "w-[108px]",
     top: "relative -top-[2px] text-[74px] leading-[0.82] tracking-[-0.08em]",
-    gap: "gap-[12px]",
-    descriptionShell: "max-w-[170px]",
+    gap: "gap-[10px]",
+    descriptionShell: "max-w-[198px]",
   },
   volume: {
-    shell: "w-[132px]",
+    shell: "w-[124px]",
     top: "text-[24px] leading-[0.9] tracking-[-0.05em]",
     bottom: "relative -top-[2px] text-[30px] leading-[0.88] tracking-[-0.06em]",
     divider: "h-px w-[108px] my-[6px]",
-    gap: "gap-[12px]",
-    descriptionShell: "max-w-[170px]",
+    gap: "gap-[10px]",
+    descriptionShell: "max-w-[184px]",
   },
   partners: {
-    shell: "w-[126px]",
+    shell: "w-[118px]",
     top: "text-[42px] leading-[0.84] tracking-[-0.06em]",
     bottom: "relative -top-[2px] text-[17px] leading-[0.94] tracking-[-0.04em]",
     divider: "h-px w-[108px] my-[6px]",
-    gap: "gap-[12px]",
-    descriptionShell: "max-w-[170px]",
+    gap: "gap-[10px]",
+    descriptionShell: "max-w-[190px]",
   },
 };
 
@@ -288,7 +288,7 @@ export function Hero() {
         <div className="md:hidden">
           <div className="flex flex-col gap-4">
             <div className="flex min-h-[248px] flex-col justify-between">
-              <h1 className="font-heading text-[32px] leading-[1] tracking-[-0.05em] text-[var(--color-text)]">
+              <h1 className="font-heading text-[26px] leading-[1] tracking-[-0.05em] text-[var(--color-text)]">
                 Симбирские краски
               </h1>
 
