@@ -22,25 +22,25 @@ const mobileMetricStyles: Record<
   }
 > = {
   experience: {
-    shell: "w-[104px]",
-    top: "relative -top-[2px] text-[74px] leading-[0.82] tracking-[-0.08em]",
-    gap: "gap-[28px]",
+    shell: "w-[112px]",
+    top: "relative -top-[2px] text-[82px] leading-[0.82] tracking-[-0.08em]",
+    gap: "gap-[18px]",
     descriptionShell: "w-[176px]",
   },
   volume: {
-    shell: "w-[122px]",
+    shell: "w-[142px]",
     top: "text-[24px] leading-[0.9] tracking-[-0.05em]",
-    bottom: "relative -top-[2px] text-[30px] leading-[0.88] tracking-[-0.06em]",
-    divider: "h-px w-[108px] my-[6px]",
+    bottom: "relative -top-[2px] text-[36px] leading-[0.88] tracking-[-0.06em]",
+    divider: "h-px w-[132px] my-[8px]",
     gap: "gap-[28px]",
-    descriptionShell: "w-[200px]",
+    descriptionShell: "w-[168px]",
   },
   partners: {
-    shell: "w-[116px]",
+    shell: "w-[136px]",
     top: "text-[42px] leading-[0.84] tracking-[-0.06em]",
     bottom: "relative -top-[2px] text-[17px] leading-[0.94] tracking-[-0.04em]",
-    divider: "h-px w-[108px] my-[6px]",
-    gap: "gap-[28px]",
+    divider: "h-px w-[126px] my-[8px]",
+    gap: "gap-[18px]",
     descriptionShell: "w-[172px]",
   },
 };
