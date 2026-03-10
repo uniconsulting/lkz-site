@@ -10,6 +10,41 @@ import { cn } from "@/lib/utils/cn";
 
 const indicatorMajorPositions = [0, 5, 10];
 
+const mobileMetricStyles: Record<
+  string,
+  {
+    shell: string;
+    top: string;
+    bottom?: string;
+    divider?: string;
+    gap: string;
+    descriptionShell: string;
+  }
+> = {
+  experience: {
+    shell: "w-[118px]",
+    top: "relative -top-[2px] text-[74px] leading-[0.82] tracking-[-0.08em]",
+    gap: "gap-[12px]",
+    descriptionShell: "max-w-[170px]",
+  },
+  volume: {
+    shell: "w-[132px]",
+    top: "text-[24px] leading-[0.9] tracking-[-0.05em]",
+    bottom: "relative -top-[2px] text-[30px] leading-[0.88] tracking-[-0.06em]",
+    divider: "h-px w-[108px] my-[6px]",
+    gap: "gap-[12px]",
+    descriptionShell: "max-w-[170px]",
+  },
+  partners: {
+    shell: "w-[126px]",
+    top: "text-[42px] leading-[0.84] tracking-[-0.06em]",
+    bottom: "relative -top-[2px] text-[17px] leading-[0.94] tracking-[-0.04em]",
+    divider: "h-px w-[108px] my-[6px]",
+    gap: "gap-[12px]",
+    descriptionShell: "max-w-[170px]",
+  },
+};
+
 function formatMetricValue(value: number, original: string) {
   if (original.includes(".")) {
     return new Intl.NumberFormat("de-DE").format(value);
@@ -74,37 +109,61 @@ function ArrowFrameButton({
   const Icon = direction === "prev" ? ArrowLeft : ArrowRight;
 
   return (
-    <div className="rounded-[28px] bg-[var(--color-surface)] p-2">
+    <div className="rounded-[24px] bg-[var(--color-surface)] p-2 md:rounded-[28px]">
       <button
         type="button"
         onClick={onClick}
         aria-label={direction === "prev" ? "Предыдущий блок" : "Следующий блок"}
         className={cn(
-          "inline-flex h-12 w-[128px] items-center justify-center rounded-[20px] bg-[var(--color-bg)] text-[var(--color-accent-3)]",
+          "inline-flex h-11 w-[88px] items-center justify-center rounded-[18px] bg-[var(--color-bg)] text-[var(--color-accent-3)] md:h-12 md:w-[128px] md:rounded-[20px]",
           "transition-[transform,box-shadow,color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
           "hover:-translate-y-[1px] hover:text-[var(--color-accent-1)] hover:shadow-[0_6px_14px_rgba(43,47,51,0.06)]",
         )}
       >
-        <Icon size={22} strokeWidth={2.2} />
+        <Icon size={20} strokeWidth={2.2} className="md:h-[22px] md:w-[22px]" />
       </button>
     </div>
   );
 }
 
-function HeroMetric({ slide }: { slide: HeroSlide }) {
+function HeroMetric({
+  slide,
+  mobile = false,
+}: {
+  slide: HeroSlide;
+  mobile?: boolean;
+}) {
+  const mobileStyle = mobileMetricStyles[slide.id] ?? mobileMetricStyles.experience;
+
+  const shellClassName = mobile
+    ? mobileStyle.shell
+    : slide.metricShellClassName;
+
+  const topClassName = mobile
+    ? mobileStyle.top
+    : slide.metricTopClassName;
+
+  const bottomClassName = mobile
+    ? mobileStyle.bottom
+    : slide.metricBottomClassName;
+
+  const dividerClassName = mobile
+    ? mobileStyle.divider
+    : slide.metricDividerClassName;
+
   if (slide.metricVariant === "single") {
     return (
       <div
         className={cn(
           "shrink-0 self-center overflow-hidden",
-          slide.metricShellClassName,
+          shellClassName,
         )}
       >
         <AnimatedMetricNumber
           value={slide.metricTop}
           className={cn(
             "block font-heading text-[var(--color-accent-1)]",
-            slide.metricTopClassName,
+            topClassName,
           )}
         />
       </div>
@@ -115,21 +174,21 @@ function HeroMetric({ slide }: { slide: HeroSlide }) {
     <div
       className={cn(
         "shrink-0 self-center overflow-hidden",
-        slide.metricShellClassName,
+        shellClassName,
       )}
     >
       <AnimatedMetricNumber
         value={slide.metricTop}
         className={cn(
           "block font-heading text-[var(--color-accent-1)]",
-          slide.metricTopClassName,
+          topClassName,
         )}
       />
 
       <span
         className={cn(
-          "block h-[3px] bg-[var(--color-accent-3)]/85",
-          slide.metricDividerClassName,
+          "block bg-[var(--color-accent-3)]/85",
+          dividerClassName,
         )}
       />
 
@@ -139,7 +198,7 @@ function HeroMetric({ slide }: { slide: HeroSlide }) {
         transition={{ duration: 0.34, ease: "easeOut", delay: 0.06 }}
         className={cn(
           "block font-heading text-[var(--color-accent-1)]",
-          slide.metricBottomClassName,
+          bottomClassName,
         )}
       >
         {slide.metricBottom}
@@ -148,11 +207,17 @@ function HeroMetric({ slide }: { slide: HeroSlide }) {
   );
 }
 
-function HeroIndicators({ activeIndex }: { activeIndex: number }) {
+function HeroIndicators({
+  activeIndex,
+  mobile = false,
+}: {
+  activeIndex: number;
+  mobile?: boolean;
+}) {
   const activeMajorIndex = indicatorMajorPositions[activeIndex] ?? 0;
 
   return (
-    <div className="flex items-end gap-[12px]">
+    <div className={cn("flex items-end", mobile ? "gap-[8px]" : "gap-[12px]")}>
       {Array.from({ length: 11 }).map((_, index) => {
         const isMajor = indicatorMajorPositions.includes(index);
         const isActive = index === activeMajorIndex;
@@ -162,7 +227,13 @@ function HeroIndicators({ activeIndex }: { activeIndex: number }) {
             key={index}
             className={cn(
               "block rounded-full transition duration-300",
-              isMajor ? "h-[54px] w-[3px]" : "h-[34px] w-[2px]",
+              mobile
+                ? isMajor
+                  ? "h-[34px] w-[3px]"
+                  : "h-[20px] w-[2px]"
+                : isMajor
+                  ? "h-[54px] w-[3px]"
+                  : "h-[34px] w-[2px]",
               isActive
                 ? "bg-[var(--color-accent-1)]"
                 : isMajor
@@ -176,10 +247,23 @@ function HeroIndicators({ activeIndex }: { activeIndex: number }) {
   );
 }
 
-function HeroBannerPlaceholder() {
+function HeroBannerPlaceholder({
+  className,
+  labelClassName,
+}: {
+  className?: string;
+  labelClassName?: string;
+}) {
   return (
-    <div className="flex h-[360px] w-full items-center justify-center rounded-[36px] bg-[var(--color-accent-2)] text-white">
-      <span className="font-body text-[44px] tracking-[-0.03em]">БАННЕР</span>
+    <div
+      className={cn(
+        "flex w-full items-center justify-center rounded-[28px] bg-[var(--color-accent-2)] text-white md:rounded-[36px]",
+        className,
+      )}
+    >
+      <span className={cn("font-body tracking-[-0.03em]", labelClassName)}>
+        БАННЕР
+      </span>
     </div>
   );
 }
@@ -188,6 +272,7 @@ export function Hero() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const activeSlide = useMemo(() => heroSlides[activeIndex], [activeIndex]);
+  const mobileStyle = mobileMetricStyles[activeSlide.id] ?? mobileMetricStyles.experience;
 
   function goPrev() {
     setActiveIndex((prev) => (prev === 0 ? heroSlides.length - 1 : prev - 1));
@@ -200,7 +285,64 @@ export function Hero() {
   return (
     <Section className="pt-4 md:pt-6 xl:pt-8">
       <Container>
-        <div className="grid items-start gap-8 xl:grid-cols-[1fr_720px] xl:gap-10">
+        <div className="md:hidden">
+          <div className="flex flex-col gap-4">
+            <div className="flex min-h-[248px] flex-col justify-between">
+              <h1 className="font-heading text-[32px] leading-[1] tracking-[-0.05em] text-[var(--color-text)]">
+                Симбирские краски
+              </h1>
+
+              <div className="flex-1 py-3">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={`mobile-${activeSlide.id}`}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.22, ease: "easeOut" }}
+                    className={cn(
+                      "flex h-full items-center",
+                      mobileStyle.gap,
+                    )}
+                  >
+                    <HeroMetric slide={activeSlide} mobile />
+
+                    <div
+                      className={cn(
+                        "min-w-0 flex-1 self-center",
+                        mobileStyle.descriptionShell,
+                      )}
+                    >
+                      <div className="flex flex-col gap-[6px]">
+                        {activeSlide.description.map((line) => (
+                          <p
+                            key={line}
+                            className="text-[15px] leading-[1.16] tracking-[-0.02em] text-[var(--color-text)]"
+                          >
+                            {line}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
+              <div className="flex items-center justify-between gap-3">
+                <ArrowFrameButton direction="prev" onClick={goPrev} />
+                <HeroIndicators activeIndex={activeIndex} mobile />
+                <ArrowFrameButton direction="next" onClick={goNext} />
+              </div>
+            </div>
+
+            <HeroBannerPlaceholder
+              className="aspect-[2/1]"
+              labelClassName="text-[28px]"
+            />
+          </div>
+        </div>
+
+        <div className="hidden md:grid md:items-start md:gap-8 xl:grid-cols-[1fr_720px] xl:gap-10">
           <div className="flex h-[360px] flex-col justify-between">
             <h1 className="font-heading whitespace-nowrap text-[46px] leading-[1] tracking-[-0.05em] text-[var(--color-text)]">
               Симбирские краски
@@ -249,7 +391,10 @@ export function Hero() {
             </div>
           </div>
 
-          <HeroBannerPlaceholder />
+          <HeroBannerPlaceholder
+            className="h-[360px]"
+            labelClassName="text-[44px]"
+          />
         </div>
       </Container>
     </Section>
