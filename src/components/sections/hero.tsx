@@ -25,7 +25,7 @@ const mobileMetricStyles: Record<
     shell: "w-[112px]",
     top: "relative -top-[2px] text-[82px] leading-[0.82] tracking-[-0.08em]",
     gap: "gap-[18px]",
-    descriptionShell: "w-[176px]",
+    descriptionShell: "w-[220px]",
   },
   volume: {
     shell: "w-[142px]",
@@ -33,7 +33,7 @@ const mobileMetricStyles: Record<
     bottom: "relative -top-[2px] text-[36px] leading-[0.88] tracking-[-0.06em]",
     divider: "h-px w-[132px] my-[8px]",
     gap: "gap-[28px]",
-    descriptionShell: "w-[168px]",
+    descriptionShell: "w-[220px]",
   },
   partners: {
     shell: "w-[136px]",
@@ -41,7 +41,7 @@ const mobileMetricStyles: Record<
     bottom: "relative -top-[2px] text-[17px] leading-[0.94] tracking-[-0.04em]",
     divider: "h-px w-[126px] my-[8px]",
     gap: "gap-[18px]",
-    descriptionShell: "w-[172px]",
+    descriptionShell: "w-[220px]",
   },
 };
 
