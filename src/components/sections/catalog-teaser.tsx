@@ -57,7 +57,7 @@ function RnDCard({ mobile = false }: { mobile?: boolean }) {
   return (
     <div
       className={cn(
-        "flex h-full flex-col justify-between border-[5px] border-[var(--color-accent-2)] bg-[var(--color-bg)]",
+        "flex h-full flex-col justify-between border-[6px] border-[var(--color-accent-2)] bg-[var(--color-bg)]",
         mobile
           ? "rounded-[28px] px-6 py-6"
           : "w-[290px] rounded-[32px] px-8 py-7",
