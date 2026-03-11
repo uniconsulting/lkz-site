@@ -1,51 +1,44 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion } from "motion/react";
+import { useRef, useState } from "react";
+import {
+  motion,
+  useMotionValueEvent,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "motion/react";
 import { Factory, FlaskConical, Leaf } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { cn } from "@/lib/utils/cn";
 
-const AUTO_DELAY = 4200;
-
-// Ширина стартовой карточки R&D
+// Ширина стартовой карточки №1
 const LEFT_CARD_WIDTH = 290;
 
-// Насколько следующая карточка заходит под предыдущую.
-// Увеличили значение, чтобы левые углы №2 и №3 не читались.
+// Глубина наложения карточек друг на друга
 const CARD_OVERLAP = 64;
 
-// Ширина тёмной карточки
-const FACTORY_CARD_WIDTH = 560;
+// Ширина карточки №2
+const FACTORY_CARD_WIDTH = 620;
 
-// Старт правой области: она начинается левее края первой карточки,
-// чтобы создать реальный эффект наложения.
+// Старт зоны карточки №2 за карточкой №1
 const RIGHT_AREA_LEFT = LEFT_CARD_WIDTH - CARD_OVERLAP;
 
-// Старт зелёной карточки: она уходит под тёмную карточку.
+// Старт карточки №3 за карточкой №2
 const ECO_CARD_LEFT = FACTORY_CARD_WIDTH - CARD_OVERLAP;
 
-function ProgressBars({
-  activeStage,
-  onSelect,
-}: {
-  activeStage: number;
-  onSelect: (stage: number) => void;
-}) {
+function ProgressBars({ activeStage }: { activeStage: number }) {
   return (
     <div className="flex items-center justify-end gap-2">
       {[0, 1, 2].map((stage) => (
-        <button
+        <span
           key={stage}
-          type="button"
-          onClick={() => onSelect(stage)}
-          aria-label={`Открыть этап ${stage + 1}`}
           className={cn(
             "rounded-full transition-all duration-300",
             activeStage === stage
               ? "h-[4px] w-10 bg-[var(--color-accent-1)]"
-              : "h-[4px] w-6 bg-[var(--color-accent-3)]/45 hover:bg-[var(--color-accent-3)]/75",
+              : "h-[4px] w-6 bg-[var(--color-accent-3)]/45",
           )}
         />
       ))}
@@ -94,31 +87,17 @@ function RnDCard({ mobile = false }: { mobile?: boolean }) {
   );
 }
 
-function FactoryPanel({
-  visible,
-  mobile = false,
-}: {
-  visible: boolean;
-  mobile?: boolean;
-}) {
+function FactoryPanel({ mobile = false }: { mobile?: boolean }) {
   return (
     <div
       className={cn(
         "flex h-full flex-col justify-between bg-[var(--color-accent-2)] text-white",
         mobile
           ? "rounded-[28px] px-6 py-6"
-          : "w-[560px] rounded-[32px] px-24 py-7",
+          : "w-[620px] rounded-[32px] px-16 py-7",
       )}
     >
-      <motion.div
-        initial={false}
-        animate={{
-          opacity: visible ? 1 : 0,
-          x: visible ? 0 : 12,
-        }}
-        transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
-        className="flex h-full flex-col justify-between"
-      >
+      <div className="flex h-full flex-col justify-between">
         <div
           className={cn(
             "font-heading tracking-[-0.04em]",
@@ -128,11 +107,11 @@ function FactoryPanel({
           комплекс на
         </div>
 
-        <div className={cn("flex items-end", mobile ? "gap-3" : "gap-5")}>
+        <div className={cn("flex items-center", mobile ? "gap-3" : "gap-5")}>
           <Factory
             size={mobile ? 38 : 44}
             strokeWidth={2.1}
-            className={mobile ? "mb-[6px]" : "mb-[10px] shrink-0"}
+            className="shrink-0"
           />
 
           <div
@@ -148,43 +127,29 @@ function FactoryPanel({
         <div
           className={cn(
             "text-white/92",
-            mobile ? "text-[15px] leading-[1.3]" : "max-w-[360px] text-[17px] leading-[1.24]",
+            mobile ? "text-[15px] leading-[1.3]" : "max-w-[420px] text-[17px] leading-[1.24]",
           )}
         >
           <div>современный заводской комплекс,</div>
           <div>оснащённый автоматизированными</div>
           <div>линиями последнего поколения</div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }
 
-function EcoPanel({
-  visible,
-  mobile = false,
-}: {
-  visible: boolean;
-  mobile?: boolean;
-}) {
+function EcoPanel({ mobile = false }: { mobile?: boolean }) {
   return (
     <div
       className={cn(
         "flex h-full flex-col justify-between bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)]",
         mobile
           ? "rounded-[28px] px-6 py-6"
-          : "w-full rounded-[32px] px-24 py-7",
+          : "w-full rounded-[32px] px-16 py-7",
       )}
     >
-      <motion.div
-        initial={false}
-        animate={{
-          opacity: visible ? 1 : 0,
-          x: visible ? 0 : 12,
-        }}
-        transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
-        className="flex h-full flex-col justify-between"
-      >
+      <div className="flex h-full flex-col justify-between">
         <div
           className={cn(
             "font-heading tracking-[-0.04em]",
@@ -194,11 +159,11 @@ function EcoPanel({
           эко-стандарт
         </div>
 
-        <div className={cn("flex items-end", mobile ? "gap-3" : "gap-5")}>
+        <div className={cn("flex items-center", mobile ? "gap-3" : "gap-5")}>
           <Leaf
             size={mobile ? 38 : 44}
             strokeWidth={2.1}
-            className={mobile ? "mb-[6px]" : "mb-[10px] shrink-0"}
+            className="shrink-0"
           />
 
           <div
@@ -214,31 +179,67 @@ function EcoPanel({
         <div
           className={cn(
             "opacity-95",
-            mobile ? "text-[15px] leading-[1.3]" : "max-w-[320px] text-[17px] leading-[1.24]",
+            mobile ? "text-[15px] leading-[1.3]" : "max-w-[360px] text-[17px] leading-[1.24]",
           )}
         >
           <div>соблюдаем стандарты эко-норм</div>
           <div>безопасность для человека</div>
           <div>и окружающей среды</div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }
 
 export function CatalogTeaser() {
+  const sceneRef = useRef<HTMLDivElement | null>(null);
   const [activeStage, setActiveStage] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
 
-  useEffect(() => {
-    if (isPaused) return;
+  const { scrollYProgress } = useScroll({
+    target: sceneRef,
+    offset: ["start 75%", "end 30%"],
+  });
 
-    const interval = window.setInterval(() => {
-      setActiveStage((prev) => (prev === 2 ? 0 : prev + 1));
-    }, AUTO_DELAY);
+  const factoryRevealRaw = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
+  const ecoRevealRaw = useTransform(scrollYProgress, [0.45, 0.95], [0, 1]);
 
-    return () => window.clearInterval(interval);
-  }, [isPaused]);
+  const factoryReveal = useSpring(factoryRevealRaw, {
+    stiffness: 110,
+    damping: 24,
+    mass: 0.5,
+  });
+
+  const ecoReveal = useSpring(ecoRevealRaw, {
+    stiffness: 110,
+    damping: 24,
+    mass: 0.5,
+  });
+
+  const factoryClip = useTransform(
+    factoryReveal,
+    (v) => `inset(0 ${100 - v * 100}% 0 0 round 32px)`,
+  );
+
+  const ecoClip = useTransform(
+    ecoReveal,
+    (v) => `inset(0 ${100 - v * 100}% 0 0 round 32px)`,
+  );
+
+  const factoryX = useTransform(factoryReveal, [0, 1], [26, 0]);
+  const ecoX = useTransform(ecoReveal, [0, 1], [26, 0]);
+
+  const factoryOpacity = useTransform(factoryReveal, [0, 1], [0.55, 1]);
+  const ecoOpacity = useTransform(ecoReveal, [0, 1], [0.55, 1]);
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest < 0.34) {
+      setActiveStage(0);
+    } else if (latest < 0.76) {
+      setActiveStage(1);
+    } else {
+      setActiveStage(2);
+    }
+  });
 
   return (
     <Section className="pt-0 xl:pt-0">
@@ -246,101 +247,53 @@ export function CatalogTeaser() {
         <div className="xl:hidden">
           <div className="flex flex-col gap-3">
             <RnDCard mobile />
-            <FactoryPanel visible mobile />
-            <EcoPanel visible mobile />
+            <FactoryPanel mobile />
+            <EcoPanel mobile />
           </div>
         </div>
 
-        <div
-          className="hidden xl:block"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-        >
-          {/* Индикатор положения перенесён в верхний правый угол */}
-          <div className="mb-5 flex items-center justify-end">
-            <ProgressBars activeStage={activeStage} onSelect={setActiveStage} />
-          </div>
-
-          <div className="relative h-[252px] w-full">
-            {/* Карточка №1. Самый верхний слой */}
-            <div className="absolute left-0 top-0 z-30 h-full">
-              <button
-                type="button"
-                onClick={() => setActiveStage(0)}
-                className="h-full text-left"
-                aria-label="Открыть блок R&D"
-              >
-                <RnDCard />
-              </button>
+        <div ref={sceneRef} className="hidden xl:block h-[720px]">
+          <div className="sticky top-28">
+            <div className="mb-5 flex items-center justify-end">
+              <ProgressBars activeStage={activeStage} />
             </div>
 
-            {/* Правая раскрываемая область.
-                Она начинается ЛЕВЕЕ правого края первой карточки,
-                чтобы карточка №2 уходила под №1. */}
-            <div
-              className="absolute top-0 z-10 h-full"
-              style={{
-                left: `${RIGHT_AREA_LEFT}px`,
-                right: 0,
-              }}
-            >
-              {/* Карточка №2.
-                  Reveal делаем через clip-path, а не через width-контейнер,
-                  чтобы карточка выезжала уже со скруглёнными углами. */}
-              <motion.div
-                className="absolute left-0 top-0 z-20 h-full w-[560px]"
-                initial={false}
-                animate={{
-                  clipPath:
-                    activeStage >= 1
-                      ? "inset(0 0% 0 0 round 32px)"
-                      : "inset(0 100% 0 0 round 32px)",
-                }}
-                transition={{
-                  duration: 0.86,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-              >
-                <button
-                  type="button"
-                  onClick={() => setActiveStage(1)}
-                  className="h-full w-full text-left"
-                  aria-label="Открыть блок производства"
-                >
-                  <FactoryPanel visible={activeStage >= 1} />
-                </button>
-              </motion.div>
+            <div className="relative h-[252px] w-full">
+              <div className="absolute left-0 top-0 z-30 h-full">
+                <RnDCard />
+              </div>
 
-              {/* Карточка №3.
-                  Её начало ещё левее под №2, а сама карточка длиннее и тянется до правого края. */}
-              <motion.div
+              <div
                 className="absolute top-0 z-10 h-full"
                 style={{
-                  left: `${ECO_CARD_LEFT}px`,
+                  left: `${RIGHT_AREA_LEFT}px`,
                   right: 0,
                 }}
-                initial={false}
-                animate={{
-                  clipPath:
-                    activeStage >= 2
-                      ? "inset(0 0% 0 0 round 32px)"
-                      : "inset(0 100% 0 0 round 32px)",
-                }}
-                transition={{
-                  duration: 0.92,
-                  ease: [0.22, 1, 0.36, 1],
-                  delay: activeStage >= 2 ? 0.06 : 0,
-                }}
               >
-                <button
-                  type="button"
-                  onClick={() => setActiveStage(2)}
-                  className="h-full w-full text-left"
-                  aria-label="Открыть блок эко-стандарта"
+                <motion.div
+                  className="absolute left-0 top-0 z-20 h-full w-[620px]"
+                  style={{
+                    clipPath: factoryClip,
+                    x: factoryX,
+                    opacity: factoryOpacity,
+                  }}
                 >
-                  <EcoPanel visible={activeStage >= 2} />
-                </button>
-              </motion.div>
+                  <FactoryPanel />
+                </motion.div>
+
+                <motion.div
+                  className="absolute top-0 z-10 h-full"
+                  style={{
+                    left: `${ECO_CARD_LEFT}px`,
+                    right: 0,
+                    clipPath: ecoClip,
+                    x: ecoX,
+                    opacity: ecoOpacity,
+                  }}
+                >
+                  <EcoPanel />
+                </motion.div>
+              </div>
             </div>
           </div>
         </div>
