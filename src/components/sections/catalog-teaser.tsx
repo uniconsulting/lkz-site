@@ -107,7 +107,7 @@ function FactoryPanel({
         "flex h-full flex-col justify-between bg-[var(--color-accent-2)] text-white",
         mobile
           ? "rounded-[28px] px-6 py-6"
-          : "w-[560px] rounded-[32px] px-16 py-7",
+          : "w-[560px] rounded-[32px] px-24 py-7",
       )}
     >
       <motion.div
@@ -151,9 +151,9 @@ function FactoryPanel({
             mobile ? "text-[15px] leading-[1.3]" : "max-w-[360px] text-[17px] leading-[1.24]",
           )}
         >
-          <div>Современный заводской комплекс,</div>
+          <div>современный заводской комплекс,</div>
           <div>оснащённый автоматизированными</div>
-          <div>линиями последнего поколения.</div>
+          <div>линиями последнего поколения</div>
         </div>
       </motion.div>
     </div>
@@ -173,7 +173,7 @@ function EcoPanel({
         "flex h-full flex-col justify-between bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)]",
         mobile
           ? "rounded-[28px] px-6 py-6"
-          : "w-full rounded-[32px] px-16 py-7",
+          : "w-full rounded-[32px] px-24 py-7",
       )}
     >
       <motion.div
@@ -241,7 +241,7 @@ export function CatalogTeaser() {
   }, [isPaused]);
 
   return (
-    <Section className="pt-2 xl:pt-3">
+    <Section className="pt-0 xl:pt-0">
       <Container>
         <div className="xl:hidden">
           <div className="flex flex-col gap-3">
