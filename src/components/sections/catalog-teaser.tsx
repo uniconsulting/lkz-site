@@ -107,7 +107,7 @@ function FactoryPanel({
         "flex h-full flex-col justify-between bg-[var(--color-accent-2)] text-white",
         mobile
           ? "rounded-[28px] px-6 py-6"
-          : "w-[560px] rounded-[32px] px-10 py-7",
+          : "w-[560px] rounded-[32px] px-16 py-7",
       )}
     >
       <motion.div
@@ -173,7 +173,7 @@ function EcoPanel({
         "flex h-full flex-col justify-between bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)]",
         mobile
           ? "rounded-[28px] px-6 py-6"
-          : "w-full rounded-[32px] px-10 py-7",
+          : "w-full rounded-[32px] px-16 py-7",
       )}
     >
       <motion.div
