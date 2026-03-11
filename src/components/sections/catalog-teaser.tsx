@@ -8,11 +8,17 @@ import { Section } from "@/components/ui/section";
 import { cn } from "@/lib/utils/cn";
 
 const AUTO_DELAY = 4200;
-const OVERLAP = 24;
-const BASE_CARD_WIDTH = 290;
-const FACTORY_WIDTH = 500;
-const ECO_WIDTH = 450;
-const RIGHT_AREA_WIDTHS = [0, FACTORY_WIDTH, FACTORY_WIDTH + ECO_WIDTH - OVERLAP] as const;
+
+const LEFT_CARD_WIDTH = 290;
+const LEFT_OVERLAP = 24;
+const MIDDLE_CARD_WIDTH = 520;
+const CARD_OVERLAP = 24;
+
+const RIGHT_STAGE_WIDTHS = [
+  "0px",
+  `${MIDDLE_CARD_WIDTH}px`,
+  `calc(100% - ${LEFT_CARD_WIDTH - LEFT_OVERLAP}px)`,
+] as const;
 
 function ProgressBars({
   activeStage,
@@ -95,14 +101,14 @@ function FactoryPanel({
         "flex h-full flex-col justify-between bg-[var(--color-accent-2)] text-white",
         mobile
           ? "rounded-[28px] px-6 py-6"
-          : "w-[500px] rounded-[32px] px-9 py-7",
+          : "w-[520px] rounded-[32px] px-10 py-7",
       )}
     >
       <motion.div
         initial={false}
         animate={{
           opacity: visible ? 1 : 0,
-          x: visible ? 0 : 14,
+          x: visible ? 0 : 12,
         }}
         transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
         className="flex h-full flex-col justify-between"
@@ -116,27 +122,38 @@ function FactoryPanel({
           комплекс на
         </div>
 
-        <div className={cn("flex items-end", mobile ? "gap-3" : "gap-4")}>
+        <div className={cn("flex items-end", mobile ? "gap-3" : "gap-5")}>
           <Factory
             size={mobile ? 38 : 46}
             strokeWidth={2.1}
-            className={mobile ? "mb-[6px]" : "mb-[8px]"}
+            className={mobile ? "mb-[6px]" : "mb-[10px] shrink-0"}
           />
 
-          <div
-            className={cn(
-              "font-heading tracking-[-0.06em]",
-              mobile ? "text-[50px] leading-[0.92]" : "text-[72px] leading-[0.9]",
-            )}
-          >
-            2300 м²
+          <div className="flex flex-col leading-none">
+            <div
+              className={cn(
+                "font-heading tracking-[-0.06em]",
+                mobile ? "text-[50px] leading-[0.92]" : "text-[72px] leading-[0.86]",
+              )}
+            >
+              2300
+            </div>
+
+            <div
+              className={cn(
+                "font-heading tracking-[-0.06em]",
+                mobile ? "text-[42px] leading-[0.9]" : "text-[54px] leading-[0.82]",
+              )}
+            >
+              м²
+            </div>
           </div>
         </div>
 
         <div
           className={cn(
             "text-white/92",
-            mobile ? "text-[15px] leading-[1.3]" : "max-w-[360px] text-[17px] leading-[1.24]",
+            mobile ? "text-[15px] leading-[1.3]" : "max-w-[340px] text-[17px] leading-[1.24]",
           )}
         >
           <div>Современный заводской комплекс,</div>
@@ -161,14 +178,14 @@ function EcoPanel({
         "flex h-full flex-col justify-between bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)]",
         mobile
           ? "rounded-[28px] px-6 py-6"
-          : "w-[450px] rounded-[32px] px-9 py-7",
+          : "w-full rounded-[32px] px-10 py-7",
       )}
     >
       <motion.div
         initial={false}
         animate={{
           opacity: visible ? 1 : 0,
-          x: visible ? 0 : 14,
+          x: visible ? 0 : 12,
         }}
         transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
         className="flex h-full flex-col justify-between"
@@ -182,20 +199,31 @@ function EcoPanel({
           эко-стандарт
         </div>
 
-        <div className={cn("flex items-end", mobile ? "gap-3" : "gap-4")}>
+        <div className={cn("flex items-end", mobile ? "gap-3" : "gap-5")}>
           <Leaf
             size={mobile ? 38 : 46}
             strokeWidth={2.1}
-            className={mobile ? "mb-[6px]" : "mb-[8px]"}
+            className={mobile ? "mb-[6px]" : "mb-[10px] shrink-0"}
           />
 
-          <div
-            className={cn(
-              "font-heading tracking-[-0.06em]",
-              mobile ? "text-[42px] leading-[0.92]" : "text-[62px] leading-[0.9]",
-            )}
-          >
-            ISO 14001
+          <div className="flex flex-col leading-none">
+            <div
+              className={cn(
+                "font-heading tracking-[-0.06em]",
+                mobile ? "text-[42px] leading-[0.92]" : "text-[56px] leading-[0.84]",
+              )}
+            >
+              ИСО
+            </div>
+
+            <div
+              className={cn(
+                "font-heading tracking-[-0.06em]",
+                mobile ? "text-[42px] leading-[0.92]" : "text-[72px] leading-[0.84]",
+              )}
+            >
+              14001
+            </div>
           </div>
         </div>
 
@@ -231,7 +259,7 @@ export function CatalogTeaser() {
   return (
     <Section className="pt-2 xl:pt-3">
       <Container>
-        <div className="md:hidden">
+        <div className="xl:hidden">
           <div className="flex flex-col gap-3">
             <RnDCard mobile />
             <FactoryPanel visible mobile />
@@ -240,13 +268,13 @@ export function CatalogTeaser() {
         </div>
 
         <div
-          className="hidden md:block"
+          className="hidden xl:block"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
           <div className="overflow-hidden">
-            <div className="flex items-stretch">
-              <div className="relative z-30 h-[252px] shrink-0">
+            <div className="relative h-[252px] w-full">
+              <div className="absolute left-0 top-0 z-30 h-full">
                 <button
                   type="button"
                   onClick={() => setActiveStage(0)}
@@ -258,30 +286,30 @@ export function CatalogTeaser() {
               </div>
 
               <motion.div
-                animate={{ width: RIGHT_AREA_WIDTHS[activeStage] }}
+                animate={{ width: RIGHT_STAGE_WIDTHS[activeStage] }}
                 transition={{
-                  duration: 0.9,
+                  duration: 0.88,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className="-ml-[24px] relative z-10 h-[252px] overflow-hidden"
+                className="absolute left-[266px] top-0 z-10 h-full overflow-hidden"
               >
-                <div className="relative h-full w-[926px]">
-                  <div className="absolute left-0 top-0 z-10 h-full">
+                <div className="relative h-full w-full min-w-[520px]">
+                  <div className="absolute left-0 top-0 z-20 h-full w-[520px]">
                     <button
                       type="button"
                       onClick={() => setActiveStage(1)}
-                      className="h-full text-left"
+                      className="h-full w-full text-left"
                       aria-label="Открыть блок производства"
                     >
                       <FactoryPanel visible={activeStage >= 1} />
                     </button>
                   </div>
 
-                  <div className="absolute left-[476px] top-0 z-20 h-full">
+                  <div className="absolute left-[496px] top-0 z-10 h-full right-0 min-w-[430px]">
                     <button
                       type="button"
                       onClick={() => setActiveStage(2)}
-                      className="h-full text-left"
+                      className="h-full w-full text-left"
                       aria-label="Открыть блок эко-стандарта"
                     >
                       <EcoPanel visible={activeStage >= 2} />
