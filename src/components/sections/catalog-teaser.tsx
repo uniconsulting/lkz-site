@@ -8,7 +8,11 @@ import { Section } from "@/components/ui/section";
 import { cn } from "@/lib/utils/cn";
 
 const AUTO_DELAY = 4200;
-const RIGHT_AREA_WIDTHS = [0, 500, 950] as const;
+const OVERLAP = 24;
+const BASE_CARD_WIDTH = 290;
+const FACTORY_WIDTH = 500;
+const ECO_WIDTH = 450;
+const RIGHT_AREA_WIDTHS = [0, FACTORY_WIDTH, FACTORY_WIDTH + ECO_WIDTH - OVERLAP] as const;
 
 function ProgressBars({
   activeStage,
@@ -57,7 +61,7 @@ function RnDCard({ mobile = false }: { mobile?: boolean }) {
         <div
           className={cn(
             "font-heading tracking-[-0.04em] text-[var(--color-accent-2)]",
-            mobile ? "text-[24px] leading-[1.08]" : "text-[26px] leading-[1.06]",
+            mobile ? "text-[20px] leading-[1.08]" : "text-[22px] leading-[1.06]",
           )}
         >
           <div>R&amp;D Центр</div>
@@ -91,22 +95,22 @@ function FactoryPanel({
         "flex h-full flex-col justify-between bg-[var(--color-accent-2)] text-white",
         mobile
           ? "rounded-[28px] px-6 py-6"
-          : "w-[500px] rounded-r-[32px] px-9 py-7",
+          : "w-[500px] rounded-[32px] px-9 py-7",
       )}
     >
       <motion.div
         initial={false}
         animate={{
           opacity: visible ? 1 : 0,
-          x: visible ? 0 : 12,
+          x: visible ? 0 : 14,
         }}
-        transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
         className="flex h-full flex-col justify-between"
       >
         <div
           className={cn(
             "font-heading tracking-[-0.04em]",
-            mobile ? "text-[24px] leading-[1]" : "text-[28px] leading-[1]",
+            mobile ? "text-[20px] leading-[1]" : "text-[24px] leading-[1]",
           )}
         >
           комплекс на
@@ -157,22 +161,22 @@ function EcoPanel({
         "flex h-full flex-col justify-between bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)]",
         mobile
           ? "rounded-[28px] px-6 py-6"
-          : "w-[450px] rounded-r-[32px] px-9 py-7",
+          : "w-[450px] rounded-[32px] px-9 py-7",
       )}
     >
       <motion.div
         initial={false}
         animate={{
           opacity: visible ? 1 : 0,
-          x: visible ? 0 : 12,
+          x: visible ? 0 : 14,
         }}
-        transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
         className="flex h-full flex-col justify-between"
       >
         <div
           className={cn(
             "font-heading tracking-[-0.04em]",
-            mobile ? "text-[22px] leading-[1]" : "text-[24px] leading-[1]",
+            mobile ? "text-[18px] leading-[1]" : "text-[20px] leading-[1]",
           )}
         >
           эко-стандарт
@@ -242,41 +246,47 @@ export function CatalogTeaser() {
         >
           <div className="overflow-hidden">
             <div className="flex items-stretch">
-              <button
-                type="button"
-                onClick={() => setActiveStage(0)}
-                className="h-[252px] shrink-0 text-left"
-                aria-label="Открыть блок R&D"
-              >
-                <RnDCard />
-              </button>
+              <div className="relative z-30 h-[252px] shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setActiveStage(0)}
+                  className="h-full text-left"
+                  aria-label="Открыть блок R&D"
+                >
+                  <RnDCard />
+                </button>
+              </div>
 
               <motion.div
                 animate={{ width: RIGHT_AREA_WIDTHS[activeStage] }}
                 transition={{
-                  duration: 0.72,
+                  duration: 0.9,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className="h-[252px] overflow-hidden"
+                className="-ml-[24px] relative z-10 h-[252px] overflow-hidden"
               >
-                <div className="flex h-full w-[950px] items-stretch">
-                  <button
-                    type="button"
-                    onClick={() => setActiveStage(1)}
-                    className="h-full shrink-0 text-left"
-                    aria-label="Открыть блок производства"
-                  >
-                    <FactoryPanel visible={activeStage >= 1} />
-                  </button>
+                <div className="relative h-full w-[926px]">
+                  <div className="absolute left-0 top-0 z-10 h-full">
+                    <button
+                      type="button"
+                      onClick={() => setActiveStage(1)}
+                      className="h-full text-left"
+                      aria-label="Открыть блок производства"
+                    >
+                      <FactoryPanel visible={activeStage >= 1} />
+                    </button>
+                  </div>
 
-                  <button
-                    type="button"
-                    onClick={() => setActiveStage(2)}
-                    className="h-full shrink-0 text-left"
-                    aria-label="Открыть блок эко-стандарта"
-                  >
-                    <EcoPanel visible={activeStage >= 2} />
-                  </button>
+                  <div className="absolute left-[476px] top-0 z-20 h-full">
+                    <button
+                      type="button"
+                      onClick={() => setActiveStage(2)}
+                      className="h-full text-left"
+                      aria-label="Открыть блок эко-стандарта"
+                    >
+                      <EcoPanel visible={activeStage >= 2} />
+                    </button>
+                  </div>
                 </div>
               </motion.div>
             </div>
