@@ -14,7 +14,7 @@ const LEFT_CARD_WIDTH = 290;
 
 // Насколько следующая карточка заходит под предыдущую.
 // Увеличили значение, чтобы левые углы №2 и №3 не читались.
-const CARD_OVERLAP = 44;
+const CARD_OVERLAP = 64;
 
 // Ширина тёмной карточки
 const FACTORY_CARD_WIDTH = 560;
