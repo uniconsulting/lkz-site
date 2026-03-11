@@ -7,8 +7,8 @@ import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { cn } from "@/lib/utils/cn";
 
-const DESKTOP_STAGE_WIDTHS = [300, 860, 1380] as const;
 const AUTO_DELAY = 4200;
+const RIGHT_AREA_WIDTHS = [0, 500, 950] as const;
 
 function ProgressBars({
   activeStage,
@@ -37,29 +37,27 @@ function ProgressBars({
   );
 }
 
-function RnDCard({
-  desktop = false,
-}: {
-  desktop?: boolean;
-}) {
+function RnDCard({ mobile = false }: { mobile?: boolean }) {
   return (
     <div
       className={cn(
-        "flex h-full flex-col justify-between rounded-[32px] border-[3px] border-[var(--color-accent-2)] bg-[var(--color-bg)]",
-        desktop ? "w-[300px] px-8 py-7" : "px-6 py-6",
+        "flex h-full flex-col justify-between border-[3px] border-[var(--color-accent-2)] bg-[var(--color-bg)]",
+        mobile
+          ? "rounded-[28px] px-6 py-6"
+          : "w-[290px] rounded-[32px] px-8 py-7",
       )}
     >
       <FlaskConical
-        size={desktop ? 42 : 34}
+        size={mobile ? 34 : 42}
         strokeWidth={2.1}
         className="text-[var(--color-accent-2)]"
       />
 
-      <div className={cn(desktop ? "space-y-5" : "space-y-4")}>
+      <div className={cn(mobile ? "space-y-4" : "space-y-5")}>
         <div
           className={cn(
             "font-heading tracking-[-0.04em] text-[var(--color-accent-2)]",
-            desktop ? "text-[26px] leading-[1.08]" : "text-[24px] leading-[1.08]",
+            mobile ? "text-[24px] leading-[1.08]" : "text-[26px] leading-[1.06]",
           )}
         >
           <div>R&amp;D Центр</div>
@@ -69,7 +67,7 @@ function RnDCard({
         <div
           className={cn(
             "text-[var(--color-text)]/82",
-            desktop ? "text-[16px] leading-[1.3]" : "text-[15px] leading-[1.3]",
+            mobile ? "text-[15px] leading-[1.3]" : "text-[16px] leading-[1.28]",
           )}
         >
           <div>улучшаем рецептуру</div>
@@ -80,49 +78,51 @@ function RnDCard({
   );
 }
 
-function FactoryCard({
+function FactoryPanel({
   visible,
-  desktop = false,
+  mobile = false,
 }: {
   visible: boolean;
-  desktop?: boolean;
+  mobile?: boolean;
 }) {
   return (
     <div
       className={cn(
         "flex h-full flex-col justify-between bg-[var(--color-accent-2)] text-white",
-        desktop ? "w-[560px] rounded-r-[32px] px-10 py-7" : "rounded-[28px] px-6 py-6",
+        mobile
+          ? "rounded-[28px] px-6 py-6"
+          : "w-[500px] rounded-r-[32px] px-9 py-7",
       )}
     >
       <motion.div
         initial={false}
         animate={{
           opacity: visible ? 1 : 0,
-          x: visible ? 0 : 10,
+          x: visible ? 0 : 12,
         }}
-        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
         className="flex h-full flex-col justify-between"
       >
         <div
           className={cn(
             "font-heading tracking-[-0.04em]",
-            desktop ? "text-[28px] leading-[1]" : "text-[24px] leading-[1]",
+            mobile ? "text-[24px] leading-[1]" : "text-[28px] leading-[1]",
           )}
         >
           комплекс на
         </div>
 
-        <div className={cn("flex items-end", desktop ? "gap-4" : "gap-3")}>
+        <div className={cn("flex items-end", mobile ? "gap-3" : "gap-4")}>
           <Factory
-            size={desktop ? 52 : 38}
+            size={mobile ? 38 : 46}
             strokeWidth={2.1}
-            className={desktop ? "mb-[8px]" : "mb-[6px]"}
+            className={mobile ? "mb-[6px]" : "mb-[8px]"}
           />
 
           <div
             className={cn(
               "font-heading tracking-[-0.06em]",
-              desktop ? "text-[82px] leading-[0.9]" : "text-[50px] leading-[0.92]",
+              mobile ? "text-[50px] leading-[0.92]" : "text-[72px] leading-[0.9]",
             )}
           >
             2300 м²
@@ -132,7 +132,7 @@ function FactoryCard({
         <div
           className={cn(
             "text-white/92",
-            desktop ? "max-w-[410px] text-[18px] leading-[1.26]" : "text-[15px] leading-[1.3]",
+            mobile ? "text-[15px] leading-[1.3]" : "max-w-[360px] text-[17px] leading-[1.24]",
           )}
         >
           <div>Современный заводской комплекс,</div>
@@ -144,49 +144,51 @@ function FactoryCard({
   );
 }
 
-function EcoCard({
+function EcoPanel({
   visible,
-  desktop = false,
+  mobile = false,
 }: {
   visible: boolean;
-  desktop?: boolean;
+  mobile?: boolean;
 }) {
   return (
     <div
       className={cn(
         "flex h-full flex-col justify-between bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)]",
-        desktop ? "w-[520px] rounded-r-[32px] px-10 py-7" : "rounded-[28px] px-6 py-6",
+        mobile
+          ? "rounded-[28px] px-6 py-6"
+          : "w-[450px] rounded-r-[32px] px-9 py-7",
       )}
     >
       <motion.div
         initial={false}
         animate={{
           opacity: visible ? 1 : 0,
-          x: visible ? 0 : 10,
+          x: visible ? 0 : 12,
         }}
-        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
         className="flex h-full flex-col justify-between"
       >
         <div
           className={cn(
             "font-heading tracking-[-0.04em]",
-            desktop ? "text-[24px] leading-[1]" : "text-[22px] leading-[1]",
+            mobile ? "text-[22px] leading-[1]" : "text-[24px] leading-[1]",
           )}
         >
           эко-стандарт
         </div>
 
-        <div className={cn("flex items-end", desktop ? "gap-4" : "gap-3")}>
+        <div className={cn("flex items-end", mobile ? "gap-3" : "gap-4")}>
           <Leaf
-            size={desktop ? 52 : 38}
+            size={mobile ? 38 : 46}
             strokeWidth={2.1}
-            className={desktop ? "mb-[8px]" : "mb-[6px]"}
+            className={mobile ? "mb-[6px]" : "mb-[8px]"}
           />
 
           <div
             className={cn(
               "font-heading tracking-[-0.06em]",
-              desktop ? "text-[72px] leading-[0.9]" : "text-[42px] leading-[0.92]",
+              mobile ? "text-[42px] leading-[0.92]" : "text-[62px] leading-[0.9]",
             )}
           >
             ISO 14001
@@ -196,7 +198,7 @@ function EcoCard({
         <div
           className={cn(
             "opacity-95",
-            desktop ? "max-w-[390px] text-[18px] leading-[1.26]" : "text-[15px] leading-[1.3]",
+            mobile ? "text-[15px] leading-[1.3]" : "max-w-[320px] text-[17px] leading-[1.24]",
           )}
         >
           <div>соблюдаем стандарты эко-норм</div>
@@ -227,9 +229,9 @@ export function CatalogTeaser() {
       <Container>
         <div className="md:hidden">
           <div className="flex flex-col gap-3">
-            <RnDCard />
-            <FactoryCard visible desktop={false} />
-            <EcoCard visible desktop={false} />
+            <RnDCard mobile />
+            <FactoryPanel visible mobile />
+            <EcoPanel visible mobile />
           </div>
         </div>
 
@@ -238,46 +240,50 @@ export function CatalogTeaser() {
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          <motion.div
-            animate={{ width: DESKTOP_STAGE_WIDTHS[activeStage] }}
-            transition={{
-              duration: 0.72,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="h-[262px] overflow-hidden"
-          >
-            <div className="flex h-full w-[1380px] items-stretch">
+          <div className="overflow-hidden">
+            <div className="flex items-stretch">
               <button
                 type="button"
                 onClick={() => setActiveStage(0)}
-                className="h-full cursor-pointer text-left"
+                className="h-[252px] shrink-0 text-left"
                 aria-label="Открыть блок R&D"
               >
-                <RnDCard desktop />
+                <RnDCard />
               </button>
 
-              <button
-                type="button"
-                onClick={() => setActiveStage(1)}
-                className="h-full cursor-pointer text-left"
-                aria-label="Открыть блок производства"
+              <motion.div
+                animate={{ width: RIGHT_AREA_WIDTHS[activeStage] }}
+                transition={{
+                  duration: 0.72,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="h-[252px] overflow-hidden"
               >
-                <FactoryCard visible={activeStage >= 1} desktop />
-              </button>
+                <div className="flex h-full w-[950px] items-stretch">
+                  <button
+                    type="button"
+                    onClick={() => setActiveStage(1)}
+                    className="h-full shrink-0 text-left"
+                    aria-label="Открыть блок производства"
+                  >
+                    <FactoryPanel visible={activeStage >= 1} />
+                  </button>
 
-              <button
-                type="button"
-                onClick={() => setActiveStage(2)}
-                className="h-full cursor-pointer text-left"
-                aria-label="Открыть блок эко-стандарта"
-              >
-                <EcoCard visible={activeStage >= 2} desktop />
-              </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveStage(2)}
+                    className="h-full shrink-0 text-left"
+                    aria-label="Открыть блок эко-стандарта"
+                  >
+                    <EcoPanel visible={activeStage >= 2} />
+                  </button>
+                </div>
+              </motion.div>
             </div>
-          </motion.div>
 
-          <div className="mt-5 flex items-center justify-end">
-            <ProgressBars activeStage={activeStage} onSelect={setActiveStage} />
+            <div className="mt-5 flex items-center justify-end">
+              <ProgressBars activeStage={activeStage} onSelect={setActiveStage} />
+            </div>
           </div>
         </div>
       </Container>
