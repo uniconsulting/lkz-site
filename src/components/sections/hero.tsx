@@ -21,7 +21,7 @@ import { heroSlides, type HeroSlide } from "@/lib/content/hero";
 import { cn } from "@/lib/utils/cn";
 
 const indicatorMajorPositions = [0, 5, 10];
-const DESKTOP_STICKY_OFFSET = 88;
+const DESKTOP_STICKY_OFFSET = 56;
 
 const LEFT_CARD_WIDTH = 300;
 const CARD_OVERLAP = 64;
@@ -566,7 +566,7 @@ export function Hero() {
             className="h-full"
             style={{ paddingTop: `${DESKTOP_STICKY_OFFSET}px` }}
           >
-            <div className="pt-6 xl:pt-8">
+            <div className="pt-0">
               <Container>
                 <div className="grid items-start gap-8 xl:grid-cols-[1fr_720px] xl:gap-10">
                   <div className="flex h-[360px] flex-col justify-between">
