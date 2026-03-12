@@ -356,7 +356,7 @@ function FactoryPanel({ mobile = false }: { mobile?: boolean }) {
         <div
           className={cn(
             "text-white/92",
-            mobile ? "text-[15px] leading-[1.3]" : "max-w-[560px] text-[17px] leading-[1.24]",
+            mobile ? "text-[15px] leading-[1.3]" : "max-w-[460px] text-[17px] leading-[1.24]",
           )}
         >
           <div>современный заводской комплекс,</div>
