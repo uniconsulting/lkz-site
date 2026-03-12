@@ -139,14 +139,14 @@ function AnimatedCatalogButton() {
       <div className="relative inline-flex overflow-hidden rounded-[18px] p-px">
         <motion.span
           aria-hidden="true"
-          className="absolute -inset-[140%]"
+          className="pointer-events-none absolute inset-0 rounded-[18px]"
           style={{
             background:
-              "conic-gradient(from 0deg, rgba(30,222,123,0.04) 0deg, rgba(30,222,123,0.08) 40deg, var(--color-accent-1) 90deg, rgba(30,222,123,0.08) 140deg, rgba(30,222,123,0.04) 210deg, rgba(30,222,123,0.08) 260deg, var(--color-accent-1) 310deg, rgba(30,222,123,0.04) 360deg)",
+              "linear-gradient(115deg, transparent 0%, transparent 34%, rgba(30,222,123,0.08) 42%, rgba(30,222,123,0.95) 50%, rgba(30,222,123,0.08) 58%, transparent 66%, transparent 100%)",
           }}
-          animate={{ rotate: 360 }}
+          animate={{ x: ["-140%", "140%"] }}
           transition={{
-            duration: 6.5,
+            duration: 2.8,
             ease: "linear",
             repeat: Infinity,
           }}
