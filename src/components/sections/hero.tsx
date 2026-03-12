@@ -345,7 +345,7 @@ function FactoryPanel({ mobile = false }: { mobile?: boolean }) {
           : "w-[560px] rounded-[32px] px-16 py-7",
       )}
     >
-      <div className="flex h-full flex-col justify-between pl-8">
+      <div className="flex h-full flex-col justify-between pl-6">
         <div
           className={cn(
             "font-heading tracking-[-0.04em]",
@@ -397,7 +397,7 @@ function EcoPanel({ mobile = false }: { mobile?: boolean }) {
           : "w-full rounded-[32px] px-14 py-7",
       )}
     >
-      <div className="flex h-full flex-col justify-between pl-8">
+      <div className="flex h-full flex-col justify-between pl-10">
         <div
           className={cn(
             "font-heading tracking-[-0.04em]",
