@@ -434,13 +434,13 @@ export function Hero() {
     offset: [`start ${STICKY_TOP_PX}px`, `end ${STICKY_TOP_PX}px`],
   });
 
-  const factoryReveal = useTransform(scrollYProgress, [0, 0.5], [0, 1], {
-    clamp: true,
-  });
+const factoryReveal = useTransform(scrollYProgress, [0.02, 0.42], [0, 1], {
+  clamp: true,
+});
 
-  const ecoReveal = useTransform(scrollYProgress, [0.5, 1], [0, 1], {
-    clamp: true,
-  });
+const ecoReveal = useTransform(scrollYProgress, [0.44, 0.78], [0, 1], {
+  clamp: true,
+});
 
   const factoryClip = useTransform(
     factoryReveal,
@@ -458,15 +458,15 @@ export function Hero() {
   const factoryOpacity = useTransform(factoryReveal, [0, 0.04, 1], [0, 0, 1]);
   const ecoOpacity = useTransform(ecoReveal, [0, 0.04, 1], [0, 0, 1]);
 
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (latest < 0.02) {
-      setCatalogStage(0);
-    } else if (latest < 0.5) {
-      setCatalogStage(1);
-    } else {
-      setCatalogStage(2);
-    }
-  });
+useMotionValueEvent(scrollYProgress, "change", (latest) => {
+  if (latest < 0.02) {
+    setCatalogStage(0);
+  } else if (latest < 0.44) {
+    setCatalogStage(1);
+  } else {
+    setCatalogStage(2);
+  }
+});
 
   function goPrev() {
     setActiveIndex((prev) => (prev === 0 ? heroSlides.length - 1 : prev - 1));
@@ -536,7 +536,7 @@ export function Hero() {
         </div>
       </Container>
 
-      <div ref={sceneRef} className="hidden xl:block h-[1700px]">
+      <div ref={sceneRef} className="hidden xl:block h-[2200px]">
         <div className="sticky top-24">
           <Container>
             <div className="grid items-start gap-8 xl:grid-cols-[1fr_720px] xl:gap-10">
