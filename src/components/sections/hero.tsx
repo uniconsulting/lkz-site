@@ -15,7 +15,7 @@ import { heroSlides, type HeroSlide } from "@/lib/content/hero";
 import { cn } from "@/lib/utils/cn";
 
 const indicatorMajorPositions = [0, 5, 10];
-const STICKY_TOP_PX = 96;
+const STICKY_TOP_PX = 88;
 
 const LEFT_CARD_WIDTH = 300;
 const CARD_OVERLAP = 64;
@@ -477,7 +477,7 @@ useMotionValueEvent(scrollYProgress, "change", (latest) => {
   }
 
   return (
-    <Section className="pt-4 md:pt-0 xl:pt-0">
+    <Section className="pt-4 md:pt-6 xl:pt-8">
       <Container>
         <div className="xl:hidden">
           <div className="flex flex-col gap-4">
@@ -537,7 +537,7 @@ useMotionValueEvent(scrollYProgress, "change", (latest) => {
       </Container>
 
       <div ref={sceneRef} className="hidden xl:block h-[2200px]">
-        <div className="sticky top-24">
+        <div className="sticky top-[88px]">
           <Container>
             <div className="grid items-start gap-8 xl:grid-cols-[1fr_720px] xl:gap-10">
               <div className="flex h-[360px] flex-col justify-between">
