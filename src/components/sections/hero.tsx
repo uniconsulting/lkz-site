@@ -339,7 +339,7 @@ function FactoryPanel({ mobile = false }: { mobile?: boolean }) {
   return (
     <div
       className={cn(
-        "flex h-full flex-col justify-between bg-[var(--color-accent-2)] text-white",
+        "flex h-full flex-col justify-between bg-[var(--color-accent-2)] text-[var(--color-accent-2-foreground)]",
         mobile
           ? "rounded-[28px] px-6 py-6"
           : "w-[560px] rounded-[32px] px-16 py-7",
@@ -374,7 +374,7 @@ function FactoryPanel({ mobile = false }: { mobile?: boolean }) {
 
         <div
           className={cn(
-            "text-white/92",
+            "opacity-90",
             mobile ? "text-[15px] leading-[1.3]" : "max-w-[560px] text-[17px] leading-[1.24]",
           )}
         >
