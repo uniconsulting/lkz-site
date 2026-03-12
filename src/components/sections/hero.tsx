@@ -8,7 +8,13 @@ import {
   useScroll,
   useTransform,
 } from "motion/react";
-import { ArrowLeft, ArrowRight, Factory, FlaskConical, Leaf } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Factory,
+  FlaskConical,
+  Leaf,
+} from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { heroSlides, type HeroSlide } from "@/lib/content/hero";
@@ -19,7 +25,7 @@ const STICKY_TOP_PX = 88;
 
 const LEFT_CARD_WIDTH = 300;
 const CARD_OVERLAP = 64;
-const FACTORY_CARD_WIDTH = 460;
+const FACTORY_CARD_WIDTH = 660;
 const RIGHT_AREA_LEFT = LEFT_CARD_WIDTH - CARD_OVERLAP;
 const ECO_CARD_LEFT = FACTORY_CARD_WIDTH - CARD_OVERLAP;
 
@@ -43,7 +49,8 @@ const mobileMetricStyles: Record<
   volume: {
     shell: "w-[142px]",
     top: "text-[27px] leading-[0.9] tracking-[-0.05em]",
-    bottom: "relative -top-[2px] text-[36px] leading-[0.88] tracking-[-0.06em]",
+    bottom:
+      "relative -top-[2px] text-[36px] leading-[0.88] tracking-[-0.06em]",
     divider: "h-px w-[138px] my-[12px]",
     gap: "gap-[28px]",
     descriptionShell: "w-[220px]",
@@ -51,7 +58,8 @@ const mobileMetricStyles: Record<
   partners: {
     shell: "w-[142px]",
     top: "text-[47px] leading-[0.84] tracking-[-0.06em]",
-    bottom: "relative -top-[2px] text-[19px] leading-[0.94] tracking-[-0.04em]",
+    bottom:
+      "relative -top-[2px] text-[19px] leading-[0.94] tracking-[-0.04em]",
     divider: "h-px w-[138px] my-[12px]",
     gap: "gap-[28px]",
     descriptionShell: "w-[240px]",
@@ -133,7 +141,11 @@ function ArrowFrameButton({
           "hover:-translate-y-[1px] hover:text-[var(--color-accent-1)] hover:shadow-[0_6px_14px_rgba(43,47,51,0.06)]",
         )}
       >
-        <Icon size={20} strokeWidth={2.2} className="md:h-[22px] md:w-[22px]" />
+        <Icon
+          size={20}
+          strokeWidth={2.2}
+          className="md:h-[22px] md:w-[22px]"
+        />
       </button>
     </div>
   );
@@ -146,12 +158,17 @@ function HeroMetric({
   slide: HeroSlide;
   mobile?: boolean;
 }) {
-  const mobileStyle = mobileMetricStyles[slide.id] ?? mobileMetricStyles.experience;
+  const mobileStyle =
+    mobileMetricStyles[slide.id] ?? mobileMetricStyles.experience;
 
   const shellClassName = mobile ? mobileStyle.shell : slide.metricShellClassName;
   const topClassName = mobile ? mobileStyle.top : slide.metricTopClassName;
-  const bottomClassName = mobile ? mobileStyle.bottom : slide.metricBottomClassName;
-  const dividerClassName = mobile ? mobileStyle.divider : slide.metricDividerClassName;
+  const bottomClassName = mobile
+    ? mobileStyle.bottom
+    : slide.metricBottomClassName;
+  const dividerClassName = mobile
+    ? mobileStyle.divider
+    : slide.metricDividerClassName;
 
   if (slide.metricVariant === "single") {
     return (
@@ -177,7 +194,9 @@ function HeroMetric({
         )}
       />
 
-      <span className={cn("block bg-[var(--color-accent-3)]/85", dividerClassName)} />
+      <span
+        className={cn("block bg-[var(--color-accent-3)]/85", dividerClassName)}
+      />
 
       <motion.span
         initial={{ opacity: 0, y: 8 }}
@@ -323,7 +342,7 @@ function FactoryPanel({ mobile = false }: { mobile?: boolean }) {
         "flex h-full flex-col justify-between bg-[var(--color-accent-2)] text-white",
         mobile
           ? "rounded-[28px] px-6 py-6"
-          : "w-[460px] rounded-[32px] px-16 py-7",
+          : "w-[660px] rounded-[32px] px-16 py-7",
       )}
     >
       <div className="flex h-full flex-col justify-between pl-8">
@@ -434,13 +453,13 @@ export function Hero() {
     offset: [`start ${STICKY_TOP_PX}px`, `end ${STICKY_TOP_PX}px`],
   });
 
-const factoryReveal = useTransform(scrollYProgress, [0.02, 0.42], [0, 1], {
-  clamp: true,
-});
+  const factoryReveal = useTransform(scrollYProgress, [0.02, 0.42], [0, 1], {
+    clamp: true,
+  });
 
-const ecoReveal = useTransform(scrollYProgress, [0.44, 0.78], [0, 1], {
-  clamp: true,
-});
+  const ecoReveal = useTransform(scrollYProgress, [0.44, 0.78], [0, 1], {
+    clamp: true,
+  });
 
   const factoryClip = useTransform(
     factoryReveal,
@@ -458,15 +477,15 @@ const ecoReveal = useTransform(scrollYProgress, [0.44, 0.78], [0, 1], {
   const factoryOpacity = useTransform(factoryReveal, [0, 0.04, 1], [0, 0, 1]);
   const ecoOpacity = useTransform(ecoReveal, [0, 0.04, 1], [0, 0, 1]);
 
-useMotionValueEvent(scrollYProgress, "change", (latest) => {
-  if (latest < 0.02) {
-    setCatalogStage(0);
-  } else if (latest < 0.44) {
-    setCatalogStage(1);
-  } else {
-    setCatalogStage(2);
-  }
-});
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest < 0.02) {
+      setCatalogStage(0);
+    } else if (latest < 0.44) {
+      setCatalogStage(1);
+    } else {
+      setCatalogStage(2);
+    }
+  });
 
   function goPrev() {
     setActiveIndex((prev) => (prev === 0 ? heroSlides.length - 1 : prev - 1));
@@ -477,7 +496,7 @@ useMotionValueEvent(scrollYProgress, "change", (latest) => {
   }
 
   return (
-    <Section className="pt-4 md:pt-6 xl:pt-8">
+    <Section className="pt-4 md:pt-0 xl:pt-0">
       <Container>
         <div className="xl:hidden">
           <div className="flex flex-col gap-4">
@@ -498,7 +517,9 @@ useMotionValueEvent(scrollYProgress, "change", (latest) => {
                   >
                     <HeroMetric slide={activeSlide} mobile />
 
-                    <div className={cn("shrink-0 self-center", mobileStyle.descriptionShell)}>
+                    <div
+                      className={cn("shrink-0 self-center", mobileStyle.descriptionShell)}
+                    >
                       <div className="flex flex-col gap-[6px]">
                         {activeSlide.description.map((line) => (
                           <p
@@ -538,107 +559,109 @@ useMotionValueEvent(scrollYProgress, "change", (latest) => {
 
       <div ref={sceneRef} className="hidden xl:block h-[2200px]">
         <div className="sticky top-[88px]">
-          <Container>
-            <div className="grid items-start gap-8 xl:grid-cols-[1fr_720px] xl:gap-10">
-              <div className="flex h-[360px] flex-col justify-between">
-                <h1 className="font-heading whitespace-nowrap text-[46px] leading-[1] tracking-[-0.05em] text-[var(--color-text)]">
-                  Симбирские краски
-                </h1>
+          <div className="pt-6 xl:pt-8">
+            <Container>
+              <div className="grid items-start gap-8 xl:grid-cols-[1fr_720px] xl:gap-10">
+                <div className="flex h-[360px] flex-col justify-between">
+                  <h1 className="font-heading whitespace-nowrap text-[46px] leading-[1] tracking-[-0.05em] text-[var(--color-text)]">
+                    Симбирские краски
+                  </h1>
 
-                <div className="flex-1 py-4">
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={activeSlide.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.24, ease: "easeOut" }}
-                      className={cn(
-                        "flex h-full items-center",
-                        activeSlide.contentGapClassName,
-                      )}
-                    >
-                      <HeroMetric slide={activeSlide} />
-
-                      <div
+                  <div className="flex-1 py-4">
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={activeSlide.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.24, ease: "easeOut" }}
                         className={cn(
-                          "min-w-0 flex-1 self-center",
-                          activeSlide.descriptionShellClassName,
+                          "flex h-full items-center",
+                          activeSlide.contentGapClassName,
                         )}
                       >
-                        <div className="flex flex-col gap-[10px]">
-                          {activeSlide.description.map((line) => (
-                            <p
-                              key={line}
-                              className="text-[18px] leading-[1.18] tracking-[-0.02em] text-[var(--color-text)]"
-                            >
-                              {line}
-                            </p>
-                          ))}
+                        <HeroMetric slide={activeSlide} />
+
+                        <div
+                          className={cn(
+                            "min-w-0 flex-1 self-center",
+                            activeSlide.descriptionShellClassName,
+                          )}
+                        >
+                          <div className="flex flex-col gap-[10px]">
+                            {activeSlide.description.map((line) => (
+                              <p
+                                key={line}
+                                className="text-[18px] leading-[1.18] tracking-[-0.02em] text-[var(--color-text)]"
+                              >
+                                {line}
+                              </p>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    </motion.div>
-                  </AnimatePresence>
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-6">
+                    <ArrowFrameButton direction="prev" onClick={goPrev} />
+                    <HeroIndicators activeIndex={activeIndex} />
+                    <ArrowFrameButton direction="next" onClick={goNext} />
+                  </div>
                 </div>
 
-                <div className="flex items-center justify-between gap-6">
-                  <ArrowFrameButton direction="prev" onClick={goPrev} />
-                  <HeroIndicators activeIndex={activeIndex} />
-                  <ArrowFrameButton direction="next" onClick={goNext} />
-                </div>
+                <HeroBannerPlaceholder
+                  className="h-[360px]"
+                  labelClassName="text-[44px]"
+                />
               </div>
 
-              <HeroBannerPlaceholder
-                className="h-[360px]"
-                labelClassName="text-[44px]"
-              />
-            </div>
-
-            {/* Catalog-teaser section start */}
-            <div className="mt-6">
-              <div className="mb-5 flex items-center justify-end">
-                <ProgressBars activeStage={catalogStage} />
-              </div>
-
-              <div className="relative h-[252px] w-full">
-                <div className="absolute left-0 top-0 z-30 h-full">
-                  <RnDCard />
+              {/* Catalog-teaser section start */}
+              <div className="mt-6">
+                <div className="mb-5 flex items-center justify-end">
+                  <ProgressBars activeStage={catalogStage} />
                 </div>
 
-                <div
-                  className="absolute top-0 z-10 h-full"
-                  style={{
-                    left: `${RIGHT_AREA_LEFT}px`,
-                    right: 0,
-                  }}
-                >
-                  <motion.div
-                    className="absolute left-0 top-0 z-20 h-full w-[660px]"
-                    style={{
-                      clipPath: factoryClip,
-                      x: factoryX,
-                      opacity: factoryOpacity,
-                    }}
-                  >
-                    <FactoryPanel />
-                  </motion.div>
+                <div className="relative h-[252px] w-full">
+                  <div className="absolute left-0 top-0 z-30 h-full">
+                    <RnDCard />
+                  </div>
 
-                  <motion.div
+                  <div
                     className="absolute top-0 z-10 h-full"
                     style={{
-                      left: `${ECO_CARD_LEFT}px`,
+                      left: `${RIGHT_AREA_LEFT}px`,
                       right: 0,
-                      clipPath: ecoClip,
-                      x: ecoX,
-                      opacity: ecoOpacity,
                     }}
                   >
-                    <EcoPanel />
-                  </motion.div>
+                    <motion.div
+                      className="absolute left-0 top-0 z-20 h-full w-[660px]"
+                      style={{
+                        clipPath: factoryClip,
+                        x: factoryX,
+                        opacity: factoryOpacity,
+                      }}
+                    >
+                      <FactoryPanel />
+                    </motion.div>
+
+                    <motion.div
+                      className="absolute top-0 z-10 h-full"
+                      style={{
+                        left: `${ECO_CARD_LEFT}px`,
+                        right: 0,
+                        clipPath: ecoClip,
+                        x: ecoX,
+                        opacity: ecoOpacity,
+                      }}
+                    >
+                      <EcoPanel />
+                    </motion.div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </Container>
+            </Container>
+          </div>
         </div>
       </div>
     </Section>
