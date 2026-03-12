@@ -21,7 +21,7 @@ import { heroSlides, type HeroSlide } from "@/lib/content/hero";
 import { cn } from "@/lib/utils/cn";
 
 const indicatorMajorPositions = [0, 5, 10];
-const DESKTOP_STICKY_TOP = 100;
+const DESKTOP_STICKY_TOP = 128;
 
 const LEFT_CARD_WIDTH = 300;
 const CARD_OVERLAP = 64;
