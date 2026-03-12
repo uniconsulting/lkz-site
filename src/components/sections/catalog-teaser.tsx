@@ -5,7 +5,6 @@ import {
   motion,
   useMotionValueEvent,
   useScroll,
-  useSpring,
   useTransform,
 } from "motion/react";
 import { Factory, FlaskConical, Leaf } from "lucide-react";
@@ -16,16 +15,16 @@ import { cn } from "@/lib/utils/cn";
 // Ширина стартовой карточки №1
 const LEFT_CARD_WIDTH = 290;
 
-// Глубина наложения карточек друг на друга
+// Глубина наложения карточек
 const CARD_OVERLAP = 64;
 
 // Ширина карточки №2
 const FACTORY_CARD_WIDTH = 620;
 
-// Старт зоны карточки №2 за карточкой №1
+// Начало области карточки №2 за карточкой №1
 const RIGHT_AREA_LEFT = LEFT_CARD_WIDTH - CARD_OVERLAP;
 
-// Старт карточки №3 за карточкой №2
+// Начало карточки №3 за карточкой №2
 const ECO_CARD_LEFT = FACTORY_CARD_WIDTH - CARD_OVERLAP;
 
 function ProgressBars({ activeStage }: { activeStage: number }) {
@@ -94,10 +93,10 @@ function FactoryPanel({ mobile = false }: { mobile?: boolean }) {
         "flex h-full flex-col justify-between bg-[var(--color-accent-2)] text-white",
         mobile
           ? "rounded-[28px] px-6 py-6"
-          : "w-[620px] rounded-[32px] px-24 py-7",
+          : "w-[620px] rounded-[32px] px-18 py-7",
       )}
     >
-      <div className="flex h-full flex-col justify-between">
+      <div className="flex h-full flex-col justify-between pl-6">
         <div
           className={cn(
             "font-heading tracking-[-0.04em]",
@@ -116,8 +115,8 @@ function FactoryPanel({ mobile = false }: { mobile?: boolean }) {
 
           <div
             className={cn(
-              "font-heading tracking-[-0.06em]",
-              mobile ? "text-[42px] leading-[0.92]" : "text-[56px] leading-[0.9]",
+              "font-heading whitespace-nowrap tracking-[-0.06em]",
+              mobile ? "text-[42px] leading-none" : "text-[56px] leading-none",
             )}
           >
             2300 м²
@@ -127,7 +126,7 @@ function FactoryPanel({ mobile = false }: { mobile?: boolean }) {
         <div
           className={cn(
             "text-white/92",
-            mobile ? "text-[15px] leading-[1.3]" : "max-w-[420px] text-[17px] leading-[1.24]",
+            mobile ? "text-[15px] leading-[1.3]" : "max-w-[500px] text-[17px] leading-[1.24]",
           )}
         >
           <div>современный заводской комплекс,</div>
@@ -146,10 +145,10 @@ function EcoPanel({ mobile = false }: { mobile?: boolean }) {
         "flex h-full flex-col justify-between bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)]",
         mobile
           ? "rounded-[28px] px-6 py-6"
-          : "w-full rounded-[32px] px-24 py-7",
+          : "w-full rounded-[32px] px-18 py-7",
       )}
     >
-      <div className="flex h-full flex-col justify-between">
+      <div className="flex h-full flex-col justify-between pl-6">
         <div
           className={cn(
             "font-heading tracking-[-0.04em]",
@@ -168,8 +167,8 @@ function EcoPanel({ mobile = false }: { mobile?: boolean }) {
 
           <div
             className={cn(
-              "font-heading tracking-[-0.06em]",
-              mobile ? "text-[42px] leading-[0.92]" : "text-[56px] leading-[0.9]",
+              "font-heading whitespace-nowrap tracking-[-0.06em]",
+              mobile ? "text-[42px] leading-none" : "text-[56px] leading-none",
             )}
           >
             ИСО 14001
@@ -197,47 +196,43 @@ export function CatalogTeaser() {
 
   const { scrollYProgress } = useScroll({
     target: sceneRef,
-    offset: ["start 75%", "end 30%"],
+    offset: ["start start", "end end"],
   });
 
-  const factoryRevealRaw = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
-  const ecoRevealRaw = useTransform(scrollYProgress, [0.45, 0.95], [0, 1]);
-
-  const factoryReveal = useSpring(factoryRevealRaw, {
-    stiffness: 110,
-    damping: 24,
-    mass: 0.5,
+  // Строгая последовательность:
+  // 0.00 - 0.48 раскрывается только №2
+  // 0.52 - 1.00 раскрывается только №3
+  const factoryReveal = useTransform(scrollYProgress, [0.02, 0.48], [0, 1], {
+    clamp: true,
   });
 
-  const ecoReveal = useSpring(ecoRevealRaw, {
-    stiffness: 110,
-    damping: 24,
-    mass: 0.5,
+  const ecoReveal = useTransform(scrollYProgress, [0.52, 0.98], [0, 1], {
+    clamp: true,
   });
 
+  // Чуть больший процент скрытия, чтобы по умолчанию не было видно слева никакого куска
   const factoryClip = useTransform(
     factoryReveal,
-    (v) => `inset(0 ${100 - v * 100}% 0 0 round 32px)`,
+    (v) => `inset(0 ${101 - v * 101}% 0 0 round 32px)`,
   );
 
   const ecoClip = useTransform(
     ecoReveal,
-    (v) => `inset(0 ${100 - v * 100}% 0 0 round 32px)`,
+    (v) => `inset(0 ${101 - v * 101}% 0 0 round 32px)`,
   );
 
-  const factoryX = useTransform(factoryReveal, [0, 1], [26, 0]);
-  const ecoX = useTransform(ecoReveal, [0, 1], [26, 0]);
+  // Премиальное, но строго последовательное выдвижение
+  const factoryX = useTransform(factoryReveal, [0, 1], [20, 0]);
+  const ecoX = useTransform(ecoReveal, [0, 1], [20, 0]);
 
-  const factoryOpacity = useTransform(factoryReveal, [0, 1], [0.55, 1]);
-  const ecoOpacity = useTransform(ecoReveal, [0, 1], [0.55, 1]);
+  const factoryOpacity = useTransform(factoryReveal, [0, 1], [0, 1]);
+  const ecoOpacity = useTransform(ecoReveal, [0, 1], [0, 1]);
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (latest < 0.34) {
-      setActiveStage(0);
-    } else if (latest < 0.76) {
-      setActiveStage(1);
+    if (latest < 0.48) {
+      setActiveStage(latest < 0.1 ? 0 : 1);
     } else {
-      setActiveStage(2);
+      setActiveStage(latest < 0.52 ? 1 : 2);
     }
   });
 
@@ -252,8 +247,10 @@ export function CatalogTeaser() {
           </div>
         </div>
 
-        <div ref={sceneRef} className="hidden xl:block h-[720px]">
-          <div className="sticky top-28">
+        {/* Более длинная scroll-scene.
+            Пока пользователь скроллит её, сцена pinned и секция не "отпускает" страницу. */}
+        <div ref={sceneRef} className="hidden xl:block h-[1200px]">
+          <div className="sticky top-24">
             <div className="mb-5 flex items-center justify-end">
               <ProgressBars activeStage={activeStage} />
             </div>
