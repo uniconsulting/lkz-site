@@ -21,7 +21,7 @@ import { heroSlides, type HeroSlide } from "@/lib/content/hero";
 import { cn } from "@/lib/utils/cn";
 
 const indicatorMajorPositions = [0, 5, 10];
-const STICKY_TOP_PX = 88;
+const DESKTOP_STICKY_OFFSET = 88;
 
 const LEFT_CARD_WIDTH = 300;
 const CARD_OVERLAP = 64;
@@ -448,11 +448,11 @@ export function Hero() {
   const mobileStyle =
     mobileMetricStyles[activeSlide.id] ?? mobileMetricStyles.experience;
 
-  const { scrollYProgress } = useScroll({
-    target: sceneRef,
-    offset: [`start ${STICKY_TOP_PX}px`, `end ${STICKY_TOP_PX}px`],
-  });
-
+const { scrollYProgress } = useScroll({
+  target: sceneRef,
+  offset: ["start start", "end end"],
+});
+  
   const factoryReveal = useTransform(scrollYProgress, [0.02, 0.42], [0, 1], {
     clamp: true,
   });
@@ -557,10 +557,14 @@ export function Hero() {
         </div>
       </Container>
 
-      <div ref={sceneRef} className="hidden xl:block h-[2200px]">
-        <div className="sticky top-[88px]">
-          <div className="pt-6 xl:pt-8">
-            <Container>
+<div ref={sceneRef} className="hidden xl:block h-[2200px]">
+  <div className="sticky top-0 h-[100svh]">
+    <div
+      className="h-full"
+      style={{ paddingTop: `${DESKTOP_STICKY_OFFSET}px` }}
+    >
+      <div className="pt-6 xl:pt-8">
+        <Container>
               <div className="grid items-start gap-8 xl:grid-cols-[1fr_720px] xl:gap-10">
                 <div className="flex h-[360px] flex-col justify-between">
                   <h1 className="font-heading whitespace-nowrap text-[46px] leading-[1] tracking-[-0.05em] text-[var(--color-text)]">
