@@ -179,7 +179,7 @@ function EcoPanel({ mobile = false }: { mobile?: boolean }) {
         <div
           className={cn(
             "opacity-95",
-            mobile ? "text-[15px] leading-[1.3]" : "max-w-[360px] text-[17px] leading-[1.24]",
+            mobile ? "text-[15px] leading-[1.3]" : "max-w-[380px] text-[17px] leading-[1.24]",
           )}
         >
           <div>соблюдаем стандарты эко-норм</div>
