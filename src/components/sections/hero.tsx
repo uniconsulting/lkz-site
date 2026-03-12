@@ -560,7 +560,7 @@ export function Hero() {
         </div>
       </Container>
 
-      <div ref={sceneRef} className="hidden xl:block h-[2600px]">
+      <div ref={sceneRef} className="hidden xl:block h-[3200px]">
         <div
           className="sticky"
           style={{
