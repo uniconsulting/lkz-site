@@ -136,23 +136,28 @@ const cardVariants = {
 function AnimatedCatalogButton() {
   return (
     <Link href="#products" className="hidden md:inline-flex">
-      <div className="relative inline-flex rounded-[18px] p-px">
+      <div className="relative inline-flex rounded-[18px]">
         <motion.span
           aria-hidden="true"
-          className="absolute inset-0 rounded-[18px]"
+          className="pointer-events-none absolute inset-0 rounded-[18px]"
           style={{
-            backgroundImage:
-              "conic-gradient(from 0deg, rgba(30,222,123,0.02) 0deg, var(--color-accent-1) 85deg, rgba(30,222,123,0.02) 170deg, var(--color-accent-1) 255deg, rgba(30,222,123,0.02) 360deg)",
+            padding: "1px",
+            background:
+              "conic-gradient(from 0deg, rgba(30,222,123,0.08) 0deg, var(--color-accent-1) 70deg, rgba(30,222,123,0.08) 140deg, rgba(30,222,123,0.08) 220deg, var(--color-accent-1) 290deg, rgba(30,222,123,0.08) 360deg)",
+            WebkitMask:
+              "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+            WebkitMaskComposite: "xor",
+            maskComposite: "exclude",
           }}
           animate={{ rotate: 360 }}
           transition={{
-            duration: 6,
+            duration: 5.8,
             ease: "linear",
             repeat: Infinity,
           }}
         />
 
-        <span className="relative inline-flex h-12 items-center justify-center rounded-[17px] bg-[var(--color-surface)] px-5 text-[15px] font-semibold text-[var(--color-text)]">
+        <span className="relative inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-surface)] px-5 text-[15px] font-semibold text-[var(--color-text)]">
           смотреть весь каталог
         </span>
       </div>
@@ -266,7 +271,7 @@ function CatalogPreviewCard({ item }: { item: PreviewItem }) {
             />
 
             <div
-              className="absolute left-5 top-5 z-20 flex items-center gap-2 text-[var(--color-accent-1)] md:left-6 md:top-6"
+              className="absolute left-5 top-5 z-20 flex items-center gap-2 text-[var(--color-bg)] md:left-6 md:top-6"
               style={{ transform: "translateZ(30px)" }}
             >
               <Icon size={16} strokeWidth={2.1} className="shrink-0" />
@@ -358,9 +363,7 @@ export function CatalogPreview() {
             </h2>
 
             <p className="mt-5 max-w-[680px] text-[15px] leading-[1.45] text-[var(--color-text-muted)] md:text-[17px]">
-              <span className="block">
-                Лакокрасочные и защитные материалы
-              </span>
+              <span className="block">Лакокрасочные и защитные материалы</span>
               <span className="block">
                 для интерьерных, фасадных и специализированных задач.
               </span>
