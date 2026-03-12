@@ -323,7 +323,7 @@ function FactoryPanel({ mobile = false }: { mobile?: boolean }) {
         "flex h-full flex-col justify-between bg-[var(--color-accent-2)] text-white",
         mobile
           ? "rounded-[28px] px-6 py-6"
-          : "w-[660px] rounded-[32px] px-16 py-7",
+          : "w-[460px] rounded-[32px] px-16 py-7",
       )}
     >
       <div className="flex h-full flex-col justify-between pl-8">
@@ -356,7 +356,7 @@ function FactoryPanel({ mobile = false }: { mobile?: boolean }) {
         <div
           className={cn(
             "text-white/92",
-            mobile ? "text-[15px] leading-[1.3]" : "max-w-[460px] text-[17px] leading-[1.24]",
+            mobile ? "text-[15px] leading-[1.3]" : "max-w-[560px] text-[17px] leading-[1.24]",
           )}
         >
           <div>современный заводской комплекс,</div>
