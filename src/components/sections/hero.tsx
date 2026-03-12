@@ -21,7 +21,7 @@ import { heroSlides, type HeroSlide } from "@/lib/content/hero";
 import { cn } from "@/lib/utils/cn";
 
 const indicatorMajorPositions = [0, 5, 10];
-const DESKTOP_STICKY_OFFSET = 56;
+const DESKTOP_STICKY_TOP = 100;
 
 const LEFT_CARD_WIDTH = 300;
 const CARD_OVERLAP = 64;
@@ -450,7 +450,7 @@ export function Hero() {
 
   const { scrollYProgress } = useScroll({
     target: sceneRef,
-    offset: ["start start", "end end"],
+    offset: [`start ${DESKTOP_STICKY_TOP}px`, `end ${DESKTOP_STICKY_TOP}px`],
   });
 
   const factoryReveal = useTransform(scrollYProgress, [0.02, 0.42], [0, 1], {
@@ -561,116 +561,115 @@ export function Hero() {
       </Container>
 
       <div ref={sceneRef} className="hidden xl:block h-[2200px]">
-        <div className="sticky top-0 h-[100svh]">
-          <div
-            className="h-full"
-            style={{ paddingTop: `${DESKTOP_STICKY_OFFSET}px` }}
-          >
-            <div className="pt-0">
-              <Container>
-                <div className="grid items-start gap-8 xl:grid-cols-[1fr_720px] xl:gap-10">
-                  <div className="flex h-[360px] flex-col justify-between">
-                    <h1 className="font-heading whitespace-nowrap text-[46px] leading-[1] tracking-[-0.05em] text-[var(--color-text)]">
-                      Симбирские краски
-                    </h1>
+        <div
+          className="sticky"
+          style={{
+            top: DESKTOP_STICKY_TOP,
+            height: `calc(100svh - ${DESKTOP_STICKY_TOP}px)`,
+          }}
+        >
+          <Container className="pt-0">
+            <div className="grid items-start gap-8 xl:grid-cols-[1fr_720px] xl:gap-10">
+              <div className="flex h-[360px] flex-col justify-between">
+                <h1 className="font-heading whitespace-nowrap text-[46px] leading-[1] tracking-[-0.05em] text-[var(--color-text)]">
+                  Симбирские краски
+                </h1>
 
-                    <div className="flex-1 py-4">
-                      <AnimatePresence mode="wait">
-                        <motion.div
-                          key={activeSlide.id}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          transition={{ duration: 0.24, ease: "easeOut" }}
-                          className={cn(
-                            "flex h-full items-center",
-                            activeSlide.contentGapClassName,
-                          )}
-                        >
-                          <HeroMetric slide={activeSlide} />
-
-                          <div
-                            className={cn(
-                              "min-w-0 flex-1 self-center",
-                              activeSlide.descriptionShellClassName,
-                            )}
-                          >
-                            <div className="flex flex-col gap-[10px]">
-                              {activeSlide.description.map((line) => (
-                                <p
-                                  key={line}
-                                  className="text-[18px] leading-[1.18] tracking-[-0.02em] text-[var(--color-text)]"
-                                >
-                                  {line}
-                                </p>
-                              ))}
-                            </div>
-                          </div>
-                        </motion.div>
-                      </AnimatePresence>
-                    </div>
-
-                    <div className="flex items-center justify-between gap-6">
-                      <ArrowFrameButton direction="prev" onClick={goPrev} />
-                      <HeroIndicators activeIndex={activeIndex} />
-                      <ArrowFrameButton direction="next" onClick={goNext} />
-                    </div>
-                  </div>
-
-                  <HeroBannerPlaceholder
-                    className="h-[360px]"
-                    labelClassName="text-[44px]"
-                  />
-                </div>
-
-                {/* Catalog-teaser section start */}
-                <div className="mt-6">
-                  <div className="mb-5 flex items-center justify-end">
-                    <ProgressBars activeStage={catalogStage} />
-                  </div>
-
-                  <div className="relative h-[252px] w-full">
-                    <div className="absolute left-0 top-0 z-30 h-full">
-                      <RnDCard />
-                    </div>
-
-                    <div
-                      className="absolute top-0 z-10 h-full"
-                      style={{
-                        left: `${RIGHT_AREA_LEFT}px`,
-                        right: 0,
-                      }}
+                <div className="flex-1 py-4">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={activeSlide.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.24, ease: "easeOut" }}
+                      className={cn(
+                        "flex h-full items-center",
+                        activeSlide.contentGapClassName,
+                      )}
                     >
-                      <motion.div
-                        className="absolute left-0 top-0 z-20 h-full"
-                        style={{
-                          width: FACTORY_CARD_WIDTH,
-                          clipPath: factoryClip,
-                          x: factoryX,
-                          opacity: factoryOpacity,
-                        }}
-                      >
-                        <FactoryPanel />
-                      </motion.div>
+                      <HeroMetric slide={activeSlide} />
 
-                      <motion.div
-                        className="absolute top-0 z-10 h-full"
-                        style={{
-                          left: `${ECO_CARD_LEFT}px`,
-                          right: 0,
-                          clipPath: ecoClip,
-                          x: ecoX,
-                          opacity: ecoOpacity,
-                        }}
+                      <div
+                        className={cn(
+                          "min-w-0 flex-1 self-center",
+                          activeSlide.descriptionShellClassName,
+                        )}
                       >
-                        <EcoPanel />
-                      </motion.div>
-                    </div>
-                  </div>
+                        <div className="flex flex-col gap-[10px]">
+                          {activeSlide.description.map((line) => (
+                            <p
+                              key={line}
+                              className="text-[18px] leading-[1.18] tracking-[-0.02em] text-[var(--color-text)]"
+                            >
+                              {line}
+                            </p>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  </AnimatePresence>
                 </div>
-              </Container>
+
+                <div className="flex items-center justify-between gap-6">
+                  <ArrowFrameButton direction="prev" onClick={goPrev} />
+                  <HeroIndicators activeIndex={activeIndex} />
+                  <ArrowFrameButton direction="next" onClick={goNext} />
+                </div>
+              </div>
+
+              <HeroBannerPlaceholder
+                className="h-[360px]"
+                labelClassName="text-[44px]"
+              />
             </div>
-          </div>
+
+            {/* Catalog-teaser section start */}
+            <div className="mt-6">
+              <div className="mb-5 flex items-center justify-end">
+                <ProgressBars activeStage={catalogStage} />
+              </div>
+
+              <div className="relative h-[252px] w-full">
+                <div className="absolute left-0 top-0 z-30 h-full">
+                  <RnDCard />
+                </div>
+
+                <div
+                  className="absolute top-0 z-10 h-full"
+                  style={{
+                    left: `${RIGHT_AREA_LEFT}px`,
+                    right: 0,
+                  }}
+                >
+                  <motion.div
+                    className="absolute left-0 top-0 z-20 h-full"
+                    style={{
+                      width: FACTORY_CARD_WIDTH,
+                      clipPath: factoryClip,
+                      x: factoryX,
+                      opacity: factoryOpacity,
+                    }}
+                  >
+                    <FactoryPanel />
+                  </motion.div>
+
+                  <motion.div
+                    className="absolute top-0 z-10 h-full"
+                    style={{
+                      left: `${ECO_CARD_LEFT}px`,
+                      right: 0,
+                      clipPath: ecoClip,
+                      x: ecoX,
+                      opacity: ecoOpacity,
+                    }}
+                  >
+                    <EcoPanel />
+                  </motion.div>
+                </div>
+              </div>
+            </div>
+          </Container>
         </div>
       </div>
     </Section>
