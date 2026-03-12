@@ -477,7 +477,7 @@ useMotionValueEvent(scrollYProgress, "change", (latest) => {
   }
 
   return (
-    <Section className="pt-4 md:pt-6 xl:pt-8">
+    <Section className="pt-4 md:pt-0 xl:pt-0">
       <Container>
         <div className="xl:hidden">
           <div className="flex flex-col gap-4">
