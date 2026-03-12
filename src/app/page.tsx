@@ -1,5 +1,6 @@
 import { Header } from "@/components/layout/header";
 import { Hero } from "@/components/sections/hero";
+import { CatalogPreview } from "@/components/sections/catalog-preview";
 import { BentoCard } from "@/components/ui/bento-card";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
@@ -32,6 +33,7 @@ export default function HomePage() {
     <main className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
       <Header />
       <Hero />
+      <CatalogPreview />
 
       <DemoSection id="how-to-buy" title="Как купить" />
       <DemoSection id="certificates" title="Сертификаты" />
