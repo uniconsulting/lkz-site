@@ -65,7 +65,7 @@ function RnDCard({ mobile = false }: { mobile?: boolean }) {
         <div
           className={cn(
             "font-heading tracking-[-0.04em] text-[var(--color-accent-2)]",
-            mobile ? "text-[20px] leading-[1.08]" : "text-[22px] leading-[1.06]",
+            mobile ? "text-[18px] leading-[1.08]" : "text-[22px] leading-[1.06]",
           )}
         >
           <div>R&amp;D Центр</div>
