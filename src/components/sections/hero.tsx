@@ -25,7 +25,7 @@ const DESKTOP_STICKY_TOP = 128;
 
 const LEFT_CARD_WIDTH = 300;
 const CARD_OVERLAP = 64;
-const FACTORY_CARD_WIDTH = 660;
+const FACTORY_CARD_WIDTH = 460;
 const RIGHT_AREA_LEFT = LEFT_CARD_WIDTH - CARD_OVERLAP;
 const ECO_CARD_LEFT = FACTORY_CARD_WIDTH - CARD_OVERLAP;
 
@@ -342,7 +342,7 @@ function FactoryPanel({ mobile = false }: { mobile?: boolean }) {
         "flex h-full flex-col justify-between bg-[var(--color-accent-2)] text-white",
         mobile
           ? "rounded-[28px] px-6 py-6"
-          : "w-[660px] rounded-[32px] px-16 py-7",
+          : "w-[460px] rounded-[32px] px-16 py-7",
       )}
     >
       <div className="flex h-full flex-col justify-between pl-8">
