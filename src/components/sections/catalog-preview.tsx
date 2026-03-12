@@ -136,28 +136,25 @@ const cardVariants = {
 function AnimatedCatalogButton() {
   return (
     <Link href="#products" className="hidden md:inline-flex">
-      <div className="relative inline-flex rounded-[18px]">
+      <div className="relative inline-flex overflow-hidden rounded-[18px] p-px">
         <motion.span
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 rounded-[18px]"
+          className="absolute -inset-[140%]"
           style={{
-            padding: "1px",
             background:
-              "conic-gradient(from 0deg, rgba(30,222,123,0.08) 0deg, var(--color-accent-1) 70deg, rgba(30,222,123,0.08) 140deg, rgba(30,222,123,0.08) 220deg, var(--color-accent-1) 290deg, rgba(30,222,123,0.08) 360deg)",
-            WebkitMask:
-              "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-            WebkitMaskComposite: "xor",
-            maskComposite: "exclude",
+              "conic-gradient(from 0deg, rgba(30,222,123,0.04) 0deg, rgba(30,222,123,0.08) 40deg, var(--color-accent-1) 90deg, rgba(30,222,123,0.08) 140deg, rgba(30,222,123,0.04) 210deg, rgba(30,222,123,0.08) 260deg, var(--color-accent-1) 310deg, rgba(30,222,123,0.04) 360deg)",
           }}
           animate={{ rotate: 360 }}
           transition={{
-            duration: 5.8,
+            duration: 6.5,
             ease: "linear",
             repeat: Infinity,
           }}
         />
 
-        <span className="relative inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-surface)] px-5 text-[15px] font-semibold text-[var(--color-text)]">
+        <span className="absolute inset-px rounded-[17px] bg-[var(--color-surface)]" />
+
+        <span className="relative inline-flex h-12 items-center justify-center rounded-[17px] px-5 text-[15px] font-semibold text-[var(--color-text)]">
           смотреть весь каталог
         </span>
       </div>
