@@ -93,7 +93,7 @@ function FactoryPanel({ mobile = false }: { mobile?: boolean }) {
         "flex h-full flex-col justify-between bg-[var(--color-accent-2)] text-white",
         mobile
           ? "rounded-[28px] px-6 py-6"
-          : "w-[620px] rounded-[32px] px-18 py-7",
+          : "w-[620px] rounded-[32px] px-20 py-7",
       )}
     >
       <div className="flex h-full flex-col justify-between pl-6">
