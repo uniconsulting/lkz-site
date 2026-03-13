@@ -3,12 +3,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import {
-  ArrowLeft,
-  ArrowRight,
   BadgePercent,
   Boxes,
   Building2,
-  CheckCircle2,
   Globe2,
   Grid2x2,
   Handshake,
@@ -52,22 +49,35 @@ const sectionMotion = {
 };
 
 const stepMotion = {
-  initial: { opacity: 0, x: 22, y: 10 },
+  initial: {
+    opacity: 0,
+    x: 34,
+    y: 0,
+    scale: 0.992,
+    filter: "blur(8px)",
+    clipPath: "inset(0 0 0 3%)",
+  },
   animate: {
     opacity: 1,
     x: 0,
     y: 0,
+    scale: 1,
+    filter: "blur(0px)",
+    clipPath: "inset(0 0 0 0%)",
     transition: {
-      duration: 0.42,
+      duration: 0.58,
       ease: [0.22, 1, 0.36, 1] as const,
     },
   },
   exit: {
     opacity: 0,
-    x: -22,
-    y: -10,
+    x: -34,
+    y: 0,
+    scale: 0.992,
+    filter: "blur(8px)",
+    clipPath: "inset(0 3% 0 0)",
     transition: {
-      duration: 0.28,
+      duration: 0.34,
       ease: [0.4, 0, 1, 1] as const,
     },
   },
@@ -97,34 +107,20 @@ const displayFeatureCards = [
   {
     id: "scenario",
     icon: Workflow,
-    title: "Сценарий",
-    description: "Подбираем сценарий под вашу модель продаж",
-    meta: "01",
-    iconClassName: "text-[var(--color-accent-1)]",
-    titleClassName: "text-[var(--color-accent-1)]",
-    className:
-      "left-0 top-0 rotate-[-4deg] opacity-55 hover:opacity-100 xl:w-[292px]",
+    title: "сценарий",
+    description: "подбираем сценарий под вашу модель продаж",
   },
   {
     id: "pl-logistics",
     icon: Boxes,
     title: "СТМ и логистика",
-    description: "Учитываем СТМ, логистику и ассортимент",
-    meta: "02",
-    iconClassName: "text-[var(--color-accent-1)]",
-    titleClassName: "text-[var(--color-accent-1)]",
-    className:
-      "left-[52px] top-[32px] rotate-[-1.8deg] opacity-75 hover:opacity-100 xl:w-[302px]",
+    description: "учитываем СТМ, логистику и ассортимент",
   },
   {
     id: "commercial-step",
     icon: Handshake,
-    title: "Коммерческий шаг",
-    description: "Даём ориентир для первого коммерческого шага",
-    meta: "03",
-    iconClassName: "text-[var(--color-accent-1)]",
-    titleClassName: "text-[var(--color-accent-1)]",
-    className: "left-[108px] top-[66px] rotate-[1deg] xl:w-[312px]",
+    title: "коммерческий шаг",
+    description: "даём ориентир для первого коммерческого шага",
   },
 ] as const;
 
@@ -148,47 +144,81 @@ function StepProgress({
         className="absolute inset-y-0 left-0 rounded-full bg-[var(--color-accent-1)]"
         initial={false}
         animate={{ width: `${ratio * 100}%` }}
-        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
       />
     </div>
   );
 }
 
 function FeatureStackCards() {
+  const [activeId, setActiveId] = useState<(typeof displayFeatureCards)[number]["id"]>(
+    "commercial-step",
+  );
+  const [isHovered, setIsHovered] = useState(false);
+
+  const collapsedPositions = [
+    { x: 0, y: 0, rotate: -4 },
+    { x: 52, y: 32, rotate: -1.8 },
+    { x: 108, y: 66, rotate: 1 },
+  ];
+
+  const expandedPositions = [
+    { x: -8, y: -6, rotate: -5 },
+    { x: 84, y: 20, rotate: -2.2 },
+    { x: 176, y: 50, rotate: 1.4 },
+  ];
+
   return (
-    <div className="relative hidden h-[230px] w-[430px] xl:block">
+    <div
+      className="relative hidden h-[230px] w-[500px] xl:block"
+      onMouseLeave={() => {
+        setIsHovered(false);
+        setActiveId("commercial-step");
+      }}
+    >
       {displayFeatureCards.map((card, index) => {
         const Icon = card.icon;
+        const isActive = activeId === card.id;
+        const position = isHovered ? expandedPositions[index] : collapsedPositions[index];
 
         return (
           <motion.div
             key={card.id}
             initial={{ opacity: 0, x: 24, y: 18 }}
-            animate={{ opacity: 1, x: 0, y: 0 }}
+            animate={{
+              opacity: isActive ? 1 : index === 0 ? 0.58 : index === 1 ? 0.74 : 1,
+              x: position.x,
+              y: position.y,
+              rotate: position.rotate,
+              zIndex: isActive ? 40 : 10 + index,
+              boxShadow: isActive
+                ? "0 16px 34px rgba(43,47,51,0.10)"
+                : "0 10px 28px rgba(43,47,51,0.05)",
+            }}
             transition={{
-              duration: 0.65,
-              delay: 0.08 + index * 0.08,
+              duration: 0.55,
               ease: [0.22, 1, 0.36, 1],
             }}
-            whileHover={{
-              y: -10,
-              scale: 1.012,
-              opacity: 1,
+            onMouseEnter={() => {
+              setIsHovered(true);
+              setActiveId(card.id);
             }}
             className={cn(
-              "absolute rounded-[24px] border border-[var(--color-border)] bg-[var(--color-bg)]/92 p-5 shadow-[0_10px_28px_rgba(43,47,51,0.05)] backdrop-blur-[10px] transition-[opacity] duration-500",
-              card.className,
+              "absolute w-[312px] rounded-[24px] border border-[var(--color-border)] bg-[var(--color-bg)]/92 p-5 backdrop-blur-[10px]",
             )}
           >
             <div className="mb-4 flex items-center gap-2">
               <Icon
-                className={cn("size-4 shrink-0", card.iconClassName)}
+                className={cn(
+                  "size-4 shrink-0",
+                  isActive ? "text-[var(--color-accent-1)]" : "text-[var(--color-text-muted)]",
+                )}
                 strokeWidth={2.2}
               />
               <span
                 className={cn(
                   "text-[13px] font-semibold leading-none tracking-[-0.02em]",
-                  card.titleClassName,
+                  isActive ? "text-[var(--color-accent-1)]" : "text-[var(--color-text-muted)]",
                 )}
               >
                 {card.title}
@@ -200,7 +230,7 @@ function FeatureStackCards() {
             </p>
 
             <div className="mt-6 text-[13px] font-medium text-[var(--color-text-muted)]">
-              {card.meta}
+              0{index + 1}
             </div>
           </motion.div>
         );
@@ -280,7 +310,7 @@ function OptionCard({
       </div>
 
       {option.description ? (
-        <div className="mt-2 text-[14px] leading-[1.38] text-[var(--color-text-muted)]">
+        <div className="mt-2 whitespace-pre-line text-[14px] leading-[1.38] text-[var(--color-text-muted)]">
           {option.description}
         </div>
       ) : null}
@@ -417,18 +447,12 @@ export function B2BCalculatorSection() {
         >
           <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between">
             <div className="max-w-[760px]">
-              <div className="mb-5 inline-flex items-center rounded-[999px] bg-[var(--color-accent-1)]/[0.12] px-3 py-1.5 text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                B2B-конфигуратор
-              </div>
-
               <h2 className="font-heading text-[30px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[40px] xl:text-[46px]">
                 Подберите формат сотрудничества
               </h2>
 
               <p className="mt-5 max-w-[640px] text-[15px] leading-[1.48] text-[var(--color-text-muted)] md:text-[17px]">
-                <span className="block">
-                  Для дилеров, торговых сетей
-                </span>
+                <span className="block">для дилеров, торговых сетей</span>
                 <span className="block">
                   и партнёров по модели Private Label
                 </span>
@@ -441,165 +465,163 @@ export function B2BCalculatorSection() {
           <FeatureCardsMobile />
 
           <div className="rounded-[32px] bg-[var(--color-surface)] p-4 md:p-6 xl:rounded-[36px] xl:p-8">
-            <div className="rounded-[28px] bg-[var(--color-surface-strong)] p-4 md:p-5 xl:rounded-[32px] xl:p-6">
-              <div className="mb-6 flex flex-col gap-4">
-                <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-                  <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-6">
-                    <div className="min-w-[56px] text-[16px] font-semibold text-[var(--color-text)]">
-                      {isCompleted
-                        ? "Готово"
-                        : `${stepIndex + 1} / ${calculatorSteps.length}`}
-                    </div>
-
-                    <p className="max-w-[740px] text-[15px] leading-[1.4] text-[var(--color-text-muted)] md:text-[16px]">
-                      {isCompleted
-                        ? "Подготовили ориентировочный сценарий сотрудничества под ваш формат запуска."
-                        : currentStep.description}
-                    </p>
+            <div className="mb-6 flex flex-col gap-4">
+              <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+                <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-6">
+                  <div className="min-w-[56px] text-[16px] font-semibold text-[var(--color-text)]">
+                    {isCompleted
+                      ? "готово"
+                      : `${stepIndex + 1} / ${calculatorSteps.length}`}
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={handleReset}
-                    className="inline-flex h-11 w-fit items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[14px] font-semibold text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
-                  >
-                    <RotateCcw size={16} strokeWidth={2.2} />
-                    <span>Сбросить</span>
-                  </button>
+                  <p className="max-w-[740px] text-[15px] leading-[1.4] text-[var(--color-text-muted)] md:text-[16px]">
+                    {isCompleted
+                      ? "подготовили ориентировочный сценарий сотрудничества под ваш формат запуска"
+                      : currentStep.description}
+                  </p>
                 </div>
 
-                <StepProgress stepIndex={stepIndex} isCompleted={isCompleted} />
+                <button
+                  type="button"
+                  onClick={handleReset}
+                  className="inline-flex h-11 w-fit items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[14px] font-semibold text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
+                >
+                  <RotateCcw size={16} strokeWidth={2.2} />
+                  <span>сбросить</span>
+                </button>
               </div>
 
-              <AnimatePresence mode="wait" initial={false}>
-                {!isCompleted ? (
-                  <motion.div
-                    key={currentStep.id}
-                    variants={stepMotion}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                  >
-                    <div className="min-h-[420px]">
-                      <h3 className="font-heading text-[34px] leading-[0.94] tracking-[-0.05em] text-[var(--color-text)] md:text-[42px] xl:text-[48px]">
-                        {currentStep.title}
-                      </h3>
+              <StepProgress stepIndex={stepIndex} isCompleted={isCompleted} />
+            </div>
 
-                      <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                        {currentStep.options.map((option) => (
-                          <OptionCard
-                            key={option.value}
-                            option={option}
-                            isSelected={currentValue === option.value}
-                            onSelect={() =>
-                              handleSelect(currentStep.id, option.value)
-                            }
-                          />
-                        ))}
-                      </div>
+            <AnimatePresence mode="wait" initial={false}>
+              {!isCompleted ? (
+                <motion.div
+                  key={currentStep.id}
+                  variants={stepMotion}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                >
+                  <div className="min-h-[420px]">
+                    <h3 className="font-heading text-[34px] leading-[0.94] tracking-[-0.05em] text-[var(--color-text)] md:text-[42px] xl:text-[48px]">
+                      {currentStep.title}
+                    </h3>
+
+                    <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                      {currentStep.options.map((option) => (
+                        <OptionCard
+                          key={option.value}
+                          option={option}
+                          isSelected={currentValue === option.value}
+                          onSelect={() =>
+                            handleSelect(currentStep.id, option.value)
+                          }
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
+                    <button
+                      type="button"
+                      onClick={handlePrev}
+                      disabled={stepIndex === 0}
+                      className={cn(
+                        "inline-flex h-12 items-center justify-center rounded-[18px] px-6 text-[15px] font-semibold transition duration-300",
+                        stepIndex === 0
+                          ? "cursor-not-allowed bg-[var(--color-border)] text-[var(--color-text-muted)]"
+                          : "bg-[var(--color-bg)] text-[var(--color-text)] hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]",
+                      )}
+                    >
+                      назад
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleNext}
+                      disabled={!currentValue}
+                      className={cn(
+                        "inline-flex h-12 items-center justify-center rounded-[18px] px-6 text-[15px] font-semibold transition duration-300",
+                        !currentValue
+                          ? "cursor-not-allowed bg-[var(--color-border)] text-[var(--color-text-muted)]"
+                          : "bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)] hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]",
+                      )}
+                    >
+                      далее
+                    </button>
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="result"
+                  variants={stepMotion}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                >
+                  <div className="rounded-[24px] bg-[var(--color-bg)] p-5 md:p-6">
+                    <div className="inline-flex items-center rounded-[999px] bg-[var(--color-accent-1)]/[0.12] px-3 py-1.5 text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
+                      рекомендуемый сценарий
                     </div>
 
-                    <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
-                      <button
-                        type="button"
-                        onClick={handlePrev}
-                        disabled={stepIndex === 0}
-                        className={cn(
-                          "inline-flex h-12 items-center justify-center rounded-[18px] px-6 text-[15px] font-semibold transition duration-300",
-                          stepIndex === 0
-                            ? "cursor-not-allowed bg-[var(--color-border)] text-[var(--color-text-muted)]"
-                            : "bg-[var(--color-bg)] text-[var(--color-text)] hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]",
-                        )}
-                      >
-                        назад
-                      </button>
+                    <h3 className="mt-5 font-heading text-[28px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[36px]">
+                      {result?.modelTitle}
+                    </h3>
 
-                      <button
-                        type="button"
-                        onClick={handleNext}
-                        disabled={!currentValue}
-                        className={cn(
-                          "inline-flex h-12 items-center justify-center rounded-[18px] px-6 text-[15px] font-semibold transition duration-300",
-                          !currentValue
-                            ? "cursor-not-allowed bg-[var(--color-border)] text-[var(--color-text-muted)]"
-                            : "bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)] hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]",
-                        )}
-                      >
-                        далее
-                      </button>
-                    </div>
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="result"
-                    variants={stepMotion}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                  >
-                    <div className="rounded-[24px] bg-[var(--color-bg)] p-5 md:p-6">
-                      <div className="inline-flex items-center rounded-[999px] bg-[var(--color-accent-1)]/[0.12] px-3 py-1.5 text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                        Рекомендуемый сценарий
-                      </div>
+                    <p className="mt-4 max-w-[760px] text-[15px] leading-[1.5] text-[var(--color-text-muted)] md:text-[16px]">
+                      {result?.modelDescription}
+                    </p>
 
-                      <h3 className="mt-5 font-heading text-[28px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[36px]">
-                        {result?.modelTitle}
-                      </h3>
-
-                      <p className="mt-4 max-w-[760px] text-[15px] leading-[1.5] text-[var(--color-text-muted)] md:text-[16px]">
-                        {result?.modelDescription}
-                      </p>
-
-                      <div className="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-                        {resultCards.map((card) => (
-                          <ResultCard
-                            key={card.id}
-                            title={card.title}
-                            value={card.value}
-                            description={card.description}
-                          />
-                        ))}
-                      </div>
-
-                      <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                        <a
-                          href="#contacts"
-                          className="inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-accent-1)] px-6 text-[15px] font-semibold text-[var(--color-accent-1-foreground)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
-                        >
-                          Получить коммерческое предложение
-                        </a>
-
-                        <button
-                          type="button"
-                          onClick={handleReset}
-                          className="inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-surface)] px-6 text-[15px] font-semibold text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
-                        >
-                          Пройти заново
-                        </button>
-                      </div>
+                    <div className="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+                      {resultCards.map((card) => (
+                        <ResultCard
+                          key={card.id}
+                          title={card.title}
+                          value={card.value}
+                          description={card.description}
+                        />
+                      ))}
                     </div>
 
-                    <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
-                      <button
-                        type="button"
-                        onClick={handlePrev}
-                        className="inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-bg)] px-6 text-[15px] font-semibold text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
+                    <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                      <a
+                        href="#contacts"
+                        className="inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-accent-1)] px-6 text-[15px] font-semibold text-[var(--color-bg)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
                       >
-                        назад
-                      </button>
+                        получить коммерческое предложение
+                      </a>
 
                       <button
                         type="button"
                         onClick={handleReset}
                         className="inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-surface)] px-6 text-[15px] font-semibold text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
                       >
-                        Новый расчёт
+                        пройти заново
                       </button>
                     </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+                  </div>
+
+                  <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
+                    <button
+                      type="button"
+                      onClick={handlePrev}
+                      className="inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-bg)] px-6 text-[15px] font-semibold text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
+                    >
+                      назад
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleReset}
+                      className="inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-surface)] px-6 text-[15px] font-semibold text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
+                    >
+                      новый расчёт
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </motion.div>
       </Container>
