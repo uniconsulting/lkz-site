@@ -127,10 +127,10 @@ function CatalogProductCard({
             <img
               src={item.image}
               alt={item.title}
-              className={cn(
-                "h-full w-full object-contain p-5 transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035]",
-                item.imageClassName,
-              )}
+className={cn(
+  "h-full w-full scale-[1.3] object-contain p-2 transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.36]",
+  item.imageClassName,
+)}
             />
           </div>
 
