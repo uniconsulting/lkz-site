@@ -182,8 +182,8 @@ function CatalogProductCard({
               "transform-gpu transition-[box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
               "hover:shadow-[0_18px_42px_rgba(43,47,51,0.10)]",
               mobile
-                ? "min-h-[420px] w-[84vw] max-w-[360px] shrink-0 snap-start"
-                : "min-h-[500px]",
+                ? "min-h-[408px] w-[84vw] max-w-[360px] shrink-0 snap-start"
+                : "min-h-[486px]",
             )}
           >
             <div className="flex h-full flex-col">
