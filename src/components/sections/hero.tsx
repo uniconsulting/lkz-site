@@ -497,7 +497,7 @@ export function Hero() {
   useEffect(() => {
     const intervalId = window.setInterval(() => {
       setBannerIndex((prev) => (prev + 1) % heroBanners.length);
-    }, 10000);
+    }, 17000);
 
     return () => window.clearInterval(intervalId);
   }, []);
