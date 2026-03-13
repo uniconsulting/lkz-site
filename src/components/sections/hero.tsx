@@ -286,31 +286,71 @@ function HeroRotatingBanner({
       )}
     >
       <AnimatePresence mode="wait" initial={false}>
-        <motion.img
+        <motion.div
           key={activeBanner.id}
-          src={activeBanner.src}
-          alt={activeBanner.alt}
-          className="absolute inset-0 h-full w-full object-cover"
-          initial={{ opacity: 0, scale: 1.045, y: 8, filter: "blur(6px)" }}
-          animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
-          exit={{ opacity: 0, scale: 0.985, y: -6, filter: "blur(6px)" }}
+          className="absolute inset-0"
+          initial={{ opacity: 0, scale: 1.06 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.985 }}
           transition={{
-            duration: 0.95,
-            ease: [0.22, 1, 0.36, 1],
+            opacity: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+            scale: { duration: 1.2, ease: [0.22, 1, 0.36, 1] },
           }}
-        />
-      </AnimatePresence>
+        >
+          <motion.img
+            src={activeBanner.src}
+            alt={activeBanner.alt}
+            className="absolute inset-0 h-full w-full object-cover"
+            initial={{
+              clipPath: "inset(0 0 0 8%)",
+              filter: "blur(8px)",
+              transform: "scale(1.04)",
+            }}
+            animate={{
+              clipPath: "inset(0 0 0 0%)",
+              filter: "blur(0px)",
+              transform: "scale(1)",
+            }}
+            exit={{
+              clipPath: "inset(0 6% 0 0)",
+              filter: "blur(8px)",
+              transform: "scale(0.985)",
+            }}
+            transition={{
+              duration: 1.05,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          />
 
-      <motion.div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
-        animate={{ opacity: [0.14, 0.24, 0.14], x: ["-3%", "3%", "-3%"] }}
-        transition={{ duration: 4, ease: "easeInOut", repeat: Infinity }}
-        style={{
-          background:
-            "linear-gradient(115deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.08) 42%, rgba(255,255,255,0.0) 72%)",
-        }}
-      />
+          <motion.div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0, 0.24, 0.08] }}
+            transition={{ duration: 1.1, ease: "easeOut" }}
+            style={{
+              background:
+                "linear-gradient(115deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.16) 44%, rgba(255,255,255,0.04) 62%, rgba(255,255,255,0) 78%)",
+            }}
+          />
+
+          <motion.div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0"
+            initial={{ x: "-18%", opacity: 0 }}
+            animate={{ x: "18%", opacity: [0, 0.16, 0] }}
+            transition={{
+              duration: 1.25,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            style={{
+              background:
+                "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.12) 48%, rgba(255,255,255,0) 100%)",
+              mixBlendMode: "screen",
+            }}
+          />
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }
