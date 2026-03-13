@@ -20,6 +20,26 @@ import { Section } from "@/components/ui/section";
 import { heroSlides, type HeroSlide } from "@/lib/content/hero";
 import { cn } from "@/lib/utils/cn";
 
+const basePath = process.env.NODE_ENV === "production" ? "/lkz-site" : "";
+
+const heroBanners = [
+  {
+    id: "private-label",
+    src: `${basePath}/images/sections/hero/banners/hero-banner-private-label.webp`,
+    alt: "Private Label",
+  },
+  {
+    id: "logistics",
+    src: `${basePath}/images/sections/hero/banners/hero-banner-logistics.webp`,
+    alt: "Логистика",
+  },
+  {
+    id: "quality",
+    src: `${basePath}/images/sections/hero/banners/hero-banner-quality.webp`,
+    alt: "Качество",
+  },
+] as const;
+
 const indicatorMajorPositions = [0, 5, 10];
 const DESKTOP_STICKY_TOP = 128;
 
@@ -253,23 +273,48 @@ function HeroIndicators({
   );
 }
 
-function HeroBannerPlaceholder({
+function HeroRotatingBanner({
+  bannerIndex,
   className,
-  labelClassName,
 }: {
+  bannerIndex: number;
   className?: string;
-  labelClassName?: string;
 }) {
+  const activeBanner = heroBanners[bannerIndex];
+
   return (
     <div
       className={cn(
-        "flex w-full items-center justify-center rounded-[28px] bg-[var(--color-accent-2)] text-white md:rounded-[36px]",
+        "relative overflow-hidden rounded-[28px] bg-[var(--color-accent-2)] md:rounded-[36px]",
         className,
       )}
     >
-      <span className={cn("font-body tracking-[-0.03em]", labelClassName)}>
-        БАННЕР
-      </span>
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.img
+          key={activeBanner.id}
+          src={activeBanner.src}
+          alt={activeBanner.alt}
+          className="absolute inset-0 h-full w-full object-cover"
+          initial={{ opacity: 0, scale: 1.045, y: 8, filter: "blur(6px)" }}
+          animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
+          exit={{ opacity: 0, scale: 0.985, y: -6, filter: "blur(6px)" }}
+          transition={{
+            duration: 0.95,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+        />
+      </AnimatePresence>
+
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        animate={{ opacity: [0.14, 0.24, 0.14], x: ["-3%", "3%", "-3%"] }}
+        transition={{ duration: 4, ease: "easeInOut", repeat: Infinity }}
+        style={{
+          background:
+            "linear-gradient(115deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.08) 42%, rgba(255,255,255,0.0) 72%)",
+        }}
+      />
     </div>
   );
 }
@@ -442,11 +487,20 @@ function EcoPanel({ mobile = false }: { mobile?: boolean }) {
 export function Hero() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [catalogStage, setCatalogStage] = useState(0);
+  const [bannerIndex, setBannerIndex] = useState(0);
   const sceneRef = useRef<HTMLDivElement | null>(null);
 
   const activeSlide = useMemo(() => heroSlides[activeIndex], [activeIndex]);
   const mobileStyle =
     mobileMetricStyles[activeSlide.id] ?? mobileMetricStyles.experience;
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      setBannerIndex((prev) => (prev + 1) % heroBanners.length);
+    }, 4000);
+
+    return () => window.clearInterval(intervalId);
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: sceneRef,
@@ -545,10 +599,7 @@ export function Hero() {
               </div>
             </div>
 
-            <HeroBannerPlaceholder
-              className="aspect-[2/1]"
-              labelClassName="text-[28px]"
-            />
+            <HeroRotatingBanner bannerIndex={bannerIndex} className="aspect-[2/1]" />
 
             {/* Catalog-teaser section start */}
             <div className="flex flex-col gap-3">
@@ -618,10 +669,7 @@ export function Hero() {
                 </div>
               </div>
 
-              <HeroBannerPlaceholder
-                className="h-[360px]"
-                labelClassName="text-[44px]"
-              />
+              <HeroRotatingBanner bannerIndex={bannerIndex} className="h-[360px]" />
             </div>
 
             {/* Catalog-teaser section start */}
