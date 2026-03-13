@@ -63,10 +63,10 @@ const catalogProductCards: CatalogProductCardItem[] = [
   {
     id: "deep-penetration-primer",
     subtitle: "эмальер",
-    title: "Грунт глубокого проникновения",
+    title: "Грунт глубокого прон.",
     image: `${basePath}/images/sections/catalog/products/product-primer-deep.webp`,
     href: "#products",
-    titleClassName: "text-[16px] md:text-[14px] xl:text-[15px] tracking-[-0.04em]",
+    titleClassName: "text-[18px] md:text-[17px] xl:text-[18px]",
   },
 ];
 
