@@ -170,7 +170,7 @@ function FeatureStackCards() {
 
   return (
     <div
-      className="relative hidden h-[230px] w-[500px] xl:block"
+      className="relative hidden h-[230px] w-[500px] xl:-mt-6 xl:block"
       onMouseLeave={() => {
         setIsHovered(false);
         setActiveId("commercial-step");
