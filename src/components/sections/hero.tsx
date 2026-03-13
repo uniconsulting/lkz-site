@@ -33,11 +33,7 @@ const heroBanners = [
     src: `${basePath}/images/sections/hero/banners/hero-banner-logistics.webp`,
     alt: "Логистика",
   },
-  {
-    id: "quality",
-    src: `${basePath}/images/sections/hero/banners/hero-banner-quality.webp`,
-    alt: "Качество",
-  },
+  
 ] as const;
 
 const indicatorMajorPositions = [0, 5, 10];
@@ -497,7 +493,7 @@ export function Hero() {
   useEffect(() => {
     const intervalId = window.setInterval(() => {
       setBannerIndex((prev) => (prev + 1) % heroBanners.length);
-    }, 17000);
+    }, 25000);
 
     return () => window.clearInterval(intervalId);
   }, []);
