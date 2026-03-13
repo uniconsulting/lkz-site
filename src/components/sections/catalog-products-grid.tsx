@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useState, type MouseEvent } from "react";
 import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/container";
@@ -63,10 +64,10 @@ const catalogProductCards: CatalogProductCardItem[] = [
   {
     id: "deep-penetration-primer",
     subtitle: "эмальер",
-    title: "Грунт глубокого прон.",
+    title: "Грунт глубокого проникновения",
     image: `${basePath}/images/sections/catalog/products/product-primer-deep.webp`,
     href: "#products",
-    titleClassName: "text-[18px] md:text-[17px] xl:text-[18px]",
+    titleClassName: "text-[16px] md:text-[14px] xl:text-[15px] tracking-[-0.04em]",
   },
 ];
 
@@ -104,61 +105,147 @@ function CatalogProductCard({
   item: CatalogProductCardItem;
   mobile?: boolean;
 }) {
+  const [tilt, setTilt] = useState({
+    rotateX: 0,
+    rotateY: 0,
+    y: 0,
+    scale: 1,
+  });
+
+  const [glow, setGlow] = useState({
+    x: 50,
+    y: 50,
+    opacity: 0,
+  });
+
+  function handleMouseMove(event: MouseEvent<HTMLDivElement>) {
+    if (mobile) return;
+
+    const rect = event.currentTarget.getBoundingClientRect();
+    const px = (event.clientX - rect.left) / rect.width;
+    const py = (event.clientY - rect.top) / rect.height;
+
+    const rotateY = (px - 0.5) * 5.5;
+    const rotateX = (0.5 - py) * 5.5;
+
+    setTilt({
+      rotateX,
+      rotateY,
+      y: -5,
+      scale: 1.008,
+    });
+
+    setGlow({
+      x: px * 100,
+      y: py * 100,
+      opacity: 1,
+    });
+  }
+
+  function handleMouseLeave() {
+    setTilt({
+      rotateX: 0,
+      rotateY: 0,
+      y: 0,
+      scale: 1,
+    });
+
+    setGlow({
+      x: 50,
+      y: 50,
+      opacity: 0,
+    });
+  }
+
   return (
     <motion.div variants={cardVariants} className="h-full">
-      <Link
-        href={item.href}
-        className={cn(
-          "group block h-full rounded-[28px] bg-[var(--color-surface)] p-3 md:rounded-[32px]",
-          "transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
-          "hover:-translate-y-[2px] hover:shadow-[0_10px_24px_rgba(43,47,51,0.08)]",
-          mobile ? "min-h-[420px] w-[84vw] max-w-[360px] shrink-0 snap-start" : "min-h-[500px]",
-        )}
+      <div
+        className="h-full [perspective:1600px]"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
       >
-        <div className="flex h-full flex-col">
-          <div
+        <motion.div
+          animate={tilt}
+          transition={{
+            type: "spring",
+            stiffness: 170,
+            damping: 20,
+            mass: 0.95,
+          }}
+          style={{ transformStyle: "preserve-3d" }}
+          className="h-full"
+        >
+          <Link
+            href={item.href}
             className={cn(
-              "relative overflow-hidden rounded-[22px] bg-[var(--color-bg)] md:rounded-[24px]",
-              mobile ? "h-[310px]" : "h-[378px]",
+              "group block h-full rounded-[28px] bg-[var(--color-surface)] p-3 md:rounded-[32px]",
+              "transform-gpu transition-[box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
+              "hover:shadow-[0_18px_42px_rgba(43,47,51,0.10)]",
+              mobile
+                ? "min-h-[420px] w-[84vw] max-w-[360px] shrink-0 snap-start"
+                : "min-h-[500px]",
             )}
           >
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.0)_0%,rgba(255,255,255,0.06)_100%)]" />
+            <div className="flex h-full flex-col">
+              <div
+                className={cn(
+                  "relative overflow-hidden rounded-[22px] bg-[var(--color-bg)] md:rounded-[24px]",
+                  mobile ? "h-[310px]" : "h-[378px]",
+                )}
+                style={{ transform: "translateZ(28px)" }}
+              >
+                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.0)_0%,rgba(255,255,255,0.05)_100%)]" />
 
-            <img
-              src={item.image}
-              alt={item.title}
-className={cn(
-  "h-full w-full scale-[1.3] object-contain p-2 transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.36]",
-  item.imageClassName,
-)}
-            />
-          </div>
+                <motion.div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0"
+                  animate={{ opacity: glow.opacity }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  style={{
+                    background: `radial-gradient(280px circle at ${glow.x}% ${glow.y}%, rgba(255,255,255,0.22), transparent 62%)`,
+                  }}
+                />
 
-          <div className="flex min-h-[78px] items-end justify-between gap-4 px-2 pb-1 pt-5">
-            <div className="min-w-0 flex-1">
-              <div className="mb-1 text-[13px] leading-[1.1] tracking-[-0.02em] text-[var(--color-text-muted)] md:text-[12px] xl:text-[13px]">
-                {item.subtitle}
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className={cn(
+                    "h-full w-full scale-[1.3] object-contain p-2 transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.36]",
+                    item.imageClassName,
+                  )}
+                />
               </div>
 
               <div
-                className={cn(
-                  "truncate font-heading leading-[0.98] text-[var(--color-text)]",
-                  item.titleClassName,
-                )}
-                title={item.title}
+                className="flex min-h-[78px] items-end justify-between gap-4 px-2 pb-1 pt-5"
+                style={{ transform: "translateZ(22px)" }}
               >
-                {item.title}
-              </div>
-            </div>
+                <div className="min-w-0 flex-1">
+                  <div className="mb-1 text-[13px] leading-[1.1] tracking-[-0.02em] text-[var(--color-text-muted)] md:text-[12px] xl:text-[13px]">
+                    {item.subtitle}
+                  </div>
 
-            <div className="shrink-0 rounded-[18px] bg-[var(--color-bg)] p-2">
-              <div className="flex h-10 w-[74px] items-center justify-center rounded-[14px] bg-[var(--color-surface)] text-[var(--color-accent-1)] transition duration-300 group-hover:translate-x-[2px] md:h-11 md:w-[86px]">
-                <ArrowRight size={22} strokeWidth={2.2} />
+                  <div
+                    className={cn(
+                      "truncate font-semibold leading-[0.98] text-[var(--color-text)]",
+                      item.titleClassName,
+                    )}
+                    title={item.title}
+                  >
+                    {item.title}
+                  </div>
+                </div>
+
+                <div className="shrink-0 rounded-[18px] bg-[var(--color-bg)] p-2 transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:shadow-[0_8px_18px_rgba(43,47,51,0.06)]">
+                  <div className="flex h-10 w-[74px] items-center justify-center rounded-[14px] bg-[var(--color-surface)] text-[var(--color-accent-1)] transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[2px] md:h-11 md:w-[86px]">
+                    <ArrowRight size={22} strokeWidth={2.2} />
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      </Link>
+          </Link>
+        </motion.div>
+      </div>
     </motion.div>
   );
 }
