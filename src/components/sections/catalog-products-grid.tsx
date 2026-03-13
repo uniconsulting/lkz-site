@@ -217,7 +217,7 @@ function CatalogProductCard({
               </div>
 
               <div
-                className="flex min-h-[70px] items-end justify-between gap-4 px-2 pb-0 pt-5"
+                className="flex min-h-[70px] items-end justify-between gap-4 px-2 pb-0 pt-4"
                 style={{ transform: "translateZ(22px)" }}
               >
                 <div className="min-w-0 flex-1">
