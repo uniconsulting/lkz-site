@@ -64,10 +64,10 @@ const catalogProductCards: CatalogProductCardItem[] = [
   {
     id: "deep-penetration-primer",
     subtitle: "эмальер",
-    title: "Грунт глубокого проникновения",
+    title: "Грунт глубокого прон.",
     image: `${basePath}/images/sections/catalog/products/product-primer-deep.webp`,
     href: "#products",
-    titleClassName: "text-[16px] md:text-[14px] xl:text-[15px] tracking-[-0.04em]",
+    titleClassName: "text-[18px] md:text-[17px] xl:text-[18px] tracking-[-0.04em]",
   },
 ];
 
@@ -217,7 +217,7 @@ function CatalogProductCard({
               </div>
 
               <div
-                className="flex min-h-[78px] items-end justify-between gap-4 px-2 pb-1 pt-5"
+                className="flex min-h-[78px] items-end justify-between gap-4 px-2 pb-0 pt-5"
                 style={{ transform: "translateZ(22px)" }}
               >
                 <div className="min-w-0 flex-1">
