@@ -266,7 +266,7 @@ function RequestForm() {
   const [step, setStep] = useState<0 | 1>(0);
 
   return (
-    <div className="flex h-full min-h-[360px] flex-col">
+    <div className="flex h-full flex-col">
       <div className="mb-4 flex items-center gap-3">
         <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
           {step + 1} / 2
@@ -282,7 +282,7 @@ function RequestForm() {
         </div>
       </div>
 
-      <div className="min-h-[228px] flex-1">
+      <div className="flex-1 min-h-0">
         <AnimatePresence mode="wait" initial={false}>
           {step === 0 ? (
             <motion.div
@@ -370,6 +370,7 @@ function SendProposalForm() {
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     const nextFiles = Array.from(event.target.files ?? []);
     mergeFiles(nextFiles);
+    event.target.value = "";
   }
 
   function removeFile(index: number) {
@@ -377,7 +378,7 @@ function SendProposalForm() {
   }
 
   return (
-    <div className="flex h-full min-h-[360px] flex-col">
+    <div className="flex h-full flex-col">
       <div
         onDragOver={(event) => {
           event.preventDefault();
@@ -391,34 +392,86 @@ function SendProposalForm() {
           mergeFiles(dropped);
         }}
         className={cn(
-          "flex min-h-[292px] flex-1 flex-col items-center justify-center rounded-[22px] border border-dashed bg-[var(--color-bg)] p-5 text-center transition duration-300",
+          "flex flex-1 min-h-0 flex-col rounded-[22px] border border-dashed bg-[var(--color-bg)] p-5 transition duration-300",
           isDragging
             ? "border-[var(--color-accent-1)] bg-[var(--color-accent-1)]/[0.06]"
             : "border-[var(--color-border)]",
         )}
       >
-        <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-[16px] bg-[var(--color-accent-1)]/[0.12] text-[var(--color-accent-1)]">
-          <FolderUp size={20} strokeWidth={2.2} />
-        </div>
+        {files.length === 0 ? (
+          <div className="flex h-full flex-col items-center justify-center text-center">
+            <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-[16px] bg-[var(--color-accent-1)]/[0.12] text-[var(--color-accent-1)]">
+              <FolderUp size={20} strokeWidth={2.2} />
+            </div>
 
-        <div className="max-w-[320px] text-[15px] font-semibold leading-[1.2] text-[var(--color-text)]">
-          загрузите коммерческое предложение
-        </div>
+            <div className="max-w-[320px] text-[15px] font-semibold leading-[1.2] text-[var(--color-text)]">
+              загрузите коммерческое предложение
+            </div>
 
-        <div className="mt-3 max-w-[320px] text-[13px] leading-[1.45] text-[var(--color-text-muted)]">
-          <span className="block">
-            pdf, doc, docx, xls, xlsx, ppt, pptx или архив
-          </span>
-          <span className="block">до 3 файлов в одном запросе</span>
-        </div>
+            <div className="mt-3 max-w-[320px] text-[13px] leading-[1.45] text-[var(--color-text-muted)]">
+              <span className="block">
+                pdf, doc, docx, xls, xlsx, ppt, pptx или архив
+              </span>
+              <span className="block">до 3 файлов в одном запросе</span>
+            </div>
 
-        <button
-          type="button"
-          onClick={() => inputRef.current?.click()}
-          className="mt-4 inline-flex h-10 items-center justify-center rounded-[15px] bg-[var(--color-accent-1)] px-5 text-[13px] font-semibold text-[var(--color-bg)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
-        >
-          выбрать файлы
-        </button>
+            <button
+              type="button"
+              onClick={() => inputRef.current?.click()}
+              className="mt-4 inline-flex h-10 items-center justify-center rounded-[15px] bg-[var(--color-accent-1)] px-5 text-[13px] font-semibold text-[var(--color-bg)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
+            >
+              выбрать файлы
+            </button>
+          </div>
+        ) : (
+          <div className="flex h-full min-h-0 flex-col">
+            <div className="mb-4">
+              <div className="text-[15px] font-semibold leading-[1.2] text-[var(--color-text)]">
+                загруженные файлы
+              </div>
+              <div className="mt-2 text-[13px] leading-[1.45] text-[var(--color-text-muted)]">
+                можно прикрепить до 3 файлов
+              </div>
+            </div>
+
+            <div className="flex-1 min-h-0 space-y-2 overflow-y-auto pr-1">
+              {files.map((file, index) => (
+                <div
+                  key={`${file.name}-${index}`}
+                  className="flex items-center justify-between gap-3 rounded-[14px] bg-[var(--color-surface)] px-3 py-3"
+                >
+                  <div className="min-w-0">
+                    <div className="truncate text-[14px] font-medium text-[var(--color-text)]">
+                      {file.name}
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => removeFile(index)}
+                    className="shrink-0 text-[var(--color-text-muted)] transition duration-200 hover:text-[var(--color-text)]"
+                  >
+                    <X size={14} strokeWidth={2.2} />
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => inputRef.current?.click()}
+              disabled={files.length >= 3}
+              className={cn(
+                "mt-4 inline-flex h-10 items-center justify-center self-start rounded-[15px] px-5 text-[13px] font-semibold transition duration-300",
+                files.length >= 3
+                  ? "cursor-not-allowed bg-[var(--color-border)] text-[var(--color-text-muted)]"
+                  : "bg-[var(--color-accent-1)] text-[var(--color-bg)] hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]",
+              )}
+            >
+              добавить файлы
+            </button>
+          </div>
+        )}
 
         <input
           ref={inputRef}
@@ -427,31 +480,6 @@ function SendProposalForm() {
           className="hidden"
           onChange={handleInputChange}
         />
-      </div>
-
-      <div className="mt-4 min-h-[56px]">
-        {files.length > 0 ? (
-          <div className="flex flex-wrap gap-2">
-            {files.map((file, index) => (
-              <div
-                key={`${file.name}-${index}`}
-                className="inline-flex items-center gap-2 rounded-[14px] bg-[var(--color-bg)] px-3 py-2 text-[13px] text-[var(--color-text)]"
-              >
-                <span className="max-w-[180px] truncate">{file.name}</span>
-
-                <button
-                  type="button"
-                  onClick={() => removeFile(index)}
-                  className="text-[var(--color-text-muted)] transition duration-200 hover:text-[var(--color-text)]"
-                >
-                  <X size={14} strokeWidth={2.2} />
-                </button>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div />
-        )}
       </div>
 
       <button
@@ -525,8 +553,8 @@ export function PartnershipContactSection() {
               className="overflow-hidden rounded-[32px] bg-[var(--color-surface)] xl:min-h-[520px]"
             >
               <div className="grid h-full xl:grid-cols-[1fr_1fr]">
-                <div className="flex h-full flex-col justify-center bg-[var(--color-accent-2)] px-7 py-8 text-[var(--color-accent-2-foreground)] md:px-8 md:py-9">
-                  <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-[15px] bg-[var(--color-accent-1)]/[0.14] text-[var(--color-accent-1)]">
+                <div className="flex h-full flex-col justify-center bg-[var(--color-accent-2)] px-8 py-10 text-[var(--color-accent-2-foreground)] md:px-9 md:py-11">
+                  <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-[15px] bg-[var(--color-accent-1)]/[0.14] text-[var(--color-accent-1)]">
                     <Workflow size={18} strokeWidth={2.2} />
                   </div>
 
@@ -534,21 +562,21 @@ export function PartnershipContactSection() {
                     {partnershipContent.leadCard.title}
                   </h3>
 
-                  <p className="mt-5 max-w-[380px] text-[13px] leading-[1.44] text-[var(--color-accent-2-foreground)]/76 md:text-[14px]">
+                  <p className="mt-6 max-w-[388px] text-[13px] leading-[1.44] text-[var(--color-accent-2-foreground)]/76 md:text-[14px]">
                     {partnershipContent.leadCard.description}
                   </p>
 
-                  <div className="mt-7 space-y-4">
+                  <div className="mt-8 space-y-4">
                     {partnershipContent.leadCard.points.map((item) => {
                       const Icon = item.icon;
 
                       return (
-                        <div key={item.text} className="flex items-start gap-3">
-                          <div className="mt-[2px] flex h-6 w-6 items-center justify-center rounded-[9px] bg-[var(--color-accent-1)]/[0.12] text-[var(--color-accent-1)]">
+                        <div key={item.text} className="flex items-center gap-3">
+                          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[9px] bg-[var(--color-accent-1)]/[0.12] text-[var(--color-accent-1)]">
                             <Icon size={13} strokeWidth={2.2} />
                           </div>
 
-                          <div className="max-w-[352px] text-[13px] leading-[1.36] text-[var(--color-accent-2-foreground)]/92">
+                          <div className="max-w-[356px] text-[13px] leading-[1.34] text-[var(--color-accent-2-foreground)]/92">
                             {item.text}
                           </div>
                         </div>
@@ -608,7 +636,7 @@ export function PartnershipContactSection() {
                     : partnershipContent.formCard.sendTitle}
                 </h3>
 
-                <div className="mt-4 min-h-[360px] flex-1">
+                <div className="mt-4 h-[360px] flex-1">
                   <AnimatePresence mode="wait" initial={false}>
                     {mode === "request" ? (
                       <motion.div
@@ -617,7 +645,7 @@ export function PartnershipContactSection() {
                         initial="initial"
                         animate="animate"
                         exit="exit"
-                        className="h-full min-h-[360px]"
+                        className="h-full"
                       >
                         <RequestForm />
                       </motion.div>
@@ -628,7 +656,7 @@ export function PartnershipContactSection() {
                         initial="initial"
                         animate="animate"
                         exit="exit"
-                        className="h-full min-h-[360px]"
+                        className="h-full"
                       >
                         <SendProposalForm />
                       </motion.div>
