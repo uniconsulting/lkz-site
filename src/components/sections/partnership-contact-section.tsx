@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { motion } from "motion/react";
 import {
-  ArrowUpRight,
   Building2,
   FileText,
   MapPinned,
@@ -13,14 +12,11 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
-import { cn } from "@/lib/utils/cn";
 
 const basePath = process.env.NODE_ENV === "production" ? "/lkz-site" : "";
 
 const YANDEX_MAP_EMBED_URL =
   "https://yandex.ru/map-widget/v1/?um=constructor%3Ab9ba62ca6079292583614d568f069fd31e16362261dcb68461cc2aa7f829bdc7&source=constructor";
-
-const YANDEX_MAP_OPEN_URL = "https://yandex.com/maps/-/CPB2u0L4";
 
 const partnershipContent = {
   title: "Запустим сотрудничество под вашу задачу",
@@ -60,13 +56,6 @@ const partnershipContent = {
     company: 'ООО "ЛКЗ"',
     inn: "7327093976",
     ogrn: "1207300001963",
-  },
-
-  mapCard: {
-    title: "география поставок",
-    description:
-      "Работаем с дилерами, торговыми сетями и B2B-партнёрами по всей России. Производственная база и логистический контур позволяют выстраивать поставки под региональные и сетевые задачи.",
-    cta: "открыть в Я.Картах",
   },
 };
 
@@ -116,13 +105,13 @@ function ContactInput({
         <textarea
           rows={5}
           placeholder={placeholder}
-          className={cn(baseClassName, "resize-none py-3.5")}
+          className={`${baseClassName} resize-none py-3.5`}
         />
       ) : (
         <input
           type="text"
           placeholder={placeholder}
-          className={cn(baseClassName, "h-12")}
+          className={`${baseClassName} h-12`}
         />
       )}
     </label>
@@ -149,23 +138,23 @@ export function PartnershipContactSection() {
             </p>
           </div>
 
-          <div className="mt-8 grid gap-4 xl:grid-cols-[1.12fr_0.88fr] xl:items-stretch">
+          <div className="mt-8 grid gap-4 xl:grid-cols-[1.38fr_0.72fr] xl:items-stretch">
             <motion.div
               variants={cardMotion}
-              className="overflow-hidden rounded-[32px] bg-[var(--color-surface)]"
+              className="overflow-hidden rounded-[32px] bg-[var(--color-surface)] xl:h-[460px]"
             >
-              <div className="grid min-h-[420px] xl:min-h-[440px] xl:grid-cols-[0.84fr_1.16fr]">
-                <div className="flex flex-col justify-between bg-[var(--color-accent-2)] p-6 text-[var(--color-accent-2-foreground)] md:p-8">
+              <div className="grid h-full xl:grid-cols-[0.72fr_1.08fr]">
+                <div className="flex h-full flex-col justify-between bg-[var(--color-accent-2)] p-6 text-[var(--color-accent-2-foreground)] md:p-8">
                   <div>
                     <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-[18px] bg-[var(--color-accent-1)]/[0.14] text-[var(--color-accent-1)]">
                       <PackageCheck size={22} strokeWidth={2.2} />
                     </div>
 
-                    <h3 className="font-heading text-[30px] leading-[0.96] tracking-[-0.05em] md:text-[38px]">
+                    <h3 className="font-heading text-[30px] leading-[0.96] tracking-[-0.05em] md:text-[36px]">
                       {partnershipContent.leadCard.title}
                     </h3>
 
-                    <p className="mt-5 max-w-[380px] text-[15px] leading-[1.48] text-[var(--color-accent-2-foreground)]/76 md:text-[17px]">
+                    <p className="mt-5 max-w-[360px] text-[15px] leading-[1.48] text-[var(--color-accent-2-foreground)]/76 md:text-[16px]">
                       {partnershipContent.leadCard.description}
                     </p>
 
@@ -179,7 +168,7 @@ export function PartnershipContactSection() {
                               <Icon size={15} strokeWidth={2.2} />
                             </div>
 
-                            <div className="max-w-[340px] text-[15px] leading-[1.42] text-[var(--color-accent-2-foreground)]/92">
+                            <div className="max-w-[320px] text-[15px] leading-[1.42] text-[var(--color-accent-2-foreground)]/92">
                               {item.text}
                             </div>
                           </div>
@@ -198,68 +187,70 @@ export function PartnershipContactSection() {
                   </div>
                 </div>
 
-                <div className="relative min-h-[260px] overflow-hidden xl:min-h-[440px]">
+                <div className="relative h-full min-h-[280px] overflow-hidden">
                   <img
                     src={partnershipContent.leadCard.image}
                     alt={partnershipContent.leadCard.title}
                     className="h-full w-full object-cover"
                   />
 
-                  <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(20,24,28,0.10)_0%,rgba(20,24,28,0.02)_38%,rgba(20,24,28,0.18)_100%)]" />
+                  <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(20,24,28,0.08)_0%,rgba(20,24,28,0.01)_34%,rgba(20,24,28,0.14)_100%)]" />
                 </div>
               </div>
             </motion.div>
 
             <motion.div
               variants={cardMotion}
-              className="rounded-[32px] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 md:p-8 xl:min-h-[420px] xl:p-7"
+              className="flex rounded-[32px] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 md:p-8 xl:h-[460px]"
             >
-              <h3 className="font-heading text-[28px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[34px]">
-                {partnershipContent.formCard.title}
-              </h3>
+              <div className="flex h-full w-full flex-col">
+                <h3 className="font-heading text-[28px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[32px]">
+                  {partnershipContent.formCard.title}
+                </h3>
 
-              <form
-                className="mt-6 space-y-4"
-                onSubmit={(event) => event.preventDefault()}
-              >
-                <ContactInput label="имя" placeholder="ваше имя" />
-                <ContactInput label="компания" placeholder="название компании" />
-                <ContactInput
-                  label="телефон / telegram"
-                  placeholder="контакт для связи"
-                />
-
-                <label className="block">
-                  <div className="mb-2 text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
-                    формат интереса
-                  </div>
-
-                  <select className="h-12 w-full rounded-[18px] border border-[var(--color-border)] bg-[var(--color-bg)] px-4 text-[15px] text-[var(--color-text)] outline-none transition duration-300 focus:border-[var(--color-accent-1)] focus:shadow-[0_0_0_3px_rgba(30,222,123,0.10)]">
-                    <option>выберите формат</option>
-                    <option>готовая продукция</option>
-                    <option>дилерство</option>
-                    <option>private label / СТМ</option>
-                    <option>пока нужна консультация</option>
-                  </select>
-                </label>
-
-                <ContactInput
-                  label="комментарий"
-                  placeholder="кратко опишите задачу, объём или интересующие категории"
-                  textarea
-                />
-
-                <button
-                  type="submit"
-                  className="mt-2 inline-flex h-12 w-full items-center justify-center rounded-[18px] bg-[var(--color-accent-1)] px-6 text-[15px] font-semibold text-[var(--color-bg)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
+                <form
+                  className="mt-6 flex flex-1 flex-col space-y-4"
+                  onSubmit={(event) => event.preventDefault()}
                 >
-                  {partnershipContent.formCard.submit}
-                </button>
-              </form>
+                  <ContactInput label="имя" placeholder="ваше имя" />
+                  <ContactInput label="компания" placeholder="название компании" />
+                  <ContactInput
+                    label="телефон / telegram"
+                    placeholder="контакт для связи"
+                  />
+
+                  <label className="block">
+                    <div className="mb-2 text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
+                      формат интереса
+                    </div>
+
+                    <select className="h-12 w-full rounded-[18px] border border-[var(--color-border)] bg-[var(--color-bg)] px-4 text-[15px] text-[var(--color-text)] outline-none transition duration-300 focus:border-[var(--color-accent-1)] focus:shadow-[0_0_0_3px_rgba(30,222,123,0.10)]">
+                      <option>выберите формат</option>
+                      <option>готовая продукция</option>
+                      <option>дилерство</option>
+                      <option>private label / СТМ</option>
+                      <option>пока нужна консультация</option>
+                    </select>
+                  </label>
+
+                  <ContactInput
+                    label="комментарий"
+                    placeholder="кратко опишите задачу, объём или интересующие категории"
+                    textarea
+                  />
+
+                  <button
+                    type="submit"
+                    className="mt-auto inline-flex h-12 w-full items-center justify-center rounded-[18px] bg-[var(--color-accent-1)] px-6 text-[15px] font-semibold text-[var(--color-bg)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
+                  >
+                    {partnershipContent.formCard.submit}
+                  </button>
+                </form>
+              </div>
             </motion.div>
           </div>
 
-          <div className="mt-4 grid gap-4 xl:grid-cols-2">
+          <div className="mt-4 grid gap-4 xl:grid-cols-[0.9fr_1.1fr] xl:items-stretch">
             <motion.div
               variants={cardMotion}
               className="rounded-[32px] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 md:p-8"
@@ -333,43 +324,14 @@ export function PartnershipContactSection() {
 
             <motion.div
               variants={cardMotion}
-              className="overflow-hidden rounded-[32px] border border-[var(--color-border)] bg-[var(--color-surface)]"
+              className="overflow-hidden rounded-[32px] border border-[var(--color-border)] bg-[var(--color-surface)] xl:min-h-[360px]"
             >
-              <div className="relative h-full min-h-[360px] xl:min-h-[388px]">
-                <iframe
-                  src={YANDEX_MAP_EMBED_URL}
-                  title="Карта"
-                  className="absolute inset-0 h-full w-full border-0"
-                  loading="lazy"
-                  frameBorder="0"
-                />
-
-                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(20,24,28,0.00)_0%,rgba(20,24,28,0.06)_100%)]" />
-
-                <div className="absolute inset-x-0 top-0 z-10 p-6 md:p-8">
-                  <div className="max-w-[520px] rounded-[24px] bg-[var(--color-bg)]/86 p-5 backdrop-blur-[10px]">
-                    <h3 className="font-heading text-[28px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[34px]">
-                      {partnershipContent.mapCard.title}
-                    </h3>
-
-                    <p className="mt-4 text-[15px] leading-[1.48] text-[var(--color-text-muted)]">
-                      {partnershipContent.mapCard.description}
-                    </p>
-
-                    <div className="mt-5">
-                      <a
-                        href={YANDEX_MAP_OPEN_URL}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex h-11 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-accent-1)] px-4 text-[14px] font-semibold text-[var(--color-bg)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
-                      >
-                        <span>{partnershipContent.mapCard.cta}</span>
-                        <ArrowUpRight size={16} strokeWidth={2.2} />
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <iframe
+                src={YANDEX_MAP_EMBED_URL}
+                title="Карта"
+                className="h-full min-h-[360px] w-full border-0"
+                loading="lazy"
+              />
             </motion.div>
           </div>
         </motion.div>
