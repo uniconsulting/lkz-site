@@ -267,7 +267,7 @@ function RequestForm() {
   const [step, setStep] = useState<0 | 1>(0);
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full min-h-[344px] flex-col">
       <div className="mb-4 flex items-center gap-3">
         <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
           {step + 1} / 2
@@ -378,7 +378,7 @@ function SendProposalForm() {
   }
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full min-h-[344px] flex-col">
       <div
         onDragOver={(event) => {
           event.preventDefault();
@@ -407,7 +407,10 @@ function SendProposalForm() {
         </div>
 
         <div className="mt-3 max-w-[320px] text-[13px] leading-[1.45] text-[var(--color-text-muted)]">
-          pdf, doc, docx, xls, xlsx, ppt, pptx или архив. До 3 файлов в одном запросе.
+          <span className="block">
+            pdf, doc, docx, xls, xlsx, ppt, pptx или архив
+          </span>
+          <span className="block">до 3 файлов в одном запросе</span>
         </div>
 
         <button
@@ -447,11 +450,7 @@ function SendProposalForm() {
               </div>
             ))}
           </div>
-        ) : (
-          <div className="text-[13px] leading-[1.45] text-[var(--color-text-muted)]">
-            можно приложить до 3 файлов. Если файлов больше, лучше объединить их в архив.
-          </div>
-        )}
+        ) : null}
       </div>
 
       <button
@@ -498,7 +497,7 @@ export function PartnershipContactSection() {
               variants={cardMotion}
               className="overflow-hidden rounded-[32px] bg-[var(--color-surface)] xl:min-h-[520px]"
             >
-              <div className="grid h-full xl:grid-cols-[0.68fr_1.12fr]">
+              <div className="grid h-full xl:grid-cols-[1fr_1fr]">
                 <div className="flex h-full flex-col justify-between bg-[var(--color-accent-2)] p-6 text-[var(--color-accent-2-foreground)] md:p-7">
                   <div>
                     <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-[15px] bg-[var(--color-accent-1)]/[0.14] text-[var(--color-accent-1)]">
@@ -509,7 +508,7 @@ export function PartnershipContactSection() {
                       {partnershipContent.leadCard.title}
                     </h3>
 
-                    <p className="mt-4 max-w-[324px] text-[13px] leading-[1.4] text-[var(--color-accent-2-foreground)]/76 md:text-[14px]">
+                    <p className="mt-4 max-w-[360px] text-[13px] leading-[1.4] text-[var(--color-accent-2-foreground)]/76 md:text-[14px]">
                       {partnershipContent.leadCard.description}
                     </p>
 
@@ -523,7 +522,7 @@ export function PartnershipContactSection() {
                               <Icon size={13} strokeWidth={2.2} />
                             </div>
 
-                            <div className="max-w-[292px] text-[13px] leading-[1.34] text-[var(--color-accent-2-foreground)]/92">
+                            <div className="max-w-[336px] text-[13px] leading-[1.34] text-[var(--color-accent-2-foreground)]/92">
                               {item.text}
                             </div>
                           </div>
@@ -593,7 +592,7 @@ export function PartnershipContactSection() {
                     : partnershipContent.formCard.sendTitle}
                 </h3>
 
-                <div className="mt-4 flex-1">
+                <div className="mt-4 min-h-[344px] flex-1">
                   <AnimatePresence mode="wait" initial={false}>
                     {mode === "request" ? (
                       <motion.div
@@ -602,7 +601,7 @@ export function PartnershipContactSection() {
                         initial="initial"
                         animate="animate"
                         exit="exit"
-                        className="h-full"
+                        className="h-full min-h-[344px]"
                       >
                         <RequestForm />
                       </motion.div>
@@ -613,7 +612,7 @@ export function PartnershipContactSection() {
                         initial="initial"
                         animate="animate"
                         exit="exit"
-                        className="h-full"
+                        className="h-full min-h-[344px]"
                       >
                         <SendProposalForm />
                       </motion.div>
