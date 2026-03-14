@@ -261,7 +261,7 @@ export function PartnershipContactSection() {
                       <PackageCheck size={20} strokeWidth={2.2} />
                     </div>
 
-                    <h3 className="font-heading text-[28px] leading-[0.96] tracking-[-0.05em] md:text-[33px]">
+                    <h3 className="font-heading text-[22px] leading-[0.96] tracking-[-0.05em] md:text-[22px]">
                       {partnershipContent.leadCard.title}
                     </h3>
 
@@ -315,7 +315,7 @@ export function PartnershipContactSection() {
               className="flex rounded-[32px] bg-[var(--color-surface)] p-6 md:p-7 xl:h-[440px]"
             >
               <div className="flex h-full w-full flex-col">
-                <h3 className="font-heading text-[26px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[30px]">
+                <h3 className="font-heading text-[22px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[22px]">
                   {partnershipContent.formCard.title}
                 </h3>
 
