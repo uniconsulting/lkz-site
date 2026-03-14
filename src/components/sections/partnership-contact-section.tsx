@@ -636,7 +636,7 @@ export function PartnershipContactSection() {
                     : partnershipContent.formCard.sendTitle}
                 </h3>
 
-                <div className="mt-4 h-[360px] flex-1">
+                <div className="mt-5 h-[360px] flex-1">
                   <AnimatePresence mode="wait" initial={false}>
                     {mode === "request" ? (
                       <motion.div
