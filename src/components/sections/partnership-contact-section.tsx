@@ -1,11 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import {
   Building2,
   ChevronDown,
+  Copy,
   FileText,
   FolderUp,
   MapPinned,
@@ -38,7 +38,7 @@ const partnershipContent = {
     points: [
       {
         icon: PackageCheck,
-        text: "собственная производственная база и лаборатория",
+        text: "производственная база и лаборатория",
       },
       {
         icon: ShieldCheck,
@@ -49,7 +49,6 @@ const partnershipContent = {
         text: "инфраструктура для стабильных B2B-поставок",
       },
     ],
-    cta: "запросить коммерческое предложение",
     image: `${basePath}/images/sections/partnership/partnership-hero.webp`,
   },
 
@@ -267,7 +266,7 @@ function RequestForm() {
   const [step, setStep] = useState<0 | 1>(0);
 
   return (
-    <div className="flex h-full min-h-[344px] flex-col">
+    <div className="flex h-full min-h-[360px] flex-col">
       <div className="mb-4 flex items-center gap-3">
         <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
           {step + 1} / 2
@@ -283,7 +282,7 @@ function RequestForm() {
         </div>
       </div>
 
-      <div className="min-h-[216px] flex-1">
+      <div className="min-h-[228px] flex-1">
         <AnimatePresence mode="wait" initial={false}>
           {step === 0 ? (
             <motion.div
@@ -378,7 +377,7 @@ function SendProposalForm() {
   }
 
   return (
-    <div className="flex h-full min-h-[344px] flex-col">
+    <div className="flex h-full min-h-[360px] flex-col">
       <div
         onDragOver={(event) => {
           event.preventDefault();
@@ -392,7 +391,7 @@ function SendProposalForm() {
           mergeFiles(dropped);
         }}
         className={cn(
-          "flex min-h-[216px] flex-1 flex-col items-center justify-center rounded-[22px] border border-dashed bg-[var(--color-bg)] p-5 text-center transition duration-300",
+          "flex min-h-[292px] flex-1 flex-col items-center justify-center rounded-[22px] border border-dashed bg-[var(--color-bg)] p-5 text-center transition duration-300",
           isDragging
             ? "border-[var(--color-accent-1)] bg-[var(--color-accent-1)]/[0.06]"
             : "border-[var(--color-border)]",
@@ -450,7 +449,9 @@ function SendProposalForm() {
               </div>
             ))}
           </div>
-        ) : null}
+        ) : (
+          <div />
+        )}
       </div>
 
       <button
@@ -466,6 +467,32 @@ function SendProposalForm() {
         {partnershipContent.formCard.submitSend}
       </button>
     </div>
+  );
+}
+
+function CopyValueButton({ value }: { value: string }) {
+  const [copied, setCopied] = useState(false);
+
+  async function handleCopy() {
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1200);
+    } catch {
+      setCopied(false);
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handleCopy}
+      className="absolute right-4 top-4 inline-flex h-8 w-8 items-center justify-center rounded-[10px] bg-[var(--color-surface)] text-[var(--color-text-muted)] transition duration-300 hover:text-[var(--color-text)] hover:shadow-[0_6px_14px_rgba(43,47,51,0.08)]"
+      aria-label="Скопировать"
+      title={copied ? "Скопировано" : "Скопировать"}
+    >
+      <Copy size={15} strokeWidth={2.2} />
+    </button>
   );
 }
 
@@ -498,46 +525,35 @@ export function PartnershipContactSection() {
               className="overflow-hidden rounded-[32px] bg-[var(--color-surface)] xl:min-h-[520px]"
             >
               <div className="grid h-full xl:grid-cols-[1fr_1fr]">
-                <div className="flex h-full flex-col justify-between bg-[var(--color-accent-2)] p-6 text-[var(--color-accent-2-foreground)] md:p-7">
-                  <div>
-                    <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-[15px] bg-[var(--color-accent-1)]/[0.14] text-[var(--color-accent-1)]">
-                      <Workflow size={18} strokeWidth={2.2} />
-                    </div>
-
-                    <h3 className="font-heading text-[26px] leading-[0.94] tracking-[-0.05em] md:text-[30px]">
-                      {partnershipContent.leadCard.title}
-                    </h3>
-
-                    <p className="mt-4 max-w-[360px] text-[13px] leading-[1.4] text-[var(--color-accent-2-foreground)]/76 md:text-[14px]">
-                      {partnershipContent.leadCard.description}
-                    </p>
-
-                    <div className="mt-5 space-y-3">
-                      {partnershipContent.leadCard.points.map((item) => {
-                        const Icon = item.icon;
-
-                        return (
-                          <div key={item.text} className="flex items-start gap-3">
-                            <div className="mt-[2px] flex h-6 w-6 items-center justify-center rounded-[9px] bg-[var(--color-accent-1)]/[0.12] text-[var(--color-accent-1)]">
-                              <Icon size={13} strokeWidth={2.2} />
-                            </div>
-
-                            <div className="max-w-[336px] text-[13px] leading-[1.34] text-[var(--color-accent-2-foreground)]/92">
-                              {item.text}
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
+                <div className="flex h-full flex-col justify-center bg-[var(--color-accent-2)] px-7 py-8 text-[var(--color-accent-2-foreground)] md:px-8 md:py-9">
+                  <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-[15px] bg-[var(--color-accent-1)]/[0.14] text-[var(--color-accent-1)]">
+                    <Workflow size={18} strokeWidth={2.2} />
                   </div>
 
-                  <div className="mt-5">
-                    <Link
-                      href="#contacts"
-                      className="inline-flex h-10 items-center justify-center rounded-[15px] bg-[var(--color-accent-1)] px-5 text-[13px] font-semibold text-[var(--color-bg)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
-                    >
-                      {partnershipContent.leadCard.cta}
-                    </Link>
+                  <h3 className="font-heading text-[27px] leading-[0.94] tracking-[-0.05em] md:text-[31px]">
+                    {partnershipContent.leadCard.title}
+                  </h3>
+
+                  <p className="mt-5 max-w-[380px] text-[13px] leading-[1.44] text-[var(--color-accent-2-foreground)]/76 md:text-[14px]">
+                    {partnershipContent.leadCard.description}
+                  </p>
+
+                  <div className="mt-7 space-y-4">
+                    {partnershipContent.leadCard.points.map((item) => {
+                      const Icon = item.icon;
+
+                      return (
+                        <div key={item.text} className="flex items-start gap-3">
+                          <div className="mt-[2px] flex h-6 w-6 items-center justify-center rounded-[9px] bg-[var(--color-accent-1)]/[0.12] text-[var(--color-accent-1)]">
+                            <Icon size={13} strokeWidth={2.2} />
+                          </div>
+
+                          <div className="max-w-[352px] text-[13px] leading-[1.36] text-[var(--color-accent-2-foreground)]/92">
+                            {item.text}
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
 
@@ -592,7 +608,7 @@ export function PartnershipContactSection() {
                     : partnershipContent.formCard.sendTitle}
                 </h3>
 
-                <div className="mt-4 min-h-[344px] flex-1">
+                <div className="mt-4 min-h-[360px] flex-1">
                   <AnimatePresence mode="wait" initial={false}>
                     {mode === "request" ? (
                       <motion.div
@@ -601,7 +617,7 @@ export function PartnershipContactSection() {
                         initial="initial"
                         animate="animate"
                         exit="exit"
-                        className="h-full min-h-[344px]"
+                        className="h-full min-h-[360px]"
                       >
                         <RequestForm />
                       </motion.div>
@@ -612,7 +628,7 @@ export function PartnershipContactSection() {
                         initial="initial"
                         animate="animate"
                         exit="exit"
-                        className="h-full min-h-[344px]"
+                        className="h-full min-h-[360px]"
                       >
                         <SendProposalForm />
                       </motion.div>
@@ -664,7 +680,8 @@ export function PartnershipContactSection() {
                 </div>
 
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="rounded-[22px] bg-[var(--color-bg)] p-5 transition duration-300 hover:shadow-[0_8px_20px_rgba(43,47,51,0.05)]">
+                  <div className="relative rounded-[22px] bg-[var(--color-bg)] p-5 transition duration-300 hover:shadow-[0_8px_20px_rgba(43,47,51,0.05)]">
+                    <CopyValueButton value={partnershipContent.contactsCard.inn} />
                     <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
                       ИНН
                     </div>
@@ -673,7 +690,8 @@ export function PartnershipContactSection() {
                     </div>
                   </div>
 
-                  <div className="rounded-[22px] bg-[var(--color-bg)] p-5 transition duration-300 hover:shadow-[0_8px_20px_rgba(43,47,51,0.05)]">
+                  <div className="relative rounded-[22px] bg-[var(--color-bg)] p-5 transition duration-300 hover:shadow-[0_8px_20px_rgba(43,47,51,0.05)]">
+                    <CopyValueButton value={partnershipContent.contactsCard.ogrn} />
                     <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
                       ОГРН
                     </div>
