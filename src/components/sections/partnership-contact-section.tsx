@@ -32,9 +32,13 @@ const partnershipContent = {
   ],
 
   leadCard: {
-    title: "13 лет развиваем производство",
-    description:
-      "За это время выстроили производственную базу, лабораторный контроль и рабочую инфраструктуру поставок, чтобы стабильно закрывать задачи дилеров, торговых сетей и B2B-партнёров.",
+    titleLines: ["13 лет развиваем", "производство"],
+    descriptionLines: [
+      "За это время выстроили производственную базу,",
+      "лабораторный контроль и рабочую инфраструктуру",
+      "поставок, чтобы стабильно закрывать задачи",
+      "дилеров, торговых сетей и B2B-партнёров.",
+    ],
     points: [
       {
         icon: PackageCheck,
@@ -53,10 +57,6 @@ const partnershipContent = {
   },
 
   formCard: {
-    requestTitle: "запросить коммерческое предложение",
-    sendTitle: "отправить коммерческое предложение",
-    submitRequest: "отправить запрос",
-    submitSend: "отправить КП",
     interestOptions: [
       "готовая продукция",
       "дилерство",
@@ -101,9 +101,9 @@ const cardMotion = {
 const innerPanelMotion = {
   initial: {
     opacity: 0,
-    x: 22,
-    scale: 0.992,
-    filter: "blur(8px)",
+    x: 18,
+    scale: 0.995,
+    filter: "blur(6px)",
   },
   animate: {
     opacity: 1,
@@ -111,17 +111,17 @@ const innerPanelMotion = {
     scale: 1,
     filter: "blur(0px)",
     transition: {
-      duration: 0.42,
+      duration: 0.34,
       ease: [0.22, 1, 0.36, 1] as const,
     },
   },
   exit: {
     opacity: 0,
-    x: -18,
-    scale: 0.992,
-    filter: "blur(8px)",
+    x: -14,
+    scale: 0.995,
+    filter: "blur(6px)",
     transition: {
-      duration: 0.24,
+      duration: 0.2,
       ease: [0.4, 0, 1, 1] as const,
     },
   },
@@ -139,11 +139,11 @@ function ContactInput({
   textarea?: boolean;
 }) {
   const baseClassName =
-    "w-full rounded-[18px] border border-transparent bg-[var(--color-bg)] px-4 text-[15px] text-[var(--color-text)] outline-none transition duration-300 placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent-1)] focus:shadow-[0_0_0_3px_rgba(30,222,123,0.10)] hover:border-[var(--color-border)]";
+    "w-full rounded-[22px] border border-transparent bg-[var(--color-bg)] px-6 text-[12px] text-[var(--color-text)] outline-none transition duration-300 placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent-1)] focus:shadow-[0_0_0_3px_rgba(30,222,123,0.10)] hover:border-[var(--color-border)]";
 
   return (
     <label className="block">
-      <div className="mb-2 text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
+      <div className="mb-[5px] text-[12px] font-semibold tracking-[-0.02em] text-[var(--color-text-muted)]">
         {label}
       </div>
 
@@ -151,13 +151,13 @@ function ContactInput({
         <textarea
           rows={3}
           placeholder={placeholder}
-          className={cn(baseClassName, "resize-none py-3.5")}
+          className={cn(baseClassName, "h-[134px] resize-none py-5")}
         />
       ) : (
         <input
           type="text"
           placeholder={placeholder}
-          className={cn(baseClassName, "h-11")}
+          className={cn(baseClassName, "h-[44px]")}
         />
       )}
     </label>
@@ -191,7 +191,7 @@ function B2BSelect({
 
   return (
     <div ref={rootRef} className="relative">
-      <div className="mb-2 text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
+      <div className="mb-[5px] text-[12px] font-semibold tracking-[-0.02em] text-[var(--color-text-muted)]">
         {label}
       </div>
 
@@ -199,7 +199,7 @@ function B2BSelect({
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
         className={cn(
-          "flex h-11 w-full items-center justify-between rounded-[18px] border border-transparent bg-[var(--color-bg)] px-4 text-left text-[15px] transition duration-300 hover:border-[var(--color-border)]",
+          "flex h-[44px] w-full items-center justify-between rounded-[22px] border border-transparent bg-[var(--color-bg)] px-6 text-left text-[12px] transition duration-300 hover:border-[var(--color-border)]",
           isOpen
             ? "border-[var(--color-accent-1)] shadow-[0_0_0_3px_rgba(30,222,123,0.10)]"
             : "",
@@ -214,7 +214,7 @@ function B2BSelect({
         </span>
 
         <ChevronDown
-          size={18}
+          size={16}
           strokeWidth={2.2}
           className={cn(
             "shrink-0 text-[var(--color-text-muted)] transition duration-300",
@@ -230,7 +230,7 @@ function B2BSelect({
           y: isOpen ? 0 : -8,
           pointerEvents: isOpen ? "auto" : "none",
         }}
-        transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
         className="absolute left-0 right-0 top-[calc(100%+8px)] z-20 overflow-hidden rounded-[20px] bg-[var(--color-bg)] shadow-[0_16px_38px_rgba(43,47,51,0.12)]"
       >
         <div className="p-2">
@@ -246,7 +246,7 @@ function B2BSelect({
                   setIsOpen(false);
                 }}
                 className={cn(
-                  "flex w-full items-center rounded-[14px] px-3 py-3 text-left text-[15px] transition duration-200",
+                  "flex w-full items-center rounded-[14px] px-4 py-3 text-left text-[12px] transition duration-200",
                   isActive
                     ? "bg-[var(--color-accent-1)]/[0.10] text-[var(--color-text)]"
                     : "text-[var(--color-text)] hover:bg-[var(--color-surface)]",
@@ -262,27 +262,67 @@ function B2BSelect({
   );
 }
 
+function ModeSwitch({
+  mode,
+  onChange,
+}: {
+  mode: ProposalMode;
+  onChange: (mode: ProposalMode) => void;
+}) {
+  return (
+    <div className="grid h-[60px] grid-cols-[1fr_1px_1fr] items-center gap-[18px]">
+      <button
+        type="button"
+        onClick={() => onChange("request")}
+        className={cn(
+          "h-[60px] rounded-[30px] text-[14px] font-semibold tracking-[-0.03em] transition duration-300",
+          mode === "request"
+            ? "bg-[var(--color-accent-1)] text-[var(--color-bg)]"
+            : "bg-[var(--color-bg)] text-[var(--color-text)]",
+        )}
+      >
+        запросить КП
+      </button>
+
+      <div className="h-[32px] w-px bg-[var(--color-accent-2)]/10" />
+
+      <button
+        type="button"
+        onClick={() => onChange("send")}
+        className={cn(
+          "h-[60px] rounded-[30px] text-[14px] font-semibold tracking-[-0.03em] transition duration-300",
+          mode === "send"
+            ? "bg-[var(--color-accent-1)] text-[var(--color-bg)]"
+            : "bg-[var(--color-bg)] text-[var(--color-text)]",
+        )}
+      >
+        отправить КП
+      </button>
+    </div>
+  );
+}
+
 function RequestForm() {
   const [step, setStep] = useState<0 | 1>(0);
 
   return (
     <div className="flex h-full flex-col">
-      <div className="mb-4 flex items-center gap-3">
-        <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
-          {step + 1} / 2
+      <div className="flex h-[18px] items-center gap-3">
+        <div className="text-[12px] tracking-[-0.02em] text-[var(--color-text-muted)]">
+          {step + 1}/2
         </div>
 
-        <div className="relative h-[4px] flex-1 overflow-hidden rounded-full bg-[var(--color-border)]">
+        <div className="relative h-[3px] flex-1 overflow-hidden rounded-full bg-[var(--color-border)]">
           <motion.span
             className="absolute inset-y-0 left-0 rounded-full bg-[var(--color-accent-1)]"
             initial={false}
-            animate={{ width: step === 0 ? "50%" : "100%" }}
-            transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+            animate={{ width: step === 0 ? "46%" : "100%" }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
           />
         </div>
       </div>
 
-      <div className="flex-1 min-h-0">
+      <div className="mt-[42px] h-[235px] overflow-hidden">
         <AnimatePresence mode="wait" initial={false}>
           {step === 0 ? (
             <motion.div
@@ -291,13 +331,18 @@ function RequestForm() {
               initial="initial"
               animate="animate"
               exit="exit"
-              className="space-y-3"
+              className="space-y-0"
             >
               <ContactInput label="имя" placeholder="ваше имя" />
-              <ContactInput label="организация" placeholder="название компании" />
+              <div className="h-[23px]" />
               <ContactInput
-                label="телефон / telegram"
-                placeholder="контакт для связи"
+                label="организация"
+                placeholder="название компании"
+              />
+              <div className="h-[23px]" />
+              <ContactInput
+                label="контакт"
+                placeholder="telegram / телефон / email"
               />
             </motion.div>
           ) : (
@@ -307,17 +352,17 @@ function RequestForm() {
               initial="initial"
               animate="animate"
               exit="exit"
-              className="space-y-3"
+              className="space-y-0"
             >
               <B2BSelect
                 label="формат интереса"
                 placeholder="выберите формат"
                 options={partnershipContent.formCard.interestOptions}
               />
-
+              <div className="h-[23px]" />
               <ContactInput
-                label="комментарий"
-                placeholder="кратко опишите задачу, объём или интересующие категории"
+                label="комментарий / сообщение"
+                placeholder="опишите задачу"
                 textarea
               />
             </motion.div>
@@ -325,12 +370,12 @@ function RequestForm() {
         </AnimatePresence>
       </div>
 
-      <div className="mt-4 flex gap-3">
+      <div className="mt-[47px] flex h-[60px] gap-4">
         {step === 1 ? (
           <button
             type="button"
             onClick={() => setStep(0)}
-            className="inline-flex h-10 items-center justify-center rounded-[15px] bg-[var(--color-bg)] px-5 text-[13px] font-semibold text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
+            className="h-[60px] w-[190px] rounded-[30px] bg-[var(--color-bg)] text-[14px] font-semibold tracking-[-0.03em] text-[var(--color-text-muted)] transition duration-300 hover:text-[var(--color-text)]"
           >
             назад
           </button>
@@ -340,16 +385,16 @@ function RequestForm() {
           <button
             type="button"
             onClick={() => setStep(1)}
-            className="inline-flex h-10 flex-1 items-center justify-center rounded-[15px] bg-[var(--color-accent-1)] px-5 text-[13px] font-semibold text-[var(--color-bg)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
+            className="h-[60px] w-full rounded-[30px] bg-[var(--color-accent-2)] text-[var(--color-accent-2-foreground)] text-[14px] font-semibold tracking-[-0.03em] transition duration-300 hover:opacity-95"
           >
             далее
           </button>
         ) : (
           <button
             type="button"
-            className="inline-flex h-10 flex-1 items-center justify-center rounded-[15px] bg-[var(--color-accent-1)] px-5 text-[13px] font-semibold text-[var(--color-bg)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
+            className="h-[60px] flex-1 rounded-[30px] bg-[var(--color-accent-2)] text-[var(--color-accent-2-foreground)] text-[14px] font-semibold tracking-[-0.03em] transition duration-300 hover:opacity-95"
           >
-            {partnershipContent.formCard.submitRequest}
+            отправить
           </button>
         )}
       </div>
@@ -379,120 +424,109 @@ function SendProposalForm() {
 
   return (
     <div className="flex h-full flex-col">
-      <div
-        onDragOver={(event) => {
-          event.preventDefault();
-          setIsDragging(true);
-        }}
-        onDragLeave={() => setIsDragging(false)}
-        onDrop={(event) => {
-          event.preventDefault();
-          setIsDragging(false);
-          const dropped = Array.from(event.dataTransfer.files ?? []);
-          mergeFiles(dropped);
-        }}
-        className={cn(
-          "flex h-full flex-col rounded-[22px] border border-dashed bg-[var(--color-bg)] p-5 transition duration-300",
-          isDragging
-            ? "border-[var(--color-accent-1)] bg-[var(--color-accent-1)]/[0.06]"
-            : "border-[var(--color-border)]",
-        )}
-      >
-        {files.length === 0 ? (
-          <div className="flex h-full flex-col items-center justify-center text-center">
-            <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-[16px] bg-[var(--color-accent-1)]/[0.12] text-[var(--color-accent-1)]">
-              <FolderUp size={20} strokeWidth={2.2} />
-            </div>
+      <div className="h-[16px] text-[12px] font-semibold tracking-[-0.03em] text-[var(--color-text-muted)]">
+        загрузите Ваше КП
+      </div>
 
-            <div className="max-w-[320px] text-[15px] font-semibold leading-[1.2] text-[var(--color-text)]">
-              загрузите коммерческое предложение
-            </div>
-
-            <div className="mt-3 max-w-[320px] text-[13px] leading-[1.45] text-[var(--color-text-muted)]">
-              <span className="block">
-                pdf, doc, docx, xls, xlsx, ppt, pptx или архив
-              </span>
-              <span className="block">до 3 файлов в одном запросе</span>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => inputRef.current?.click()}
-              className="mt-4 inline-flex h-10 items-center justify-center rounded-[15px] bg-[var(--color-accent-1)] px-5 text-[13px] font-semibold text-[var(--color-bg)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
-            >
-              выбрать файлы
-            </button>
-          </div>
-        ) : (
-          <div className="flex h-full min-h-0 flex-col">
-            <div className="mb-4 shrink-0">
-              <div className="text-[15px] font-semibold leading-[1.2] text-[var(--color-text)]">
-                загруженные файлы
+      <div className="mt-[16px] flex h-[300px] flex-col rounded-[30px] border-[3px] border-dashed border-[var(--color-accent-2)] bg-[var(--color-bg)] p-5 transition duration-300">
+        <div
+          onDragOver={(event) => {
+            event.preventDefault();
+            setIsDragging(true);
+          }}
+          onDragLeave={() => setIsDragging(false)}
+          onDrop={(event) => {
+            event.preventDefault();
+            setIsDragging(false);
+            const dropped = Array.from(event.dataTransfer.files ?? []);
+            mergeFiles(dropped);
+          }}
+          className={cn(
+            "flex h-full flex-col transition duration-300",
+            isDragging ? "opacity-90" : "",
+          )}
+        >
+          {files.length === 0 ? (
+            <div className="flex h-full flex-col items-center justify-center text-center">
+              <div className="mb-4 flex h-11 w-11 items-center justify-center text-[var(--color-accent-1)]">
+                <FolderUp size={42} strokeWidth={2.1} />
               </div>
-              <div className="mt-2 text-[13px] leading-[1.45] text-[var(--color-text-muted)]">
-                можно прикрепить до 3 файлов
+
+              <button
+                type="button"
+                onClick={() => inputRef.current?.click()}
+                className="text-[12px] tracking-[-0.03em] text-[var(--color-text)] transition duration-300 hover:text-[var(--color-accent-2)]"
+              >
+                выбрать файлы
+              </button>
+
+              <div className="mt-[48px] text-[12px] leading-[1.55] tracking-[-0.02em] text-[var(--color-text-muted)]">
+                <span className="block">
+                  pdf, doc, docx, xls, xlsx, ppt, pptx или архив
+                </span>
+                <span className="block">до 3 файлов в одном запросе</span>
               </div>
             </div>
-
-            <div className="flex-1 min-h-0 space-y-2 overflow-y-auto pr-1">
-              {files.map((file, index) => (
-                <div
-                  key={`${file.name}-${index}`}
-                  className="flex items-center justify-between gap-3 rounded-[14px] bg-[var(--color-surface)] px-3 py-3"
-                >
-                  <div className="min-w-0">
-                    <div className="truncate text-[14px] font-medium text-[var(--color-text)]">
+          ) : (
+            <div className="flex h-full min-h-0 flex-col">
+              <div className="flex-1 min-h-0 space-y-2 overflow-y-auto pr-1">
+                {files.map((file, index) => (
+                  <div
+                    key={`${file.name}-${index}`}
+                    className="flex items-center justify-between gap-3 rounded-[16px] bg-[var(--color-surface)] px-4 py-3"
+                  >
+                    <div className="min-w-0 truncate text-[12px] tracking-[-0.02em] text-[var(--color-text)]">
                       {file.name}
                     </div>
+
+                    <button
+                      type="button"
+                      onClick={() => removeFile(index)}
+                      className="shrink-0 text-[var(--color-text-muted)] transition duration-200 hover:text-[var(--color-text)]"
+                    >
+                      <X size={14} strokeWidth={2.2} />
+                    </button>
                   </div>
+                ))}
+              </div>
 
-                  <button
-                    type="button"
-                    onClick={() => removeFile(index)}
-                    className="shrink-0 text-[var(--color-text-muted)] transition duration-200 hover:text-[var(--color-text)]"
-                  >
-                    <X size={14} strokeWidth={2.2} />
-                  </button>
-                </div>
-              ))}
+              <button
+                type="button"
+                onClick={() => inputRef.current?.click()}
+                disabled={files.length >= 3}
+                className={cn(
+                  "mt-4 h-[44px] rounded-[22px] text-[12px] tracking-[-0.02em] transition duration-300",
+                  files.length >= 3
+                    ? "cursor-not-allowed bg-[var(--color-border)] text-[var(--color-text-muted)]"
+                    : "bg-[var(--color-surface)] text-[var(--color-text)] hover:text-[var(--color-accent-2)]",
+                )}
+              >
+                добавить файлы
+              </button>
             </div>
+          )}
 
-            <button
-              type="button"
-              onClick={() => inputRef.current?.click()}
-              disabled={files.length >= 3}
-              className={cn(
-                "mt-4 inline-flex h-10 items-center justify-center self-start rounded-[15px] px-5 text-[13px] font-semibold transition duration-300",
-                files.length >= 3
-                  ? "cursor-not-allowed bg-[var(--color-border)] text-[var(--color-text-muted)]"
-                  : "bg-[var(--color-accent-1)] text-[var(--color-bg)] hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]",
-              )}
-            >
-              добавить файлы
-            </button>
-          </div>
-        )}
-
-        <input
-          ref={inputRef}
-          type="file"
-          multiple
-          className="hidden"
-          onChange={handleInputChange}
-        />
+          <input
+            ref={inputRef}
+            type="file"
+            multiple
+            className="hidden"
+            onChange={handleInputChange}
+          />
+        </div>
       </div>
 
       <button
         type="button"
         disabled={files.length === 0}
         className={cn(
-          "mt-4 inline-flex h-10 w-full items-center justify-center rounded-[15px] px-5 text-[13px] font-semibold transition duration-300",
+          "mt-[10px] h-[60px] rounded-[30px] text-[14px] font-semibold tracking-[-0.03em] transition duration-300",
           files.length === 0
             ? "cursor-not-allowed bg-[var(--color-border)] text-[var(--color-text-muted)]"
-            : "bg-[var(--color-accent-1)] text-[var(--color-bg)] hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]",
+            : "bg-[var(--color-accent-2)] text-[var(--color-accent-2-foreground)] hover:opacity-95",
         )}
       >
-        {partnershipContent.formCard.submitSend}
+        отправить
       </button>
     </div>
   );
@@ -547,36 +581,44 @@ export function PartnershipContactSection() {
             </p>
           </div>
 
-          <div className="mt-8 grid gap-4 xl:grid-cols-[1.38fr_0.72fr] xl:items-stretch">
+          <div className="mt-8 grid gap-4 xl:grid-cols-[857px_447px] xl:justify-between xl:items-start">
             <motion.div
               variants={cardMotion}
-              className="overflow-hidden rounded-[32px] bg-[var(--color-surface)] xl:h-[552px]"
+              className="overflow-hidden rounded-[40px] bg-[var(--color-surface)] xl:h-[552px] xl:w-[857px]"
             >
-              <div className="grid h-full xl:grid-cols-[1fr_1fr]">
-                <div className="flex h-full flex-col justify-center bg-[var(--color-accent-2)] px-8 py-10 text-[var(--color-accent-2-foreground)] md:px-9 md:py-11">
-                  <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-[15px] bg-[var(--color-accent-1)]/[0.14] text-[var(--color-accent-1)]">
+              <div className="grid h-full xl:grid-cols-[428px_429px]">
+                <div className="h-full bg-[var(--color-accent-2)] px-[28px] py-[28px] text-[var(--color-accent-2-foreground)]">
+                  <div className="flex h-[44px] w-[44px] items-center justify-center rounded-[18px] bg-[var(--color-accent-1)]/[0.14] text-[var(--color-accent-1)]">
                     <Workflow size={18} strokeWidth={2.2} />
                   </div>
 
-                  <h3 className="font-heading text-[27px] leading-[0.94] tracking-[-0.05em] md:text-[31px]">
-                    {partnershipContent.leadCard.title}
-                  </h3>
+                  <div className="mt-[28px] font-heading text-[30px] leading-[0.92] tracking-[-0.05em]">
+                    {partnershipContent.leadCard.titleLines.map((line) => (
+                      <div key={line}>{line}</div>
+                    ))}
+                  </div>
 
-                  <p className="mt-6 max-w-[388px] text-[13px] leading-[1.44] text-[var(--color-accent-2-foreground)]/76 md:text-[14px]">
-                    {partnershipContent.leadCard.description}
-                  </p>
+                  <div className="mt-[36px] h-px bg-white/10" />
 
-                  <div className="mt-8 space-y-4">
+                  <div className="mt-[36px] space-y-[12px] text-[10px] leading-[1.2] tracking-[-0.02em] text-[var(--color-accent-2-foreground)]/82">
+                    {partnershipContent.leadCard.descriptionLines.map((line) => (
+                      <div key={line}>{line}</div>
+                    ))}
+                  </div>
+
+                  <div className="mt-[36px] h-px bg-white/10" />
+
+                  <div className="mt-[36px] space-y-[28px]">
                     {partnershipContent.leadCard.points.map((item) => {
                       const Icon = item.icon;
 
                       return (
-                        <div key={item.text} className="flex items-center gap-3">
-                          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[9px] bg-[var(--color-accent-1)]/[0.12] text-[var(--color-accent-1)]">
-                            <Icon size={13} strokeWidth={2.2} />
+                        <div key={item.text} className="flex items-center gap-4">
+                          <div className="flex h-[28px] w-[28px] shrink-0 items-center justify-center rounded-[14px] bg-[var(--color-accent-1)]/[0.14] text-[var(--color-accent-1)]">
+                            <Icon size={14} strokeWidth={2.2} />
                           </div>
 
-                          <div className="max-w-[356px] text-[13px] leading-[1.34] text-[var(--color-accent-2-foreground)]/92">
+                          <div className="text-[10px] leading-[1.2] tracking-[-0.02em] text-[var(--color-accent-2-foreground)]/92">
                             {item.text}
                           </div>
                         </div>
@@ -585,84 +627,48 @@ export function PartnershipContactSection() {
                   </div>
                 </div>
 
-                <div className="relative h-full min-h-[260px] overflow-hidden">
+                <div className="relative h-full overflow-hidden">
                   <img
                     src={partnershipContent.leadCard.image}
-                    alt={partnershipContent.leadCard.title}
+                    alt="Производственная линия"
                     className="h-full w-full object-cover"
                   />
-
-                  <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(20,24,28,0.08)_0%,rgba(20,24,28,0.01)_34%,rgba(20,24,28,0.14)_100%)]" />
                 </div>
               </div>
             </motion.div>
 
             <motion.div
               variants={cardMotion}
-              className="flex rounded-[32px] bg-[var(--color-surface)] p-5 md:p-6 xl:h-[552px]"
+              className="rounded-[40px] bg-[var(--color-surface)] p-[18px] xl:h-[552px] xl:w-[447px]"
             >
-              <div className="flex h-full w-full flex-col">
-                <div className="mb-5 flex rounded-[18px] bg-[var(--color-bg)] p-1">
-                  <button
-                    type="button"
-                    onClick={() => setMode("request")}
-                    className={cn(
-                      "flex-1 rounded-[14px] px-4 py-2.5 text-[14px] font-semibold transition duration-300",
-                      mode === "request"
-                        ? "bg-[var(--color-accent-1)] text-[var(--color-bg)]"
-                        : "text-[var(--color-text-muted)] hover:text-[var(--color-text)]",
-                    )}
-                  >
-                    запросить КП
-                  </button>
+              <ModeSwitch mode={mode} onChange={setMode} />
 
-                  <button
-                    type="button"
-                    onClick={() => setMode("send")}
-                    className={cn(
-                      "flex-1 rounded-[14px] px-4 py-2.5 text-[14px] font-semibold transition duration-300",
-                      mode === "send"
-                        ? "bg-[var(--color-accent-1)] text-[var(--color-bg)]"
-                        : "text-[var(--color-text-muted)] hover:text-[var(--color-text)]",
-                    )}
-                  >
-                    отправить КП
-                  </button>
-                </div>
-
-                <h3 className="min-h-[52px] font-heading text-[24px] leading-[0.94] tracking-[-0.05em] text-[var(--color-text)] md:text-[27px]">
-                  {mode === "request"
-                    ? partnershipContent.formCard.requestTitle
-                    : partnershipContent.formCard.sendTitle}
-                </h3>
-
-                <div className="mt-4 h-[372px] shrink-0">
-                  <AnimatePresence mode="wait" initial={false}>
-                    {mode === "request" ? (
-                      <motion.div
-                        key="request-mode"
-                        variants={innerPanelMotion}
-                        initial="initial"
-                        animate="animate"
-                        exit="exit"
-                        className="h-full"
-                      >
-                        <RequestForm />
-                      </motion.div>
-                    ) : (
-                      <motion.div
-                        key="send-mode"
-                        variants={innerPanelMotion}
-                        initial="initial"
-                        animate="animate"
-                        exit="exit"
-                        className="h-full"
-                      >
-                        <SendProposalForm />
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
+              <div className="mt-[54px] h-[402px]">
+                <AnimatePresence mode="wait" initial={false}>
+                  {mode === "request" ? (
+                    <motion.div
+                      key="request-mode"
+                      variants={innerPanelMotion}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      className="h-full"
+                    >
+                      <RequestForm />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="send-mode"
+                      variants={innerPanelMotion}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      className="h-full"
+                    >
+                      <SendProposalForm />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </motion.div>
           </div>
