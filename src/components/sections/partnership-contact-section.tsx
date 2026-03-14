@@ -101,7 +101,7 @@ const cardMotion = {
 const innerPanelMotion = {
   initial: {
     opacity: 0,
-    x: 26,
+    x: 22,
     scale: 0.992,
     filter: "blur(8px)",
   },
@@ -111,17 +111,17 @@ const innerPanelMotion = {
     scale: 1,
     filter: "blur(0px)",
     transition: {
-      duration: 0.46,
+      duration: 0.42,
       ease: [0.22, 1, 0.36, 1] as const,
     },
   },
   exit: {
     opacity: 0,
-    x: -20,
+    x: -18,
     scale: 0.992,
     filter: "blur(8px)",
     transition: {
-      duration: 0.28,
+      duration: 0.24,
       ease: [0.4, 0, 1, 1] as const,
     },
   },
@@ -392,7 +392,7 @@ function SendProposalForm() {
           mergeFiles(dropped);
         }}
         className={cn(
-          "flex flex-1 min-h-0 flex-col rounded-[22px] border border-dashed bg-[var(--color-bg)] p-5 transition duration-300",
+          "flex h-full flex-col rounded-[22px] border border-dashed bg-[var(--color-bg)] p-5 transition duration-300",
           isDragging
             ? "border-[var(--color-accent-1)] bg-[var(--color-accent-1)]/[0.06]"
             : "border-[var(--color-border)]",
@@ -408,7 +408,7 @@ function SendProposalForm() {
               загрузите коммерческое предложение
             </div>
 
-            <div className="mt-5 max-w-[320px] text-[13px] leading-[1.45] text-[var(--color-text-muted)]">
+            <div className="mt-3 max-w-[320px] text-[13px] leading-[1.45] text-[var(--color-text-muted)]">
               <span className="block">
                 pdf, doc, docx, xls, xlsx, ppt, pptx или архив
               </span>
@@ -425,7 +425,7 @@ function SendProposalForm() {
           </div>
         ) : (
           <div className="flex h-full min-h-0 flex-col">
-            <div className="mb-4">
+            <div className="mb-4 shrink-0">
               <div className="text-[15px] font-semibold leading-[1.2] text-[var(--color-text)]">
                 загруженные файлы
               </div>
@@ -486,7 +486,7 @@ function SendProposalForm() {
         type="button"
         disabled={files.length === 0}
         className={cn(
-          "mt-8 inline-flex h-10 w-full items-center justify-center rounded-[15px] px-5 text-[13px] font-semibold transition duration-300",
+          "mt-4 inline-flex h-10 w-full items-center justify-center rounded-[15px] px-5 text-[13px] font-semibold transition duration-300",
           files.length === 0
             ? "cursor-not-allowed bg-[var(--color-border)] text-[var(--color-text-muted)]"
             : "bg-[var(--color-accent-1)] text-[var(--color-bg)] hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]",
@@ -550,7 +550,7 @@ export function PartnershipContactSection() {
           <div className="mt-8 grid gap-4 xl:grid-cols-[1.38fr_0.72fr] xl:items-stretch">
             <motion.div
               variants={cardMotion}
-              className="overflow-hidden rounded-[32px] bg-[var(--color-surface)] xl:min-h-[520px]"
+              className="overflow-hidden rounded-[32px] bg-[var(--color-surface)] xl:h-[552px]"
             >
               <div className="grid h-full xl:grid-cols-[1fr_1fr]">
                 <div className="flex h-full flex-col justify-center bg-[var(--color-accent-2)] px-8 py-10 text-[var(--color-accent-2-foreground)] md:px-9 md:py-11">
@@ -599,7 +599,7 @@ export function PartnershipContactSection() {
 
             <motion.div
               variants={cardMotion}
-              className="flex rounded-[32px] bg-[var(--color-surface)] p-5 md:p-6 xl:min-h-[520px]"
+              className="flex rounded-[32px] bg-[var(--color-surface)] p-5 md:p-6 xl:h-[552px]"
             >
               <div className="flex h-full w-full flex-col">
                 <div className="mb-5 flex rounded-[18px] bg-[var(--color-bg)] p-1">
@@ -630,13 +630,13 @@ export function PartnershipContactSection() {
                   </button>
                 </div>
 
-                <h3 className="font-heading text-[24px] leading-[0.94] tracking-[-0.05em] text-[var(--color-text)] md:text-[27px]">
+                <h3 className="min-h-[52px] font-heading text-[24px] leading-[0.94] tracking-[-0.05em] text-[var(--color-text)] md:text-[27px]">
                   {mode === "request"
                     ? partnershipContent.formCard.requestTitle
                     : partnershipContent.formCard.sendTitle}
                 </h3>
 
-                <div className="mt-5 h-[360px] flex-1">
+                <div className="mt-4 h-[372px] shrink-0">
                   <AnimatePresence mode="wait" initial={false}>
                     {mode === "request" ? (
                       <motion.div
