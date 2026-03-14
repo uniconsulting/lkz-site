@@ -17,10 +17,8 @@ import { cn } from "@/lib/utils/cn";
 
 const basePath = process.env.NODE_ENV === "production" ? "/lkz-site" : "";
 
-// ВАЖНО:
-// Сюда лучше вставить именно embed-ссылку Яндекс.Карт для iframe.
-// Короткая ссылка ниже уже используется для перехода в Я.Карты.
-const YANDEX_MAP_EMBED_URL = "";
+const YANDEX_MAP_EMBED_URL =
+  "https://yandex.ru/map-widget/v1/?um=constructor%3Ab9ba62ca6079292583614d568f069fd31e16362261dcb68461cc2aa7f829bdc7&source=constructor";
 
 const YANDEX_MAP_OPEN_URL = "https://yandex.com/maps/-/CPB2u0L4";
 
@@ -151,12 +149,12 @@ export function PartnershipContactSection() {
             </p>
           </div>
 
-          <div className="mt-8 grid gap-4 xl:grid-cols-[1.08fr_0.92fr]">
+          <div className="mt-8 grid gap-4 xl:grid-cols-[1.12fr_0.88fr] xl:items-stretch">
             <motion.div
               variants={cardMotion}
               className="overflow-hidden rounded-[32px] bg-[var(--color-surface)]"
             >
-              <div className="grid min-h-[520px] xl:grid-cols-[0.92fr_1fr]">
+              <div className="grid min-h-[420px] xl:min-h-[440px] xl:grid-cols-[0.84fr_1.16fr]">
                 <div className="flex flex-col justify-between bg-[var(--color-accent-2)] p-6 text-[var(--color-accent-2-foreground)] md:p-8">
                   <div>
                     <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-[18px] bg-[var(--color-accent-1)]/[0.14] text-[var(--color-accent-1)]">
@@ -167,7 +165,7 @@ export function PartnershipContactSection() {
                       {partnershipContent.leadCard.title}
                     </h3>
 
-                    <p className="mt-5 max-w-[420px] text-[15px] leading-[1.48] text-[var(--color-accent-2-foreground)]/76 md:text-[17px]">
+                    <p className="mt-5 max-w-[380px] text-[15px] leading-[1.48] text-[var(--color-accent-2-foreground)]/76 md:text-[17px]">
                       {partnershipContent.leadCard.description}
                     </p>
 
@@ -181,7 +179,7 @@ export function PartnershipContactSection() {
                               <Icon size={15} strokeWidth={2.2} />
                             </div>
 
-                            <div className="max-w-[360px] text-[15px] leading-[1.42] text-[var(--color-accent-2-foreground)]/92">
+                            <div className="max-w-[340px] text-[15px] leading-[1.42] text-[var(--color-accent-2-foreground)]/92">
                               {item.text}
                             </div>
                           </div>
@@ -200,7 +198,7 @@ export function PartnershipContactSection() {
                   </div>
                 </div>
 
-                <div className="relative min-h-[280px] overflow-hidden">
+                <div className="relative min-h-[260px] overflow-hidden xl:min-h-[440px]">
                   <img
                     src={partnershipContent.leadCard.image}
                     alt={partnershipContent.leadCard.title}
@@ -214,7 +212,7 @@ export function PartnershipContactSection() {
 
             <motion.div
               variants={cardMotion}
-              className="rounded-[32px] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 md:p-8"
+              className="rounded-[32px] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 md:p-8 xl:min-h-[420px] xl:p-7"
             >
               <h3 className="font-heading text-[28px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[34px]">
                 {partnershipContent.formCard.title}
@@ -337,23 +335,14 @@ export function PartnershipContactSection() {
               variants={cardMotion}
               className="overflow-hidden rounded-[32px] border border-[var(--color-border)] bg-[var(--color-surface)]"
             >
-              <div className="relative h-full min-h-[420px]">
-                {YANDEX_MAP_EMBED_URL ? (
-                  <iframe
-                    src={YANDEX_MAP_EMBED_URL}
-                    title="Карта"
-                    className="absolute inset-0 h-full w-full border-0"
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                  />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center bg-[linear-gradient(135deg,#e8f7ef_0%,#dff3ea_28%,#d7eef7_100%)]">
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_58%,rgba(30,222,123,0.18),transparent_18%),radial-gradient(circle_at_46%_50%,rgba(30,222,123,0.12),transparent_22%),linear-gradient(0deg,rgba(255,255,255,0.20),rgba(255,255,255,0.20))]" />
-                    <div className="relative flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-accent-1)] text-[var(--color-bg)] shadow-[0_10px_24px_rgba(30,222,123,0.22)]">
-                      <MapPinned size={24} strokeWidth={2.2} />
-                    </div>
-                  </div>
-                )}
+              <div className="relative h-full min-h-[360px] xl:min-h-[388px]">
+                <iframe
+                  src={YANDEX_MAP_EMBED_URL}
+                  title="Карта"
+                  className="absolute inset-0 h-full w-full border-0"
+                  loading="lazy"
+                  frameBorder="0"
+                />
 
                 <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(20,24,28,0.00)_0%,rgba(20,24,28,0.06)_100%)]" />
 
