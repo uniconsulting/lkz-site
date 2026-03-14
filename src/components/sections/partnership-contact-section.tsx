@@ -93,7 +93,7 @@ function ContactInput({
   textarea?: boolean;
 }) {
   const baseClassName =
-    "w-full rounded-[18px] border border-[var(--color-border)] bg-[var(--color-bg)] px-4 text-[15px] text-[var(--color-text)] outline-none transition duration-300 placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent-1)] focus:shadow-[0_0_0_3px_rgba(30,222,123,0.10)]";
+    "w-full rounded-[18px] bg-[var(--color-bg)] px-4 text-[15px] text-[var(--color-text)] outline-none transition duration-300 placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent-1)] focus:shadow-[0_0_0_3px_rgba(30,222,123,0.10)]";
 
   return (
     <label className="block">
@@ -201,7 +201,7 @@ export function PartnershipContactSection() {
 
             <motion.div
               variants={cardMotion}
-              className="flex rounded-[32px] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 md:p-8 xl:h-[460px]"
+              className="flex rounded-[32px] bg-[var(--color-surface)] p-6 md:p-8 xl:h-[460px]"
             >
               <div className="flex h-full w-full flex-col">
                 <h3 className="font-heading text-[28px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[32px]">
@@ -224,7 +224,7 @@ export function PartnershipContactSection() {
                       формат интереса
                     </div>
 
-                    <select className="h-12 w-full rounded-[18px] border border-[var(--color-border)] bg-[var(--color-bg)] px-4 text-[15px] text-[var(--color-text)] outline-none transition duration-300 focus:border-[var(--color-accent-1)] focus:shadow-[0_0_0_3px_rgba(30,222,123,0.10)]">
+                    <select className="h-12 w-full rounded-[18px] bg-[var(--color-bg)] px-4 text-[15px] text-[var(--color-text)] outline-none transition duration-300 focus:border-[var(--color-accent-1)] focus:shadow-[0_0_0_3px_rgba(30,222,123,0.10)]">
                       <option>выберите формат</option>
                       <option>готовая продукция</option>
                       <option>дилерство</option>
@@ -253,7 +253,7 @@ export function PartnershipContactSection() {
           <div className="mt-4 grid gap-4 xl:grid-cols-[0.9fr_1.1fr] xl:items-stretch">
             <motion.div
               variants={cardMotion}
-              className="rounded-[32px] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 md:p-8"
+              className="rounded-[32px] bg-[var(--color-surface)] p-6 md:p-8"
             >
               <h3 className="font-heading text-[28px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[34px]">
                 {partnershipContent.contactsCard.title}
@@ -324,7 +324,7 @@ export function PartnershipContactSection() {
 
             <motion.div
               variants={cardMotion}
-              className="overflow-hidden rounded-[32px] border border-[var(--color-border)] bg-[var(--color-surface)] xl:min-h-[360px]"
+              className="overflow-hidden rounded-[32px] bg-[var(--color-surface)] xl:min-h-[360px]"
             >
               <iframe
                 src={YANDEX_MAP_EMBED_URL}
