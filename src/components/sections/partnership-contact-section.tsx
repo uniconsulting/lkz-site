@@ -408,7 +408,7 @@ function SendProposalForm() {
               загрузите коммерческое предложение
             </div>
 
-            <div className="mt-3 max-w-[320px] text-[13px] leading-[1.45] text-[var(--color-text-muted)]">
+            <div className="mt-5 max-w-[320px] text-[13px] leading-[1.45] text-[var(--color-text-muted)]">
               <span className="block">
                 pdf, doc, docx, xls, xlsx, ppt, pptx или архив
               </span>
