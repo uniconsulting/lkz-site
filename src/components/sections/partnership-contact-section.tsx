@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import {
   Building2,
+  Check,
   ChevronDown,
   Copy,
   FileText,
@@ -147,7 +148,7 @@ function ContactInput({
 
   return (
     <label className="block">
-      <div className="mb-[5px] text-[12px] font-semibold tracking-[-0.03em] text-[var(--color-text-muted)]">
+      <div className="mb-[5px] pl-[4px] text-[14px] font-semibold tracking-[-0.03em] text-[var(--color-text-muted)]">
         {label}
       </div>
 
@@ -195,7 +196,7 @@ function B2BSelect({
 
   return (
     <div ref={rootRef} className="relative">
-      <div className="mb-[5px] text-[12px] font-semibold tracking-[-0.03em] text-[var(--color-text-muted)]">
+      <div className="mb-[5px] pl-[4px] text-[14px] font-semibold tracking-[-0.03em] text-[var(--color-text-muted)]">
         {label}
       </div>
 
@@ -334,7 +335,7 @@ function RequestForm() {
           <button
             type="button"
             onClick={() => setStep(0)}
-            className="inline-flex h-[60px] flex-1 items-center justify-center rounded-[30px] bg-[var(--color-bg)] text-[14px] font-semibold text-[var(--color-text-muted)] transition duration-300 hover:-translate-y-[1px] hover:text-[var(--color-text)] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
+            className="inline-flex h-[60px] flex-1 items-center justify-center rounded-[12px] bg-[var(--color-bg)] text-[14px] font-semibold text-[var(--color-text-muted)] transition duration-300 hover:-translate-y-[1px] hover:text-[var(--color-text)] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
           >
             назад
           </button>
@@ -344,14 +345,14 @@ function RequestForm() {
           <button
             type="button"
             onClick={() => setStep(1)}
-            className="inline-flex h-[60px] flex-1 items-center justify-center rounded-[30px] bg-[var(--color-accent-2)] text-[14px] font-semibold text-[var(--color-accent-2-foreground)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(43,47,51,0.16)]"
+            className="inline-flex h-[60px] flex-1 items-center justify-center rounded-[12px] bg-[var(--color-accent-2)] text-[14px] font-semibold text-[var(--color-accent-2-foreground)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(43,47,51,0.16)]"
           >
             далее
           </button>
         ) : (
           <button
             type="button"
-            className="inline-flex h-[60px] flex-1 items-center justify-center rounded-[30px] bg-[var(--color-accent-2)] text-[14px] font-semibold text-[var(--color-accent-2-foreground)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(43,47,51,0.16)]"
+            className="inline-flex h-[60px] flex-1 items-center justify-center rounded-[12px] bg-[var(--color-accent-2)] text-[14px] font-semibold text-[var(--color-accent-2-foreground)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(43,47,51,0.16)]"
           >
             отправить
           </button>
@@ -383,7 +384,7 @@ function SendProposalForm() {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="text-[12px] font-semibold tracking-[-0.03em] text-[var(--color-text)]">
+      <div className="pl-[4px] text-[14px] font-semibold tracking-[-0.03em] text-[var(--color-text)]">
         загрузите Ваше КП
       </div>
 
@@ -400,11 +401,12 @@ function SendProposalForm() {
           mergeFiles(dropped);
         }}
         className={cn(
-          "mt-[23px] flex h-[300px] flex-col rounded-[24px] border-2 border-dashed bg-[var(--color-bg)] p-5 transition duration-300",
+          "mt-[23px] flex flex-col rounded-[24px] border-2 border-dashed bg-[var(--color-bg)] p-5 transition duration-300",
           isDragging
             ? "border-[var(--color-accent-1)] bg-[var(--color-accent-1)]/[0.06]"
             : "border-[var(--color-accent-2)]",
         )}
+        style={{ height: `${UPLOAD_WINDOW_HEIGHT}px` }}
       >
         {files.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center text-center">
@@ -415,7 +417,7 @@ function SendProposalForm() {
             <button
               type="button"
               onClick={() => inputRef.current?.click()}
-              className="text-[14px] text-[var(--color-text)] transition duration-300 hover:text-[var(--color-accent-2)]"
+              className="rounded-[12px] text-[14px] text-[var(--color-text)] transition duration-300 hover:text-[var(--color-accent-2)]"
             >
               выбрать файлы
             </button>
@@ -455,7 +457,7 @@ function SendProposalForm() {
               onClick={() => inputRef.current?.click()}
               disabled={files.length >= 3}
               className={cn(
-                "mt-4 inline-flex h-[44px] items-center justify-center self-start rounded-[22px] px-5 text-[12px] font-medium transition duration-300",
+                "mt-4 inline-flex h-[44px] items-center justify-center self-start rounded-[12px] px-5 text-[12px] font-medium transition duration-300",
                 files.length >= 3
                   ? "cursor-not-allowed bg-[var(--color-border)] text-[var(--color-text-muted)]"
                   : "bg-[var(--color-accent-1)] text-[var(--color-bg)] hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]",
@@ -479,7 +481,7 @@ function SendProposalForm() {
         type="button"
         disabled={files.length === 0}
         className={cn(
-          "mt-[54px] inline-flex h-[60px] w-full items-center justify-center rounded-[30px] text-[14px] font-semibold transition duration-300",
+          "mt-[54px] inline-flex h-[60px] w-full items-center justify-center rounded-[12px] text-[14px] font-semibold transition duration-300",
           files.length === 0
             ? "cursor-not-allowed bg-[var(--color-border)] text-[var(--color-text-muted)]"
             : "bg-[var(--color-accent-2)] text-[var(--color-accent-2-foreground)] hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(43,47,51,0.16)]",
@@ -498,7 +500,7 @@ function CopyValueButton({ value }: { value: string }) {
     try {
       await navigator.clipboard.writeText(value);
       setCopied(true);
-      window.setTimeout(() => setCopied(false), 1200);
+      window.setTimeout(() => setCopied(false), 1400);
     } catch {
       setCopied(false);
     }
@@ -508,11 +510,20 @@ function CopyValueButton({ value }: { value: string }) {
     <button
       type="button"
       onClick={handleCopy}
-      className="absolute right-4 top-4 inline-flex h-8 w-8 items-center justify-center rounded-[10px] bg-[var(--color-surface)] text-[var(--color-text-muted)] transition duration-300 hover:text-[var(--color-text)] hover:shadow-[0_6px_14px_rgba(43,47,51,0.08)]"
+      className={cn(
+        "absolute right-4 top-4 inline-flex h-8 w-8 items-center justify-center rounded-[10px] bg-[var(--color-surface)] transition duration-300 hover:shadow-[0_6px_14px_rgba(43,47,51,0.08)]",
+        copied
+          ? "text-[var(--color-accent-1)]"
+          : "text-[var(--color-text-muted)] hover:text-[var(--color-text)]",
+      )}
       aria-label="Скопировать"
       title={copied ? "Скопировано" : "Скопировать"}
     >
-      <Copy size={15} strokeWidth={2.2} />
+      {copied ? (
+        <Check size={15} strokeWidth={2.4} />
+      ) : (
+        <Copy size={15} strokeWidth={2.2} />
+      )}
     </button>
   );
 }
@@ -573,7 +584,7 @@ export function PartnershipContactSection() {
                     </div>
 
                     <div className="mt-[36px] border-t border-white/10 pt-[36px]">
-                      <div className="space-y-[22px]">
+                      <div className="space-y-[12px]">
                         {partnershipContent.leadCard.points.map((item) => {
                           const Icon = item.icon;
 
@@ -618,7 +629,7 @@ export function PartnershipContactSection() {
                     type="button"
                     onClick={() => setMode("request")}
                     className={cn(
-                      "h-full rounded-[30px] text-[14px] font-semibold transition duration-300",
+                      "h-full rounded-[12px] text-[14px] font-semibold transition duration-300",
                       mode === "request"
                         ? "bg-[var(--color-accent-1)] text-[var(--color-bg)]"
                         : "bg-[var(--color-bg)] text-[var(--color-text)]",
@@ -633,7 +644,7 @@ export function PartnershipContactSection() {
                     type="button"
                     onClick={() => setMode("send")}
                     className={cn(
-                      "h-full rounded-[30px] text-[14px] font-semibold transition duration-300",
+                      "h-full rounded-[12px] text-[14px] font-semibold transition duration-300",
                       mode === "send"
                         ? "bg-[var(--color-accent-1)] text-[var(--color-bg)]"
                         : "bg-[var(--color-bg)] text-[var(--color-text)]",
