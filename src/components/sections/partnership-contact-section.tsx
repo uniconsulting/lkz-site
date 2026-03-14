@@ -1,18 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState, type DragEvent } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import {
-  ArrowLeft,
-  ArrowRight,
   Building2,
+  ChevronDown,
   FileText,
-  FlaskConical,
+  FolderUp,
   MapPinned,
+  PackageCheck,
   ShieldCheck,
-  Upload,
-  WandSparkles,
+  Truck,
+  Workflow,
   X,
 } from "lucide-react";
 import { Container } from "@/components/ui/container";
@@ -27,30 +27,43 @@ const YANDEX_MAP_EMBED_URL =
 const partnershipContent = {
   title: "Запустим сотрудничество под вашу задачу",
   description: [
-    "производственная экспертиза, контроль качества",
-    "и удобный формат работы с коммерческими материалами",
+    "13 лет развиваем производство, лабораторию и инфраструктуру",
+    "чтобы обеспечивать стабильное качество и предсказуемые поставки для B2B-партнёров",
   ],
 
   leadCard: {
-    title: "R&D-центр и контроль качества",
+    title: "13 лет развиваем производство",
     description:
-      "Собственная лаборатория, выверенные рецептуры и контроль стабильности партий помогают быстрее согласовывать требования и переходить к предметному коммерческому диалогу.",
+      "За это время выстроили производственную базу, лабораторный контроль и рабочую инфраструктуру поставок, чтобы стабильно закрывать задачи дилеров, торговых сетей и B2B-партнёров.",
     points: [
       {
-        icon: FlaskConical,
-        text: "проверяем рецептуры, укрывистость и стабильность покрытия",
+        icon: PackageCheck,
+        text: "собственная производственная база и лаборатория",
       },
       {
         icon: ShieldCheck,
-        text: "сопровождаем согласование требований по продукту и документам",
+        text: "системный контроль качества каждой партии",
       },
       {
-        icon: WandSparkles,
-        text: "ускоряем переход от технического обсуждения к коммерческому предложению",
+        icon: Truck,
+        text: "инфраструктура для стабильных B2B-поставок",
       },
     ],
-    cta: "обсудить задачу",
+    cta: "запросить коммерческое предложение",
     image: `${basePath}/images/sections/partnership/partnership-hero.webp`,
+  },
+
+  formCard: {
+    requestTitle: "запросить коммерческое предложение",
+    sendTitle: "отправить коммерческое предложение",
+    submitRequest: "отправить запрос",
+    submitSend: "отправить КП",
+    interestOptions: [
+      "готовая продукция",
+      "дилерство",
+      "private label / СТМ",
+      "пока нужна консультация",
+    ],
   },
 
   contactsCard: {
@@ -60,13 +73,6 @@ const partnershipContent = {
     inn: "7327093976",
     ogrn: "1207300001963",
   },
-
-  requestFormats: [
-    "готовая продукция",
-    "дилерство",
-    "private label / СТМ",
-    "пока нужна консультация",
-  ],
 };
 
 const sectionMotion = {
@@ -93,10 +99,10 @@ const cardMotion = {
   },
 };
 
-const paneMotion = {
+const innerPanelMotion = {
   initial: {
     opacity: 0,
-    x: 28,
+    x: 26,
     scale: 0.992,
     filter: "blur(8px)",
   },
@@ -106,13 +112,13 @@ const paneMotion = {
     scale: 1,
     filter: "blur(0px)",
     transition: {
-      duration: 0.5,
+      duration: 0.46,
       ease: [0.22, 1, 0.36, 1] as const,
     },
   },
   exit: {
     opacity: 0,
-    x: -28,
+    x: -20,
     scale: 0.992,
     filter: "blur(8px)",
     transition: {
@@ -121,6 +127,8 @@ const paneMotion = {
     },
   },
 };
+
+type ProposalMode = "request" | "send";
 
 function ContactInput({
   label,
@@ -132,7 +140,7 @@ function ContactInput({
   textarea?: boolean;
 }) {
   const baseClassName =
-    "w-full rounded-[18px] border border-transparent bg-[var(--color-bg)] px-4 text-[15px] text-[var(--color-text)] outline-none transition duration-300 placeholder:text-[var(--color-text-muted)] hover:border-[var(--color-border)] focus:border-[var(--color-accent-1)] focus:shadow-[0_0_0_3px_rgba(30,222,123,0.10)]";
+    "w-full rounded-[18px] border border-transparent bg-[var(--color-bg)] px-4 text-[15px] text-[var(--color-text)] outline-none transition duration-300 placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent-1)] focus:shadow-[0_0_0_3px_rgba(30,222,123,0.10)] hover:border-[var(--color-border)]";
 
   return (
     <label className="block">
@@ -192,8 +200,7 @@ function B2BSelect({
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
         className={cn(
-          "flex h-12 w-full items-center justify-between rounded-[18px] border border-transparent bg-[var(--color-bg)] px-4 text-left text-[15px] transition duration-300",
-          "hover:border-[var(--color-border)]",
+          "flex h-12 w-full items-center justify-between rounded-[18px] border border-transparent bg-[var(--color-bg)] px-4 text-left text-[15px] transition duration-300 hover:border-[var(--color-border)]",
           isOpen
             ? "border-[var(--color-accent-1)] shadow-[0_0_0_3px_rgba(30,222,123,0.10)]"
             : "",
@@ -207,16 +214,14 @@ function B2BSelect({
           {selected || placeholder}
         </span>
 
-        <motion.span
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.2, ease: "easeOut" }}
-        >
-          <ArrowRight
-            size={16}
-            strokeWidth={2.2}
-            className="rotate-90 text-[var(--color-text-muted)]"
-          />
-        </motion.span>
+        <ChevronDown
+          size={18}
+          strokeWidth={2.2}
+          className={cn(
+            "shrink-0 text-[var(--color-text-muted)] transition duration-300",
+            isOpen ? "rotate-180" : "",
+          )}
+        />
       </button>
 
       <motion.div
@@ -258,21 +263,13 @@ function B2BSelect({
   );
 }
 
-function RequestQuotePane({
-  step,
-  onPrev,
-  onNext,
-}: {
-  step: 0 | 1;
-  onPrev: () => void;
-  onNext: () => void;
-}) {
-  const progress = step === 0 ? "50%" : "100%";
+function RequestForm() {
+  const [step, setStep] = useState<0 | 1>(0);
 
   return (
     <div className="flex h-full flex-col">
-      <div className="mb-5 flex items-center justify-between gap-4">
-        <div className="min-w-[44px] text-[14px] font-semibold text-[var(--color-text)]">
+      <div className="mb-5 flex items-center gap-3">
+        <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
           {step + 1} / 2
         </div>
 
@@ -280,71 +277,43 @@ function RequestQuotePane({
           <motion.span
             className="absolute inset-y-0 left-0 rounded-full bg-[var(--color-accent-1)]"
             initial={false}
-            animate={{ width: progress }}
-            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            animate={{ width: step === 0 ? "50%" : "100%" }}
+            transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
           />
         </div>
       </div>
 
-      <AnimatePresence mode="wait" initial={false}>
-        {step === 0 ? (
-          <motion.div
-            key="request-step-1"
-            variants={paneMotion}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            className="flex h-full flex-col"
-          >
-            <h3 className="font-heading text-[26px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[30px]">
-              запросить КП
-            </h3>
-
-            <p className="mt-3 text-[14px] leading-[1.42] text-[var(--color-text-muted)]">
-              оставьте базовые данные для связи и перейдите к параметрам запроса
-            </p>
-
-            <div className="mt-5 flex flex-1 flex-col space-y-3.5">
+      <div className="min-h-[250px] flex-1">
+        <AnimatePresence mode="wait" initial={false}>
+          {step === 0 ? (
+            <motion.div
+              key="request-step-1"
+              variants={innerPanelMotion}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="space-y-3.5"
+            >
               <ContactInput label="имя" placeholder="ваше имя" />
               <ContactInput label="организация" placeholder="название компании" />
               <ContactInput
-                label="контакт"
-                placeholder="телефон, email или telegram"
+                label="телефон / telegram"
+                placeholder="контакт для связи"
               />
-            </div>
-
-            <div className="mt-5 flex justify-end">
-              <button
-                type="button"
-                onClick={onNext}
-                className="inline-flex h-11 items-center justify-center rounded-[16px] bg-[var(--color-accent-1)] px-5 text-[14px] font-semibold text-[var(--color-bg)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
-              >
-                далее
-              </button>
-            </div>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="request-step-2"
-            variants={paneMotion}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            className="flex h-full flex-col"
-          >
-            <h3 className="font-heading text-[26px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[30px]">
-              запросить КП
-            </h3>
-
-            <p className="mt-3 text-[14px] leading-[1.42] text-[var(--color-text-muted)]">
-              укажите формат интереса и добавьте комментарий по задаче
-            </p>
-
-            <div className="mt-5 flex flex-1 flex-col space-y-3.5">
+            </motion.div>
+          ) : (
+            <motion.div
+              key="request-step-2"
+              variants={innerPanelMotion}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="space-y-3.5"
+            >
               <B2BSelect
                 label="формат интереса"
                 placeholder="выберите формат"
-                options={partnershipContent.requestFormats}
+                options={partnershipContent.formCard.interestOptions}
               />
 
               <ContactInput
@@ -352,167 +321,157 @@ function RequestQuotePane({
                 placeholder="кратко опишите задачу, объём или интересующие категории"
                 textarea
               />
-            </div>
-
-            <div className="mt-5 flex justify-between gap-3">
-              <button
-                type="button"
-                onClick={onPrev}
-                className="inline-flex h-11 items-center justify-center rounded-[16px] bg-[var(--color-bg)] px-5 text-[14px] font-semibold text-[var(--color-text)] transition duration-300 hover:border-[var(--color-border)] hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
-              >
-                назад
-              </button>
-
-              <button
-                type="button"
-                className="inline-flex h-11 items-center justify-center rounded-[16px] bg-[var(--color-accent-1)] px-5 text-[14px] font-semibold text-[var(--color-bg)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
-              >
-                отправить запрос
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
-
-function formatFileSize(size: number) {
-  if (size < 1024 * 1024) {
-    return `${Math.round(size / 1024)} КБ`;
-  }
-  return `${(size / (1024 * 1024)).toFixed(1)} МБ`;
-}
-
-function SendQuotePane() {
-  const [files, setFiles] = useState<File[]>([]);
-  const [isDragActive, setIsDragActive] = useState(false);
-  const inputRef = useRef<HTMLInputElement | null>(null);
-
-  function applyFiles(list: FileList | null) {
-    if (!list) return;
-    const next = Array.from(list).slice(0, 3);
-    setFiles(next);
-  }
-
-  function handleDrop(event: DragEvent<HTMLDivElement>) {
-    event.preventDefault();
-    setIsDragActive(false);
-    applyFiles(event.dataTransfer.files);
-  }
-
-  const helperText = useMemo(() => {
-    if (files.length === 0) {
-      return "загрузите до 3 файлов: КП, спецификации, таблицы, презентации или архив";
-    }
-    return `загружено файлов: ${files.length} из 3`;
-  }, [files.length]);
-
-  return (
-    <div className="flex h-full flex-col">
-      <h3 className="font-heading text-[26px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[30px]">
-        отправить КП
-      </h3>
-
-      <p className="mt-3 text-[14px] leading-[1.42] text-[var(--color-text-muted)]">
-        прикрепите материалы для рассмотрения: коммерческое предложение,
-        спецификацию, расчёты или сопроводительные документы
-      </p>
-
-      <div className="mt-5 flex flex-1 flex-col">
-        <div
-          onDragOver={(event) => {
-            event.preventDefault();
-            setIsDragActive(true);
-          }}
-          onDragLeave={() => setIsDragActive(false)}
-          onDrop={handleDrop}
-          onClick={() => inputRef.current?.click()}
-          className={cn(
-            "flex min-h-[232px] cursor-pointer flex-col items-center justify-center rounded-[24px] border border-transparent bg-[var(--color-bg)] px-6 py-8 text-center transition duration-300",
-            "hover:border-[var(--color-border)]",
-            isDragActive
-              ? "border-[var(--color-accent-1)] shadow-[0_0_0_3px_rgba(30,222,123,0.10)]"
-              : "",
+            </motion.div>
           )}
-        >
-          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-[18px] bg-[var(--color-accent-1)]/[0.12] text-[var(--color-accent-1)]">
-            <Upload size={24} strokeWidth={2.2} />
-          </div>
+        </AnimatePresence>
+      </div>
 
-          <div className="text-[17px] font-semibold leading-[1.1] text-[var(--color-text)]">
-            перетащите файлы сюда
-          </div>
-
-          <div className="mt-2 text-[14px] leading-[1.42] text-[var(--color-text-muted)]">
-            или нажмите, чтобы выбрать файлы с устройства
-          </div>
-
-          <div className="mt-4 text-[13px] leading-[1.4] text-[var(--color-text-muted)]">
-            {helperText}
-          </div>
-
-          <input
-            ref={inputRef}
-            type="file"
-            multiple
-            onChange={(event) => applyFiles(event.target.files)}
-            className="hidden"
-          />
-        </div>
-
-        {files.length > 0 ? (
-          <div className="mt-4 space-y-2">
-            {files.map((file, index) => (
-              <div
-                key={`${file.name}-${index}`}
-                className="flex items-center justify-between gap-3 rounded-[18px] bg-[var(--color-bg)] px-4 py-3"
-              >
-                <div className="min-w-0">
-                  <div className="truncate text-[14px] font-semibold text-[var(--color-text)]">
-                    {file.name}
-                  </div>
-                  <div className="mt-1 text-[13px] text-[var(--color-text-muted)]">
-                    {formatFileSize(file.size)}
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    setFiles((prev) => prev.filter((_, itemIndex) => itemIndex !== index))
-                  }
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[14px] bg-[var(--color-surface)] text-[var(--color-text-muted)] transition duration-200 hover:text-[var(--color-text)]"
-                >
-                  <X size={16} strokeWidth={2.2} />
-                </button>
-              </div>
-            ))}
-          </div>
-        ) : null}
-
-        <div className="mt-5 flex justify-end">
+      <div className="mt-5 flex gap-3">
+        {step === 1 ? (
           <button
             type="button"
-            className="inline-flex h-11 items-center justify-center rounded-[16px] bg-[var(--color-accent-1)] px-5 text-[14px] font-semibold text-[var(--color-bg)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
+            onClick={() => setStep(0)}
+            className="inline-flex h-11 items-center justify-center rounded-[16px] bg-[var(--color-bg)] px-5 text-[14px] font-semibold text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
           >
-            отправить материалы
+            назад
           </button>
-        </div>
+        ) : null}
+
+        {step === 0 ? (
+          <button
+            type="button"
+            onClick={() => setStep(1)}
+            className="inline-flex h-11 flex-1 items-center justify-center rounded-[16px] bg-[var(--color-accent-1)] px-5 text-[14px] font-semibold text-[var(--color-bg)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
+          >
+            далее
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="inline-flex h-11 flex-1 items-center justify-center rounded-[16px] bg-[var(--color-accent-1)] px-5 text-[14px] font-semibold text-[var(--color-bg)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
+          >
+            {partnershipContent.formCard.submitRequest}
+          </button>
+        )}
       </div>
     </div>
   );
 }
 
-export function PartnershipContactSection() {
-  const [mode, setMode] = useState<"request" | "send">("request");
-  const [requestStep, setRequestStep] = useState<0 | 1>(0);
+function SendProposalForm() {
+  const [files, setFiles] = useState<File[]>([]);
+  const [isDragging, setIsDragging] = useState(false);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
-  useEffect(() => {
-    if (mode === "send") {
-      setRequestStep(0);
-    }
-  }, [mode]);
+  function mergeFiles(newFiles: File[]) {
+    const merged = [...files, ...newFiles].slice(0, 3);
+    setFiles(merged);
+  }
+
+  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const nextFiles = Array.from(event.target.files ?? []);
+    mergeFiles(nextFiles);
+  }
+
+  function removeFile(index: number) {
+    setFiles((prev) => prev.filter((_, idx) => idx !== index));
+  }
+
+  return (
+    <div className="flex h-full flex-col">
+      <div
+        onDragOver={(event) => {
+          event.preventDefault();
+          setIsDragging(true);
+        }}
+        onDragLeave={() => setIsDragging(false)}
+        onDrop={(event) => {
+          event.preventDefault();
+          setIsDragging(false);
+          const dropped = Array.from(event.dataTransfer.files ?? []);
+          mergeFiles(dropped);
+        }}
+        className={cn(
+          "flex min-h-[250px] flex-1 flex-col items-center justify-center rounded-[22px] border border-dashed bg-[var(--color-bg)] p-6 text-center transition duration-300",
+          isDragging
+            ? "border-[var(--color-accent-1)] bg-[var(--color-accent-1)]/[0.06]"
+            : "border-[var(--color-border)]",
+        )}
+      >
+        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[18px] bg-[var(--color-accent-1)]/[0.12] text-[var(--color-accent-1)]">
+          <FolderUp size={22} strokeWidth={2.2} />
+        </div>
+
+        <div className="max-w-[320px] text-[16px] font-semibold leading-[1.2] text-[var(--color-text)]">
+          загрузите коммерческое предложение
+        </div>
+
+        <div className="mt-3 max-w-[320px] text-[14px] leading-[1.45] text-[var(--color-text-muted)]">
+          pdf, doc, docx, xls, xlsx, ppt, pptx или архив. До 3 файлов в одном запросе.
+        </div>
+
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          className="mt-5 inline-flex h-11 items-center justify-center rounded-[16px] bg-[var(--color-accent-1)] px-5 text-[14px] font-semibold text-[var(--color-bg)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
+        >
+          выбрать файлы
+        </button>
+
+        <input
+          ref={inputRef}
+          type="file"
+          multiple
+          className="hidden"
+          onChange={handleInputChange}
+        />
+      </div>
+
+      <div className="mt-4 min-h-[64px]">
+        {files.length > 0 ? (
+          <div className="flex flex-wrap gap-2">
+            {files.map((file, index) => (
+              <div
+                key={`${file.name}-${index}`}
+                className="inline-flex items-center gap-2 rounded-[14px] bg-[var(--color-bg)] px-3 py-2 text-[13px] text-[var(--color-text)]"
+              >
+                <span className="max-w-[180px] truncate">{file.name}</span>
+
+                <button
+                  type="button"
+                  onClick={() => removeFile(index)}
+                  className="text-[var(--color-text-muted)] transition duration-200 hover:text-[var(--color-text)]"
+                >
+                  <X size={14} strokeWidth={2.2} />
+                </button>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-[13px] leading-[1.45] text-[var(--color-text-muted)]">
+            можно приложить до 3 файлов. Если файлов больше, лучше объединить их в архив.
+          </div>
+        )}
+      </div>
+
+      <button
+        type="button"
+        disabled={files.length === 0}
+        className={cn(
+          "mt-5 inline-flex h-11 w-full items-center justify-center rounded-[16px] px-5 text-[14px] font-semibold transition duration-300",
+          files.length === 0
+            ? "cursor-not-allowed bg-[var(--color-border)] text-[var(--color-text-muted)]"
+            : "bg-[var(--color-accent-1)] text-[var(--color-bg)] hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]",
+        )}
+      >
+        {partnershipContent.formCard.submitSend}
+      </button>
+    </div>
+  );
+}
+
+export function PartnershipContactSection() {
+  const [mode, setMode] = useState<ProposalMode>("request");
 
   return (
     <Section className="pt-10 md:pt-12 xl:pt-14">
@@ -537,20 +496,20 @@ export function PartnershipContactSection() {
           <div className="mt-8 grid gap-4 xl:grid-cols-[1.38fr_0.72fr] xl:items-stretch">
             <motion.div
               variants={cardMotion}
-              className="overflow-hidden rounded-[32px] bg-[var(--color-surface)] xl:h-[440px]"
+              className="overflow-hidden rounded-[32px] bg-[var(--color-surface)] xl:h-[468px]"
             >
               <div className="grid h-full xl:grid-cols-[0.72fr_1.08fr]">
                 <div className="flex h-full flex-col justify-between bg-[var(--color-accent-2)] p-6 text-[var(--color-accent-2-foreground)] md:p-7">
                   <div>
                     <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-[16px] bg-[var(--color-accent-1)]/[0.14] text-[var(--color-accent-1)]">
-                      <FlaskConical size={20} strokeWidth={2.2} />
+                      <Workflow size={20} strokeWidth={2.2} />
                     </div>
 
                     <h3 className="font-heading text-[28px] leading-[0.96] tracking-[-0.05em] md:text-[33px]">
                       {partnershipContent.leadCard.title}
                     </h3>
 
-                    <p className="mt-4 max-w-[338px] text-[14px] leading-[1.45] text-[var(--color-accent-2-foreground)]/76 md:text-[15px]">
+                    <p className="mt-4 max-w-[332px] text-[14px] leading-[1.42] text-[var(--color-accent-2-foreground)]/76 md:text-[15px]">
                       {partnershipContent.leadCard.description}
                     </p>
 
@@ -564,7 +523,7 @@ export function PartnershipContactSection() {
                               <Icon size={14} strokeWidth={2.2} />
                             </div>
 
-                            <div className="max-w-[310px] text-[14px] leading-[1.4] text-[var(--color-accent-2-foreground)]/92">
+                            <div className="max-w-[304px] text-[14px] leading-[1.36] text-[var(--color-accent-2-foreground)]/92">
                               {item.text}
                             </div>
                           </div>
@@ -597,18 +556,18 @@ export function PartnershipContactSection() {
 
             <motion.div
               variants={cardMotion}
-              className="flex rounded-[32px] bg-[var(--color-surface)] p-6 md:p-7 xl:h-[440px]"
+              className="flex rounded-[32px] bg-[var(--color-surface)] p-6 md:p-7 xl:h-[468px]"
             >
               <div className="flex h-full w-full flex-col">
-                <div className="mb-5 inline-flex rounded-[18px] bg-[var(--color-bg)] p-1">
+                <div className="mb-5 flex rounded-[18px] bg-[var(--color-bg)] p-1">
                   <button
                     type="button"
                     onClick={() => setMode("request")}
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-[14px] px-4 text-[14px] font-semibold transition duration-300",
+                      "flex-1 rounded-[14px] px-4 py-2.5 text-[14px] font-semibold transition duration-300",
                       mode === "request"
                         ? "bg-[var(--color-accent-1)] text-[var(--color-bg)]"
-                        : "text-[var(--color-text-muted)]",
+                        : "text-[var(--color-text-muted)] hover:text-[var(--color-text)]",
                     )}
                   >
                     запросить КП
@@ -618,45 +577,49 @@ export function PartnershipContactSection() {
                     type="button"
                     onClick={() => setMode("send")}
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-[14px] px-4 text-[14px] font-semibold transition duration-300",
+                      "flex-1 rounded-[14px] px-4 py-2.5 text-[14px] font-semibold transition duration-300",
                       mode === "send"
                         ? "bg-[var(--color-accent-1)] text-[var(--color-bg)]"
-                        : "text-[var(--color-text-muted)]",
+                        : "text-[var(--color-text-muted)] hover:text-[var(--color-text)]",
                     )}
                   >
                     отправить КП
                   </button>
                 </div>
 
-                <AnimatePresence mode="wait" initial={false}>
-                  {mode === "request" ? (
-                    <motion.div
-                      key={`request-${requestStep}`}
-                      variants={paneMotion}
-                      initial="initial"
-                      animate="animate"
-                      exit="exit"
-                      className="flex h-full flex-col"
-                    >
-                      <RequestQuotePane
-                        step={requestStep}
-                        onPrev={() => setRequestStep(0)}
-                        onNext={() => setRequestStep(1)}
-                      />
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="send"
-                      variants={paneMotion}
-                      initial="initial"
-                      animate="animate"
-                      exit="exit"
-                      className="flex h-full flex-col"
-                    >
-                      <SendQuotePane />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <h3 className="font-heading text-[24px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[28px]">
+                  {mode === "request"
+                    ? partnershipContent.formCard.requestTitle
+                    : partnershipContent.formCard.sendTitle}
+                </h3>
+
+                <div className="mt-5 flex-1">
+                  <AnimatePresence mode="wait" initial={false}>
+                    {mode === "request" ? (
+                      <motion.div
+                        key="request-mode"
+                        variants={innerPanelMotion}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
+                        className="h-full"
+                      >
+                        <RequestForm />
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="send-mode"
+                        variants={innerPanelMotion}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
+                        className="h-full"
+                      >
+                        <SendProposalForm />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
             </motion.div>
           </div>
@@ -702,7 +665,7 @@ export function PartnershipContactSection() {
                 </div>
 
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="rounded-[22px] bg-[var(--color-bg)] p-5 transition duration-300 hover:border-[var(--color-border)] hover:shadow-[0_8px_20px_rgba(43,47,51,0.05)]">
+                  <div className="rounded-[22px] bg-[var(--color-bg)] p-5 transition duration-300 hover:shadow-[0_8px_20px_rgba(43,47,51,0.05)]">
                     <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
                       ИНН
                     </div>
@@ -711,7 +674,7 @@ export function PartnershipContactSection() {
                     </div>
                   </div>
 
-                  <div className="rounded-[22px] bg-[var(--color-bg)] p-5 transition duration-300 hover:border-[var(--color-border)] hover:shadow-[0_8px_20px_rgba(43,47,51,0.05)]">
+                  <div className="rounded-[22px] bg-[var(--color-bg)] p-5 transition duration-300 hover:shadow-[0_8px_20px_rgba(43,47,51,0.05)]">
                     <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
                       ОГРН
                     </div>
@@ -724,7 +687,7 @@ export function PartnershipContactSection() {
                 <div className="pt-1">
                   <button
                     type="button"
-                    className="inline-flex h-11 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[14px] font-semibold text-[var(--color-text)] transition duration-300 hover:border-[var(--color-border)] hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
+                    className="inline-flex h-11 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[14px] font-semibold text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
                   >
                     <FileText size={16} strokeWidth={2.2} />
                     <span>получить карточку компании</span>
