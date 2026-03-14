@@ -486,7 +486,7 @@ function SendProposalForm() {
         type="button"
         disabled={files.length === 0}
         className={cn(
-          "mt-6 inline-flex h-10 w-full items-center justify-center rounded-[15px] px-5 text-[13px] font-semibold transition duration-300",
+          "mt-8 inline-flex h-10 w-full items-center justify-center rounded-[15px] px-5 text-[13px] font-semibold transition duration-300",
           files.length === 0
             ? "cursor-not-allowed bg-[var(--color-border)] text-[var(--color-text-muted)]"
             : "bg-[var(--color-accent-1)] text-[var(--color-bg)] hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]",
