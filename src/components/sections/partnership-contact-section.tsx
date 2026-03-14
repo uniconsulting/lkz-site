@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import {
   Building2,
+  ChevronDown,
   FileText,
   MapPinned,
   PackageCheck,
@@ -12,6 +14,7 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
+import { cn } from "@/lib/utils/cn";
 
 const basePath = process.env.NODE_ENV === "production" ? "/lkz-site" : "";
 
@@ -20,8 +23,10 @@ const YANDEX_MAP_EMBED_URL =
 
 const partnershipContent = {
   title: "Запустим сотрудничество под вашу задачу",
-  description:
-    "Оптовые поставки, СТМ, логистика и подбор рабочей продуктовой матрицы для вашего канала продаж.",
+  description: [
+    "оптовые поставки, СТМ, логистика",
+    "и подбор рабочей продуктовой матрицы для вашего канала продаж",
+  ],
 
   leadCard: {
     title: "Оптовые поставки и Private Label",
@@ -48,6 +53,12 @@ const partnershipContent = {
   formCard: {
     title: "получить коммерческое предложение",
     submit: "отправить запрос",
+    interestOptions: [
+      "готовая продукция",
+      "дилерство",
+      "private label / СТМ",
+      "пока нужна консультация",
+    ],
   },
 
   contactsCard: {
@@ -93,7 +104,7 @@ function ContactInput({
   textarea?: boolean;
 }) {
   const baseClassName =
-    "w-full rounded-[18px] bg-[var(--color-bg)] px-4 text-[15px] text-[var(--color-text)] outline-none transition duration-300 placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent-1)] focus:shadow-[0_0_0_3px_rgba(30,222,123,0.10)]";
+    "w-full rounded-[18px] border border-transparent bg-[var(--color-bg)] px-4 text-[15px] text-[var(--color-text)] outline-none transition duration-300 placeholder:text-[var(--color-text-muted)] hover:border-[var(--color-border)] focus:border-[var(--color-accent-1)] focus:shadow-[0_0_0_3px_rgba(30,222,123,0.10)]";
 
   return (
     <label className="block">
@@ -103,18 +114,117 @@ function ContactInput({
 
       {textarea ? (
         <textarea
-          rows={5}
+          rows={4}
           placeholder={placeholder}
-          className={`${baseClassName} resize-none py-3.5`}
+          className={cn(baseClassName, "resize-none py-3.5")}
         />
       ) : (
         <input
           type="text"
           placeholder={placeholder}
-          className={`${baseClassName} h-12`}
+          className={cn(baseClassName, "h-12")}
         />
       )}
     </label>
+  );
+}
+
+function B2BSelect({
+  label,
+  placeholder,
+  options,
+}: {
+  label: string;
+  placeholder: string;
+  options: string[];
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selected, setSelected] = useState("");
+  const rootRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    function handleOutside(event: MouseEvent) {
+      if (!rootRef.current) return;
+      if (!rootRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+
+    window.addEventListener("mousedown", handleOutside);
+    return () => window.removeEventListener("mousedown", handleOutside);
+  }, []);
+
+  return (
+    <div ref={rootRef} className="relative">
+      <div className="mb-2 text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
+        {label}
+      </div>
+
+      <button
+        type="button"
+        onClick={() => setIsOpen((prev) => !prev)}
+        className={cn(
+          "flex h-12 w-full items-center justify-between rounded-[18px] border border-transparent bg-[var(--color-bg)] px-4 text-left text-[15px] transition duration-300",
+          "hover:border-[var(--color-border)]",
+          isOpen
+            ? "border-[var(--color-accent-1)] shadow-[0_0_0_3px_rgba(30,222,123,0.10)]"
+            : "",
+        )}
+      >
+        <span
+          className={cn(
+            selected ? "text-[var(--color-text)]" : "text-[var(--color-text-muted)]",
+          )}
+        >
+          {selected || placeholder}
+        </span>
+
+        <ChevronDown
+          size={18}
+          strokeWidth={2.2}
+          className={cn(
+            "shrink-0 text-[var(--color-text-muted)] transition duration-300",
+            isOpen ? "rotate-180" : "",
+          )}
+        />
+      </button>
+
+      <motion.div
+        initial={false}
+        animate={{
+          opacity: isOpen ? 1 : 0,
+          y: isOpen ? 0 : -8,
+          pointerEvents: isOpen ? "auto" : "none",
+        }}
+        transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+        className="absolute left-0 right-0 top-[calc(100%+8px)] z-20 overflow-hidden rounded-[20px] bg-[var(--color-bg)] shadow-[0_16px_38px_rgba(43,47,51,0.12)]"
+      >
+        <div className="p-2">
+          {options.map((option) => {
+            const isActive = selected === option;
+
+            return (
+              <button
+                key={option}
+                type="button"
+                onClick={() => {
+                  setSelected(option);
+                  setIsOpen(false);
+                }}
+                className={cn(
+                  "flex w-full items-center rounded-[14px] px-3 py-3 text-left text-[15px] transition duration-200",
+                  isActive
+                    ? "bg-[var(--color-accent-1)]/[0.10] text-[var(--color-text)]"
+                    : "text-[var(--color-text)] hover:bg-[var(--color-surface)]",
+                )}
+              >
+                {option}
+              </button>
+            );
+          })}
+        </div>
+      </motion.div>
+    </div>
   );
 }
 
@@ -134,41 +244,42 @@ export function PartnershipContactSection() {
             </h2>
 
             <p className="mt-5 max-w-[760px] text-[15px] leading-[1.48] text-[var(--color-text-muted)] md:text-[17px]">
-              {partnershipContent.description}
+              <span className="block">{partnershipContent.description[0]}</span>
+              <span className="block">{partnershipContent.description[1]}</span>
             </p>
           </div>
 
           <div className="mt-8 grid gap-4 xl:grid-cols-[1.38fr_0.72fr] xl:items-stretch">
             <motion.div
               variants={cardMotion}
-              className="overflow-hidden rounded-[32px] bg-[var(--color-surface)] xl:h-[460px]"
+              className="overflow-hidden rounded-[32px] bg-[var(--color-surface)] xl:h-[440px]"
             >
               <div className="grid h-full xl:grid-cols-[0.72fr_1.08fr]">
-                <div className="flex h-full flex-col justify-between bg-[var(--color-accent-2)] p-6 text-[var(--color-accent-2-foreground)] md:p-8">
+                <div className="flex h-full flex-col justify-between bg-[var(--color-accent-2)] p-6 text-[var(--color-accent-2-foreground)] md:p-7">
                   <div>
-                    <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-[18px] bg-[var(--color-accent-1)]/[0.14] text-[var(--color-accent-1)]">
-                      <PackageCheck size={22} strokeWidth={2.2} />
+                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-[16px] bg-[var(--color-accent-1)]/[0.14] text-[var(--color-accent-1)]">
+                      <PackageCheck size={20} strokeWidth={2.2} />
                     </div>
 
-                    <h3 className="font-heading text-[30px] leading-[0.96] tracking-[-0.05em] md:text-[36px]">
+                    <h3 className="font-heading text-[28px] leading-[0.96] tracking-[-0.05em] md:text-[33px]">
                       {partnershipContent.leadCard.title}
                     </h3>
 
-                    <p className="mt-5 max-w-[360px] text-[15px] leading-[1.48] text-[var(--color-accent-2-foreground)]/76 md:text-[16px]">
+                    <p className="mt-4 max-w-[338px] text-[14px] leading-[1.45] text-[var(--color-accent-2-foreground)]/76 md:text-[15px]">
                       {partnershipContent.leadCard.description}
                     </p>
 
-                    <div className="mt-7 space-y-4">
+                    <div className="mt-6 space-y-3.5">
                       {partnershipContent.leadCard.points.map((item) => {
                         const Icon = item.icon;
 
                         return (
                           <div key={item.text} className="flex items-start gap-3">
                             <div className="mt-[2px] flex h-7 w-7 items-center justify-center rounded-[10px] bg-[var(--color-accent-1)]/[0.12] text-[var(--color-accent-1)]">
-                              <Icon size={15} strokeWidth={2.2} />
+                              <Icon size={14} strokeWidth={2.2} />
                             </div>
 
-                            <div className="max-w-[320px] text-[15px] leading-[1.42] text-[var(--color-accent-2-foreground)]/92">
+                            <div className="max-w-[310px] text-[14px] leading-[1.4] text-[var(--color-accent-2-foreground)]/92">
                               {item.text}
                             </div>
                           </div>
@@ -177,17 +288,17 @@ export function PartnershipContactSection() {
                     </div>
                   </div>
 
-                  <div className="mt-8">
+                  <div className="mt-6">
                     <Link
                       href="#contacts"
-                      className="inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-accent-1)] px-6 text-[15px] font-semibold text-[var(--color-bg)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
+                      className="inline-flex h-11 items-center justify-center rounded-[16px] bg-[var(--color-accent-1)] px-5 text-[14px] font-semibold text-[var(--color-bg)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
                     >
                       {partnershipContent.leadCard.cta}
                     </Link>
                   </div>
                 </div>
 
-                <div className="relative h-full min-h-[280px] overflow-hidden">
+                <div className="relative h-full min-h-[260px] overflow-hidden">
                   <img
                     src={partnershipContent.leadCard.image}
                     alt={partnershipContent.leadCard.title}
@@ -201,15 +312,15 @@ export function PartnershipContactSection() {
 
             <motion.div
               variants={cardMotion}
-              className="flex rounded-[32px] bg-[var(--color-surface)] p-6 md:p-8 xl:h-[460px]"
+              className="flex rounded-[32px] bg-[var(--color-surface)] p-6 md:p-7 xl:h-[440px]"
             >
               <div className="flex h-full w-full flex-col">
-                <h3 className="font-heading text-[28px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[32px]">
+                <h3 className="font-heading text-[26px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[30px]">
                   {partnershipContent.formCard.title}
                 </h3>
 
                 <form
-                  className="mt-6 flex flex-1 flex-col space-y-4"
+                  className="mt-5 flex flex-1 flex-col space-y-3.5"
                   onSubmit={(event) => event.preventDefault()}
                 >
                   <ContactInput label="имя" placeholder="ваше имя" />
@@ -219,19 +330,11 @@ export function PartnershipContactSection() {
                     placeholder="контакт для связи"
                   />
 
-                  <label className="block">
-                    <div className="mb-2 text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
-                      формат интереса
-                    </div>
-
-                    <select className="h-12 w-full rounded-[18px] bg-[var(--color-bg)] px-4 text-[15px] text-[var(--color-text)] outline-none transition duration-300 focus:border-[var(--color-accent-1)] focus:shadow-[0_0_0_3px_rgba(30,222,123,0.10)]">
-                      <option>выберите формат</option>
-                      <option>готовая продукция</option>
-                      <option>дилерство</option>
-                      <option>private label / СТМ</option>
-                      <option>пока нужна консультация</option>
-                    </select>
-                  </label>
+                  <B2BSelect
+                    label="формат интереса"
+                    placeholder="выберите формат"
+                    options={partnershipContent.formCard.interestOptions}
+                  />
 
                   <ContactInput
                     label="комментарий"
@@ -241,7 +344,7 @@ export function PartnershipContactSection() {
 
                   <button
                     type="submit"
-                    className="mt-auto inline-flex h-12 w-full items-center justify-center rounded-[18px] bg-[var(--color-accent-1)] px-6 text-[15px] font-semibold text-[var(--color-bg)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
+                    className="mt-auto inline-flex h-11 w-full items-center justify-center rounded-[16px] bg-[var(--color-accent-1)] px-6 text-[14px] font-semibold text-[var(--color-bg)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
                   >
                     {partnershipContent.formCard.submit}
                   </button>
@@ -261,7 +364,7 @@ export function PartnershipContactSection() {
 
               <div className="mt-6 grid gap-5">
                 <div className="flex items-start gap-4">
-                  <div className="mt-[2px] flex h-10 w-10 items-center justify-center rounded-[14px] bg-[var(--color-accent-1)]/[0.12] text-[var(--color-accent-1)]">
+                  <div className="mt-[2px] flex h-10 w-10 items-center justify-center rounded-[14px] bg-[var(--color-accent-1)] text-[var(--color-bg)]">
                     <MapPinned size={18} strokeWidth={2.2} />
                   </div>
 
@@ -276,7 +379,7 @@ export function PartnershipContactSection() {
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="mt-[2px] flex h-10 w-10 items-center justify-center rounded-[14px] bg-[var(--color-accent-1)]/[0.12] text-[var(--color-accent-1)]">
+                  <div className="mt-[2px] flex h-10 w-10 items-center justify-center rounded-[14px] bg-[var(--color-accent-1)] text-[var(--color-bg)]">
                     <Building2 size={18} strokeWidth={2.2} />
                   </div>
 
@@ -291,7 +394,7 @@ export function PartnershipContactSection() {
                 </div>
 
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="rounded-[22px] bg-[var(--color-bg)] p-5">
+                  <div className="rounded-[22px] bg-[var(--color-bg)] p-5 transition duration-300 hover:border-[var(--color-border)] hover:shadow-[0_8px_20px_rgba(43,47,51,0.05)]">
                     <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
                       ИНН
                     </div>
@@ -300,7 +403,7 @@ export function PartnershipContactSection() {
                     </div>
                   </div>
 
-                  <div className="rounded-[22px] bg-[var(--color-bg)] p-5">
+                  <div className="rounded-[22px] bg-[var(--color-bg)] p-5 transition duration-300 hover:border-[var(--color-border)] hover:shadow-[0_8px_20px_rgba(43,47,51,0.05)]">
                     <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
                       ОГРН
                     </div>
@@ -313,7 +416,7 @@ export function PartnershipContactSection() {
                 <div className="pt-1">
                   <button
                     type="button"
-                    className="inline-flex h-11 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[14px] font-semibold text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
+                    className="inline-flex h-11 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[14px] font-semibold text-[var(--color-text)] transition duration-300 hover:border-[var(--color-border)] hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
                   >
                     <FileText size={16} strokeWidth={2.2} />
                     <span>получить карточку компании</span>
