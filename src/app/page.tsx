@@ -4,7 +4,6 @@ import { CatalogPreview } from "@/components/sections/catalog-preview";
 import { CatalogProductsGrid } from "@/components/sections/catalog-products-grid";
 import { B2BCalculatorSection } from "@/components/sections/b2b-calculator";
 import { PartnershipContactSection } from "@/components/sections/partnership-contact-section";
-import { Footer } from "@/components/layout/footer";
 
 export default function HomePage() {
   return (
@@ -15,7 +14,6 @@ export default function HomePage() {
       <CatalogProductsGrid />
       <B2BCalculatorSection />
       <PartnershipContactSection />
-      <Footer />
     </main>
   );
 }
