@@ -640,20 +640,16 @@ export function ContactsPage() {
 
                 <div
                   aria-hidden="true"
-                  className="pointer-events-none absolute inset-x-0 top-0 h-[180px]"
-                  style={{
-                    background:
-                      "linear-gradient(180deg, rgba(20,24,28,0.58) 0%, rgba(20,24,28,0.34) 48%, rgba(20,24,28,0.00) 100%)",
-                  }}
+                  className="pointer-events-none absolute inset-x-0 top-0 h-[180px] bg-[linear-gradient(180deg,rgba(255,255,255,0.82)_0%,rgba(255,255,255,0.46)_48%,rgba(255,255,255,0)_100%)] dark:bg-[linear-gradient(180deg,rgba(20,24,28,0.58)_0%,rgba(20,24,28,0.34)_48%,rgba(20,24,28,0)_100%)]"
                 />
 
-                <div className="absolute left-5 top-5 z-10 max-w-[420px] text-white md:left-6 md:top-6">
+                <div className="absolute left-5 top-5 z-10 max-w-[420px] text-[var(--color-text)] dark:text-white md:left-6 md:top-6">
                   <div className="mb-3 flex items-center gap-3">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-white/14 text-white backdrop-blur-sm">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-white/50 text-[var(--color-text)] backdrop-blur-sm dark:bg-white/14 dark:text-white">
                       <MapPinned size={20} strokeWidth={2.1} />
                     </div>
 
-                    <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-white/88">
+                    <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text)]/78 dark:text-white/88">
                       офис и производство
                     </div>
                   </div>
@@ -664,7 +660,7 @@ export function ContactsPage() {
                     Московское шоссе, 42Е
                   </div>
 
-                  <div className="mt-4 text-[15px] leading-[1.4] text-white/84 md:text-[16px]">
+                  <div className="mt-4 text-[15px] leading-[1.4] text-[var(--color-text)]/72 dark:text-white/84 md:text-[16px]">
                     Пн-Пт: 8:00 – 18:00
                   </div>
                 </div>
@@ -695,7 +691,7 @@ export function ContactsPage() {
                     <div className="text-[14px] font-semibold uppercase tracking-[0.06em] text-[var(--color-text-muted)]">
                       ИНН
                     </div>
-                    <div className="mt-8 font-heading text-[32px] leading-none tracking-[-0.05em] text-[var(--color-text)] md:text-[36px]">
+                    <div className="mt-6 font-heading text-[22px] leading-none tracking-[-0.04em] text-[var(--color-text)] md:text-[24px]">
                       7327093976
                     </div>
                   </div>
@@ -705,7 +701,7 @@ export function ContactsPage() {
                     <div className="text-[14px] font-semibold uppercase tracking-[0.06em] text-[var(--color-text-muted)]">
                       ОГРН
                     </div>
-                    <div className="mt-8 font-heading text-[32px] leading-none tracking-[-0.05em] text-[var(--color-text)] md:text-[36px]">
+                    <div className="mt-6 font-heading text-[22px] leading-none tracking-[-0.04em] text-[var(--color-text)] md:text-[24px]">
                       1207300001963
                     </div>
                   </div>
