@@ -269,11 +269,11 @@ function ContactInput({
   textarea?: boolean;
 }) {
   const baseClassName =
-    "w-full rounded-[22px] border border-transparent bg-[var(--color-surface)] px-6 text-[13px] text-[var(--color-text)] outline-none transition duration-300 placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent-1)] focus:shadow-[0_0_0_3px_rgba(30,222,123,0.10)] hover:border-[var(--color-border)]";
+    "w-full rounded-[22px] border border-transparent bg-[var(--color-accent-1-foreground)] px-6 text-[13px] text-[var(--color-text)] outline-none transition duration-300 placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent-1)] focus:shadow-[0_0_0_3px_rgba(30,222,123,0.10)] hover:border-[var(--color-border)]";
 
   return (
     <label className="block">
-      <div className="mb-[6px] pl-[4px] text-[14px] font-semibold tracking-[-0.03em] text-[var(--color-text-muted)]">
+      <div className="mb-[6px] pl-[8px] text-[14px] font-semibold tracking-[-0.03em] text-[var(--color-text-muted)]">
         {label}
       </div>
 
@@ -365,74 +365,88 @@ export function HowToBuyPage() {
   }
 
   return (
-    <div className="pt-[92px] pb-6 md:pt-[104px] md:pb-8 xl:pb-10">
+    <div className="pt-[92px] pb-2 md:pt-[104px] md:pb-4 xl:pb-6">
       <Section className="pt-8 md:pt-10 xl:pt-12">
         <Container>
-<motion.div
-  variants={sectionMotion}
-  initial="hidden"
-  animate="visible"
-  className="grid gap-5 xl:grid-cols-[1.08fr_0.92fr] xl:items-stretch"
->
-  <div className="flex max-w-[760px] flex-col justify-end">
-    <div className="mb-5 text-[15px] tracking-[-0.02em] text-[var(--color-text-muted)]">
-      главная / как купить
-    </div>
+          <motion.div
+            variants={sectionMotion}
+            initial="hidden"
+            animate="visible"
+            className="grid gap-5 xl:grid-cols-[1.08fr_0.92fr] xl:items-center"
+          >
+            <div className="flex max-w-[760px] flex-col justify-center xl:-mt-2">
+              <div className="mb-5 text-[15px] tracking-[-0.02em] text-[var(--color-text-muted)]">
+                главная / как купить
+              </div>
 
-    <h1 className="font-heading text-[34px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[48px] xl:text-[58px]">
-      Как купить продукцию
-    </h1>
+              <h1 className="font-heading text-[34px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[48px] xl:text-[58px]">
+                Как купить продукцию
+              </h1>
 
-    <p className="mt-5 max-w-[620px] text-[16px] leading-[1.46] text-[var(--color-text-muted)] md:text-[18px]">
-      Подбираем условия поставки индивидуально под объём, задачи и формат сотрудничества.
-    </p>
+              <p className="mt-5 max-w-[620px] text-[16px] leading-[1.46] text-[var(--color-text-muted)] md:text-[18px]">
+                <span className="block">
+                  подбираем условия поставки индивидуально под объём,
+                </span>
+                <span className="block">
+                  задачи и формат сотрудничества
+                </span>
+              </p>
 
-    <a
-      href="#buy-request"
-      className="mt-7 inline-flex h-12 w-fit items-center justify-center rounded-[18px] bg-[var(--color-accent-1)] px-6 text-[15px] font-semibold text-[var(--color-accent-1-foreground)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
-    >
-      оставить запрос
-    </a>
-  </div>
-
-  <div className="how-to-buy-hero-card overflow-hidden rounded-[28px] p-5 md:p-6 xl:p-7">
-    <div className="flex h-full flex-col">
-      <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-        персональный формат покупки
-      </div>
-
-      <h2 className="how-to-buy-hero-card-title mt-4 font-heading text-[26px] leading-[0.96] tracking-[-0.04em] md:text-[30px]">
-        условия поставки формируются под ваш запрос
-      </h2>
-
-      <p className="how-to-buy-hero-card-body mt-4 max-w-[520px] text-[15px] leading-[1.48] md:text-[16px]">
-        После уточнения параметров менеджер направляет прайс-лист, условия сотрудничества и следующий шаг по взаимодействию.
-      </p>
-
-      <div className="how-to-buy-hero-card-divider mt-6 border-t pt-6">
-        <div className="grid gap-3 sm:grid-cols-3">
-          <div className="rounded-[18px] bg-white/[0.04] px-4 py-4">
-            <div className="how-to-buy-hero-card-point text-[14px] font-semibold leading-[1.2] tracking-[-0.02em]">
-              оптовые закупки
+              <a
+                href="#buy-request"
+                className="mt-7 inline-flex h-12 w-fit items-center justify-center rounded-[18px] bg-[var(--color-accent-1)] px-6 text-[15px] font-semibold text-[var(--color-accent-1-foreground)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
+              >
+                оставить запрос
+              </a>
             </div>
-          </div>
 
-          <div className="rounded-[18px] bg-white/[0.04] px-4 py-4">
-            <div className="how-to-buy-hero-card-point text-[14px] font-semibold leading-[1.2] tracking-[-0.02em]">
-              дилерский формат
-            </div>
-          </div>
+            <div className="how-to-buy-hero-card overflow-hidden rounded-[28px] p-5 md:p-6 xl:p-7">
+              <div className="flex h-full flex-col">
+                <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
+                  персональный формат покупки
+                </div>
 
-          <div className="rounded-[18px] bg-white/[0.04] px-4 py-4">
-            <div className="how-to-buy-hero-card-point text-[14px] font-semibold leading-[1.2] tracking-[-0.02em]">
-              Private Label / СТМ
+                <h2 className="how-to-buy-hero-card-title mt-4 font-heading text-[26px] leading-[0.96] tracking-[-0.04em] md:text-[30px]">
+                  <span className="block">
+                    условия поставки формируются под
+                  </span>
+                  <span className="block">ваш запрос</span>
+                </h2>
+
+                <p className="how-to-buy-hero-card-body mt-4 max-w-[520px] text-[15px] leading-[1.48] md:text-[16px]">
+                  <span className="block">
+                    после уточнения параметров менеджер направляет
+                  </span>
+                  <span className="block">
+                    прайс-лист, условия сотрудничества и следующий шаг
+                  </span>
+                  <span className="block">по взаимодействию</span>
+                </p>
+
+                <div className="how-to-buy-hero-card-divider mt-6 border-t pt-6">
+                  <div className="grid gap-3 sm:grid-cols-3">
+                    <div className="flex min-h-[72px] items-center justify-center rounded-[18px] bg-white/[0.04] px-4 py-4 text-center">
+                      <div className="how-to-buy-hero-card-point text-[14px] font-semibold leading-[1.2] tracking-[-0.02em]">
+                        оптовые закупки
+                      </div>
+                    </div>
+
+                    <div className="flex min-h-[72px] items-center justify-center rounded-[18px] bg-white/[0.04] px-4 py-4 text-center">
+                      <div className="how-to-buy-hero-card-point text-[14px] font-semibold leading-[1.2] tracking-[-0.02em]">
+                        дилерский формат
+                      </div>
+                    </div>
+
+                    <div className="flex min-h-[72px] items-center justify-center rounded-[18px] bg-white/[0.04] px-4 py-4 text-center">
+                      <div className="how-to-buy-hero-card-point text-[14px] font-semibold leading-[1.2] tracking-[-0.02em]">
+                        Private Label / СТМ
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</motion.div>
+          </motion.div>
         </Container>
       </Section>
 
@@ -648,7 +662,10 @@ export function HowToBuyPage() {
 
                       <div className="mt-5 grid gap-4">
                         <ContactInput label="имя" placeholder="ваше имя" />
-                        <ContactInput label="компания" placeholder="название компании" />
+                        <ContactInput
+                          label="компания"
+                          placeholder="название компании"
+                        />
                         <ContactInput
                           label="контакт"
                           placeholder="telegram / телефон / email"
