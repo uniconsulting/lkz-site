@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { drukWide, garet } from "@/lib/fonts";
+import { Header } from "@/components/layout/header";
+import { Footer } from "@/components/layout/footer";
 
 export const metadata: Metadata = {
   title: "LKZ Site",
@@ -15,7 +17,9 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body className={`${drukWide.variable} ${garet.variable}`}>
+        <Header />
         {children}
+        <Footer />
       </body>
     </html>
   );
