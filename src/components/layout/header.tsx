@@ -3,7 +3,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
-import { Calculator, Menu, Search, X } from "lucide-react";
+import { BarChart3, Menu, Search, X } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { headerNav } from "@/lib/constants/navigation";
 import { cn } from "@/lib/utils/cn";
@@ -23,7 +23,7 @@ function HeaderActionButton({
   className?: string;
 }) {
   return (
-    <a
+    <Link
       href={href}
       aria-label={label}
       title={label}
@@ -33,7 +33,7 @@ function HeaderActionButton({
       )}
     >
       {icon ? icon : label}
-    </a>
+    </Link>
   );
 }
 
@@ -108,11 +108,8 @@ function DesktopSearch({
   return (
     <div
       ref={wrapperRef}
-      data-open={isOpen ? "true" : "false"}
-      className={cn(
-        "search-shell relative h-11 shrink-0 rounded-[18px] bg-[var(--color-bg)]",
-        isOpen ? "w-[340px]" : "w-11",
-      )}
+      className="absolute left-0 top-0 h-11 transition-[width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+      style={{ width: isOpen ? 340 : 44 }}
     >
       <button
         type="button"
@@ -120,7 +117,7 @@ function DesktopSearch({
         aria-label={isOpen ? "Закрыть поиск" : "Открыть поиск"}
         title={isOpen ? "Закрыть поиск" : "Открыть поиск"}
         className={cn(
-          "search-trigger absolute inset-0 z-[2] inline-flex h-11 w-11 items-center justify-center rounded-[18px] text-[var(--color-text)]",
+          "absolute inset-0 z-[2] inline-flex h-11 w-11 items-center justify-center rounded-[18px] bg-[var(--color-bg)] text-[var(--color-text)] transition duration-300",
           isOpen
             ? "pointer-events-none opacity-0"
             : "pointer-events-auto opacity-100",
@@ -133,7 +130,7 @@ function DesktopSearch({
         role="search"
         onSubmit={(event) => event.preventDefault()}
         className={cn(
-          "search-panel absolute inset-0 flex h-11 items-center overflow-hidden rounded-[18px]",
+          "absolute inset-0 flex h-11 items-center overflow-hidden rounded-[18px] bg-[var(--color-bg)] transition duration-300",
           isOpen
             ? "pointer-events-auto opacity-100"
             : "pointer-events-none opacity-0",
@@ -143,10 +140,7 @@ function DesktopSearch({
           ref={inputRef}
           type="text"
           placeholder="Напишите, что хотите найти"
-          className={cn(
-            "h-full w-full bg-transparent px-5 pr-3 text-[14px] text-[var(--color-text)] outline-none placeholder:text-[var(--color-text-muted)]",
-            isOpen ? "opacity-100" : "opacity-0",
-          )}
+          className="h-full w-full bg-transparent px-5 pr-3 text-[14px] text-[var(--color-text)] outline-none placeholder:text-[var(--color-text-muted)]"
         />
 
         <button
@@ -166,6 +160,8 @@ function DesktopSearch({
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
@@ -181,6 +177,43 @@ export function Header() {
     };
   }, [isMenuOpen]);
 
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    function updateHeaderState() {
+      const currentScrollY = window.scrollY;
+      const delta = currentScrollY - lastScrollY;
+
+      setIsScrolled(currentScrollY > 8);
+
+      if (currentScrollY <= 8) {
+        setIsHidden(false);
+      } else if (delta > 5) {
+        setIsHidden(true);
+      } else if (delta < -5) {
+        setIsHidden(false);
+      }
+
+      lastScrollY = currentScrollY;
+      ticking = false;
+    }
+
+    function onScroll() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(updateHeaderState);
+      }
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    updateHeaderState();
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
   function closeMenu() {
     setIsMenuOpen(false);
   }
@@ -191,133 +224,154 @@ export function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 py-4 md:py-5">
-        <Container>
-          <div className="md:hidden">
-            <div className="flex items-center justify-between gap-3">
-              <div className="min-w-0 rounded-[28px] bg-[var(--color-surface)] p-2">
-                <Link
-                  href="/"
-                  aria-label="На главную"
-                  className="inline-flex h-11 items-center justify-start px-2"
-                  onClick={closeMenu}
-                >
-                  <img
-                    src={`${basePath}/images/common/logo.svg`}
-                    alt="Логотип"
-                    className="logo-light block h-[34px] w-auto object-contain md:relative md:-top-[2px] md:h-[36px]"
-                  />
+      <header
+        className={cn(
+          "fixed inset-x-0 top-0 z-50 transition-[transform,opacity] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
+          isHidden && !isMenuOpen
+            ? "-translate-y-[calc(100%+12px)] opacity-0"
+            : "translate-y-0 opacity-100",
+        )}
+      >
+        <div
+          className={cn(
+            "absolute inset-0 pointer-events-none transition-opacity duration-500",
+            isScrolled ? "opacity-100" : "opacity-0",
+          )}
+          style={{
+            backdropFilter: "blur(16px)",
+            WebkitBackdropFilter: "blur(16px)",
+            background: "color-mix(in srgb, var(--color-surface) 72%, transparent)",
+          }}
+        />
 
-                  <img
-                    src={`${basePath}/images/common/logo-dark.svg`}
-                    alt="Логотип"
-                    className="logo-dark hidden h-[34px] w-auto object-contain md:relative md:-top-[2px] md:h-[36px]"
-                  />
-                </Link>
+        <div className="relative py-4 md:py-5">
+          <Container>
+            <div className="md:hidden">
+              <div className="flex items-center justify-between gap-3">
+                <div className="min-w-0 rounded-[28px] bg-[var(--color-surface)] p-2">
+                  <Link
+                    href="/"
+                    aria-label="На главную"
+                    className="inline-flex h-11 items-center justify-start px-2"
+                    onClick={closeMenu}
+                  >
+                    <img
+                      src={`${basePath}/images/common/logo.svg`}
+                      alt="Логотип"
+                      className="logo-light block h-[34px] w-auto object-contain md:relative md:-top-[2px] md:h-[36px]"
+                    />
+
+                    <img
+                      src={`${basePath}/images/common/logo-dark.svg`}
+                      alt="Логотип"
+                      className="logo-dark hidden h-[34px] w-auto object-contain md:relative md:-top-[2px] md:h-[36px]"
+                    />
+                  </Link>
+                </div>
+
+                <div className="rounded-[28px] bg-[var(--color-surface)] p-2">
+                  <div className="flex items-center gap-2">
+                    <HeaderActionButton
+                      href="#calculator"
+                      label="Открыть блок аналитики"
+                      icon={<BarChart3 size={18} />}
+                      className="w-11"
+                    />
+
+                    <ThemeToggle />
+
+                    <MobileMenuButton
+                      isOpen={isMenuOpen}
+                      onClick={() => setIsMenuOpen((prev) => !prev)}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="hidden md:flex md:flex-col md:gap-3 xl:flex-row xl:items-center xl:justify-between">
+              <div className="min-w-0 rounded-[28px] bg-[var(--color-surface)] p-2">
+                <div className="flex min-w-0 items-center gap-2">
+                  <Link
+                    href="/"
+                    aria-label="На главную"
+                    className={cn(
+                      "inline-flex h-11 shrink-0 items-center justify-start px-2",
+                      "min-w-[78px]",
+                    )}
+                  >
+                    <img
+                      src={`${basePath}/images/common/logo.svg`}
+                      alt="Логотип"
+                      className="logo-light relative -top-[2px] block h-auto max-h-[36px] w-auto max-w-[148px] object-contain"
+                    />
+
+                    <img
+                      src={`${basePath}/images/common/logo-dark.svg`}
+                      alt="Логотип"
+                      className="logo-dark relative -top-[2px] hidden h-auto max-h-[36px] w-auto max-w-[148px] object-contain"
+                    />
+                  </Link>
+
+                  <div className="h-8 w-[2px] shrink-0 bg-white" />
+
+                  <nav
+                    aria-label="Основная навигация"
+                    className="min-w-0 overflow-x-auto"
+                  >
+                    <ul className="flex min-w-max items-center gap-2">
+                      {headerNav.map((item) => (
+                        <li key={item.href}>
+                          <Link
+                            href={item.href}
+                            className={cn(
+                              "inline-flex h-11 items-center justify-center rounded-[20px] px-4 text-[14px] font-medium text-[var(--color-text)] transition duration-200",
+                              "bg-transparent hover:bg-[var(--color-bg)]",
+                              "focus:outline-none",
+                            )}
+                          >
+                            {item.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </nav>
+                </div>
               </div>
 
               <div className="rounded-[28px] bg-[var(--color-surface)] p-2">
                 <div className="flex items-center gap-2">
+                  <div className="relative h-11 w-[548px] shrink-0">
+                    <DesktopSearch
+                      isOpen={isSearchOpen}
+                      onToggle={() => setIsSearchOpen((prev) => !prev)}
+                      onClose={closeSearch}
+                    />
+
+                    <a
+                      href="tel:+79648589910"
+                      className={cn(
+                        "absolute right-0 top-0 inline-flex h-11 items-center justify-center rounded-[18px] bg-[var(--color-bg)] px-5 text-center text-[14px] font-semibold text-[var(--color-text)] whitespace-nowrap transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
+                        isSearchOpen ? "-translate-x-[14px]" : "translate-x-0",
+                      )}
+                    >
+                      +7 (964) 858-99-10
+                    </a>
+                  </div>
+
                   <HeaderActionButton
                     href="#calculator"
-                    label="Открыть калькулятор"
-                    icon={<Calculator size={18} />}
+                    label="Открыть блок аналитики"
+                    icon={<BarChart3 size={18} />}
                     className="w-11"
                   />
 
                   <ThemeToggle />
-
-                  <MobileMenuButton
-                    isOpen={isMenuOpen}
-                    onClick={() => setIsMenuOpen((prev) => !prev)}
-                  />
                 </div>
               </div>
             </div>
-          </div>
-
-          <div className="hidden md:flex md:flex-col md:gap-3 xl:flex-row xl:items-center xl:justify-between">
-            <div className="min-w-0 rounded-[28px] bg-[var(--color-surface)] p-2">
-              <div className="flex min-w-0 items-center gap-2">
-                <Link
-                  href="/"
-                  aria-label="На главную"
-                  className={cn(
-                    "inline-flex h-11 shrink-0 items-center justify-start px-2",
-                    "min-w-[78px]",
-                  )}
-                >
-                  <img
-                    src={`${basePath}/images/common/logo.svg`}
-                    alt="Логотип"
-                    className="logo-light relative -top-[2px] block h-auto max-h-[36px] w-auto max-w-[148px] object-contain"
-                  />
-
-                  <img
-                    src={`${basePath}/images/common/logo-dark.svg`}
-                    alt="Логотип"
-                    className="logo-dark relative -top-[2px] hidden h-auto max-h-[36px] w-auto max-w-[148px] object-contain"
-                  />
-                </Link>
-
-                <div className="h-8 w-[2px] shrink-0 bg-white" />
-
-                <nav
-                  aria-label="Основная навигация"
-                  className="min-w-0 overflow-x-auto"
-                >
-                  <ul className="flex min-w-max items-center gap-2">
-                    {headerNav.map((item) => (
-                      <li key={item.href}>
-                        <a
-                          href={item.href}
-                          className={cn(
-                            "inline-flex h-11 items-center justify-center rounded-[20px] px-4 text-[14px] font-medium text-[var(--color-text)] transition duration-200",
-                            "bg-transparent hover:bg-[var(--color-bg)]",
-                            "focus:outline-none",
-                          )}
-                        >
-                          {item.label}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </nav>
-              </div>
-            </div>
-
-<div className="rounded-[28px] bg-[var(--color-surface)] p-2">
-  <div className="flex items-center gap-2">
-    <div className="flex items-center gap-2">
-      <a
-        href="tel:+79648589910"
-        className={cn(
-          "phone-shift-shell interactive-lift-accent inline-flex h-11 items-center justify-center rounded-[18px] bg-[var(--color-bg)] px-5 text-center text-[14px] font-semibold text-[var(--color-text)] whitespace-nowrap",
-          isSearchOpen && "-translate-x-[4px]",
-        )}
-      >
-        +7 (964) 858-99-10
-      </a>
-
-      <DesktopSearch
-        isOpen={isSearchOpen}
-        onToggle={() => setIsSearchOpen((prev) => !prev)}
-        onClose={closeSearch}
-      />
-    </div>
-
-    <HeaderActionButton
-      href="#calculator"
-      label="Открыть калькулятор"
-      icon={<Calculator size={18} />}
-      className="w-11"
-    />
-
-    <ThemeToggle />
-  </div>
-</div>
-          </div>
-        </Container>
+          </Container>
+        </div>
       </header>
 
       <div
@@ -402,13 +456,13 @@ export function Header() {
             <ul className="flex flex-col gap-4">
               {headerNav.map((item) => (
                 <li key={item.href}>
-                  <a
+                  <Link
                     href={item.href}
                     onClick={closeMenu}
                     className="font-heading text-[28px] leading-[0.98] tracking-[-0.03em] text-[var(--color-text)]"
                   >
                     {item.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
