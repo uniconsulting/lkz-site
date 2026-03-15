@@ -109,7 +109,7 @@ function DesktopSearch({
   return (
     <div
       ref={wrapperRef}
-      className="relative h-11 transition-[width] duration-[700ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+      className="relative h-11 shrink-0 transition-[width] duration-[850ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
       style={{ width: isOpen ? 340 : 44 }}
     >
       <button
@@ -162,7 +162,7 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
-  const [isFloating, setIsFloating] = useState(false);
+  const [surfaceProgress, setSurfaceProgress] = useState(0);
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
@@ -186,14 +186,18 @@ export function Header() {
       const currentScrollY = window.scrollY;
       const delta = currentScrollY - lastScrollY;
 
-      setIsFloating(currentScrollY > 8);
+      const nextSurfaceProgress = Math.max(
+        0,
+        Math.min((currentScrollY - 24) / 220, 1),
+      );
+      setSurfaceProgress(nextSurfaceProgress);
 
       if (currentScrollY <= HEADER_HIDE_START_SCROLL) {
         setIsHidden(false);
       } else {
-        if (delta > 5) {
+        if (delta > 4) {
           setIsHidden(true);
-        } else if (delta < -5) {
+        } else if (delta < -4) {
           setIsHidden(false);
         }
       }
@@ -226,20 +230,22 @@ export function Header() {
   }
 
   const frameStyle = {
-    background: isFloating
-      ? "color-mix(in srgb, var(--color-surface) 78%, transparent)"
-      : "var(--color-surface)",
-    backdropFilter: isFloating ? "blur(18px)" : "blur(0px)",
-    WebkitBackdropFilter: isFloating ? "blur(18px)" : "blur(0px)",
+    background: `color-mix(in srgb, var(--color-surface) ${surfaceProgress * 46}%, transparent)`,
+    backdropFilter: `blur(${surfaceProgress * 10}px)`,
+    WebkitBackdropFilter: `blur(${surfaceProgress * 10}px)`,
+    boxShadow:
+      surfaceProgress > 0.04
+        ? "0 10px 30px rgba(20,24,28,0.04)"
+        : "none",
   };
 
   return (
     <>
       <header
         className={cn(
-          "fixed inset-x-0 top-0 z-50 transition-[transform,opacity] duration-[950ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+          "fixed inset-x-0 top-0 z-50 will-change-transform transition-[transform,opacity] duration-[1350ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
           isHidden && !isMenuOpen
-            ? "-translate-y-[calc(100%+20px)] opacity-0"
+            ? "-translate-y-[calc(100%+24px)] opacity-0"
             : "translate-y-0 opacity-100",
         )}
       >
@@ -248,7 +254,7 @@ export function Header() {
             <div className="md:hidden">
               <div className="flex items-center justify-between gap-3">
                 <div
-                  className="min-w-0 rounded-[28px] p-2 transition-[background,backdrop-filter] duration-[700ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+                  className="min-w-0 rounded-[28px] p-2 transition-[background,backdrop-filter,box-shadow] duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
                   style={frameStyle}
                 >
                   <Link
@@ -272,7 +278,7 @@ export function Header() {
                 </div>
 
                 <div
-                  className="rounded-[28px] p-2 transition-[background,backdrop-filter] duration-[700ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+                  className="rounded-[28px] p-2 transition-[background,backdrop-filter,box-shadow] duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
                   style={frameStyle}
                 >
                   <div className="flex items-center gap-2">
@@ -296,7 +302,7 @@ export function Header() {
 
             <div className="hidden md:flex md:flex-col md:gap-3 xl:flex-row xl:items-center xl:justify-between">
               <div
-                className="min-w-0 rounded-[28px] p-2 transition-[background,backdrop-filter] duration-[700ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+                className="min-w-0 rounded-[28px] p-2 transition-[background,backdrop-filter,box-shadow] duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
                 style={frameStyle}
               >
                 <div className="flex min-w-0 items-center gap-2">
@@ -348,19 +354,19 @@ export function Header() {
               </div>
 
               <div
-                className="rounded-[28px] p-2 transition-[background,backdrop-filter] duration-[700ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+                className="rounded-[28px] p-2 transition-[background,backdrop-filter,box-shadow] duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
                 style={frameStyle}
               >
                 <div className="flex items-center gap-2">
                   <div className="relative h-11 w-[548px] shrink-0">
-                    <a
-                      href="tel:+79648589910"
-                      className="absolute left-0 top-0 inline-flex h-11 items-center justify-center rounded-[18px] bg-[var(--color-bg)] px-5 text-center text-[14px] font-semibold text-[var(--color-text)] whitespace-nowrap"
-                    >
-                      +7 (964) 858-99-10
-                    </a>
+                    <div className="absolute inset-0 flex items-center justify-end gap-2">
+                      <a
+                        href="tel:+79648589910"
+                        className="inline-flex h-11 items-center justify-center rounded-[18px] bg-[var(--color-bg)] px-5 text-center text-[14px] font-semibold text-[var(--color-text)] whitespace-nowrap"
+                      >
+                        +7 (964) 858-99-10
+                      </a>
 
-                    <div className="absolute right-0 top-0">
                       <DesktopSearch
                         isOpen={isSearchOpen}
                         onToggle={() => setIsSearchOpen((prev) => !prev)}
