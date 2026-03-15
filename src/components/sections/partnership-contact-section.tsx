@@ -576,7 +576,7 @@ export function PartnershipContactSection() {
                     </div>
 
                     <div className="lead-card-divider mt-[36px] border-t pt-[36px]">
-                      <div className="lead-card-body-text space-y-[12px] text-[11px] leading-[1.35] tracking-[-0.02em]">
+                      <div className="lead-card-body-text space-y-[12px] text-[13px] leading-[1.25] tracking-[-0.02em]">
                         {partnershipContent.leadCard.descriptionLines.map((line) => (
                           <p key={line}>{line}</p>
                         ))}
