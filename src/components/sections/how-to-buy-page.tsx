@@ -23,8 +23,6 @@ import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { cn } from "@/lib/utils/cn";
 import {
-  howToBuyHero,
-  howToBuyProcess,
   howToBuyResultContent,
   howToBuySteps,
   howToBuySuccessContent,
@@ -105,6 +103,30 @@ const iconMap: Record<HowToBuyOptionIconKey, LucideIcon> = {
   badge: BadgePercent,
   handshake: Handshake,
 };
+
+const processItems = [
+  {
+    id: "request",
+    index: "01",
+    title: "оставляете запрос",
+    description:
+      "кратко указываете формат закупки и что именно вас интересует",
+  },
+  {
+    id: "clarify",
+    index: "02",
+    title: "уточняем параметры",
+    description:
+      "менеджер помогает определить объём, категории продукции и формат сотрудничества",
+  },
+  {
+    id: "offer",
+    index: "03",
+    title: "получаете предложение",
+    description:
+      "направляем прайс-лист, условия поставки и следующий шаг по взаимодействию",
+  },
+] as const;
 
 function getCompletionRatio(stepIndex: number, isCompleted: boolean) {
   if (isCompleted) return 1;
@@ -343,74 +365,68 @@ export function HowToBuyPage() {
   }
 
   return (
-    <div className="pb-10 md:pb-12 xl:pb-14">
-      <Section className="pt-10 md:pt-12 xl:pt-14">
+    <div className="pt-[92px] pb-6 md:pt-[104px] md:pb-8 xl:pb-10">
+      <Section className="pt-8 md:pt-10 xl:pt-12">
         <Container>
           <motion.div
             variants={sectionMotion}
             initial="hidden"
             animate="visible"
-            className="grid gap-6 xl:grid-cols-[1.08fr_0.92fr] xl:items-start"
+            className="grid gap-5 xl:grid-cols-[1.12fr_0.88fr] xl:items-end"
           >
             <div className="max-w-[760px]">
               <div className="mb-5 text-[15px] tracking-[-0.02em] text-[var(--color-text-muted)]">
-                главная / {howToBuyHero.eyebrow}
+                главная / как купить
               </div>
 
               <h1 className="font-heading text-[34px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[48px] xl:text-[58px]">
-                {howToBuyHero.title}
+                Как купить продукцию
               </h1>
 
-              <p className="mt-5 max-w-[700px] text-[16px] leading-[1.48] text-[var(--color-text-muted)] md:text-[18px]">
-                {howToBuyHero.description.map((line) => (
-                  <span key={line} className="block">
-                    {line}
-                  </span>
-                ))}
-              </p>
-
-              <p className="mt-6 max-w-[700px] text-[15px] leading-[1.5] text-[var(--color-text-muted)] md:text-[16px]">
-                {howToBuyHero.note.map((line) => (
-                  <span key={line} className="block">
-                    {line}
-                  </span>
-                ))}
+              <p className="mt-5 max-w-[620px] text-[16px] leading-[1.46] text-[var(--color-text-muted)] md:text-[18px]">
+                Подбираем условия поставки индивидуально под объём, задачи и формат сотрудничества.
               </p>
 
               <a
                 href="#buy-request"
                 className="mt-7 inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-accent-1)] px-6 text-[15px] font-semibold text-[var(--color-accent-1-foreground)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
               >
-                {howToBuyHero.cta}
+                оставить запрос
               </a>
             </div>
 
             <div className="rounded-[28px] bg-[var(--color-surface)] p-5 md:p-6 xl:p-7">
-              <div className="grid gap-4">
-                <div className="rounded-[22px] bg-[var(--color-bg)] p-5">
-                  <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                    формат покупки
-                  </div>
-                  <div className="mt-3 text-[18px] font-semibold leading-[1.15] text-[var(--color-text)]">
-                    персональный запрос вместо универсальной корзины
+              <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
+                персональный формат покупки
+              </div>
+
+              <h2 className="mt-4 font-heading text-[26px] leading-[0.96] tracking-[-0.04em] text-[var(--color-text)] md:text-[30px]">
+                условия поставки формируются под ваш запрос
+              </h2>
+
+              <p className="mt-4 text-[15px] leading-[1.48] text-[var(--color-text-muted)] md:text-[16px]">
+                Учитываем объём закупки, интерес к продукции, регион и формат сотрудничества. После этого менеджер связывается с вами и направляет релевантные условия.
+              </p>
+
+              <div className="mt-6 space-y-3">
+                <div className="flex items-start gap-3">
+                  <div className="mt-[6px] h-2 w-2 shrink-0 rounded-full bg-[var(--color-accent-1)]" />
+                  <div className="text-[15px] leading-[1.4] text-[var(--color-text)]">
+                    прайс-лист по запросу
                   </div>
                 </div>
 
-                <div className="rounded-[22px] bg-[var(--color-bg)] p-5">
-                  <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                    что влияет на условия
-                  </div>
-                  <div className="mt-3 text-[15px] leading-[1.45] text-[var(--color-text-muted)]">
-                    объём закупки, категории продукции, регион, логистика и формат сотрудничества
+                <div className="flex items-start gap-3">
+                  <div className="mt-[6px] h-2 w-2 shrink-0 rounded-full bg-[var(--color-accent-1)]" />
+                  <div className="text-[15px] leading-[1.4] text-[var(--color-text)]">
+                    условия поставки под задачу
                   </div>
                 </div>
 
-                <div className="rounded-[22px] bg-[var(--color-bg)] p-5">
-                  <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                    результат
-                  </div>
-                  <div className="mt-3 text-[15px] leading-[1.45] text-[var(--color-text-muted)]">
-                    прайс-лист, условия поставки и следующий шаг по взаимодействию
+                <div className="flex items-start gap-3">
+                  <div className="mt-[6px] h-2 w-2 shrink-0 rounded-full bg-[var(--color-accent-1)]" />
+                  <div className="text-[15px] leading-[1.4] text-[var(--color-text)]">
+                    сопровождение менеджером
                   </div>
                 </div>
               </div>
@@ -428,7 +444,7 @@ export function HowToBuyPage() {
             viewport={{ once: true, amount: 0.18 }}
             className="grid gap-4 md:grid-cols-3"
           >
-            {howToBuyProcess.map((item) => (
+            {processItems.map((item) => (
               <ProcessCard
                 key={item.id}
                 index={item.index}
@@ -636,7 +652,10 @@ export function HowToBuyPage() {
                           label="контакт"
                           placeholder="telegram / телефон / email"
                         />
-                        <ContactInput label="город / регион" placeholder="город или регион поставки" />
+                        <ContactInput
+                          label="город / регион"
+                          placeholder="город или регион поставки"
+                        />
                         <ContactInput
                           label="комментарий"
                           placeholder="кратко опишите запрос"
@@ -665,48 +684,6 @@ export function HowToBuyPage() {
                 </motion.div>
               )}
             </AnimatePresence>
-          </motion.div>
-        </Container>
-      </Section>
-
-      <Section className="pt-8 md:pt-10 xl:pt-12">
-        <Container>
-          <motion.div
-            variants={sectionMotion}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            className="grid gap-4 md:grid-cols-3"
-          >
-            <div className="rounded-[24px] bg-[var(--color-surface)] p-5">
-              <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                телефон
-              </div>
-              <a
-                href="tel:+79648589910"
-                className="mt-3 block text-[18px] font-semibold text-[var(--color-text)]"
-              >
-                +7 (964) 858-99-10
-              </a>
-            </div>
-
-            <div className="rounded-[24px] bg-[var(--color-surface)] p-5">
-              <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                быстрый контакт
-              </div>
-              <div className="mt-3 text-[15px] leading-[1.45] text-[var(--color-text)]">
-                telegram / email по запросу через менеджера
-              </div>
-            </div>
-
-            <div className="rounded-[24px] bg-[var(--color-surface)] p-5">
-              <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                адрес
-              </div>
-              <div className="mt-3 text-[15px] leading-[1.45] text-[var(--color-text)]">
-                г. Ульяновск, Московское шоссе, 42Е
-              </div>
-            </div>
           </motion.div>
         </Container>
       </Section>
