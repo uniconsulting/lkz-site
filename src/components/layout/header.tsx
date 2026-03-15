@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils/cn";
 import { ThemeToggle } from "./theme-toggle";
 
 const basePath = process.env.NODE_ENV === "production" ? "/lkz-site" : "";
+const HEADER_HIDE_START_SCROLL = 3200;
 
 function HeaderActionButton({
   href,
@@ -23,7 +24,7 @@ function HeaderActionButton({
   className?: string;
 }) {
   return (
-    <Link
+    <a
       href={href}
       aria-label={label}
       title={label}
@@ -33,7 +34,7 @@ function HeaderActionButton({
       )}
     >
       {icon ? icon : label}
-    </Link>
+    </a>
   );
 }
 
@@ -108,7 +109,7 @@ function DesktopSearch({
   return (
     <div
       ref={wrapperRef}
-      className="absolute left-0 top-0 h-11 transition-[width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+      className="relative h-11 transition-[width] duration-[700ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
       style={{ width: isOpen ? 340 : 44 }}
     >
       <button
@@ -130,7 +131,7 @@ function DesktopSearch({
         role="search"
         onSubmit={(event) => event.preventDefault()}
         className={cn(
-          "absolute inset-0 flex h-11 items-center overflow-hidden rounded-[18px] bg-[var(--color-bg)] transition duration-300",
+          "absolute inset-0 flex h-11 items-center overflow-hidden rounded-[18px] bg-[var(--color-bg)] transition-[opacity] duration-300",
           isOpen
             ? "pointer-events-auto opacity-100"
             : "pointer-events-none opacity-0",
@@ -160,8 +161,8 @@ function DesktopSearch({
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
+  const [isFloating, setIsFloating] = useState(false);
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
@@ -185,14 +186,16 @@ export function Header() {
       const currentScrollY = window.scrollY;
       const delta = currentScrollY - lastScrollY;
 
-      setIsScrolled(currentScrollY > 8);
+      setIsFloating(currentScrollY > 8);
 
-      if (currentScrollY <= 8) {
+      if (currentScrollY <= HEADER_HIDE_START_SCROLL) {
         setIsHidden(false);
-      } else if (delta > 5) {
-        setIsHidden(true);
-      } else if (delta < -5) {
-        setIsHidden(false);
+      } else {
+        if (delta > 5) {
+          setIsHidden(true);
+        } else if (delta < -5) {
+          setIsHidden(false);
+        }
       }
 
       lastScrollY = currentScrollY;
@@ -222,33 +225,32 @@ export function Header() {
     setIsSearchOpen(false);
   }
 
+  const frameStyle = {
+    background: isFloating
+      ? "color-mix(in srgb, var(--color-surface) 78%, transparent)"
+      : "var(--color-surface)",
+    backdropFilter: isFloating ? "blur(18px)" : "blur(0px)",
+    WebkitBackdropFilter: isFloating ? "blur(18px)" : "blur(0px)",
+  };
+
   return (
     <>
       <header
         className={cn(
-          "fixed inset-x-0 top-0 z-50 transition-[transform,opacity] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
+          "fixed inset-x-0 top-0 z-50 transition-[transform,opacity] duration-[950ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
           isHidden && !isMenuOpen
-            ? "-translate-y-[calc(100%+12px)] opacity-0"
+            ? "-translate-y-[calc(100%+20px)] opacity-0"
             : "translate-y-0 opacity-100",
         )}
       >
-        <div
-          className={cn(
-            "absolute inset-0 pointer-events-none transition-opacity duration-500",
-            isScrolled ? "opacity-100" : "opacity-0",
-          )}
-          style={{
-            backdropFilter: "blur(16px)",
-            WebkitBackdropFilter: "blur(16px)",
-            background: "color-mix(in srgb, var(--color-surface) 72%, transparent)",
-          }}
-        />
-
-        <div className="relative py-4 md:py-5">
+        <div className="py-4 md:py-5">
           <Container>
             <div className="md:hidden">
               <div className="flex items-center justify-between gap-3">
-                <div className="min-w-0 rounded-[28px] bg-[var(--color-surface)] p-2">
+                <div
+                  className="min-w-0 rounded-[28px] p-2 transition-[background,backdrop-filter] duration-[700ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+                  style={frameStyle}
+                >
                   <Link
                     href="/"
                     aria-label="На главную"
@@ -269,7 +271,10 @@ export function Header() {
                   </Link>
                 </div>
 
-                <div className="rounded-[28px] bg-[var(--color-surface)] p-2">
+                <div
+                  className="rounded-[28px] p-2 transition-[background,backdrop-filter] duration-[700ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+                  style={frameStyle}
+                >
                   <div className="flex items-center gap-2">
                     <HeaderActionButton
                       href="#calculator"
@@ -290,7 +295,10 @@ export function Header() {
             </div>
 
             <div className="hidden md:flex md:flex-col md:gap-3 xl:flex-row xl:items-center xl:justify-between">
-              <div className="min-w-0 rounded-[28px] bg-[var(--color-surface)] p-2">
+              <div
+                className="min-w-0 rounded-[28px] p-2 transition-[background,backdrop-filter] duration-[700ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+                style={frameStyle}
+              >
                 <div className="flex min-w-0 items-center gap-2">
                   <Link
                     href="/"
@@ -322,7 +330,7 @@ export function Header() {
                     <ul className="flex min-w-max items-center gap-2">
                       {headerNav.map((item) => (
                         <li key={item.href}>
-                          <Link
+                          <a
                             href={item.href}
                             className={cn(
                               "inline-flex h-11 items-center justify-center rounded-[20px] px-4 text-[14px] font-medium text-[var(--color-text)] transition duration-200",
@@ -331,7 +339,7 @@ export function Header() {
                             )}
                           >
                             {item.label}
-                          </Link>
+                          </a>
                         </li>
                       ))}
                     </ul>
@@ -339,24 +347,26 @@ export function Header() {
                 </div>
               </div>
 
-              <div className="rounded-[28px] bg-[var(--color-surface)] p-2">
+              <div
+                className="rounded-[28px] p-2 transition-[background,backdrop-filter] duration-[700ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+                style={frameStyle}
+              >
                 <div className="flex items-center gap-2">
                   <div className="relative h-11 w-[548px] shrink-0">
-                    <DesktopSearch
-                      isOpen={isSearchOpen}
-                      onToggle={() => setIsSearchOpen((prev) => !prev)}
-                      onClose={closeSearch}
-                    />
-
                     <a
                       href="tel:+79648589910"
-                      className={cn(
-                        "absolute right-0 top-0 inline-flex h-11 items-center justify-center rounded-[18px] bg-[var(--color-bg)] px-5 text-center text-[14px] font-semibold text-[var(--color-text)] whitespace-nowrap transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
-                        isSearchOpen ? "-translate-x-[14px]" : "translate-x-0",
-                      )}
+                      className="absolute left-0 top-0 inline-flex h-11 items-center justify-center rounded-[18px] bg-[var(--color-bg)] px-5 text-center text-[14px] font-semibold text-[var(--color-text)] whitespace-nowrap"
                     >
                       +7 (964) 858-99-10
                     </a>
+
+                    <div className="absolute right-0 top-0">
+                      <DesktopSearch
+                        isOpen={isSearchOpen}
+                        onToggle={() => setIsSearchOpen((prev) => !prev)}
+                        onClose={closeSearch}
+                      />
+                    </div>
                   </div>
 
                   <HeaderActionButton
@@ -456,13 +466,13 @@ export function Header() {
             <ul className="flex flex-col gap-4">
               {headerNav.map((item) => (
                 <li key={item.href}>
-                  <Link
+                  <a
                     href={item.href}
                     onClick={closeMenu}
                     className="font-heading text-[28px] leading-[0.98] tracking-[-0.03em] text-[var(--color-text)]"
                   >
                     {item.label}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>
