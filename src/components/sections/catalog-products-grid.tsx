@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState, type MouseEvent } from "react";
 import { motion } from "motion/react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ChevronRight } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { cn } from "@/lib/utils/cn";
@@ -27,7 +27,7 @@ const catalogProductCards: CatalogProductCardItem[] = [
     title: "Эмаль матовая база A",
     image: `${basePath}/images/sections/catalog/products/product-enamel-matte-base-a.webp`,
     href: "#products",
-    titleClassName: "text-[18px] md:text-[17px] xl:text-[18px]",
+    titleClassName: "text-[18px] md:text-[16px] xl:text-[17px]",
   },
   {
     id: "facade-white-paint",
@@ -35,7 +35,7 @@ const catalogProductCards: CatalogProductCardItem[] = [
     title: "Краска белоснежная",
     image: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
     href: "#products",
-    titleClassName: "text-[18px] md:text-[17px] xl:text-[18px]",
+    titleClassName: "text-[18px] md:text-[16px] xl:text-[17px]",
   },
   {
     id: "water-based-gloss-lacquer",
@@ -43,7 +43,7 @@ const catalogProductCards: CatalogProductCardItem[] = [
     title: "ВД лак глянцевый",
     image: `${basePath}/images/sections/catalog/products/product-lacquer-gloss.webp`,
     href: "#products",
-    titleClassName: "text-[18px] md:text-[17px] xl:text-[18px]",
+    titleClassName: "text-[18px] md:text-[16px] xl:text-[17px]",
   },
   {
     id: "wood-paint",
@@ -51,7 +51,7 @@ const catalogProductCards: CatalogProductCardItem[] = [
     title: "Краска для дерева",
     image: `${basePath}/images/sections/catalog/products/product-wood-paint.webp`,
     href: "#products",
-    titleClassName: "text-[18px] md:text-[17px] xl:text-[18px]",
+    titleClassName: "text-[18px] md:text-[16px] xl:text-[17px]",
   },
   {
     id: "sodium-liquid-glass",
@@ -59,7 +59,7 @@ const catalogProductCards: CatalogProductCardItem[] = [
     title: "Жидкое стекло",
     image: `${basePath}/images/sections/catalog/products/product-liquid-glass.webp`,
     href: "#products",
-    titleClassName: "text-[18px] md:text-[17px] xl:text-[18px]",
+    titleClassName: "text-[18px] md:text-[16px] xl:text-[17px]",
   },
   {
     id: "universal-antiseptic",
@@ -67,7 +67,7 @@ const catalogProductCards: CatalogProductCardItem[] = [
     title: "Антисептик",
     image: `${basePath}/images/sections/catalog/products/product-antiseptic.webp`,
     href: "#products",
-    titleClassName: "text-[18px] md:text-[17px] xl:text-[18px]",
+    titleClassName: "text-[18px] md:text-[16px] xl:text-[17px]",
   },
   {
     id: "deep-penetration-primer",
@@ -75,7 +75,7 @@ const catalogProductCards: CatalogProductCardItem[] = [
     title: "Грунт глубокого прон.",
     image: `${basePath}/images/sections/catalog/products/product-primer-deep.webp`,
     href: "#products",
-    titleClassName: "text-[18px] md:text-[17px] xl:text-[18px] tracking-[-0.04em]",
+    titleClassName: "text-[18px] md:text-[15px] xl:text-[16px] tracking-[-0.04em]",
   },
   {
     id: "pva-glue",
@@ -83,7 +83,7 @@ const catalogProductCards: CatalogProductCardItem[] = [
     title: "Клей ПВА",
     image: `${basePath}/images/sections/catalog/products/product-pva-glue.webp`,
     href: "#products",
-    titleClassName: "text-[18px] md:text-[17px] xl:text-[18px]",
+    titleClassName: "text-[18px] md:text-[16px] xl:text-[17px]",
   },
 ];
 
@@ -141,14 +141,14 @@ function CatalogProductCard({
     const px = (event.clientX - rect.left) / rect.width;
     const py = (event.clientY - rect.top) / rect.height;
 
-    const rotateY = (px - 0.5) * 5.5;
-    const rotateX = (0.5 - py) * 5.5;
+    const rotateY = (px - 0.5) * 5;
+    const rotateX = (0.5 - py) * 5;
 
     setTilt({
       rotateX,
       rotateY,
-      y: -5,
-      scale: 1.008,
+      y: -4,
+      scale: 1.007,
     });
 
     setGlow({
@@ -199,14 +199,14 @@ function CatalogProductCard({
               "hover:shadow-[0_18px_42px_rgba(43,47,51,0.10)]",
               mobile
                 ? "min-h-[408px] w-[84vw] max-w-[360px] shrink-0 snap-start"
-                : "min-h-[486px]",
+                : "min-h-[483px]",
             )}
           >
             <div className="flex h-full flex-col">
               <div
                 className={cn(
                   "relative overflow-hidden rounded-[22px] bg-[var(--color-bg)] md:rounded-[24px]",
-                  mobile ? "h-[310px]" : "h-[378px]",
+                  mobile ? "h-[310px]" : "h-[366px]",
                 )}
                 style={{ transform: "translateZ(28px)" }}
               >
@@ -218,7 +218,7 @@ function CatalogProductCard({
                   animate={{ opacity: glow.opacity }}
                   transition={{ duration: 0.3, ease: "easeOut" }}
                   style={{
-                    background: `radial-gradient(280px circle at ${glow.x}% ${glow.y}%, rgba(255,255,255,0.22), transparent 62%)`,
+                    background: `radial-gradient(260px circle at ${glow.x}% ${glow.y}%, rgba(255,255,255,0.22), transparent 62%)`,
                   }}
                 />
 
@@ -233,11 +233,11 @@ function CatalogProductCard({
               </div>
 
               <div
-                className="flex min-h-[70px] items-end justify-between gap-4 px-2 pb-0 pt-4"
+                className="flex min-h-[66px] items-end justify-between gap-3 px-2 pb-0 pt-4"
                 style={{ transform: "translateZ(22px)" }}
               >
                 <div className="min-w-0 flex-1">
-                  <div className="mb-1 text-[13px] leading-[1.1] tracking-[-0.02em] text-[var(--color-text-muted)] md:text-[12px] xl:text-[13px]">
+                  <div className="mb-1 text-[13px] leading-[1.08] tracking-[-0.02em] text-[var(--color-text-muted)] md:text-[11px] xl:text-[12px]">
                     {item.subtitle}
                   </div>
 
@@ -253,8 +253,8 @@ function CatalogProductCard({
                 </div>
 
                 <div className="shrink-0 rounded-[18px] bg-[var(--color-bg)] p-2 transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:shadow-[0_8px_18px_rgba(43,47,51,0.06)]">
-                  <div className="flex h-10 w-[74px] items-center justify-center rounded-[14px] bg-[var(--color-surface)] text-[var(--color-accent-1)] transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[2px] md:h-11 md:w-[86px]">
-                    <ArrowRight size={22} strokeWidth={2.2} />
+                  <div className="flex h-10 w-[64px] items-center justify-center rounded-[14px] bg-[var(--color-surface)] text-[var(--color-accent-1)] transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[2px] xl:h-10 xl:w-[72px]">
+                    <ArrowRight size={20} strokeWidth={2.2} />
                   </div>
                 </div>
               </div>
@@ -270,6 +270,22 @@ export function CatalogProductsGrid() {
   return (
     <Section className="pt-8 md:pt-10 xl:pt-12">
       <Container>
+        <div className="mb-6 hidden md:flex md:items-center md:gap-2">
+          <span className="text-[15px] tracking-[-0.02em] text-[var(--color-text-muted)]">
+            каталог
+          </span>
+
+          <ChevronRight
+            size={16}
+            strokeWidth={2.4}
+            className="text-[var(--color-accent-1)]"
+          />
+
+          <span className="text-[15px] tracking-[-0.02em] text-[var(--color-text)]">
+            рекомендуемые товары
+          </span>
+        </div>
+
         <motion.div
           variants={gridVariants}
           initial="hidden"
@@ -283,6 +299,22 @@ export function CatalogProductsGrid() {
         </motion.div>
 
         <div className="md:hidden">
+          <div className="mb-5 flex items-center gap-2">
+            <span className="text-[14px] tracking-[-0.02em] text-[var(--color-text-muted)]">
+              каталог
+            </span>
+
+            <ChevronRight
+              size={15}
+              strokeWidth={2.4}
+              className="text-[var(--color-accent-1)]"
+            />
+
+            <span className="text-[14px] tracking-[-0.02em] text-[var(--color-text)]">
+              рекомендуемые товары
+            </span>
+          </div>
+
           <div className="-mx-4 overflow-x-auto px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <motion.div
               variants={gridVariants}
