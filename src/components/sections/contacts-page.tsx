@@ -8,6 +8,7 @@ import {
   Check,
   ChevronDown,
   Copy,
+  FileText,
   FolderUp,
   Mail,
   MapPinned,
