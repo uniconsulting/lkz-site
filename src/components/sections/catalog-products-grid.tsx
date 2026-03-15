@@ -199,14 +199,14 @@ function CatalogProductCard({
               "hover:shadow-[0_18px_42px_rgba(43,47,51,0.10)]",
               mobile
                 ? "min-h-[408px] w-[84vw] max-w-[360px] shrink-0 snap-start"
-                : "min-h-[468px]",
+                : "min-h-[452px]",
             )}
           >
             <div className="flex h-full flex-col">
               <div
                 className={cn(
                   "relative overflow-hidden rounded-[22px] bg-[var(--color-bg)] md:rounded-[24px]",
-                  mobile ? "h-[310px]" : "h-[360px]",
+                  mobile ? "h-[310px]" : "h-[348px]",
                 )}
                 style={{ transform: "translateZ(28px)" }}
               >
@@ -233,17 +233,17 @@ function CatalogProductCard({
               </div>
 
               <div
-                className="flex min-h-[54px] items-end justify-between gap-3 px-2 pb-0 pt-3"
+                className="flex min-h-[48px] items-end justify-between gap-3 px-2 pb-0 pt-2"
                 style={{ transform: "translateZ(22px)" }}
               >
                 <div className="min-w-0 flex-1">
-                  <div className="mb-1 text-[15px] leading-[1.08] tracking-[-0.02em] text-[var(--color-text-muted)] md:text-[13px] xl:text-[14px]">
+                  <div className="mb-[2px] text-[15px] leading-[1.02] tracking-[-0.02em] text-[var(--color-text-muted)] md:text-[13px] xl:text-[14px]">
                     {item.subtitle}
                   </div>
 
                   <div
                     className={cn(
-                      "truncate font-semibold leading-[0.98] text-[var(--color-text)]",
+                      "truncate font-semibold leading-[0.96] text-[var(--color-text)]",
                       item.titleClassName,
                     )}
                     title={item.title}
@@ -252,7 +252,7 @@ function CatalogProductCard({
                   </div>
                 </div>
 
-                <div className="shrink-0 rounded-[18px] bg-[var(--color-bg)] p-2 transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:shadow-[0_8px_18px_rgba(43,47,51,0.06)]">
+                <div className="shrink-0 rounded-[18px] bg-[var(--color-bg)] p-[6px] transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:shadow-[0_8px_18px_rgba(43,47,51,0.06)]">
                   <div className="flex h-10 w-[64px] items-center justify-center rounded-[14px] bg-[var(--color-surface)] text-[var(--color-accent-1)] transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[2px] xl:h-10 xl:w-[72px]">
                     <ArrowRight size={20} strokeWidth={2.2} />
                   </div>
@@ -270,20 +270,29 @@ export function CatalogProductsGrid() {
   return (
     <Section className="pt-8 md:pt-10 xl:pt-12">
       <Container>
-        <div className="mb-7 hidden md:flex md:items-center md:gap-2">
-          <span className="cursor-default text-[17px] tracking-[-0.02em] text-[var(--color-text-muted)] transition duration-300 hover:text-[var(--color-text)]">
-            каталог
-          </span>
+        <div className="mb-7 hidden md:flex md:items-center md:justify-between">
+          <div className="ml-[10px] flex items-center gap-[6px]">
+            <span className="cursor-default text-[17px] leading-none tracking-[-0.02em] text-[var(--color-text-muted)] transition duration-300 hover:text-[var(--color-text)]">
+              каталог
+            </span>
 
-          <ChevronRight
-            size={17}
-            strokeWidth={2.5}
-            className="text-[var(--color-accent-1)] transition duration-300"
-          />
+            <ChevronRight
+              size={17}
+              strokeWidth={2.5}
+              className="relative top-[1px] text-[var(--color-accent-1)] transition duration-300"
+            />
 
-          <span className="cursor-default text-[17px] tracking-[-0.02em] text-[var(--color-text)] transition duration-300 hover:text-[var(--color-accent-1)]">
-            рекомендуемые товары
-          </span>
+            <span className="cursor-default text-[17px] leading-none tracking-[-0.02em] text-[var(--color-text)] transition duration-300 hover:text-[var(--color-accent-1)]">
+              рекомендуемые товары
+            </span>
+          </div>
+
+          <Link
+            href="#products"
+            className="mr-[10px] text-[17px] leading-none tracking-[-0.02em] text-[var(--color-text)] transition duration-300 hover:text-[var(--color-accent-1)]"
+          >
+            открыть весь каталог
+          </Link>
         </div>
 
         <motion.div
@@ -307,7 +316,7 @@ export function CatalogProductsGrid() {
             <ChevronRight
               size={16}
               strokeWidth={2.5}
-              className="text-[var(--color-accent-1)]"
+              className="relative top-[1px] text-[var(--color-accent-1)]"
             />
 
             <span className="text-[15px] tracking-[-0.02em] text-[var(--color-text)]">
