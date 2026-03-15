@@ -239,9 +239,9 @@ function CatalogPreviewCard({ item }: { item: PreviewItem }) {
             href={item.href}
             className={cn(
               "group relative isolate block h-full overflow-hidden rounded-[28px] bg-[var(--color-surface)] md:rounded-[32px]",
-isLarge && "min-h-[520px] md:min-h-[537px]",
-isWide && "min-h-[240px] md:min-h-[255px]",
-isSmall && "min-h-[220px] md:min-h-[255px]",
+isLarge && "min-h-[520px] md:min-h-[532px]",
+isWide && "min-h-[240px] md:min-h-[250px]",
+isSmall && "min-h-[220px] md:min-h-[250px]",
             )}
           >
             <div
