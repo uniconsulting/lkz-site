@@ -1,6 +1,6 @@
 export const headerNav = [
-  { label: "Продукция", href: "#products" },
-  { label: "Как купить", href: "#how-to-buy" },
-  { label: "Сертификаты", href: "#certificates" },
-  { label: "Контакты", href: "#contacts" },
-] as const;
+  { label: "продукция", href: "/products" },
+  { label: "как купить", href: "/how-to-buy" },
+  { label: "сертификаты", href: "/certificates" },
+  { label: "контакты", href: "#contacts" },
+];
