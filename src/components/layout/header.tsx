@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
+import { motion, useMotionValueEvent, useScroll } from "motion/react";
 import { BarChart3, Menu, Search, X } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { headerNav } from "@/lib/constants/navigation";
@@ -107,35 +108,48 @@ function DesktopSearch({
   }, [isOpen, onClose]);
 
   return (
-    <div
+    <motion.div
       ref={wrapperRef}
-      className="relative h-11 shrink-0 transition-[width] duration-[850ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
-      style={{ width: isOpen ? 340 : 44 }}
+      className="relative h-11 shrink-0"
+      initial={false}
+      animate={{ width: isOpen ? 340 : 44 }}
+      transition={{
+        type: "spring",
+        stiffness: 120,
+        damping: 22,
+        mass: 0.9,
+      }}
     >
-      <button
+      <motion.button
         type="button"
         onClick={onToggle}
         aria-label={isOpen ? "Закрыть поиск" : "Открыть поиск"}
         title={isOpen ? "Закрыть поиск" : "Открыть поиск"}
         className={cn(
-          "absolute inset-0 z-[2] inline-flex h-11 w-11 items-center justify-center rounded-[18px] bg-[var(--color-bg)] text-[var(--color-text)] transition duration-300",
+          "absolute inset-0 z-[2] inline-flex h-11 w-11 items-center justify-center rounded-[18px] bg-[var(--color-bg)] text-[var(--color-text)]",
           isOpen
-            ? "pointer-events-none opacity-0"
-            : "pointer-events-auto opacity-100",
+            ? "pointer-events-none"
+            : "pointer-events-auto",
         )}
+        initial={false}
+        animate={{ opacity: isOpen ? 0 : 1 }}
+        transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
       >
         <Search size={18} />
-      </button>
+      </motion.button>
 
-      <form
+      <motion.form
         role="search"
         onSubmit={(event) => event.preventDefault()}
         className={cn(
-          "absolute inset-0 flex h-11 items-center overflow-hidden rounded-[18px] bg-[var(--color-bg)] transition-[opacity] duration-300",
+          "absolute inset-0 flex h-11 items-center overflow-hidden rounded-[18px] bg-[var(--color-bg)]",
           isOpen
-            ? "pointer-events-auto opacity-100"
-            : "pointer-events-none opacity-0",
+            ? "pointer-events-auto"
+            : "pointer-events-none",
         )}
+        initial={false}
+        animate={{ opacity: isOpen ? 1 : 0 }}
+        transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
       >
         <input
           ref={inputRef}
@@ -153,8 +167,8 @@ function DesktopSearch({
         >
           <Search size={18} />
         </button>
-      </form>
-    </div>
+      </motion.form>
+    </motion.div>
   );
 }
 
@@ -163,6 +177,9 @@ export function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
   const [surfaceProgress, setSurfaceProgress] = useState(0);
+
+  const { scrollY } = useScroll();
+  const lastScrollRef = useRef(0);
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
@@ -178,48 +195,28 @@ export function Header() {
     };
   }, [isMenuOpen]);
 
-  useEffect(() => {
-    let lastScrollY = window.scrollY;
-    let ticking = false;
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = lastScrollRef.current;
+    const delta = latest - previous;
 
-    function updateHeaderState() {
-      const currentScrollY = window.scrollY;
-      const delta = currentScrollY - lastScrollY;
+    const nextSurfaceProgress = Math.max(
+      0,
+      Math.min(latest / 260, 1),
+    );
+    setSurfaceProgress(nextSurfaceProgress);
 
-      const nextSurfaceProgress = Math.max(
-        0,
-        Math.min((currentScrollY - 24) / 220, 1),
-      );
-      setSurfaceProgress(nextSurfaceProgress);
-
-      if (currentScrollY <= HEADER_HIDE_START_SCROLL) {
+    if (latest <= HEADER_HIDE_START_SCROLL) {
+      setIsHidden(false);
+    } else {
+      if (delta > 3) {
+        setIsHidden(true);
+      } else if (delta < -3) {
         setIsHidden(false);
-      } else {
-        if (delta > 4) {
-          setIsHidden(true);
-        } else if (delta < -4) {
-          setIsHidden(false);
-        }
-      }
-
-      lastScrollY = currentScrollY;
-      ticking = false;
-    }
-
-    function onScroll() {
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(updateHeaderState);
       }
     }
 
-    window.addEventListener("scroll", onScroll, { passive: true });
-    updateHeaderState();
-
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, []);
+    lastScrollRef.current = latest;
+  });
 
   function closeMenu() {
     setIsMenuOpen(false);
@@ -230,24 +227,36 @@ export function Header() {
   }
 
   const frameStyle = {
-    background: `color-mix(in srgb, var(--color-surface) ${surfaceProgress * 46}%, transparent)`,
-    backdropFilter: `blur(${surfaceProgress * 10}px)`,
-    WebkitBackdropFilter: `blur(${surfaceProgress * 10}px)`,
+    background: `color-mix(in srgb, var(--color-surface) ${100 - surfaceProgress * 22}%, transparent)`,
+    backdropFilter: `blur(${surfaceProgress * 7}px)`,
+    WebkitBackdropFilter: `blur(${surfaceProgress * 7}px)`,
     boxShadow:
-      surfaceProgress > 0.04
-        ? "0 10px 30px rgba(20,24,28,0.04)"
+      surfaceProgress > 0.06
+        ? `0 10px 30px rgba(20,24,28,${0.03 + surfaceProgress * 0.03})`
         : "none",
   };
 
   return (
     <>
-      <header
-        className={cn(
-          "fixed inset-x-0 top-0 z-50 will-change-transform transition-[transform,opacity] duration-[1350ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
-          isHidden && !isMenuOpen
-            ? "-translate-y-[calc(100%+24px)] opacity-0"
-            : "translate-y-0 opacity-100",
-        )}
+      <motion.header
+        className="fixed inset-x-0 top-0 z-50"
+        initial={false}
+        animate={{
+          y: isHidden && !isMenuOpen ? -132 : 0,
+          opacity: isHidden && !isMenuOpen ? 0 : 1,
+        }}
+        transition={{
+          y: {
+            type: "spring",
+            stiffness: 68,
+            damping: 20,
+            mass: 1.05,
+          },
+          opacity: {
+            duration: 0.42,
+            ease: [0.22, 1, 0.36, 1],
+          },
+        }}
       >
         <div className="py-4 md:py-5">
           <Container>
@@ -358,21 +367,19 @@ export function Header() {
                 style={frameStyle}
               >
                 <div className="flex items-center gap-2">
-                  <div className="relative h-11 w-[548px] shrink-0">
-                    <div className="absolute inset-0 flex items-center justify-end gap-2">
-                      <a
-                        href="tel:+79648589910"
-                        className="inline-flex h-11 items-center justify-center rounded-[18px] bg-[var(--color-bg)] px-5 text-center text-[14px] font-semibold text-[var(--color-text)] whitespace-nowrap"
-                      >
-                        +7 (964) 858-99-10
-                      </a>
+                  <div className="flex items-center gap-2">
+                    <a
+                      href="tel:+79648589910"
+                      className="inline-flex h-11 items-center justify-center rounded-[18px] bg-[var(--color-bg)] px-5 text-center text-[14px] font-semibold text-[var(--color-text)] whitespace-nowrap"
+                    >
+                      +7 (964) 858-99-10
+                    </a>
 
-                      <DesktopSearch
-                        isOpen={isSearchOpen}
-                        onToggle={() => setIsSearchOpen((prev) => !prev)}
-                        onClose={closeSearch}
-                      />
-                    </div>
+                    <DesktopSearch
+                      isOpen={isSearchOpen}
+                      onToggle={() => setIsSearchOpen((prev) => !prev)}
+                      onClose={closeSearch}
+                    />
                   </div>
 
                   <HeaderActionButton
@@ -388,7 +395,7 @@ export function Header() {
             </div>
           </Container>
         </div>
-      </header>
+      </motion.header>
 
       <div
         className={cn(
