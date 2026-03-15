@@ -46,6 +46,14 @@ const catalogProductCards: CatalogProductCardItem[] = [
     titleClassName: "text-[18px] md:text-[17px] xl:text-[18px]",
   },
   {
+    id: "wood-paint",
+    subtitle: "универсальная",
+    title: "Краска для дерева",
+    image: `${basePath}/images/sections/catalog/products/product-wood-paint.webp`,
+    href: "#products",
+    titleClassName: "text-[18px] md:text-[17px] xl:text-[18px]",
+  },
+  {
     id: "sodium-liquid-glass",
     subtitle: "натриевое",
     title: "Жидкое стекло",
@@ -68,6 +76,14 @@ const catalogProductCards: CatalogProductCardItem[] = [
     image: `${basePath}/images/sections/catalog/products/product-primer-deep.webp`,
     href: "#products",
     titleClassName: "text-[18px] md:text-[17px] xl:text-[18px] tracking-[-0.04em]",
+  },
+  {
+    id: "pva-glue",
+    subtitle: "универсальный",
+    title: "Клей ПВА",
+    image: `${basePath}/images/sections/catalog/products/product-pva-glue.webp`,
+    href: "#products",
+    titleClassName: "text-[18px] md:text-[17px] xl:text-[18px]",
   },
 ];
 
@@ -259,7 +275,7 @@ export function CatalogProductsGrid() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.12 }}
-          className="hidden md:grid md:grid-cols-2 md:gap-4 xl:grid-cols-3"
+          className="hidden md:grid md:grid-cols-2 md:gap-4 xl:grid-cols-4"
         >
           {catalogProductCards.map((item) => (
             <CatalogProductCard key={item.id} item={item} />
