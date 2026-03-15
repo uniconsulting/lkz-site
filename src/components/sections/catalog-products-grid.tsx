@@ -253,7 +253,7 @@ function CatalogProductCard({
   </div>
 
   <div className="shrink-0 pr-0">
-    <div className="flex h-10 w-[64px] items-center justify-center rounded-[14px] bg-[var(--color-bg)] text-[var(--color-accent-2)] transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[2px] group-hover:shadow-[0_8px_18px_rgba(43,47,51,0.06)] xl:h-10 xl:w-[72px]">
+    <div className="flex h-10 w-[64px] items-center justify-center rounded-[24px] bg-[var(--color-bg)] text-[var(--color-accent-2)] transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[2px] group-hover:shadow-[0_8px_18px_rgba(43,47,51,0.06)] xl:h-10 xl:w-[72px]">
       <ArrowRight size={20} strokeWidth={2.2} />
     </div>
   </div>
