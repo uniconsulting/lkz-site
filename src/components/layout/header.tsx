@@ -3,8 +3,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
-import { motion, useMotionValueEvent, useScroll } from "motion/react";
 import { BarChart3, Menu, Search, X } from "lucide-react";
+import { motion, useMotionValueEvent, useScroll } from "motion/react";
 import { Container } from "@/components/ui/container";
 import { headerNav } from "@/lib/constants/navigation";
 import { cn } from "@/lib/utils/cn";
@@ -25,7 +25,7 @@ function HeaderActionButton({
   className?: string;
 }) {
   return (
-    <a
+    <Link
       href={href}
       aria-label={label}
       title={label}
@@ -35,7 +35,7 @@ function HeaderActionButton({
       )}
     >
       {icon ? icon : label}
-    </a>
+    </Link>
   );
 }
 
@@ -127,9 +127,7 @@ function DesktopSearch({
         title={isOpen ? "Закрыть поиск" : "Открыть поиск"}
         className={cn(
           "absolute inset-0 z-[2] inline-flex h-11 w-11 items-center justify-center rounded-[18px] bg-[var(--color-bg)] text-[var(--color-text)]",
-          isOpen
-            ? "pointer-events-none"
-            : "pointer-events-auto",
+          isOpen ? "pointer-events-none" : "pointer-events-auto",
         )}
         initial={false}
         animate={{ opacity: isOpen ? 0 : 1 }}
@@ -143,9 +141,7 @@ function DesktopSearch({
         onSubmit={(event) => event.preventDefault()}
         className={cn(
           "absolute inset-0 flex h-11 items-center overflow-hidden rounded-[18px] bg-[var(--color-bg)]",
-          isOpen
-            ? "pointer-events-auto"
-            : "pointer-events-none",
+          isOpen ? "pointer-events-auto" : "pointer-events-none",
         )}
         initial={false}
         animate={{ opacity: isOpen ? 1 : 0 }}
@@ -199,10 +195,7 @@ export function Header() {
     const previous = lastScrollRef.current;
     const delta = latest - previous;
 
-    const nextSurfaceProgress = Math.max(
-      0,
-      Math.min(latest / 260, 1),
-    );
+    const nextSurfaceProgress = Math.max(0, Math.min(latest / 260, 1));
     setSurfaceProgress(nextSurfaceProgress);
 
     if (latest <= HEADER_HIDE_START_SCROLL) {
@@ -345,7 +338,7 @@ export function Header() {
                     <ul className="flex min-w-max items-center gap-2">
                       {headerNav.map((item) => (
                         <li key={item.href}>
-                          <a
+                          <Link
                             href={item.href}
                             className={cn(
                               "inline-flex h-11 items-center justify-center rounded-[20px] px-4 text-[14px] font-medium text-[var(--color-text)] transition duration-200",
@@ -354,7 +347,7 @@ export function Header() {
                             )}
                           >
                             {item.label}
-                          </a>
+                          </Link>
                         </li>
                       ))}
                     </ul>
@@ -479,13 +472,13 @@ export function Header() {
             <ul className="flex flex-col gap-4">
               {headerNav.map((item) => (
                 <li key={item.href}>
-                  <a
+                  <Link
                     href={item.href}
                     onClick={closeMenu}
                     className="font-heading text-[28px] leading-[0.98] tracking-[-0.03em] text-[var(--color-text)]"
                   >
                     {item.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
