@@ -46,6 +46,29 @@ html {
   scroll-behavior: smooth;
 }
 
+.lead-card-surface {
+  --lead-card-bg: var(--color-accent-2);
+  background-color: var(--lead-card-bg);
+  color: #ffffff;
+}
+
+.dark .lead-card-surface {
+  --lead-card-bg: #32373b;
+}
+
+.lead-card-divider {
+  border-color: rgba(255, 255, 255, 0.10);
+}
+
+.lead-card-body-text {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.lead-card-point-text,
+.lead-card-title {
+  color: #ffffff;
+}
+
 body {
   margin: 0;
   background: var(--color-bg);
