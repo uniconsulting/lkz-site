@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { BarChart3, Menu, Search, X } from "lucide-react";
 import { motion, useMotionValueEvent, useScroll } from "motion/react";
 import { Container } from "@/components/ui/container";
@@ -11,7 +12,6 @@ import { cn } from "@/lib/utils/cn";
 import { ThemeToggle } from "./theme-toggle";
 
 const basePath = process.env.NODE_ENV === "production" ? "/lkz-site" : "";
-const HEADER_HIDE_START_SCROLL = 3200;
 
 function HeaderActionButton({
   href,
@@ -169,6 +169,8 @@ function DesktopSearch({
 }
 
 export function Header() {
+  const pathname = usePathname();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
@@ -176,6 +178,8 @@ export function Header() {
 
   const { scrollY } = useScroll();
   const lastScrollRef = useRef(0);
+
+  const hideStartScroll = pathname === "/" ? 3200 : 24;
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
@@ -198,7 +202,7 @@ export function Header() {
     const nextSurfaceProgress = Math.max(0, Math.min(latest / 260, 1));
     setSurfaceProgress(nextSurfaceProgress);
 
-    if (latest <= HEADER_HIDE_START_SCROLL) {
+    if (latest <= hideStartScroll) {
       setIsHidden(false);
     } else {
       if (delta > 3) {
@@ -270,7 +274,6 @@ export function Header() {
                       alt="Логотип"
                       className="logo-light block h-[34px] w-auto object-contain md:relative md:-top-[2px] md:h-[36px]"
                     />
-
                     <img
                       src={`${basePath}/images/common/logo-dark.svg`}
                       alt="Логотип"
@@ -321,7 +324,6 @@ export function Header() {
                       alt="Логотип"
                       className="logo-light relative -top-[2px] block h-auto max-h-[36px] w-auto max-w-[148px] object-contain"
                     />
-
                     <img
                       src={`${basePath}/images/common/logo-dark.svg`}
                       alt="Логотип"
@@ -428,7 +430,6 @@ export function Header() {
                 alt="Логотип"
                 className="logo-light block h-[34px] w-auto object-contain md:relative md:-top-[2px] md:h-[36px]"
               />
-
               <img
                 src={`${basePath}/images/common/logo-dark.svg`}
                 alt="Логотип"
@@ -458,7 +459,6 @@ export function Header() {
               placeholder="Напишите, что хотите найти"
               className="h-full w-full bg-transparent px-5 pr-3 text-[15px] text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] outline-none"
             />
-
             <button
               type="submit"
               aria-label="Искать"
@@ -501,7 +501,6 @@ export function Header() {
 
           <div className="mt-auto">
             <div className="mb-5 h-px bg-white/80" />
-
             <div className="flex items-center justify-between gap-3 text-[12px] uppercase tracking-[0.06em] text-[var(--color-text-muted)]">
               <span>Симбирские краски</span>
               <span>г.Ульяновск</span>
