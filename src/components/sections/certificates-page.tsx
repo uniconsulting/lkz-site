@@ -65,7 +65,6 @@ function CategoryCard({
   const count = getCertificateCount(category.id);
   const countLabel = getCertificateCountLabel(count);
   const archive = getCertificateArchive(category.id);
-  const hasArchive = Boolean(archive?.isPublished && archive.archiveUrl);
 
   return (
     <motion.div
@@ -99,7 +98,7 @@ function CategoryCard({
           открыть
         </button>
 
-        {hasArchive ? (
+        {archive?.isPublished && archive.archiveUrl ? (
           <a
             href={archive.archiveUrl}
             download={archive.fileName}
