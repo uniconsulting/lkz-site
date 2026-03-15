@@ -558,14 +558,14 @@ export function PartnershipContactSection() {
               style={{ height: `${TOP_CARD_HEIGHT}px` }}
             >
               <div className="grid h-full xl:grid-cols-[1fr_1fr]">
-                <div className="h-full bg-[var(--color-accent-2)] px-[28px] py-[28px] text-[var(--color-accent-2-foreground)] transition-colors duration-300 dark:bg-[var(--color-surface)]">
+                <div className="lead-card-surface h-full px-[28px] py-[28px] transition-colors duration-300">
                   <div className="flex h-full flex-col">
                     <div className="flex h-[56px] w-[56px] items-center justify-center rounded-[20px] bg-[var(--color-accent-1)]/[0.12] text-[var(--color-accent-1)]">
                       <Workflow size={22} strokeWidth={2.1} />
                     </div>
 
                     <div className="mt-[28px]">
-                      <h3 className="font-heading text-[32px] leading-[0.92] tracking-[-0.05em] text-[var(--color-accent-2-foreground)]">
+                      <h3 className="lead-card-title font-heading text-[32px] leading-[0.92] tracking-[-0.05em]">
                         <span className="block">
                           {partnershipContent.leadCard.titleLines[0]}
                         </span>
@@ -575,15 +575,15 @@ export function PartnershipContactSection() {
                       </h3>
                     </div>
 
-                    <div className="mt-[36px] border-t border-[rgba(255,255,255,0.10)] pt-[36px]">
-                      <div className="space-y-[12px] text-[13px] leading-[1.35] tracking-[-0.02em] text-[var(--color-accent-2-foreground)]/82">
+                    <div className="lead-card-divider mt-[36px] border-t pt-[36px]">
+                      <div className="lead-card-body-text space-y-[12px] text-[11px] leading-[1.35] tracking-[-0.02em]">
                         {partnershipContent.leadCard.descriptionLines.map((line) => (
                           <p key={line}>{line}</p>
                         ))}
                       </div>
                     </div>
 
-                    <div className="mt-[36px] border-t border-[rgba(255,255,255,0.10)] pt-[36px]">
+                    <div className="lead-card-divider mt-[36px] border-t pt-[36px]">
                       <div className="space-y-[10px]">
                         {partnershipContent.leadCard.points.map((item) => {
                           const Icon = item.icon;
@@ -597,7 +597,7 @@ export function PartnershipContactSection() {
                                 <Icon size={16} strokeWidth={2.1} />
                               </div>
 
-                              <div className="text-[13px] leading-[1.22] tracking-[-0.02em] text-[var(--color-accent-2-foreground)] whitespace-nowrap">
+                              <div className="lead-card-point-text whitespace-nowrap text-[13px] leading-[1.22] tracking-[-0.02em]">
                                 {item.text}
                               </div>
                             </div>
