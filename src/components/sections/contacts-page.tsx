@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import Link from "next/link";
 import {
   Building2,
   Check,
@@ -14,7 +13,6 @@ import {
   MapPinned,
   MessageCircle,
   Phone,
-  Send,
   X,
 } from "lucide-react";
 import { Container } from "@/components/ui/container";
@@ -24,7 +22,6 @@ import {
   contactsHero,
   contactsMap,
   contactsPageContent,
-  contactsQuickCards,
 } from "@/lib/content/contacts";
 
 const FORM_CONTENT_HEIGHT = 430;
@@ -503,7 +500,7 @@ function MessengerButton({
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="inline-flex h-12 items-center justify-center gap-2 rounded-[18px] bg-[var(--color-bg)] px-6 text-[15px] font-semibold text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
+      className="inline-flex h-12 items-center justify-center gap-2 rounded-[18px] bg-[var(--color-accent-1)] px-6 text-[15px] font-semibold text-[var(--color-accent-1-foreground)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
     >
       <MessageCircle size={17} strokeWidth={2.2} />
       <span>{label}</span>
@@ -522,32 +519,65 @@ export function ContactsPage() {
             variants={sectionMotion}
             initial="hidden"
             animate="visible"
-            className="max-w-[1180px]"
+            className="grid gap-5 xl:grid-cols-[1.08fr_0.92fr] xl:items-center"
           >
-            <div className="mb-5 text-[15px] tracking-[-0.02em] text-[var(--color-text-muted)]">
-              главная / {contactsHero.eyebrow}
+            <div className="max-w-[860px]">
+              <div className="mb-5 text-[15px] tracking-[-0.02em] text-[var(--color-text-muted)]">
+                главная / {contactsHero.eyebrow}
+              </div>
+
+              <h1 className="font-heading text-[34px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[48px] xl:text-[58px]">
+                {contactsHero.title}
+              </h1>
+
+              <p className="mt-5 max-w-[760px] text-[16px] leading-[1.46] text-[var(--color-text-muted)] md:text-[18px]">
+                {contactsHero.description.join(" ")}
+              </p>
+
+              <div className="mt-8 space-y-4">
+                <a
+                  href="tel:+79648589910"
+                  className="block w-fit text-[28px] font-semibold leading-[1] tracking-[-0.04em] text-[var(--color-text)] md:text-[34px]"
+                >
+                  +7 (964) 858-99-10
+                </a>
+
+                <a
+                  href="mailto:simkraski@bk.ru"
+                  className="block w-fit text-[18px] leading-[1.3] text-[var(--color-text-muted)] md:text-[20px]"
+                >
+                  simkraski@bk.ru
+                </a>
+
+                <div className="pt-1 text-[15px] leading-[1.4] text-[var(--color-text-muted)]">
+                  Пн-Пт: 8:00 – 18:00
+                </div>
+              </div>
             </div>
 
-            <h1 className="font-heading text-[34px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[48px] xl:text-[58px]">
-              {contactsHero.title}
-            </h1>
+            <div className="rounded-[28px] bg-[var(--color-surface)] p-5 md:p-6 xl:p-7">
+              <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
+                мессенджеры
+              </div>
 
-            <p className="mt-5 max-w-[980px] text-[16px] leading-[1.46] text-[var(--color-text-muted)] md:text-[18px]">
-              {contactsHero.description.map((line) => (
-                <span key={line} className="block">
-                  {line}
-                </span>
-              ))}
-            </p>
+              <h2 className="mt-4 font-heading text-[26px] leading-[0.96] tracking-[-0.04em] text-[var(--color-text)] md:text-[30px]">
+                напишите нам удобным способом
+              </h2>
 
-            <div className="mt-7 flex flex-wrap gap-3">
-              {contactsHero.messengers.map((item) => (
-                <MessengerButton
-                  key={item.id}
-                  href={item.href}
-                  label={item.label}
-                />
-              ))}
+              <p className="mt-4 text-[15px] leading-[1.48] text-[var(--color-text-muted)] md:text-[16px]">
+                Для быстрого контакта используйте MAX или Telegram. По рабочим
+                вопросам также доступны телефон и электронная почта.
+              </p>
+
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                {contactsHero.messengers.map((item) => (
+                  <MessengerButton
+                    key={item.id}
+                    href={item.href}
+                    label={`написать в ${item.label}`}
+                  />
+                ))}
+              </div>
             </div>
           </motion.div>
         </Container>
@@ -560,47 +590,65 @@ export function ContactsPage() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.18 }}
-            className="grid gap-4 md:grid-cols-2 xl:grid-cols-4"
+            className="rounded-[32px] bg-[var(--color-surface)] p-5 md:p-6 xl:p-8"
           >
-            {contactsQuickCards.map((card, index) => {
-              const icon =
-                index === 0
-                  ? Phone
-                  : index === 1
-                    ? MapPinned
-                    : index === 2
-                      ? Building2
-                      : FileText;
-
-              const Icon = icon;
-
-              return (
-                <motion.div
-                  key={card.id}
-                  variants={cardMotion}
-                  className="rounded-[24px] bg-[var(--color-surface)] p-5 md:p-6"
-                >
+            <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr] xl:items-start">
+              <motion.div variants={cardMotion}>
+                <div className="mb-4 flex items-center gap-3">
                   <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-[var(--color-bg)] text-[var(--color-accent-1)]">
-                    <Icon size={20} strokeWidth={2.1} />
+                    <MapPinned size={20} strokeWidth={2.1} />
                   </div>
 
-                  <div className="mt-5 text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                    {card.eyebrow}
+                  <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
+                    офис и производство
+                  </div>
+                </div>
+
+                <div className="text-[24px] leading-[1.08] tracking-[-0.03em] text-[var(--color-text)] md:text-[30px]">
+                  г. Ульяновск,
+                  <br />
+                  Московское шоссе, 42Е
+                </div>
+              </motion.div>
+
+              <motion.div variants={cardMotion}>
+                <div className="mb-4 flex items-center gap-3">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-[var(--color-bg)] text-[var(--color-accent-1)]">
+                    <Building2 size={20} strokeWidth={2.1} />
                   </div>
 
-                  <div className="mt-4 space-y-2">
-                    {card.lines.map((line) => (
-                      <div
-                        key={line}
-                        className="text-[16px] leading-[1.42] text-[var(--color-text)]"
-                      >
-                        {line}
-                      </div>
-                    ))}
+                  <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
+                    реквизиты
                   </div>
-                </motion.div>
-              );
-            })}
+                </div>
+
+                <div className="text-[18px] leading-[1.35] text-[var(--color-text)]">
+                  ООО "ЛКЗ"
+                </div>
+
+                <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                  <div className="relative rounded-[20px] bg-[var(--color-bg)] p-4">
+                    <CopyValueButton value="7327093976" />
+                    <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
+                      ИНН
+                    </div>
+                    <div className="mt-3 text-[18px] leading-[1.2] text-[var(--color-text)]">
+                      7327093976
+                    </div>
+                  </div>
+
+                  <div className="relative rounded-[20px] bg-[var(--color-bg)] p-4">
+                    <CopyValueButton value="1207300001963" />
+                    <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
+                      ОГРН
+                    </div>
+                    <div className="mt-3 text-[18px] leading-[1.2] text-[var(--color-text)]">
+                      1207300001963
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
           </motion.div>
         </Container>
       </Section>
@@ -636,11 +684,7 @@ export function ContactsPage() {
                 </h2>
 
                 <p className="mt-4 text-[15px] leading-[1.46] text-[var(--color-text-muted)] md:text-[16px]">
-                  {contactsPageContent.formDescription.map((line) => (
-                    <span key={line} className="block">
-                      {line}
-                    </span>
-                  ))}
+                  {contactsPageContent.formDescription.join(" ")}
                 </p>
               </div>
 
@@ -704,86 +748,6 @@ export function ContactsPage() {
                       </motion.div>
                     )}
                   </AnimatePresence>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        </Container>
-      </Section>
-
-      <Section className="pt-8 md:pt-10 xl:pt-12">
-        <Container>
-          <motion.div
-            variants={sectionMotion}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.18 }}
-            className="grid gap-4 md:grid-cols-2"
-          >
-            <motion.div
-              variants={cardMotion}
-              className="rounded-[24px] bg-[var(--color-surface)] p-5 md:p-6"
-            >
-              <div className="mb-4 flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-[var(--color-bg)] text-[var(--color-accent-1)]">
-                  <Mail size={20} strokeWidth={2.1} />
-                </div>
-
-                <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                  email
-                </div>
-              </div>
-
-              <a
-                href="mailto:simkraski@bk.ru"
-                className="text-[18px] font-semibold text-[var(--color-text)]"
-              >
-                simkraski@bk.ru
-              </a>
-            </motion.div>
-
-            <motion.div
-              variants={cardMotion}
-              className="rounded-[24px] bg-[var(--color-surface)] p-5 md:p-6"
-            >
-              <div className="mb-4 flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-[var(--color-bg)] text-[var(--color-accent-1)]">
-                  <Building2 size={20} strokeWidth={2.1} />
-                </div>
-
-                <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                  реквизиты
-                </div>
-              </div>
-
-              <div className="grid gap-4 sm:grid-cols-3">
-                <div className="relative rounded-[20px] bg-[var(--color-bg)] p-4">
-                  <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
-                    юр. лицо
-                  </div>
-                  <div className="mt-3 text-[16px] leading-[1.35] text-[var(--color-text)]">
-                    ООО "ЛКЗ"
-                  </div>
-                </div>
-
-                <div className="relative rounded-[20px] bg-[var(--color-bg)] p-4">
-                  <CopyValueButton value="7327093976" />
-                  <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
-                    ИНН
-                  </div>
-                  <div className="mt-3 text-[16px] leading-[1.35] text-[var(--color-text)]">
-                    7327093976
-                  </div>
-                </div>
-
-                <div className="relative rounded-[20px] bg-[var(--color-bg)] p-4">
-                  <CopyValueButton value="1207300001963" />
-                  <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
-                    ОГРН
-                  </div>
-                  <div className="mt-3 text-[16px] leading-[1.35] text-[var(--color-text)]">
-                    1207300001963
-                  </div>
                 </div>
               </div>
             </motion.div>
