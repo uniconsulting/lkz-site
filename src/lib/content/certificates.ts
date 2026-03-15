@@ -3,6 +3,7 @@ export type CertificateCategory = "compliance" | "sgr" | "declaration";
 export type CertificateCategoryMeta = {
   id: CertificateCategory;
   title: string;
+  titleLines: [string, string];
   description: string;
   shortLabel: string;
 };
@@ -31,8 +32,7 @@ export const certificatesHero = {
   eyebrow: "сертификаты",
   title: "Сертификаты и документы",
   description: [
-    "архив PDF-документов по продукции:",
-    "сертификаты соответствия, СГР и декларации",
+    "архив PDF-документов по продукции: сертификаты соответствия, СГР и декларации",
   ],
   cta: "перейти к документам",
 };
@@ -42,12 +42,14 @@ export const certificateCategories: CertificateCategoryMeta[] = [
     id: "compliance",
     shortLabel: "сертификаты",
     title: "сертификаты соответствия",
+    titleLines: ["сертификаты", "соответствия"],
     description: "подтверждающие документы по отдельным позициям продукции",
   },
   {
     id: "sgr",
     shortLabel: "СГР",
     title: "СГР",
+    titleLines: ["СГР", " "],
     description:
       "свидетельства о государственной регистрации по релевантным категориям",
   },
@@ -55,6 +57,7 @@ export const certificateCategories: CertificateCategoryMeta[] = [
     id: "declaration",
     shortLabel: "декларации",
     title: "декларации",
+    titleLines: ["декларации", " "],
     description:
       "архив деклараций по продукции для скачивания по отдельности или пакетом",
   },
@@ -85,7 +88,6 @@ export const certificateArchives: CertificateArchiveItem[] = [
 ];
 
 export const certificateDocuments: CertificateItem[] = [
-  // Примеры для будущего наполнения через админку:
   // {
   //   id: "compliance-01",
   //   title: "Сертификат соответствия на интерьерную краску",
@@ -100,7 +102,7 @@ export const certificateDocuments: CertificateItem[] = [
 ];
 
 export const certificatesEmptyState = {
-  title: "Документы этой категории будут добавлены через админ-панель",
+  title: "документов пока нет",
   description:
     "Если нужный документ требуется уже сейчас, свяжитесь с менеджером",
   cta: "связаться с менеджером",
