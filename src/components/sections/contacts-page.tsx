@@ -7,7 +7,6 @@ import {
   Check,
   ChevronDown,
   Copy,
-  FileText,
   FolderUp,
   Mail,
   MapPinned,
@@ -488,7 +487,7 @@ function CopyValueButton({ value }: { value: string }) {
   );
 }
 
-function MessengerButton({
+function MessengerPrimaryButton({
   href,
   label,
 }: {
@@ -508,8 +507,33 @@ function MessengerButton({
   );
 }
 
+function MessengerSecondaryButton({
+  href,
+  label,
+}: {
+  href: string;
+  label: string;
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className="inline-flex h-12 items-center justify-center gap-2 rounded-[18px] bg-[var(--color-bg)] px-6 text-[15px] font-semibold text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
+    >
+      <MessageCircle size={17} strokeWidth={2.2} />
+      <span>{label}</span>
+    </a>
+  );
+}
+
 export function ContactsPage() {
   const [mode, setMode] = useState<ProposalMode>("request");
+
+  const maxLink = contactsHero.messengers.find((item) => item.id === "max");
+  const telegramLink = contactsHero.messengers.find(
+    (item) => item.id === "telegram",
+  );
 
   return (
     <div className="pt-[92px] pb-2 md:pt-[104px] md:pb-4 xl:pb-6">
@@ -519,7 +543,7 @@ export function ContactsPage() {
             variants={sectionMotion}
             initial="hidden"
             animate="visible"
-            className="grid gap-5 xl:grid-cols-[1.08fr_0.92fr] xl:items-center"
+            className="grid gap-5 xl:grid-cols-[1.02fr_0.98fr] xl:items-center"
           >
             <div className="max-w-[860px]">
               <div className="mb-5 text-[15px] tracking-[-0.02em] text-[var(--color-text-muted)]">
@@ -531,28 +555,13 @@ export function ContactsPage() {
               </h1>
 
               <p className="mt-5 max-w-[760px] text-[16px] leading-[1.46] text-[var(--color-text-muted)] md:text-[18px]">
-                {contactsHero.description.join(" ")}
+                <span className="block">
+                  свяжитесь с нами по телефону, почте, в мессенджерах,
+                </span>
+                <span className="block">
+                  или отправьте запрос через форму
+                </span>
               </p>
-
-              <div className="mt-8 space-y-4">
-                <a
-                  href="tel:+79648589910"
-                  className="block w-fit text-[28px] font-semibold leading-[1] tracking-[-0.04em] text-[var(--color-text)] md:text-[34px]"
-                >
-                  +7 (964) 858-99-10
-                </a>
-
-                <a
-                  href="mailto:simkraski@bk.ru"
-                  className="block w-fit text-[18px] leading-[1.3] text-[var(--color-text-muted)] md:text-[20px]"
-                >
-                  simkraski@bk.ru
-                </a>
-
-                <div className="pt-1 text-[15px] leading-[1.4] text-[var(--color-text-muted)]">
-                  Пн-Пт: 8:00 – 18:00
-                </div>
-              </div>
             </div>
 
             <div className="rounded-[28px] bg-[var(--color-surface)] p-5 md:p-6 xl:p-7">
@@ -561,22 +570,33 @@ export function ContactsPage() {
               </div>
 
               <h2 className="mt-4 font-heading text-[26px] leading-[0.96] tracking-[-0.04em] text-[var(--color-text)] md:text-[30px]">
-                напишите нам удобным способом
+                <span className="block">напишите нам</span>
+                <span className="block">удобным способом</span>
               </h2>
 
-              <p className="mt-4 text-[15px] leading-[1.48] text-[var(--color-text-muted)] md:text-[16px]">
-                Для быстрого контакта используйте MAX или Telegram. По рабочим
-                вопросам также доступны телефон и электронная почта.
+              <p className="mt-4 max-w-[520px] text-[15px] leading-[1.48] text-[var(--color-text-muted)] md:text-[16px]">
+                <span className="block">
+                  для быстрого контакта используйте MAX или Telegram,
+                </span>
+                <span className="block">
+                  по рабочим вопросам также доступны телефон и электронная почта
+                </span>
               </p>
 
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                {contactsHero.messengers.map((item) => (
-                  <MessengerButton
-                    key={item.id}
-                    href={item.href}
-                    label={`написать в ${item.label}`}
+                {maxLink ? (
+                  <MessengerPrimaryButton
+                    href={maxLink.href}
+                    label="написать в MAX"
                   />
-                ))}
+                ) : null}
+
+                {telegramLink ? (
+                  <MessengerSecondaryButton
+                    href={telegramLink.href}
+                    label="написать в Telegram"
+                  />
+                ) : null}
               </div>
             </div>
           </motion.div>
@@ -590,27 +610,75 @@ export function ContactsPage() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.18 }}
+            className="grid gap-4 xl:grid-cols-2"
+          >
+            <motion.div
+              variants={cardMotion}
+              className="rounded-[32px] bg-[var(--color-surface)] p-5 md:p-6 xl:p-8"
+            >
+              <div className="mb-4 flex items-center gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-[var(--color-bg)] text-[var(--color-accent-1)]">
+                  <Phone size={20} strokeWidth={2.1} />
+                </div>
+
+                <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
+                  быстрая связь
+                </div>
+              </div>
+
+              <a
+                href="tel:+79648589910"
+                className="block w-fit text-[28px] font-semibold leading-[1] tracking-[-0.04em] text-[var(--color-text)] md:text-[34px]"
+              >
+                +7 (964) 858-99-10
+              </a>
+
+              <a
+                href="mailto:simkraski@bk.ru"
+                className="mt-5 block w-fit text-[18px] leading-[1.3] text-[var(--color-text-muted)] md:text-[20px]"
+              >
+                simkraski@bk.ru
+              </a>
+            </motion.div>
+
+            <motion.div
+              variants={cardMotion}
+              className="rounded-[32px] bg-[var(--color-surface)] p-5 md:p-6 xl:p-8"
+            >
+              <div className="mb-4 flex items-center gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-[var(--color-bg)] text-[var(--color-accent-1)]">
+                  <MapPinned size={20} strokeWidth={2.1} />
+                </div>
+
+                <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
+                  офис и производство
+                </div>
+              </div>
+
+              <div className="text-[24px] leading-[1.08] tracking-[-0.03em] text-[var(--color-text)] md:text-[30px]">
+                г. Ульяновск,
+                <br />
+                Московское шоссе, 42Е
+              </div>
+
+              <div className="mt-6 text-[15px] leading-[1.4] text-[var(--color-text-muted)] md:text-[16px]">
+                Пн-Пт: 8:00 – 18:00
+              </div>
+            </motion.div>
+          </motion.div>
+        </Container>
+      </Section>
+
+      <Section className="pt-8 md:pt-10 xl:pt-12">
+        <Container>
+          <motion.div
+            variants={sectionMotion}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.18 }}
             className="rounded-[32px] bg-[var(--color-surface)] p-5 md:p-6 xl:p-8"
           >
-            <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr] xl:items-start">
-              <motion.div variants={cardMotion}>
-                <div className="mb-4 flex items-center gap-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-[var(--color-bg)] text-[var(--color-accent-1)]">
-                    <MapPinned size={20} strokeWidth={2.1} />
-                  </div>
-
-                  <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                    офис и производство
-                  </div>
-                </div>
-
-                <div className="text-[24px] leading-[1.08] tracking-[-0.03em] text-[var(--color-text)] md:text-[30px]">
-                  г. Ульяновск,
-                  <br />
-                  Московское шоссе, 42Е
-                </div>
-              </motion.div>
-
+            <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr] xl:items-start">
               <motion.div variants={cardMotion}>
                 <div className="mb-4 flex items-center gap-3">
                   <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-[var(--color-bg)] text-[var(--color-accent-1)]">
@@ -622,29 +690,32 @@ export function ContactsPage() {
                   </div>
                 </div>
 
-                <div className="text-[18px] leading-[1.35] text-[var(--color-text)]">
+                <div className="text-[20px] leading-[1.3] text-[var(--color-text)]">
                   ООО "ЛКЗ"
                 </div>
+              </motion.div>
 
-                <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                  <div className="relative rounded-[20px] bg-[var(--color-bg)] p-4">
-                    <CopyValueButton value="7327093976" />
-                    <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
-                      ИНН
-                    </div>
-                    <div className="mt-3 text-[18px] leading-[1.2] text-[var(--color-text)]">
-                      7327093976
-                    </div>
+              <motion.div
+                variants={cardMotion}
+                className="grid gap-4 sm:grid-cols-2"
+              >
+                <div className="relative rounded-[20px] bg-[var(--color-bg)] p-4">
+                  <CopyValueButton value="7327093976" />
+                  <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
+                    ИНН
                   </div>
+                  <div className="mt-3 text-[18px] leading-[1.2] text-[var(--color-text)]">
+                    7327093976
+                  </div>
+                </div>
 
-                  <div className="relative rounded-[20px] bg-[var(--color-bg)] p-4">
-                    <CopyValueButton value="1207300001963" />
-                    <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
-                      ОГРН
-                    </div>
-                    <div className="mt-3 text-[18px] leading-[1.2] text-[var(--color-text)]">
-                      1207300001963
-                    </div>
+                <div className="relative rounded-[20px] bg-[var(--color-bg)] p-4">
+                  <CopyValueButton value="1207300001963" />
+                  <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
+                    ОГРН
+                  </div>
+                  <div className="mt-3 text-[18px] leading-[1.2] text-[var(--color-text)]">
+                    1207300001963
                   </div>
                 </div>
               </motion.div>
