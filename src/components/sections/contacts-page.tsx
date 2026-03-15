@@ -7,6 +7,7 @@ import {
   Check,
   ChevronDown,
   Copy,
+  FileText,
   FolderUp,
   Mail,
   MapPinned,
@@ -255,10 +256,7 @@ function RequestForm() {
               className="space-y-[23px]"
             >
               <ContactInput label="имя" placeholder="ваше имя" />
-              <ContactInput
-                label="организация"
-                placeholder="название компании"
-              />
+              <ContactInput label="организация" placeholder="название компании" />
               <ContactInput
                 label="контакт"
                 placeholder="telegram / телефон / email"
@@ -558,10 +556,26 @@ export function ContactsPage() {
                 <span className="block">
                   свяжитесь с нами по телефону, почте, в мессенджерах,
                 </span>
-                <span className="block">
-                  или отправьте запрос через форму
-                </span>
+                <span className="block">или отправьте запрос через форму</span>
               </p>
+
+              <div className="mt-8 flex flex-wrap items-center gap-4 text-[20px] leading-none tracking-[-0.03em] text-[var(--color-text)] md:text-[24px]">
+                <a
+                  href="tel:+79648589910"
+                  className="font-medium transition duration-300 hover:text-[var(--color-accent-1)]"
+                >
+                  +7 (964) 858-99-10
+                </a>
+
+                <span className="hidden h-6 w-px bg-[var(--color-border)] md:block" />
+
+                <a
+                  href="mailto:simkraski@bk.ru"
+                  className="font-medium text-[var(--color-text)] transition duration-300 hover:text-[var(--color-accent-1)]"
+                >
+                  simkraski@bk.ru
+                </a>
+              </div>
             </div>
 
             <div className="rounded-[28px] bg-[var(--color-surface)] p-5 md:p-6 xl:p-7">
@@ -610,116 +624,102 @@ export function ContactsPage() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.18 }}
-            className="grid gap-4 xl:grid-cols-2"
+            className="grid gap-4 xl:grid-cols-[1.08fr_0.92fr] xl:items-stretch"
           >
             <motion.div
               variants={cardMotion}
-              className="rounded-[32px] bg-[var(--color-surface)] p-5 md:p-6 xl:p-8"
+              className="relative overflow-hidden rounded-[32px] bg-[var(--color-surface)] xl:min-h-[620px]"
             >
-              <div className="mb-4 flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-[var(--color-bg)] text-[var(--color-accent-1)]">
-                  <Phone size={20} strokeWidth={2.1} />
+              <iframe
+                src={contactsMap.embedUrl}
+                title="Карта"
+                className="h-full min-h-[360px] w-full border-0 xl:min-h-[620px]"
+                loading="lazy"
+              />
+
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 top-0 h-[180px]"
+                style={{
+                  background:
+                    "linear-gradient(180deg, rgba(20,24,28,0.58) 0%, rgba(20,24,28,0.34) 48%, rgba(20,24,28,0.00) 100%)",
+                }}
+              />
+
+              <div className="absolute left-5 top-5 z-10 max-w-[420px] text-white md:left-6 md:top-6">
+                <div className="mb-3 flex items-center gap-3">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-white/14 text-white backdrop-blur-sm">
+                    <MapPinned size={20} strokeWidth={2.1} />
+                  </div>
+
+                  <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-white/88">
+                    офис и производство
+                  </div>
                 </div>
 
-                <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                  быстрая связь
+                <div className="text-[24px] leading-[1.08] tracking-[-0.03em] md:text-[30px]">
+                  г. Ульяновск,
+                  <br />
+                  Московское шоссе, 42Е
+                </div>
+
+                <div className="mt-4 text-[15px] leading-[1.4] text-white/84 md:text-[16px]">
+                  Пн-Пт: 8:00 – 18:00
                 </div>
               </div>
-
-              <a
-                href="tel:+79648589910"
-                className="block w-fit text-[28px] font-semibold leading-[1] tracking-[-0.04em] text-[var(--color-text)] md:text-[34px]"
-              >
-                +7 (964) 858-99-10
-              </a>
-
-              <a
-                href="mailto:simkraski@bk.ru"
-                className="mt-5 block w-fit text-[18px] leading-[1.3] text-[var(--color-text-muted)] md:text-[20px]"
-              >
-                simkraski@bk.ru
-              </a>
             </motion.div>
 
             <motion.div
               variants={cardMotion}
-              className="rounded-[32px] bg-[var(--color-surface)] p-5 md:p-6 xl:p-8"
+              className="rounded-[32px] bg-[var(--color-surface)] p-5 md:p-6 xl:p-7"
             >
               <div className="mb-4 flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-[var(--color-bg)] text-[var(--color-accent-1)]">
-                  <MapPinned size={20} strokeWidth={2.1} />
+                <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)]">
+                  <Building2 size={20} strokeWidth={2.1} />
                 </div>
 
-                <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                  офис и производство
-                </div>
-              </div>
-
-              <div className="text-[24px] leading-[1.08] tracking-[-0.03em] text-[var(--color-text)] md:text-[30px]">
-                г. Ульяновск,
-                <br />
-                Московское шоссе, 42Е
-              </div>
-
-              <div className="mt-6 text-[15px] leading-[1.4] text-[var(--color-text-muted)] md:text-[16px]">
-                Пн-Пт: 8:00 – 18:00
-              </div>
-            </motion.div>
-          </motion.div>
-        </Container>
-      </Section>
-
-      <Section className="pt-8 md:pt-10 xl:pt-12">
-        <Container>
-          <motion.div
-            variants={sectionMotion}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.18 }}
-            className="rounded-[32px] bg-[var(--color-surface)] p-5 md:p-6 xl:p-8"
-          >
-            <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr] xl:items-start">
-              <motion.div variants={cardMotion}>
-                <div className="mb-4 flex items-center gap-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-[var(--color-bg)] text-[var(--color-accent-1)]">
-                    <Building2 size={20} strokeWidth={2.1} />
-                  </div>
-
-                  <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                    реквизиты
-                  </div>
-                </div>
-
-                <div className="text-[20px] leading-[1.3] text-[var(--color-text)]">
-                  ООО "ЛКЗ"
-                </div>
-              </motion.div>
-
-              <motion.div
-                variants={cardMotion}
-                className="grid gap-4 sm:grid-cols-2"
-              >
-                <div className="relative rounded-[20px] bg-[var(--color-bg)] p-4">
-                  <CopyValueButton value="7327093976" />
+                <div>
                   <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
+                    юридическое лицо
+                  </div>
+                  <div className="mt-1 text-[18px] leading-[1.25] text-[var(--color-text)] md:text-[20px]">
+                    ООО "ЛКЗ"
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                <div className="relative rounded-[26px] bg-[var(--color-bg)] px-5 py-6">
+                  <CopyValueButton value="7327093976" />
+                  <div className="text-[14px] font-semibold uppercase tracking-[0.06em] text-[var(--color-text-muted)]">
                     ИНН
                   </div>
-                  <div className="mt-3 text-[18px] leading-[1.2] text-[var(--color-text)]">
+                  <div className="mt-8 font-heading text-[32px] leading-none tracking-[-0.05em] text-[var(--color-text)] md:text-[36px]">
                     7327093976
                   </div>
                 </div>
 
-                <div className="relative rounded-[20px] bg-[var(--color-bg)] p-4">
+                <div className="relative rounded-[26px] bg-[var(--color-bg)] px-5 py-6">
                   <CopyValueButton value="1207300001963" />
-                  <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
+                  <div className="text-[14px] font-semibold uppercase tracking-[0.06em] text-[var(--color-text-muted)]">
                     ОГРН
                   </div>
-                  <div className="mt-3 text-[18px] leading-[1.2] text-[var(--color-text)]">
+                  <div className="mt-8 font-heading text-[32px] leading-none tracking-[-0.05em] text-[var(--color-text)] md:text-[36px]">
                     1207300001963
                   </div>
                 </div>
-              </motion.div>
-            </div>
+              </div>
+
+              <div className="mt-8">
+                <button
+                  type="button"
+                  className="inline-flex h-12 items-center justify-center gap-3 rounded-[18px] bg-[var(--color-bg)] px-6 text-[15px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
+                >
+                  <FileText size={18} strokeWidth={2.1} />
+                  <span>получить карточку компании</span>
+                </button>
+              </div>
+            </motion.div>
           </motion.div>
         </Container>
       </Section>
@@ -731,97 +731,86 @@ export function ContactsPage() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.14 }}
-            className="grid gap-4 xl:grid-cols-[0.92fr_1.08fr] xl:items-stretch"
+            className="rounded-[32px] bg-[var(--color-surface)] p-[20px]"
           >
-            <motion.div
-              variants={cardMotion}
-              className="overflow-hidden rounded-[32px] bg-[var(--color-surface)] xl:min-h-[620px]"
-            >
-              <iframe
-                src={contactsMap.embedUrl}
-                title="Карта"
-                className="h-full min-h-[360px] w-full border-0 xl:min-h-[620px]"
-                loading="lazy"
-              />
-            </motion.div>
+            <div className="grid gap-4 xl:grid-cols-[0.94fr_1.06fr] xl:items-stretch">
+              <div className="rounded-[28px] bg-[var(--color-bg)] p-5 md:p-6">
+                <div className="mb-6 max-w-[760px]">
+                  <h2 className="font-heading text-[30px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[40px]">
+                    {contactsPageContent.formTitle}
+                  </h2>
 
-            <motion.div
-              variants={cardMotion}
-              className="rounded-[32px] bg-[var(--color-surface)] p-[20px]"
-            >
-              <div className="mb-6 max-w-[760px]">
-                <h2 className="font-heading text-[30px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[40px]">
-                  {contactsPageContent.formTitle}
-                </h2>
-
-                <p className="mt-4 text-[15px] leading-[1.46] text-[var(--color-text-muted)] md:text-[16px]">
-                  {contactsPageContent.formDescription.join(" ")}
-                </p>
-              </div>
-
-              <div className="flex h-full flex-col">
-                <div className="grid h-[60px] grid-cols-[1fr_1px_1fr] items-center gap-[18px]">
-                  <button
-                    type="button"
-                    onClick={() => setMode("request")}
-                    className={cn(
-                      "h-full rounded-[12px] text-[14px] font-semibold transition duration-300",
-                      mode === "request"
-                        ? "bg-[var(--color-accent-1)] text-[var(--color-bg)]"
-                        : "bg-[var(--color-bg)] text-[var(--color-text)]",
-                    )}
-                  >
-                    запросить КП
-                  </button>
-
-                  <div className="mx-auto h-[44px] w-px bg-[var(--color-accent-2)]/10" />
-
-                  <button
-                    type="button"
-                    onClick={() => setMode("send")}
-                    className={cn(
-                      "h-full rounded-[12px] text-[14px] font-semibold transition duration-300",
-                      mode === "send"
-                        ? "bg-[var(--color-accent-1)] text-[var(--color-bg)]"
-                        : "bg-[var(--color-bg)] text-[var(--color-text)]",
-                    )}
-                  >
-                    отправить КП
-                  </button>
+                  <p className="mt-4 text-[15px] leading-[1.46] text-[var(--color-text-muted)] md:text-[16px]">
+                    {contactsPageContent.formDescription.join(" ")}
+                  </p>
                 </div>
 
-                <div
-                  className="mt-[54px]"
-                  style={{ height: `${FORM_CONTENT_HEIGHT}px` }}
-                >
-                  <AnimatePresence mode="wait" initial={false}>
-                    {mode === "request" ? (
-                      <motion.div
-                        key="request-mode"
-                        variants={innerPanelMotion}
-                        initial="initial"
-                        animate="animate"
-                        exit="exit"
-                        className="h-full"
-                      >
-                        <RequestForm />
-                      </motion.div>
-                    ) : (
-                      <motion.div
-                        key="send-mode"
-                        variants={innerPanelMotion}
-                        initial="initial"
-                        animate="animate"
-                        exit="exit"
-                        className="h-full"
-                      >
-                        <SendProposalForm />
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                <div className="flex h-full flex-col">
+                  <div className="grid h-[60px] grid-cols-[1fr_1px_1fr] items-center gap-[18px]">
+                    <button
+                      type="button"
+                      onClick={() => setMode("request")}
+                      className={cn(
+                        "h-full rounded-[12px] text-[14px] font-semibold transition duration-300",
+                        mode === "request"
+                          ? "bg-[var(--color-accent-1)] text-[var(--color-bg)]"
+                          : "bg-[var(--color-surface)] text-[var(--color-text)]",
+                      )}
+                    >
+                      запросить КП
+                    </button>
+
+                    <div className="mx-auto h-[44px] w-px bg-[var(--color-accent-2)]/10" />
+
+                    <button
+                      type="button"
+                      onClick={() => setMode("send")}
+                      className={cn(
+                        "h-full rounded-[12px] text-[14px] font-semibold transition duration-300",
+                        mode === "send"
+                          ? "bg-[var(--color-accent-1)] text-[var(--color-bg)]"
+                          : "bg-[var(--color-surface)] text-[var(--color-text)]",
+                      )}
+                    >
+                      отправить КП
+                    </button>
+                  </div>
+
+                  <div
+                    className="mt-[54px]"
+                    style={{ height: `${FORM_CONTENT_HEIGHT}px` }}
+                  >
+                    <AnimatePresence mode="wait" initial={false}>
+                      {mode === "request" ? (
+                        <motion.div
+                          key="request-mode"
+                          variants={innerPanelMotion}
+                          initial="initial"
+                          animate="animate"
+                          exit="exit"
+                          className="h-full"
+                        >
+                          <RequestForm />
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="send-mode"
+                          variants={innerPanelMotion}
+                          initial="initial"
+                          animate="animate"
+                          exit="exit"
+                          className="h-full"
+                        >
+                          <SendProposalForm />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 </div>
               </div>
-            </motion.div>
+
+              <div className="hidden xl:block" />
+            </div>
           </motion.div>
         </Container>
       </Section>
