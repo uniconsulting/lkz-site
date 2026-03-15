@@ -232,32 +232,32 @@ function CatalogProductCard({
                 />
               </div>
 
-              <div
-                className="flex min-h-[48px] items-end justify-between gap-3 px-2 pb-0 pt-2"
-                style={{ transform: "translateZ(22px)" }}
-              >
-                <div className="min-w-0 flex-1">
-                  <div className="mb-[2px] text-[15px] leading-[1.02] tracking-[-0.02em] text-[var(--color-text-muted)] md:text-[13px] xl:text-[14px]">
-                    {item.subtitle}
-                  </div>
+<div
+  className="flex min-h-[48px] items-end justify-between gap-3 px-0 pb-0 pt-2"
+  style={{ transform: "translateZ(22px)" }}
+>
+  <div className="min-w-0 flex-1 px-2">
+    <div className="mb-[2px] text-[15px] leading-[1.02] tracking-[-0.02em] text-[var(--color-text-muted)] md:text-[13px] xl:text-[14px]">
+      {item.subtitle}
+    </div>
 
-                  <div
-                    className={cn(
-                      "truncate font-semibold leading-[0.96] text-[var(--color-text)]",
-                      item.titleClassName,
-                    )}
-                    title={item.title}
-                  >
-                    {item.title}
-                  </div>
-                </div>
+    <div
+      className={cn(
+        "truncate font-semibold leading-[0.96] text-[var(--color-text)]",
+        item.titleClassName,
+      )}
+      title={item.title}
+    >
+      {item.title}
+    </div>
+  </div>
 
-                <div className="shrink-0 rounded-[18px] bg-[var(--color-bg)] p-[6px] transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:shadow-[0_8px_18px_rgba(43,47,51,0.06)]">
-                  <div className="flex h-10 w-[64px] items-center justify-center rounded-[14px] bg-[var(--color-surface)] text-[var(--color-accent-1)] transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[2px] xl:h-10 xl:w-[72px]">
-                    <ArrowRight size={20} strokeWidth={2.2} />
-                  </div>
-                </div>
-              </div>
+  <div className="shrink-0 pr-0">
+    <div className="flex h-10 w-[64px] items-center justify-center rounded-[14px] bg-[var(--color-bg)] text-[var(--color-accent-2)] transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[2px] group-hover:shadow-[0_8px_18px_rgba(43,47,51,0.06)] xl:h-10 xl:w-[72px]">
+      <ArrowRight size={20} strokeWidth={2.2} />
+    </div>
+  </div>
+</div>
             </div>
           </Link>
         </motion.div>
