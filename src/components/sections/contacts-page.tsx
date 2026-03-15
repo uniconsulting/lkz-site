@@ -9,10 +9,8 @@ import {
   Copy,
   FileText,
   FolderUp,
-  Mail,
   MapPinned,
   MessageCircle,
-  Phone,
   X,
 } from "lucide-react";
 import { Container } from "@/components/ui/container";
@@ -256,7 +254,10 @@ function RequestForm() {
               className="space-y-[23px]"
             >
               <ContactInput label="имя" placeholder="ваше имя" />
-              <ContactInput label="организация" placeholder="название компании" />
+              <ContactInput
+                label="организация"
+                placeholder="название компании"
+              />
               <ContactInput
                 label="контакт"
                 placeholder="telegram / телефон / email"
@@ -571,7 +572,7 @@ export function ContactsPage() {
 
                 <a
                   href="mailto:simkraski@bk.ru"
-                  className="font-medium text-[var(--color-text)] transition duration-300 hover:text-[var(--color-accent-1)]"
+                  className="font-medium transition duration-300 hover:text-[var(--color-accent-1)]"
                 >
                   simkraski@bk.ru
                 </a>
@@ -624,11 +625,70 @@ export function ContactsPage() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.18 }}
+            className="rounded-[32px] bg-[var(--color-surface)] p-5 md:p-6 xl:p-7"
+          >
+            <div className="mb-4 flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)]">
+                <Building2 size={20} strokeWidth={2.1} />
+              </div>
+
+              <div>
+                <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
+                  юридическое лицо
+                </div>
+                <div className="mt-1 text-[18px] leading-[1.25] text-[var(--color-text)] md:text-[20px]">
+                  ООО "ЛКЗ"
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:max-w-[760px]">
+              <div className="relative rounded-[26px] bg-[var(--color-bg)] px-5 py-6">
+                <CopyValueButton value="7327093976" />
+                <div className="text-[14px] font-semibold uppercase tracking-[0.06em] text-[var(--color-text-muted)]">
+                  ИНН
+                </div>
+                <div className="mt-8 font-heading text-[32px] leading-none tracking-[-0.05em] text-[var(--color-text)] md:text-[36px]">
+                  7327093976
+                </div>
+              </div>
+
+              <div className="relative rounded-[26px] bg-[var(--color-bg)] px-5 py-6">
+                <CopyValueButton value="1207300001963" />
+                <div className="text-[14px] font-semibold uppercase tracking-[0.06em] text-[var(--color-text-muted)]">
+                  ОГРН
+                </div>
+                <div className="mt-8 font-heading text-[32px] leading-none tracking-[-0.05em] text-[var(--color-text)] md:text-[36px]">
+                  1207300001963
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-8">
+              <button
+                type="button"
+                className="inline-flex h-12 items-center justify-center gap-3 rounded-[18px] bg-[var(--color-bg)] px-6 text-[15px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
+              >
+                <FileText size={18} strokeWidth={2.1} />
+                <span>получить карточку компании</span>
+              </button>
+            </div>
+          </motion.div>
+        </Container>
+      </Section>
+
+      <Section className="pt-8 md:pt-10 xl:pt-12">
+        <Container>
+          <motion.div
+            variants={sectionMotion}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.14 }}
             className="grid gap-4 xl:grid-cols-[1.08fr_0.92fr] xl:items-stretch"
           >
             <motion.div
               variants={cardMotion}
-              className="relative overflow-hidden rounded-[32px] bg-[var(--color-surface)] xl:min-h-[620px]"
+              className="relative overflow-hidden rounded-[32px] bg-[var(--color-surface)]"
             >
               <iframe
                 src={contactsMap.embedUrl}
@@ -671,146 +731,81 @@ export function ContactsPage() {
 
             <motion.div
               variants={cardMotion}
-              className="rounded-[32px] bg-[var(--color-surface)] p-5 md:p-6 xl:p-7"
+              className="rounded-[32px] bg-[var(--color-surface)] p-[20px]"
             >
-              <div className="mb-4 flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)]">
-                  <Building2 size={20} strokeWidth={2.1} />
-                </div>
+              <div className="mb-6 max-w-[760px]">
+                <h2 className="font-heading text-[30px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[40px]">
+                  {contactsPageContent.formTitle}
+                </h2>
 
-                <div>
-                  <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
-                    юридическое лицо
-                  </div>
-                  <div className="mt-1 text-[18px] leading-[1.25] text-[var(--color-text)] md:text-[20px]">
-                    ООО "ЛКЗ"
-                  </div>
-                </div>
+                <p className="mt-4 text-[15px] leading-[1.46] text-[var(--color-text-muted)] md:text-[16px]">
+                  {contactsPageContent.formDescription.join(" ")}
+                </p>
               </div>
 
-              <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                <div className="relative rounded-[26px] bg-[var(--color-bg)] px-5 py-6">
-                  <CopyValueButton value="7327093976" />
-                  <div className="text-[14px] font-semibold uppercase tracking-[0.06em] text-[var(--color-text-muted)]">
-                    ИНН
-                  </div>
-                  <div className="mt-8 font-heading text-[32px] leading-none tracking-[-0.05em] text-[var(--color-text)] md:text-[36px]">
-                    7327093976
-                  </div>
+              <div className="flex h-full flex-col">
+                <div className="grid h-[60px] grid-cols-[1fr_1px_1fr] items-center gap-[18px]">
+                  <button
+                    type="button"
+                    onClick={() => setMode("request")}
+                    className={cn(
+                      "h-full rounded-[12px] text-[14px] font-semibold transition duration-300",
+                      mode === "request"
+                        ? "bg-[var(--color-accent-1)] text-[var(--color-bg)]"
+                        : "bg-[var(--color-bg)] text-[var(--color-text)]",
+                    )}
+                  >
+                    запросить КП
+                  </button>
+
+                  <div className="mx-auto h-[44px] w-px bg-[var(--color-accent-2)]/10" />
+
+                  <button
+                    type="button"
+                    onClick={() => setMode("send")}
+                    className={cn(
+                      "h-full rounded-[12px] text-[14px] font-semibold transition duration-300",
+                      mode === "send"
+                        ? "bg-[var(--color-accent-1)] text-[var(--color-bg)]"
+                        : "bg-[var(--color-bg)] text-[var(--color-text)]",
+                    )}
+                  >
+                    отправить КП
+                  </button>
                 </div>
 
-                <div className="relative rounded-[26px] bg-[var(--color-bg)] px-5 py-6">
-                  <CopyValueButton value="1207300001963" />
-                  <div className="text-[14px] font-semibold uppercase tracking-[0.06em] text-[var(--color-text-muted)]">
-                    ОГРН
-                  </div>
-                  <div className="mt-8 font-heading text-[32px] leading-none tracking-[-0.05em] text-[var(--color-text)] md:text-[36px]">
-                    1207300001963
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-8">
-                <button
-                  type="button"
-                  className="inline-flex h-12 items-center justify-center gap-3 rounded-[18px] bg-[var(--color-bg)] px-6 text-[15px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
+                <div
+                  className="mt-[54px]"
+                  style={{ height: `${FORM_CONTENT_HEIGHT}px` }}
                 >
-                  <FileText size={18} strokeWidth={2.1} />
-                  <span>получить карточку компании</span>
-                </button>
+                  <AnimatePresence mode="wait" initial={false}>
+                    {mode === "request" ? (
+                      <motion.div
+                        key="request-mode"
+                        variants={innerPanelMotion}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
+                        className="h-full"
+                      >
+                        <RequestForm />
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="send-mode"
+                        variants={innerPanelMotion}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
+                        className="h-full"
+                      >
+                        <SendProposalForm />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
             </motion.div>
-          </motion.div>
-        </Container>
-      </Section>
-
-      <Section className="pt-8 md:pt-10 xl:pt-12">
-        <Container>
-          <motion.div
-            variants={sectionMotion}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.14 }}
-            className="rounded-[32px] bg-[var(--color-surface)] p-[20px]"
-          >
-            <div className="grid gap-4 xl:grid-cols-[0.94fr_1.06fr] xl:items-stretch">
-              <div className="rounded-[28px] bg-[var(--color-bg)] p-5 md:p-6">
-                <div className="mb-6 max-w-[760px]">
-                  <h2 className="font-heading text-[30px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[40px]">
-                    {contactsPageContent.formTitle}
-                  </h2>
-
-                  <p className="mt-4 text-[15px] leading-[1.46] text-[var(--color-text-muted)] md:text-[16px]">
-                    {contactsPageContent.formDescription.join(" ")}
-                  </p>
-                </div>
-
-                <div className="flex h-full flex-col">
-                  <div className="grid h-[60px] grid-cols-[1fr_1px_1fr] items-center gap-[18px]">
-                    <button
-                      type="button"
-                      onClick={() => setMode("request")}
-                      className={cn(
-                        "h-full rounded-[12px] text-[14px] font-semibold transition duration-300",
-                        mode === "request"
-                          ? "bg-[var(--color-accent-1)] text-[var(--color-bg)]"
-                          : "bg-[var(--color-surface)] text-[var(--color-text)]",
-                      )}
-                    >
-                      запросить КП
-                    </button>
-
-                    <div className="mx-auto h-[44px] w-px bg-[var(--color-accent-2)]/10" />
-
-                    <button
-                      type="button"
-                      onClick={() => setMode("send")}
-                      className={cn(
-                        "h-full rounded-[12px] text-[14px] font-semibold transition duration-300",
-                        mode === "send"
-                          ? "bg-[var(--color-accent-1)] text-[var(--color-bg)]"
-                          : "bg-[var(--color-surface)] text-[var(--color-text)]",
-                      )}
-                    >
-                      отправить КП
-                    </button>
-                  </div>
-
-                  <div
-                    className="mt-[54px]"
-                    style={{ height: `${FORM_CONTENT_HEIGHT}px` }}
-                  >
-                    <AnimatePresence mode="wait" initial={false}>
-                      {mode === "request" ? (
-                        <motion.div
-                          key="request-mode"
-                          variants={innerPanelMotion}
-                          initial="initial"
-                          animate="animate"
-                          exit="exit"
-                          className="h-full"
-                        >
-                          <RequestForm />
-                        </motion.div>
-                      ) : (
-                        <motion.div
-                          key="send-mode"
-                          variants={innerPanelMotion}
-                          initial="initial"
-                          animate="animate"
-                          exit="exit"
-                          className="h-full"
-                        >
-                          <SendProposalForm />
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                </div>
-              </div>
-
-              <div className="hidden xl:block" />
-            </div>
           </motion.div>
         </Container>
       </Section>
