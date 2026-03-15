@@ -51,11 +51,10 @@ const sectionMotion = {
 const stepMotion = {
   initial: {
     opacity: 0,
-    x: 34,
-    y: 0,
-    scale: 0.992,
-    filter: "blur(8px)",
-    clipPath: "inset(0 0 0 3%)",
+    x: 22,
+    y: 10,
+    scale: 0.995,
+    filter: "blur(6px)",
   },
   animate: {
     opacity: 1,
@@ -63,21 +62,19 @@ const stepMotion = {
     y: 0,
     scale: 1,
     filter: "blur(0px)",
-    clipPath: "inset(0 0 0 0%)",
     transition: {
-      duration: 0.58,
+      duration: 0.52,
       ease: [0.22, 1, 0.36, 1] as const,
     },
   },
   exit: {
     opacity: 0,
-    x: -34,
-    y: 0,
-    scale: 0.992,
-    filter: "blur(8px)",
-    clipPath: "inset(0 3% 0 0)",
+    x: -18,
+    y: -6,
+    scale: 0.995,
+    filter: "blur(6px)",
     transition: {
-      duration: 0.34,
+      duration: 0.28,
       ease: [0.4, 0, 1, 1] as const,
     },
   },
@@ -436,7 +433,7 @@ export function B2BCalculatorSection() {
   const currentValue = answers[currentStep.id];
 
   return (
-    <Section className="pt-10 md:pt-12 xl:pt-14">
+    <Section id="calculator" className="pt-10 md:pt-12 xl:pt-14">
       <Container>
         <motion.div
           variants={sectionMotion}
@@ -560,7 +557,7 @@ export function B2BCalculatorSection() {
                   animate="animate"
                   exit="exit"
                 >
-                  <div className="rounded-[24px] bg-[var(--color-bg)] p-5 md:p-6">
+                  <div className="min-h-[520px] rounded-[24px] bg-[var(--color-bg)] p-5 md:min-h-[560px] md:p-6">
                     <div className="inline-flex items-center rounded-[999px] bg-[var(--color-accent-1)]/[0.12] px-3 py-1.5 text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
                       рекомендуемый сценарий
                     </div>
@@ -600,24 +597,6 @@ export function B2BCalculatorSection() {
                         пройти заново
                       </button>
                     </div>
-                  </div>
-
-                  <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
-                    <button
-                      type="button"
-                      onClick={handlePrev}
-                      className="inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-bg)] px-6 text-[15px] font-semibold text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
-                    >
-                      назад
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={handleReset}
-                      className="inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-surface)] px-6 text-[15px] font-semibold text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
-                    >
-                      новый расчёт
-                    </button>
                   </div>
                 </motion.div>
               )}
