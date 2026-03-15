@@ -199,7 +199,7 @@ function CatalogProductCard({
               "hover:shadow-[0_18px_42px_rgba(43,47,51,0.10)]",
               mobile
                 ? "min-h-[408px] w-[84vw] max-w-[360px] shrink-0 snap-start"
-                : "min-h-[440px]",
+                : "min-h-[430px]",
             )}
           >
             <div className="flex h-full flex-col">
@@ -233,7 +233,7 @@ function CatalogProductCard({
               </div>
 
 <div
-  className="flex min-h-[48px] items-end justify-between gap-3 px-0 pb-0 pt-2"
+  className="flex min-h-[48px] items-end justify-between gap-3 px-0 pb-0 pt-4"
   style={{ transform: "translateZ(22px)" }}
 >
   <div className="min-w-0 flex-1 px-2">
