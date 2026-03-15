@@ -165,7 +165,7 @@ export function Footer() {
               </ContactRow>
 
               <ContactRow icon={<MapPin size={22} />}>
-                г. Ульяновск, Московское шоссе 24Д
+                г. Ульяновск, Московское шоссе, 42Е
               </ContactRow>
 
               <ContactRow icon={<Clock3 size={22} />}>
@@ -229,7 +229,7 @@ export function Footer() {
             <span className="block lg:inline">© 2015 – 2026 Симбирские краски</span>
             <span className="hidden lg:inline"> | </span>
             <span className="block lg:inline">
-              ИНН: 1234567890 | ОГРН: 1234567890123
+              ИНН: 7327093976 | ОГРН: 1207300001963
             </span>
             <span className="hidden lg:inline"> | </span>
             <span className="block lg:inline">Все права защищены.</span>
