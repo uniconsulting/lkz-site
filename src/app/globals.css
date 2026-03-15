@@ -89,6 +89,32 @@ a {
   text-decoration: none;
 }
 
+.how-to-buy-hero-card {
+  background-color: var(--color-accent-2);
+  color: #ffffff;
+}
+
+.dark .how-to-buy-hero-card {
+  background-color: #32373b;
+  color: #ffffff;
+}
+
+.how-to-buy-hero-card-title {
+  color: #ffffff;
+}
+
+.how-to-buy-hero-card-body {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.how-to-buy-hero-card-divider {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.how-to-buy-hero-card-point {
+  color: #ffffff;
+}
+
 button,
 input,
 textarea,
