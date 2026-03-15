@@ -199,7 +199,7 @@ function CatalogProductCard({
               "hover:shadow-[0_18px_42px_rgba(43,47,51,0.10)]",
               mobile
                 ? "min-h-[408px] w-[84vw] max-w-[360px] shrink-0 snap-start"
-                : "min-h-[452px]",
+                : "min-h-[440px]",
             )}
           >
             <div className="flex h-full flex-col">
