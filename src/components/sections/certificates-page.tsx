@@ -69,7 +69,7 @@ function CategoryCard({
   return (
     <motion.div
       variants={cardMotion}
-      className="rounded-[24px] bg-[var(--color-surface)] p-5 md:p-6"
+      className="flex h-full flex-col rounded-[24px] bg-[var(--color-surface)] p-5 md:p-6"
     >
       <div className="flex items-start justify-between gap-4">
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[16px] bg-[var(--color-bg)] text-[var(--color-accent-1)]">
@@ -82,14 +82,15 @@ function CategoryCard({
       </div>
 
       <h3 className="mt-5 font-heading text-[24px] leading-[0.96] tracking-[-0.04em] text-[var(--color-text)]">
-        {category.title}
+        <span className="block">{category.titleLines[0]}</span>
+        <span className="block">{category.titleLines[1]}</span>
       </h3>
 
       <p className="mt-4 text-[15px] leading-[1.46] text-[var(--color-text-muted)]">
         {category.description}
       </p>
 
-      <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+      <div className="mt-auto flex flex-col gap-3 pt-6 sm:flex-row">
         <button
           type="button"
           onClick={() => onOpen(category.id)}
@@ -185,7 +186,7 @@ function DocumentRow({
             {title}
           </h3>
 
-          {(documentNumber || issueDate || product) ? (
+          {documentNumber || issueDate || product ? (
             <div className="mt-3 flex flex-col gap-1 text-[14px] leading-[1.42] text-[var(--color-text-muted)]">
               {documentNumber ? <div>номер: {documentNumber}</div> : null}
               {issueDate ? <div>дата: {issueDate}</div> : null}
@@ -234,7 +235,7 @@ export function CertificatesPage() {
             variants={sectionMotion}
             initial="hidden"
             animate="visible"
-            className="max-w-[860px]"
+            className="max-w-[1180px]"
           >
             <div className="mb-5 text-[15px] tracking-[-0.02em] text-[var(--color-text-muted)]">
               главная / {certificatesHero.eyebrow}
@@ -244,12 +245,8 @@ export function CertificatesPage() {
               {certificatesHero.title}
             </h1>
 
-            <p className="mt-5 max-w-[700px] text-[16px] leading-[1.46] text-[var(--color-text-muted)] md:text-[18px]">
-              {certificatesHero.description.map((line) => (
-                <span key={line} className="block">
-                  {line}
-                </span>
-              ))}
+            <p className="mt-5 max-w-[1180px] text-[16px] leading-[1.46] text-[var(--color-text-muted)] md:text-[18px]">
+              {certificatesHero.description.join(" ")}
             </p>
 
             <a
@@ -282,10 +279,7 @@ export function CertificatesPage() {
         </Container>
       </Section>
 
-      <Section
-        id="certificates-archive"
-        className="pt-8 md:pt-10 xl:pt-12"
-      >
+      <Section id="certificates-archive" className="pt-8 md:pt-10 xl:pt-12">
         <Container>
           <motion.div
             variants={sectionMotion}
