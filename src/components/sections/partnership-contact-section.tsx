@@ -532,7 +532,7 @@ export function PartnershipContactSection() {
   const [mode, setMode] = useState<ProposalMode>("request");
 
   return (
-    <Section className="pt-10 md:pt-12 xl:pt-14">
+    <Section id="contacts" className="pt-10 md:pt-12 xl:pt-14">
       <Container>
         <motion.div
           variants={sectionMotion}
@@ -558,7 +558,7 @@ export function PartnershipContactSection() {
               style={{ height: `${TOP_CARD_HEIGHT}px` }}
             >
               <div className="grid h-full xl:grid-cols-[1fr_1fr]">
-                <div className="h-full bg-[var(--color-accent-2)] px-[28px] py-[28px] text-[var(--color-accent-2-foreground)]">
+                <div className="h-full bg-[var(--color-accent-2)] px-[28px] py-[28px] text-[var(--color-accent-2-foreground)] transition-colors duration-300 hover:bg-[var(--color-surface)]">
                   <div className="flex h-full flex-col">
                     <div className="flex h-[56px] w-[56px] items-center justify-center rounded-[20px] bg-[var(--color-accent-1)]/[0.12] text-[var(--color-accent-1)]">
                       <Workflow size={22} strokeWidth={2.1} />
@@ -575,16 +575,16 @@ export function PartnershipContactSection() {
                       </h3>
                     </div>
 
-                    <div className="mt-[36px] border-t border-white/10 pt-[36px]">
-                      <div className="space-y-[12px] text-[12px] leading-[1.35] tracking-[-0.02em] text-[var(--color-accent-2-foreground)]/82">
+                    <div className="mt-[36px] border-t border-[rgba(255,255,255,0.10)] pt-[36px]">
+                      <div className="space-y-[12px] text-[11px] leading-[1.35] tracking-[-0.02em] text-[var(--color-accent-2-foreground)]/82">
                         {partnershipContent.leadCard.descriptionLines.map((line) => (
                           <p key={line}>{line}</p>
                         ))}
                       </div>
                     </div>
 
-                    <div className="mt-[36px] border-t border-white/10 pt-[36px]">
-                      <div className="space-y-[12px]">
+                    <div className="mt-[36px] border-t border-[rgba(255,255,255,0.10)] pt-[36px]">
+                      <div className="space-y-[10px]">
                         {partnershipContent.leadCard.points.map((item) => {
                           const Icon = item.icon;
 
@@ -597,7 +597,7 @@ export function PartnershipContactSection() {
                                 <Icon size={16} strokeWidth={2.1} />
                               </div>
 
-                              <div className="text-[12px] leading-[1.25] tracking-[-0.02em] text-[var(--color-accent-2-foreground)] whitespace-nowrap">
+                              <div className="text-[13px] leading-[1.22] tracking-[-0.02em] text-[var(--color-accent-2-foreground)] whitespace-nowrap">
                                 {item.text}
                               </div>
                             </div>
@@ -614,6 +614,10 @@ export function PartnershipContactSection() {
                     alt="Производственная линия"
                     className="h-full w-full object-cover"
                   />
+
+                  <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(20,24,28,0.16)_0%,rgba(20,24,28,0.06)_24%,rgba(20,24,28,0.18)_52%,rgba(20,24,28,0.08)_74%,rgba(20,24,28,0.20)_100%)]" />
+
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_22%,rgba(20,24,28,0.20),transparent_34%),radial-gradient(circle_at_72%_36%,rgba(20,24,28,0.12),transparent_30%),radial-gradient(circle_at_58%_82%,rgba(20,24,28,0.18),transparent_36%)] mix-blend-multiply" />
                 </div>
               </div>
             </motion.div>
@@ -704,7 +708,7 @@ export function PartnershipContactSection() {
                     <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
                       офис и производство
                     </div>
-                    <div className="mt-2 text-[16px] leading-[1.42] text-[var(--color-text)]">
+                    <div className="relative -top-[1px] mt-1 text-[16px] leading-[1.42] text-[var(--color-text)]">
                       {partnershipContent.contactsCard.address}
                     </div>
                   </div>
@@ -719,7 +723,7 @@ export function PartnershipContactSection() {
                     <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
                       юридическое лицо
                     </div>
-                    <div className="mt-2 text-[16px] leading-[1.42] text-[var(--color-text)]">
+                    <div className="relative -top-[1px] mt-1 text-[16px] leading-[1.42] text-[var(--color-text)]">
                       {partnershipContent.contactsCard.company}
                     </div>
                   </div>
