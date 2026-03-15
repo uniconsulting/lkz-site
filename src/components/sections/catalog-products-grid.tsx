@@ -27,7 +27,7 @@ const catalogProductCards: CatalogProductCardItem[] = [
     title: "Эмаль матовая база A",
     image: `${basePath}/images/sections/catalog/products/product-enamel-matte-base-a.webp`,
     href: "#products",
-    titleClassName: "text-[18px] md:text-[16px] xl:text-[17px]",
+    titleClassName: "text-[16px] md:text-[14px] xl:text-[15px]",
   },
   {
     id: "facade-white-paint",
@@ -35,7 +35,7 @@ const catalogProductCards: CatalogProductCardItem[] = [
     title: "Краска белоснежная",
     image: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
     href: "#products",
-    titleClassName: "text-[18px] md:text-[16px] xl:text-[17px]",
+    titleClassName: "text-[16px] md:text-[14px] xl:text-[15px]",
   },
   {
     id: "water-based-gloss-lacquer",
@@ -43,7 +43,7 @@ const catalogProductCards: CatalogProductCardItem[] = [
     title: "ВД лак глянцевый",
     image: `${basePath}/images/sections/catalog/products/product-lacquer-gloss.webp`,
     href: "#products",
-    titleClassName: "text-[18px] md:text-[16px] xl:text-[17px]",
+    titleClassName: "text-[16px] md:text-[14px] xl:text-[15px]",
   },
   {
     id: "wood-paint",
@@ -51,7 +51,7 @@ const catalogProductCards: CatalogProductCardItem[] = [
     title: "Краска для дерева",
     image: `${basePath}/images/sections/catalog/products/product-wood-paint.webp`,
     href: "#products",
-    titleClassName: "text-[18px] md:text-[16px] xl:text-[17px]",
+    titleClassName: "text-[16px] md:text-[14px] xl:text-[15px]",
   },
   {
     id: "sodium-liquid-glass",
@@ -59,7 +59,7 @@ const catalogProductCards: CatalogProductCardItem[] = [
     title: "Жидкое стекло",
     image: `${basePath}/images/sections/catalog/products/product-liquid-glass.webp`,
     href: "#products",
-    titleClassName: "text-[18px] md:text-[16px] xl:text-[17px]",
+    titleClassName: "text-[16px] md:text-[14px] xl:text-[15px]",
   },
   {
     id: "universal-antiseptic",
@@ -67,7 +67,7 @@ const catalogProductCards: CatalogProductCardItem[] = [
     title: "Антисептик",
     image: `${basePath}/images/sections/catalog/products/product-antiseptic.webp`,
     href: "#products",
-    titleClassName: "text-[18px] md:text-[16px] xl:text-[17px]",
+    titleClassName: "text-[16px] md:text-[14px] xl:text-[15px]",
   },
   {
     id: "deep-penetration-primer",
@@ -75,7 +75,7 @@ const catalogProductCards: CatalogProductCardItem[] = [
     title: "Грунт глубокого прон.",
     image: `${basePath}/images/sections/catalog/products/product-primer-deep.webp`,
     href: "#products",
-    titleClassName: "text-[18px] md:text-[15px] xl:text-[16px] tracking-[-0.04em]",
+    titleClassName: "text-[16px] md:text-[13px] xl:text-[14px] tracking-[-0.04em]",
   },
   {
     id: "pva-glue",
@@ -83,7 +83,7 @@ const catalogProductCards: CatalogProductCardItem[] = [
     title: "Клей ПВА",
     image: `${basePath}/images/sections/catalog/products/product-pva-glue.webp`,
     href: "#products",
-    titleClassName: "text-[18px] md:text-[16px] xl:text-[17px]",
+    titleClassName: "text-[16px] md:text-[14px] xl:text-[15px]",
   },
 ];
 
@@ -199,14 +199,14 @@ function CatalogProductCard({
               "hover:shadow-[0_18px_42px_rgba(43,47,51,0.10)]",
               mobile
                 ? "min-h-[408px] w-[84vw] max-w-[360px] shrink-0 snap-start"
-                : "min-h-[483px]",
+                : "min-h-[468px]",
             )}
           >
             <div className="flex h-full flex-col">
               <div
                 className={cn(
                   "relative overflow-hidden rounded-[22px] bg-[var(--color-bg)] md:rounded-[24px]",
-                  mobile ? "h-[310px]" : "h-[366px]",
+                  mobile ? "h-[310px]" : "h-[360px]",
                 )}
                 style={{ transform: "translateZ(28px)" }}
               >
@@ -233,11 +233,11 @@ function CatalogProductCard({
               </div>
 
               <div
-                className="flex min-h-[66px] items-end justify-between gap-3 px-2 pb-0 pt-4"
+                className="flex min-h-[54px] items-end justify-between gap-3 px-2 pb-0 pt-3"
                 style={{ transform: "translateZ(22px)" }}
               >
                 <div className="min-w-0 flex-1">
-                  <div className="mb-1 text-[13px] leading-[1.08] tracking-[-0.02em] text-[var(--color-text-muted)] md:text-[11px] xl:text-[12px]">
+                  <div className="mb-1 text-[15px] leading-[1.08] tracking-[-0.02em] text-[var(--color-text-muted)] md:text-[13px] xl:text-[14px]">
                     {item.subtitle}
                   </div>
 
@@ -270,18 +270,18 @@ export function CatalogProductsGrid() {
   return (
     <Section className="pt-8 md:pt-10 xl:pt-12">
       <Container>
-        <div className="mb-6 hidden md:flex md:items-center md:gap-2">
-          <span className="text-[15px] tracking-[-0.02em] text-[var(--color-text-muted)]">
+        <div className="mb-7 hidden md:flex md:items-center md:gap-2">
+          <span className="cursor-default text-[17px] tracking-[-0.02em] text-[var(--color-text-muted)] transition duration-300 hover:text-[var(--color-text)]">
             каталог
           </span>
 
           <ChevronRight
-            size={16}
-            strokeWidth={2.4}
-            className="text-[var(--color-accent-1)]"
+            size={17}
+            strokeWidth={2.5}
+            className="text-[var(--color-accent-1)] transition duration-300"
           />
 
-          <span className="text-[15px] tracking-[-0.02em] text-[var(--color-text)]">
+          <span className="cursor-default text-[17px] tracking-[-0.02em] text-[var(--color-text)] transition duration-300 hover:text-[var(--color-accent-1)]">
             рекомендуемые товары
           </span>
         </div>
@@ -300,17 +300,17 @@ export function CatalogProductsGrid() {
 
         <div className="md:hidden">
           <div className="mb-5 flex items-center gap-2">
-            <span className="text-[14px] tracking-[-0.02em] text-[var(--color-text-muted)]">
+            <span className="text-[15px] tracking-[-0.02em] text-[var(--color-text-muted)]">
               каталог
             </span>
 
             <ChevronRight
-              size={15}
-              strokeWidth={2.4}
+              size={16}
+              strokeWidth={2.5}
               className="text-[var(--color-accent-1)]"
             />
 
-            <span className="text-[14px] tracking-[-0.02em] text-[var(--color-text)]">
+            <span className="text-[15px] tracking-[-0.02em] text-[var(--color-text)]">
               рекомендуемые товары
             </span>
           </div>
