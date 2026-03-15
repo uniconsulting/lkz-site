@@ -7,7 +7,6 @@ import {
   Check,
   ChevronDown,
   Copy,
-  FileText,
   FolderUp,
   MapPinned,
   MessageCircle,
@@ -624,114 +623,99 @@ export function ContactsPage() {
             variants={sectionMotion}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.18 }}
-            className="rounded-[32px] bg-[var(--color-surface)] p-5 md:p-6 xl:p-7"
-          >
-            <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)]">
-                <Building2 size={20} strokeWidth={2.1} />
-              </div>
-
-              <div>
-                <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
-                  юридическое лицо
-                </div>
-                <div className="mt-1 text-[18px] leading-[1.25] text-[var(--color-text)] md:text-[20px]">
-                  ООО "ЛКЗ"
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:max-w-[760px]">
-              <div className="relative rounded-[26px] bg-[var(--color-bg)] px-5 py-6">
-                <CopyValueButton value="7327093976" />
-                <div className="text-[14px] font-semibold uppercase tracking-[0.06em] text-[var(--color-text-muted)]">
-                  ИНН
-                </div>
-                <div className="mt-8 font-heading text-[32px] leading-none tracking-[-0.05em] text-[var(--color-text)] md:text-[36px]">
-                  7327093976
-                </div>
-              </div>
-
-              <div className="relative rounded-[26px] bg-[var(--color-bg)] px-5 py-6">
-                <CopyValueButton value="1207300001963" />
-                <div className="text-[14px] font-semibold uppercase tracking-[0.06em] text-[var(--color-text-muted)]">
-                  ОГРН
-                </div>
-                <div className="mt-8 font-heading text-[32px] leading-none tracking-[-0.05em] text-[var(--color-text)] md:text-[36px]">
-                  1207300001963
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-8">
-              <button
-                type="button"
-                className="inline-flex h-12 items-center justify-center gap-3 rounded-[18px] bg-[var(--color-bg)] px-6 text-[15px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
-              >
-                <FileText size={18} strokeWidth={2.1} />
-                <span>получить карточку компании</span>
-              </button>
-            </div>
-          </motion.div>
-        </Container>
-      </Section>
-
-      <Section className="pt-8 md:pt-10 xl:pt-12">
-        <Container>
-          <motion.div
-            variants={sectionMotion}
-            initial="hidden"
-            whileInView="visible"
             viewport={{ once: true, amount: 0.14 }}
             className="grid gap-4 xl:grid-cols-[1.08fr_0.92fr] xl:items-stretch"
           >
-            <motion.div
-              variants={cardMotion}
-              className="relative overflow-hidden rounded-[32px] bg-[var(--color-surface)]"
-            >
-              <iframe
-                src={contactsMap.embedUrl}
-                title="Карта"
-                className="h-full min-h-[360px] w-full border-0 xl:min-h-[620px]"
-                loading="lazy"
-              />
+            <div className="grid gap-4 xl:grid-rows-[1fr_auto]">
+              <motion.div
+                variants={cardMotion}
+                className="relative overflow-hidden rounded-[32px] bg-[var(--color-surface)] min-h-[360px] xl:min-h-[396px]"
+              >
+                <iframe
+                  src={contactsMap.embedUrl}
+                  title="Карта"
+                  className="h-full w-full border-0"
+                  loading="lazy"
+                />
 
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-x-0 top-0 h-[180px]"
-                style={{
-                  background:
-                    "linear-gradient(180deg, rgba(20,24,28,0.58) 0%, rgba(20,24,28,0.34) 48%, rgba(20,24,28,0.00) 100%)",
-                }}
-              />
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-x-0 top-0 h-[180px]"
+                  style={{
+                    background:
+                      "linear-gradient(180deg, rgba(20,24,28,0.58) 0%, rgba(20,24,28,0.34) 48%, rgba(20,24,28,0.00) 100%)",
+                  }}
+                />
 
-              <div className="absolute left-5 top-5 z-10 max-w-[420px] text-white md:left-6 md:top-6">
-                <div className="mb-3 flex items-center gap-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-white/14 text-white backdrop-blur-sm">
-                    <MapPinned size={20} strokeWidth={2.1} />
+                <div className="absolute left-5 top-5 z-10 max-w-[420px] text-white md:left-6 md:top-6">
+                  <div className="mb-3 flex items-center gap-3">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-white/14 text-white backdrop-blur-sm">
+                      <MapPinned size={20} strokeWidth={2.1} />
+                    </div>
+
+                    <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-white/88">
+                      офис и производство
+                    </div>
                   </div>
 
-                  <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-white/88">
-                    офис и производство
+                  <div className="text-[24px] leading-[1.08] tracking-[-0.03em] md:text-[30px]">
+                    г. Ульяновск,
+                    <br />
+                    Московское шоссе, 42Е
+                  </div>
+
+                  <div className="mt-4 text-[15px] leading-[1.4] text-white/84 md:text-[16px]">
+                    Пн-Пт: 8:00 – 18:00
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                variants={cardMotion}
+                className="rounded-[32px] bg-[var(--color-surface)] p-5 md:p-6 xl:p-7"
+              >
+                <div className="mb-4 flex items-center gap-3">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)]">
+                    <Building2 size={20} strokeWidth={2.1} />
+                  </div>
+
+                  <div>
+                    <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
+                      юридическое лицо
+                    </div>
+                    <div className="mt-1 text-[18px] leading-[1.25] text-[var(--color-text)] md:text-[20px]">
+                      ООО "ЛКЗ"
+                    </div>
                   </div>
                 </div>
 
-                <div className="text-[24px] leading-[1.08] tracking-[-0.03em] md:text-[30px]">
-                  г. Ульяновск,
-                  <br />
-                  Московское шоссе, 42Е
-                </div>
+                <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                  <div className="relative rounded-[26px] bg-[var(--color-bg)] px-5 py-6">
+                    <CopyValueButton value="7327093976" />
+                    <div className="text-[14px] font-semibold uppercase tracking-[0.06em] text-[var(--color-text-muted)]">
+                      ИНН
+                    </div>
+                    <div className="mt-8 font-heading text-[32px] leading-none tracking-[-0.05em] text-[var(--color-text)] md:text-[36px]">
+                      7327093976
+                    </div>
+                  </div>
 
-                <div className="mt-4 text-[15px] leading-[1.4] text-white/84 md:text-[16px]">
-                  Пн-Пт: 8:00 – 18:00
+                  <div className="relative rounded-[26px] bg-[var(--color-bg)] px-5 py-6">
+                    <CopyValueButton value="1207300001963" />
+                    <div className="text-[14px] font-semibold uppercase tracking-[0.06em] text-[var(--color-text-muted)]">
+                      ОГРН
+                    </div>
+                    <div className="mt-8 font-heading text-[32px] leading-none tracking-[-0.05em] text-[var(--color-text)] md:text-[36px]">
+                      1207300001963
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </div>
 
             <motion.div
               variants={cardMotion}
-              className="rounded-[32px] bg-[var(--color-surface)] p-[20px]"
+              className="rounded-[32px] bg-[var(--color-surface)] p-[20px] xl:min-h-[620px]"
             >
               <div className="mb-6 max-w-[760px]">
                 <h2 className="font-heading text-[30px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[40px]">
