@@ -558,7 +558,7 @@ export function PartnershipContactSection() {
               style={{ height: `${TOP_CARD_HEIGHT}px` }}
             >
               <div className="grid h-full xl:grid-cols-[1fr_1fr]">
-                <div className="h-full bg-[var(--color-accent-2)] px-[28px] py-[28px] text-[var(--color-accent-2-foreground)] transition-colors duration-300 hover:bg-[var(--color-surface)]">
+                <div className="h-full bg-[var(--color-accent-2)] px-[28px] py-[28px] text-[var(--color-accent-2-foreground)] transition-colors duration-300 dark:bg-[var(--color-surface)]">
                   <div className="flex h-full flex-col">
                     <div className="flex h-[56px] w-[56px] items-center justify-center rounded-[20px] bg-[var(--color-accent-1)]/[0.12] text-[var(--color-accent-1)]">
                       <Workflow size={22} strokeWidth={2.1} />
@@ -576,7 +576,7 @@ export function PartnershipContactSection() {
                     </div>
 
                     <div className="mt-[36px] border-t border-[rgba(255,255,255,0.10)] pt-[36px]">
-                      <div className="space-y-[12px] text-[11px] leading-[1.35] tracking-[-0.02em] text-[var(--color-accent-2-foreground)]/82">
+                      <div className="space-y-[12px] text-[13px] leading-[1.35] tracking-[-0.02em] text-[var(--color-accent-2-foreground)]/82">
                         {partnershipContent.leadCard.descriptionLines.map((line) => (
                           <p key={line}>{line}</p>
                         ))}
