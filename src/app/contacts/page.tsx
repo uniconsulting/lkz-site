@@ -4,9 +4,17 @@ import { ContactsPage } from "@/components/sections/contacts-page";
 export const metadata: Metadata = {
   title: "Контакты | Симбирские краски",
   description:
-    "Контакты Симбирских красок: телефон, email, адрес, режим работы, реквизиты, карта и форма запроса или отправки коммерческого предложения.",
+    "Телефон, почта, адрес, реквизиты и форма запроса коммерческого предложения.",
 };
 
-export default function Page() {
-  return <ContactsPage />;
+type PageProps = {
+  searchParams: Promise<{
+    product?: string;
+  }>;
+};
+
+export default async function Page({ searchParams }: PageProps) {
+  const params = await searchParams;
+
+  return <ContactsPage productSlug={params.product ?? null} />;
 }
