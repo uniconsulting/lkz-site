@@ -10,7 +10,7 @@ import {
 } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { motion } from "motion/react";
-import { ArrowRight, PackageSearch, X } from "lucide-react";
+import { ArrowRight, PackageSearch, SlidersHorizontal, X } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import {
@@ -18,8 +18,6 @@ import {
   getFilteredProducts,
   getProductCategoryById,
   getProductLineById,
-  type ProductCategoryId,
-  type ProductLineId,
 } from "@/lib/content/products";
 import {
   buildSearchParamsFromFilterState,
@@ -29,6 +27,7 @@ import {
 } from "@/lib/products-filters";
 import { ProductsFiltersPanel } from "@/components/catalog/products-filters-panel";
 import { ProductsSortSelect } from "@/components/catalog/products-sort-select";
+import { ProductsFiltersDrawer } from "@/components/catalog/products-filters-drawer";
 import { cn } from "@/lib/utils/cn";
 
 const sectionMotion = {
@@ -257,6 +256,7 @@ export function ProductsPage() {
   const [selectedPackagings, setSelectedPackagings] = useState(parsedState.packagings);
   const [includeArchived, setIncludeArchived] = useState(parsedState.includeArchived);
   const [sort, setSort] = useState<ProductsSortValue>(parsedState.sort);
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
   const allPackagings = useMemo(() => getAllPackagings(), []);
 
@@ -272,9 +272,9 @@ export function ProductsPage() {
   const updateUrlState = useCallback(
     (nextState: {
       search: string;
-      categoryIds: ProductCategoryId[];
-      lineIds: ProductLineId[];
-      packagings: string[];
+      categoryIds: typeof selectedCategories;
+      lineIds: typeof selectedLines;
+      packagings: typeof selectedPackagings;
       includeArchived: boolean;
       sort: ProductsSortValue;
     }) => {
@@ -298,7 +298,7 @@ export function ProductsPage() {
     [selectedCategories, selectedLines, selectedPackagings, includeArchived, search, sort],
   );
 
-  function toggleCategory(id: ProductCategoryId) {
+  function toggleCategory(id: (typeof selectedCategories)[number]) {
     const next = selectedCategories.includes(id)
       ? selectedCategories.filter((item) => item !== id)
       : [...selectedCategories, id];
@@ -314,7 +314,7 @@ export function ProductsPage() {
     });
   }
 
-  function toggleLine(id: ProductLineId) {
+  function toggleLine(id: (typeof selectedLines)[number]) {
     const next = selectedLines.includes(id)
       ? selectedLines.filter((item) => item !== id)
       : [...selectedLines, id];
@@ -452,7 +452,7 @@ export function ProductsPage() {
               variants={sectionMotion}
               initial="hidden"
               animate="visible"
-              className="xl:sticky xl:top-[112px]"
+              className="hidden xl:sticky xl:top-[112px] xl:block"
             >
               <ProductsFiltersPanel
                 search={search}
@@ -478,56 +478,71 @@ export function ProductsPage() {
                 animate="visible"
                 className="rounded-[28px] bg-[var(--color-surface)] p-4 md:p-5"
               >
-                <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                  <div>
-                    <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                      найдено позиций
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
+                        найдено позиций
+                      </div>
+                      <div className="mt-2 text-[26px] font-semibold tracking-[-0.04em] text-[var(--color-text)]">
+                        {filteredProducts.length}
+                      </div>
                     </div>
-                    <div className="mt-2 text-[26px] font-semibold tracking-[-0.04em] text-[var(--color-text)]">
-                      {filteredProducts.length}
+
+                    <div className="hidden md:block">
+                      <ProductsSortSelect value={sort} onChange={handleSortChange} />
                     </div>
                   </div>
 
-                  <div className="flex flex-col gap-3 md:items-end">
+                  <div className="flex items-center gap-3 md:hidden">
+                    <button
+                      type="button"
+                      onClick={() => setIsMobileFiltersOpen(true)}
+                      className="inline-flex h-11 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[14px] font-semibold text-[var(--color-text)]"
+                    >
+                      <SlidersHorizontal size={16} strokeWidth={2.2} />
+                      <span>фильтры</span>
+                    </button>
+
                     <ProductsSortSelect value={sort} onChange={handleSortChange} />
+                  </div>
 
-                    <div className="flex flex-wrap gap-2">
-                      {selectedCategories.map((id) => (
-                        <button
-                          key={id}
-                          type="button"
-                          onClick={() => toggleCategory(id)}
-                          className="inline-flex h-10 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
-                        >
-                          <span>{getProductCategoryById(id)?.shortTitle ?? id}</span>
-                          <X size={14} strokeWidth={2.2} />
-                        </button>
-                      ))}
+                  <div className="flex flex-wrap gap-2">
+                    {selectedCategories.map((id) => (
+                      <button
+                        key={id}
+                        type="button"
+                        onClick={() => toggleCategory(id)}
+                        className="inline-flex h-10 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
+                      >
+                        <span>{getProductCategoryById(id)?.shortTitle ?? id}</span>
+                        <X size={14} strokeWidth={2.2} />
+                      </button>
+                    ))}
 
-                      {selectedLines.map((id) => (
-                        <button
-                          key={id}
-                          type="button"
-                          onClick={() => toggleLine(id)}
-                          className="inline-flex h-10 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
-                        >
-                          <span>{getProductLineById(id)?.title ?? id}</span>
-                          <X size={14} strokeWidth={2.2} />
-                        </button>
-                      ))}
+                    {selectedLines.map((id) => (
+                      <button
+                        key={id}
+                        type="button"
+                        onClick={() => toggleLine(id)}
+                        className="inline-flex h-10 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
+                      >
+                        <span>{getProductLineById(id)?.title ?? id}</span>
+                        <X size={14} strokeWidth={2.2} />
+                      </button>
+                    ))}
 
-                      {selectedPackagings.map((item) => (
-                        <button
-                          key={item}
-                          type="button"
-                          onClick={() => togglePackaging(item)}
-                          className="inline-flex h-10 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
-                        >
-                          <span>{item}</span>
-                          <X size={14} strokeWidth={2.2} />
-                        </button>
-                      ))}
-                    </div>
+                    {selectedPackagings.map((item) => (
+                      <button
+                        key={item}
+                        type="button"
+                        onClick={() => togglePackaging(item)}
+                        className="inline-flex h-10 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
+                      >
+                        <span>{item}</span>
+                        <X size={14} strokeWidth={2.2} />
+                      </button>
+                    ))}
                   </div>
                 </div>
               </motion.div>
@@ -590,7 +605,25 @@ export function ProductsPage() {
           </div>
         </Container>
       </Section>
+
+      <ProductsFiltersDrawer
+        isOpen={isMobileFiltersOpen}
+        onClose={() => setIsMobileFiltersOpen(false)}
+        resultCount={filteredProducts.length}
+        search={search}
+        onSearchChange={handleSearchChange}
+        selectedCategories={selectedCategories}
+        onToggleCategory={toggleCategory}
+        selectedLines={selectedLines}
+        onToggleLine={toggleLine}
+        selectedPackagings={selectedPackagings}
+        onTogglePackaging={togglePackaging}
+        allPackagings={allPackagings}
+        includeArchived={includeArchived}
+        onToggleArchived={handleToggleArchived}
+        onReset={resetFilters}
+        hasActiveFilters={hasActiveFilters}
+      />
     </div>
   );
 }
-
