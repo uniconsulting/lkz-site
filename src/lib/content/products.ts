@@ -780,3 +780,7 @@ export function getRelatedProducts(
   return scored.slice(0, limit).map((item) => item.product);
 }
 
+export function getProductApplicationAreas(productId: string) {
+  const product = products.find((item) => item.id === productId);
+  return product?.applicationAreas ?? [];
+}
