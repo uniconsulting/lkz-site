@@ -12,6 +12,7 @@ import {
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import {
+  type ProductCharacteristic,
   type ProductItem,
   getProductCategoryById,
   getProductLineById,
@@ -58,6 +59,50 @@ function CharacteristicCard({
   );
 }
 
+function CharacteristicsSection({
+  eyebrow,
+  title,
+  items,
+}: {
+  eyebrow: string;
+  title: string;
+  items: ProductCharacteristic[];
+}) {
+  if (!items.length) return null;
+
+  return (
+    <Section className="pt-8 md:pt-10 xl:pt-12">
+      <Container>
+        <motion.div
+          variants={sectionMotion}
+          initial="hidden"
+          animate="visible"
+          className="rounded-[32px] bg-[var(--color-surface)] p-6 md:p-8"
+        >
+          <div className="mb-6">
+            <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
+              {eyebrow}
+            </div>
+            <h2 className="mt-4 font-heading text-[28px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[36px]">
+              {title}
+            </h2>
+          </div>
+
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+            {items.map((item) => (
+              <CharacteristicCard
+                key={`${item.label}-${item.value}`}
+                label={item.label}
+                value={item.value}
+              />
+            ))}
+          </div>
+        </motion.div>
+      </Container>
+    </Section>
+  );
+}
+
 function ApplicationAreaChip({ value }: { value: string }) {
   return (
     <Link
@@ -98,6 +143,10 @@ export function ProductDetailPage({ product }: { product: ProductItem }) {
   const relatedProducts = getRelatedProducts(product.id, { limit: 3 });
   const contactHref = `/contacts?product=${encodeURIComponent(product.slug)}`;
   const applicationAreas = product.applicationAreas ?? [];
+
+  const commercialCharacteristics = product.characteristics?.commercial ?? [];
+  const technicalCharacteristics = product.characteristics?.technical ?? [];
+  const scenarioCharacteristics = product.characteristics?.scenario ?? [];
 
   return (
     <div className="pt-[92px] pb-6 md:pt-[104px] md:pb-8 xl:pb-10">
@@ -234,37 +283,23 @@ export function ProductDetailPage({ product }: { product: ProductItem }) {
         </Container>
       </Section>
 
-      {product.characteristics && product.characteristics.length > 0 ? (
-        <Section className="pt-8 md:pt-10 xl:pt-12">
-          <Container>
-            <motion.div
-              variants={sectionMotion}
-              initial="hidden"
-              animate="visible"
-              className="rounded-[32px] bg-[var(--color-surface)] p-6 md:p-8"
-            >
-              <div className="mb-6">
-                <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                  характеристики
-                </div>
-                <h2 className="mt-4 font-heading text-[28px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[36px]">
-                  Параметры товара
-                </h2>
-              </div>
+      <CharacteristicsSection
+        eyebrow="коммерческие параметры"
+        title="Коммерческая информация"
+        items={commercialCharacteristics}
+      />
 
-              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-                {product.characteristics.map((item) => (
-                  <CharacteristicCard
-                    key={`${item.label}-${item.value}`}
-                    label={item.label}
-                    value={item.value}
-                  />
-                ))}
-              </div>
-            </motion.div>
-          </Container>
-        </Section>
-      ) : null}
+      <CharacteristicsSection
+        eyebrow="технические параметры"
+        title="Технические свойства"
+        items={technicalCharacteristics}
+      />
+
+      <CharacteristicsSection
+        eyebrow="сценарные параметры"
+        title="Прикладное применение"
+        items={scenarioCharacteristics}
+      />
 
       {applicationAreas.length > 0 ? (
         <Section className="pt-8 md:pt-10 xl:pt-12">
