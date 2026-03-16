@@ -29,11 +29,10 @@ import {
   buildSearchParamsFromFilterState,
   hasActiveProductsFilters,
   parseFilterStateFromSearchParams,
-  type ProductsFilterState,
   type ProductsSortValue,
 } from "@/lib/products-filters";
 import { ProductsFiltersPanel } from "@/components/catalog/products-filters-panel";
-import { ProductsSortSelect } from "@/components/catalog/products-sort-select";
+import { ProductsSortDropdown } from "@/components/catalog/products-sort-dropdown";
 import { ProductsFiltersDrawer } from "@/components/catalog/products-filters-drawer";
 import { cn } from "@/lib/utils/cn";
 
@@ -88,11 +87,16 @@ const productsPageContent = {
 
 const quickUseCases = [
   "интерьер",
+  "стены",
+  "потолки",
   "фасад",
   "дерево",
   "радиаторы",
   "бани и сауны",
   "osb",
+  "наружные работы",
+  "внутренние работы",
+  "минеральные основания",
 ];
 
 function QuickUseCaseButton({
@@ -109,7 +113,7 @@ function QuickUseCaseButton({
       type="button"
       onClick={onClick}
       className={cn(
-        "inline-flex h-11 items-center justify-center rounded-[16px] px-4 text-[14px] font-medium transition duration-300",
+        "inline-flex h-11 shrink-0 items-center justify-center rounded-[16px] px-4 text-[14px] font-medium transition duration-300",
         active
           ? "bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)]"
           : "bg-[var(--color-bg)] text-[var(--color-text)] hover:-translate-y-[1px] hover:shadow-[0_6px_16px_rgba(43,47,51,0.05)]",
@@ -125,14 +129,12 @@ function ProductMarketplaceCard({
   title,
   subtitle,
   lineTitle,
-  isArchived,
   image,
 }: {
   href: string;
   title: string;
   subtitle?: string;
   lineTitle: string;
-  isArchived?: boolean;
   image?: string;
 }) {
   const [tilt, setTilt] = useState({
@@ -242,12 +244,6 @@ function ProductMarketplaceCard({
                     </div>
                   </div>
                 )}
-
-                {isArchived ? (
-                  <div className="absolute left-3 top-3 inline-flex h-8 items-center rounded-[999px] bg-[var(--color-surface)] px-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
-                    архив
-                  </div>
-                ) : null}
               </div>
 
               <div
@@ -298,7 +294,6 @@ export function ProductsPage() {
   const [selectedApplicationAreas, setSelectedApplicationAreas] = useState(
     parsedState.applicationAreas,
   );
-  const [includeArchived, setIncludeArchived] = useState(parsedState.includeArchived);
   const [sort, setSort] = useState<ProductsSortValue>(parsedState.sort);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
@@ -310,13 +305,22 @@ export function ProductsPage() {
     setSelectedLines(parsedState.lineIds);
     setSelectedPackagings(parsedState.packagings);
     setSelectedApplicationAreas(parsedState.applicationAreas);
-    setIncludeArchived(parsedState.includeArchived);
     setSort(parsedState.sort);
   }, [parsedState]);
 
   const updateUrlState = useCallback(
-    (nextState: ProductsFilterState) => {
-      const params = buildSearchParamsFromFilterState(nextState);
+    (nextState: {
+      search: string;
+      categoryIds: typeof selectedCategories;
+      lineIds: typeof selectedLines;
+      packagings: typeof selectedPackagings;
+      applicationAreas: typeof selectedApplicationAreas;
+      sort: ProductsSortValue;
+    }) => {
+      const params = buildSearchParamsFromFilterState({
+        ...nextState,
+        includeArchived: false,
+      });
       const query = params.toString();
       router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
     },
@@ -330,7 +334,7 @@ export function ProductsPage() {
         lineIds: selectedLines,
         packagings: selectedPackagings,
         applicationAreas: selectedApplicationAreas,
-        includeArchived,
+        includeArchived: false,
         search,
         sort,
       }),
@@ -339,7 +343,6 @@ export function ProductsPage() {
       selectedLines,
       selectedPackagings,
       selectedApplicationAreas,
-      includeArchived,
       search,
       sort,
     ],
@@ -357,7 +360,6 @@ export function ProductsPage() {
       lineIds: selectedLines,
       packagings: selectedPackagings,
       applicationAreas: selectedApplicationAreas,
-      includeArchived,
       sort,
     });
   }
@@ -374,7 +376,6 @@ export function ProductsPage() {
       lineIds: next,
       packagings: selectedPackagings,
       applicationAreas: selectedApplicationAreas,
-      includeArchived,
       sort,
     });
   }
@@ -391,7 +392,6 @@ export function ProductsPage() {
       lineIds: selectedLines,
       packagings: next,
       applicationAreas: selectedApplicationAreas,
-      includeArchived,
       sort,
     });
   }
@@ -408,7 +408,6 @@ export function ProductsPage() {
       lineIds: selectedLines,
       packagings: selectedPackagings,
       applicationAreas: next,
-      includeArchived,
       sort,
     });
   }
@@ -421,7 +420,6 @@ export function ProductsPage() {
       lineIds: selectedLines,
       packagings: selectedPackagings,
       applicationAreas: selectedApplicationAreas,
-      includeArchived,
       sort,
     });
   }
@@ -434,22 +432,7 @@ export function ProductsPage() {
       lineIds: selectedLines,
       packagings: selectedPackagings,
       applicationAreas: selectedApplicationAreas,
-      includeArchived,
       sort: value,
-    });
-  }
-
-  function handleToggleArchived() {
-    const next = !includeArchived;
-    setIncludeArchived(next);
-    updateUrlState({
-      search,
-      categoryIds: selectedCategories,
-      lineIds: selectedLines,
-      packagings: selectedPackagings,
-      applicationAreas: selectedApplicationAreas,
-      includeArchived: next,
-      sort,
     });
   }
 
@@ -459,7 +442,6 @@ export function ProductsPage() {
     setSelectedLines([]);
     setSelectedPackagings([]);
     setSelectedApplicationAreas([]);
-    setIncludeArchived(false);
     setSort("default");
 
     updateUrlState({
@@ -468,7 +450,6 @@ export function ProductsPage() {
       lineIds: [],
       packagings: [],
       applicationAreas: [],
-      includeArchived: false,
       sort: "default",
     });
   }
@@ -479,7 +460,7 @@ export function ProductsPage() {
     lineIds: selectedLines,
     packagings: selectedPackagings,
     applicationAreas: selectedApplicationAreas,
-    includeArchived,
+    includeArchived: false,
     sort,
   });
 
@@ -533,19 +514,26 @@ export function ProductsPage() {
                 className="text-[var(--color-accent-1)]"
               />
               <span className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                подбор по задаче
+                быстрый подбор по задаче
               </span>
             </div>
 
-            <div className="flex flex-wrap gap-2">
-              {quickUseCases.map((item) => (
-                <QuickUseCaseButton
-                  key={item}
-                  label={item}
-                  active={selectedApplicationAreas.includes(item)}
-                  onClick={() => toggleApplicationArea(item)}
-                />
-              ))}
+            <div className="relative">
+              <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-[linear-gradient(90deg,var(--color-surface)_0%,rgba(0,0,0,0)_100%)]" />
+              <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-8 bg-[linear-gradient(270deg,var(--color-surface)_0%,rgba(0,0,0,0)_100%)]" />
+
+              <div className="-mx-1 overflow-x-auto px-1 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                <div className="flex w-max gap-2">
+                  {quickUseCases.map((item) => (
+                    <QuickUseCaseButton
+                      key={item}
+                      label={item}
+                      active={selectedApplicationAreas.includes(item)}
+                      onClick={() => toggleApplicationArea(item)}
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
           </motion.div>
         </Container>
@@ -570,10 +558,6 @@ export function ProductsPage() {
                 selectedPackagings={selectedPackagings}
                 onTogglePackaging={togglePackaging}
                 allPackagings={allPackagings}
-                selectedApplicationAreas={selectedApplicationAreas}
-                onToggleApplicationArea={toggleApplicationArea}
-                includeArchived={includeArchived}
-                onToggleArchived={handleToggleArchived}
                 onReset={resetFilters}
                 hasActiveFilters={hasActiveFilters}
               />
@@ -586,84 +570,82 @@ export function ProductsPage() {
                 animate="visible"
                 className="rounded-[28px] bg-[var(--color-surface)] p-4 md:p-5"
               >
-                <div className="flex flex-col gap-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                        найдено позиций
-                      </div>
-                      <div className="mt-2 text-[26px] font-semibold tracking-[-0.04em] text-[var(--color-text)]">
-                        {filteredProducts.length}
-                      </div>
+                <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                  <div className="pt-[2px]">
+                    <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
+                      найдено позиций
                     </div>
-
-                    <div className="hidden md:block">
-                      <ProductsSortSelect value={sort} onChange={handleSortChange} />
+                    <div className="mt-2 text-[26px] font-semibold tracking-[-0.04em] text-[var(--color-text)]">
+                      {filteredProducts.length}
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 md:hidden">
+                  <div className="hidden md:block">
+                    <ProductsSortDropdown value={sort} onChange={handleSortChange} />
+                  </div>
+                </div>
+
+                <div className="mt-4 flex items-center gap-3 md:hidden">
+                  <button
+                    type="button"
+                    onClick={() => setIsMobileFiltersOpen(true)}
+                    className="inline-flex h-11 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[14px] font-semibold text-[var(--color-text)]"
+                  >
+                    <SlidersHorizontal size={16} strokeWidth={2.2} />
+                    <span>фильтры</span>
+                  </button>
+
+                  <ProductsSortDropdown value={sort} onChange={handleSortChange} />
+                </div>
+
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {selectedApplicationAreas.map((item) => (
                     <button
+                      key={item}
                       type="button"
-                      onClick={() => setIsMobileFiltersOpen(true)}
-                      className="inline-flex h-11 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[14px] font-semibold text-[var(--color-text)]"
+                      onClick={() => toggleApplicationArea(item)}
+                      className="inline-flex h-10 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
                     >
-                      <SlidersHorizontal size={16} strokeWidth={2.2} />
-                      <span>фильтры</span>
+                      <span>{item}</span>
+                      <X size={14} strokeWidth={2.2} />
                     </button>
+                  ))}
 
-                    <ProductsSortSelect value={sort} onChange={handleSortChange} />
-                  </div>
+                  {selectedCategories.map((id) => (
+                    <button
+                      key={id}
+                      type="button"
+                      onClick={() => toggleCategory(id)}
+                      className="inline-flex h-10 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
+                    >
+                      <span>{getProductCategoryById(id)?.shortTitle ?? id}</span>
+                      <X size={14} strokeWidth={2.2} />
+                    </button>
+                  ))}
 
-                  <div className="flex flex-wrap gap-2">
-                    {selectedApplicationAreas.map((item) => (
-                      <button
-                        key={item}
-                        type="button"
-                        onClick={() => toggleApplicationArea(item)}
-                        className="inline-flex h-10 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
-                      >
-                        <span>{item}</span>
-                        <X size={14} strokeWidth={2.2} />
-                      </button>
-                    ))}
+                  {selectedLines.map((id) => (
+                    <button
+                      key={id}
+                      type="button"
+                      onClick={() => toggleLine(id)}
+                      className="inline-flex h-10 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
+                    >
+                      <span>{getProductLineById(id)?.title ?? id}</span>
+                      <X size={14} strokeWidth={2.2} />
+                    </button>
+                  ))}
 
-                    {selectedCategories.map((id) => (
-                      <button
-                        key={id}
-                        type="button"
-                        onClick={() => toggleCategory(id)}
-                        className="inline-flex h-10 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
-                      >
-                        <span>{getProductCategoryById(id)?.shortTitle ?? id}</span>
-                        <X size={14} strokeWidth={2.2} />
-                      </button>
-                    ))}
-
-                    {selectedLines.map((id) => (
-                      <button
-                        key={id}
-                        type="button"
-                        onClick={() => toggleLine(id)}
-                        className="inline-flex h-10 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
-                      >
-                        <span>{getProductLineById(id)?.title ?? id}</span>
-                        <X size={14} strokeWidth={2.2} />
-                      </button>
-                    ))}
-
-                    {selectedPackagings.map((item) => (
-                      <button
-                        key={item}
-                        type="button"
-                        onClick={() => togglePackaging(item)}
-                        className="inline-flex h-10 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
-                      >
-                        <span>{item}</span>
-                        <X size={14} strokeWidth={2.2} />
-                      </button>
-                    ))}
-                  </div>
+                  {selectedPackagings.map((item) => (
+                    <button
+                      key={item}
+                      type="button"
+                      onClick={() => togglePackaging(item)}
+                      className="inline-flex h-10 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
+                    >
+                      <span>{item}</span>
+                      <X size={14} strokeWidth={2.2} />
+                    </button>
+                  ))}
                 </div>
               </motion.div>
 
@@ -715,7 +697,6 @@ export function ProductsPage() {
                       title={product.title}
                       subtitle={product.subtitle}
                       lineTitle={getProductLineById(product.lineId)?.title ?? ""}
-                      isArchived={product.isArchived}
                       image={product.image}
                     />
                   ))}
@@ -739,14 +720,9 @@ export function ProductsPage() {
         selectedPackagings={selectedPackagings}
         onTogglePackaging={togglePackaging}
         allPackagings={allPackagings}
-        selectedApplicationAreas={selectedApplicationAreas}
-        onToggleApplicationArea={toggleApplicationArea}
-        includeArchived={includeArchived}
-        onToggleArchived={handleToggleArchived}
         onReset={resetFilters}
         hasActiveFilters={hasActiveFilters}
       />
     </div>
   );
 }
-
