@@ -37,3 +37,4 @@ export default async function Page({ params }: PageProps) {
 
   return <ProductDetailPage product={product} />;
 }
+
