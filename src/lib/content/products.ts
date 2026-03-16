@@ -515,3 +515,4 @@ export function getRelatedProducts(
 
   return scored.slice(0, limit).map((item) => item.product);
 }
+
