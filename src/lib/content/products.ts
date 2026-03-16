@@ -871,22 +871,15 @@ export function getFilteredProducts({
     );
   });
 
-  switch (sort) {
-    case "name-asc":
-      return [...filtered].sort((a, b) => a.title.localeCompare(b.title, "ru"));
-    case "name-desc":
-      return [...filtered].sort((a, b) => b.title.localeCompare(a.title, "ru"));
-    case "active-first":
-      return [...filtered].sort(
-        (a, b) => Number(!!a.isArchived) - Number(!!b.isArchived),
-      );
-    case "archived-first":
-      return [...filtered].sort(
-        (a, b) => Number(!!b.isArchived) - Number(!!a.isArchived),
-      );
-    default:
-      return filtered;
-  }
+switch (sort) {
+  case "name-asc":
+    return [...filtered].sort((a, b) => a.title.localeCompare(b.title, "ru"));
+
+  case "name-desc":
+    return [...filtered].sort((a, b) => b.title.localeCompare(a.title, "ru"));
+
+  default:
+    return filtered;
 }
 
 export function getRelatedProducts(
