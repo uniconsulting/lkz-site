@@ -3,31 +3,11 @@
 import { Check, Search, SlidersHorizontal, X } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import {
-  getAllApplicationAreas,
   productCategories,
   productLines,
   type ProductCategoryId,
   type ProductLineId,
 } from "@/lib/content/products";
-
-type ProductsFiltersPanelProps = {
-  search: string;
-  onSearchChange: (value: string) => void;
-  selectedCategories: ProductCategoryId[];
-  onToggleCategory: (value: ProductCategoryId) => void;
-  selectedLines: ProductLineId[];
-  onToggleLine: (value: ProductLineId) => void;
-  selectedPackagings: string[];
-  onTogglePackaging: (value: string) => void;
-  allPackagings: string[];
-  selectedApplicationAreas: string[];
-  onToggleApplicationArea: (value: string) => void;
-  includeArchived: boolean;
-  onToggleArchived: () => void;
-  onReset: () => void;
-  hasActiveFilters: boolean;
-  embedded?: boolean;
-};
 
 function FilterChip({
   label,
@@ -97,16 +77,23 @@ export function ProductsFiltersPanel({
   selectedPackagings,
   onTogglePackaging,
   allPackagings,
-  selectedApplicationAreas,
-  onToggleApplicationArea,
-  includeArchived,
-  onToggleArchived,
-  onReset,
   hasActiveFilters,
+  onReset,
   embedded = false,
-}: ProductsFiltersPanelProps) {
-  const applicationAreas = getAllApplicationAreas();
-
+}: {
+  search: string;
+  onSearchChange: (value: string) => void;
+  selectedCategories: ProductCategoryId[];
+  onToggleCategory: (value: ProductCategoryId) => void;
+  selectedLines: ProductLineId[];
+  onToggleLine: (value: ProductLineId) => void;
+  selectedPackagings: string[];
+  onTogglePackaging: (value: string) => void;
+  allPackagings: string[];
+  hasActiveFilters: boolean;
+  onReset: () => void;
+  embedded?: boolean;
+}) {
   const content = (
     <>
       {!embedded ? (
@@ -160,22 +147,6 @@ export function ProductsFiltersPanel({
         <div className="space-y-5">
           <div>
             <div className="catalog-filter-panel-muted mb-3 text-[12px] font-semibold uppercase tracking-[0.08em]">
-              быстрый подбор по задаче
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {applicationAreas.map((item) => (
-                <FilterChip
-                  key={item}
-                  label={item}
-                  active={selectedApplicationAreas.includes(item)}
-                  onClick={() => onToggleApplicationArea(item)}
-                />
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <div className="catalog-filter-panel-muted mb-3 text-[12px] font-semibold uppercase tracking-[0.08em]">
               категории
             </div>
             <div className="space-y-2">
@@ -221,17 +192,6 @@ export function ProductsFiltersPanel({
               ))}
             </div>
           </div>
-
-          <div>
-            <div className="catalog-filter-panel-muted mb-3 text-[12px] font-semibold uppercase tracking-[0.08em]">
-              статус
-            </div>
-            <CheckboxRow
-              label="показывать архивные позиции"
-              checked={includeArchived}
-              onToggle={onToggleArchived}
-            />
-          </div>
         </div>
       </div>
     </>
@@ -243,4 +203,3 @@ export function ProductsFiltersPanel({
 
   return <div className="catalog-filter-panel rounded-[28px]">{content}</div>;
 }
-
