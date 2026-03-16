@@ -871,15 +871,16 @@ export function getFilteredProducts({
     );
   });
 
-switch (sort) {
-  case "name-asc":
-    return [...filtered].sort((a, b) => a.title.localeCompare(b.title, "ru"));
+  switch (sort) {
+    case "name-asc":
+      return [...filtered].sort((a, b) => a.title.localeCompare(b.title, "ru"));
 
-  case "name-desc":
-    return [...filtered].sort((a, b) => b.title.localeCompare(a.title, "ru"));
+    case "name-desc":
+      return [...filtered].sort((a, b) => b.title.localeCompare(a.title, "ru"));
 
-  default:
-    return filtered;
+    default:
+      return filtered;
+  }
 }
 
 export function getRelatedProducts(
