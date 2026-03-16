@@ -13,6 +13,7 @@ export type ProductsFilterState = {
   categoryIds: ProductCategoryId[];
   lineIds: ProductLineId[];
   packagings: string[];
+  applicationAreas: string[];
   includeArchived: boolean;
   sort: ProductsSortValue;
 };
@@ -22,6 +23,7 @@ export const DEFAULT_PRODUCTS_FILTER_STATE: ProductsFilterState = {
   categoryIds: [],
   lineIds: [],
   packagings: [],
+  applicationAreas: [],
   includeArchived: false,
   sort: "default",
 };
@@ -49,6 +51,7 @@ export function parseFilterStateFromSearchParams(
   const categoryIds = normalizeArrayParam(searchParams.getAll("category")) as ProductCategoryId[];
   const lineIds = normalizeArrayParam(searchParams.getAll("line")) as ProductLineId[];
   const packagings = normalizeArrayParam(searchParams.getAll("pack"));
+  const applicationAreas = normalizeArrayParam(searchParams.getAll("use"));
   const includeArchived = parseBooleanParam(searchParams.get("archived"));
   const sort = (searchParams.get("sort") as ProductsSortValue | null) ?? "default";
 
@@ -57,6 +60,7 @@ export function parseFilterStateFromSearchParams(
     categoryIds,
     lineIds,
     packagings,
+    applicationAreas,
     includeArchived,
     sort,
   };
@@ -81,6 +85,10 @@ export function buildSearchParamsFromFilterState(state: ProductsFilterState) {
     params.append("pack", value);
   });
 
+  state.applicationAreas.forEach((value) => {
+    params.append("use", value);
+  });
+
   if (state.includeArchived) {
     params.set("archived", "1");
   }
@@ -98,6 +106,7 @@ export function hasActiveProductsFilters(state: ProductsFilterState) {
     state.categoryIds.length > 0 ||
     state.lineIds.length > 0 ||
     state.packagings.length > 0 ||
+    state.applicationAreas.length > 0 ||
     state.includeArchived ||
     state.sort !== "default"
   );
