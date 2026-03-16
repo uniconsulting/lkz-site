@@ -7,8 +7,6 @@ const SORT_OPTIONS: Array<{ value: ProductsSortValue; label: string }> = [
   { value: "default", label: "по умолчанию" },
   { value: "name-asc", label: "название А-Я" },
   { value: "name-desc", label: "название Я-А" },
-  { value: "active-first", label: "сначала актуальные" },
-  { value: "archived-first", label: "сначала архивные" },
 ];
 
 export function ProductsSortSelect({
