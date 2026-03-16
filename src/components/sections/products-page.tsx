@@ -13,7 +13,14 @@ import { motion } from "motion/react";
 import { ArrowRight, PackageSearch, X } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
-import { getAllPackagings, getFilteredProducts, getProductCategoryById, getProductLineById } from "@/lib/content/products";
+import {
+  getAllPackagings,
+  getFilteredProducts,
+  getProductCategoryById,
+  getProductLineById,
+  type ProductCategoryId,
+  type ProductLineId,
+} from "@/lib/content/products";
 import {
   buildSearchParamsFromFilterState,
   hasActiveProductsFilters,
