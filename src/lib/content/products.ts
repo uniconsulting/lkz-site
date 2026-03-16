@@ -1,30 +1,23 @@
+const basePath = process.env.NODE_ENV === "production" ? "/lkz-site" : "";
+
 export type ProductCategoryId =
   | "enamels"
+  | "varnishes"
   | "paints"
   | "special-paints"
-  | "primers"
-  | "varnishes"
-  | "adhesives-glass"
   | "protective"
-  | "special-products";
+  | "adhesives-glass"
+  | "primers";
 
-export type ProductLineId =
-  | "emalyer"
-  | "narodnaya"
-  | "baustoffe"
-  | "unbranded";
+export type ProductLineId = "emalyer" | "general";
 
-export type ProductCategory = {
-  id: ProductCategoryId;
-  title: string;
-  shortTitle: string;
-  description: string;
-  order: number;
-};
+export type ProductPackagingUnit = "kg" | "l";
 
-export type ProductLine = {
-  id: ProductLineId;
-  title: string;
+export type ProductPackaging = {
+  label: string;
+  value: number;
+  unit: ProductPackagingUnit;
+  sortOrder: number;
 };
 
 export type ProductCharacteristic = {
@@ -38,6 +31,17 @@ export type ProductCharacteristicsGroup = {
   scenario?: ProductCharacteristic[];
 };
 
+export type ProductCategory = {
+  id: ProductCategoryId;
+  title: string;
+  shortTitle: string;
+};
+
+export type ProductLine = {
+  id: ProductLineId;
+  title: string;
+};
+
 export type ProductItem = {
   id: string;
   slug: string;
@@ -46,102 +50,70 @@ export type ProductItem = {
   title: string;
   subtitle?: string;
   description: string;
-  packagings: string[];
-  applicationAreas?: string[];
+  packagings: ProductPackaging[];
   image?: string;
   isArchived?: boolean;
+  applicationAreas?: string[];
   characteristics?: ProductCharacteristicsGroup;
 };
 
+function createPackaging(
+  label: string,
+  value: number,
+  unit: ProductPackagingUnit,
+  sortOrder: number,
+): ProductPackaging {
+  return {
+    label,
+    value,
+    unit,
+    sortOrder,
+  };
+}
+
 export const productCategories: ProductCategory[] = [
-  {
-    id: "enamels",
-    title: "Эмали",
-    shortTitle: "Эмали",
-    description: "Архивные эмали и специализированные эмалевые позиции",
-    order: 1,
-  },
-  {
-    id: "paints",
-    title: "Краски",
-    shortTitle: "Краски",
-    description: "Интерьерные, фасадные и специальные акриловые краски",
-    order: 2,
-  },
-  {
-    id: "special-paints",
-    title: "Специальные краски",
-    shortTitle: "Спецкраски",
-    description: "Краски-грунты и износостойкие специальные составы",
-    order: 3,
-  },
-  {
-    id: "primers",
-    title: "Грунтовки",
-    shortTitle: "Грунтовки",
-    description: "Бетонконтакт и грунты глубокого проникновения",
-    order: 4,
-  },
-  {
-    id: "varnishes",
-    title: "Лаки",
-    shortTitle: "Лаки",
-    description: "Универсальные и специальные водно-дисперсионные лаки",
-    order: 5,
-  },
-  {
-    id: "adhesives-glass",
-    title: "Клей и жидкое стекло",
-    shortTitle: "Клей и стекло",
-    description: "Клеевые составы и жидкое стекло",
-    order: 6,
-  },
-  {
-    id: "protective",
-    title: "Защитные материалы",
-    shortTitle: "Защита",
-    description: "Антисептики и составы для защиты древесины",
-    order: 7,
-  },
-  {
-    id: "special-products",
-    title: "Специальные позиции",
-    shortTitle: "Спецпозиции",
-    description: "Дополнительные продукты каталога",
-    order: 8,
-  },
+  { id: "enamels", title: "Эмали", shortTitle: "эмали" },
+  { id: "varnishes", title: "Лаки", shortTitle: "лаки" },
+  { id: "paints", title: "Краски", shortTitle: "краски" },
+  { id: "special-paints", title: "Специальные краски", shortTitle: "спецкраски" },
+  { id: "protective", title: "Защитные материалы", shortTitle: "защита" },
+  { id: "adhesives-glass", title: "Клей и жидкое стекло", shortTitle: "клей и стекло" },
+  { id: "primers", title: "Грунты", shortTitle: "грунты" },
 ];
 
 export const productLines: ProductLine[] = [
   { id: "emalyer", title: "Эмальер" },
-  { id: "narodnaya", title: "Народная" },
-  { id: "baustoffe", title: "BauStoffe" },
-  { id: "unbranded", title: "Без линейки" },
+  { id: "general", title: "Универсальная линейка" },
 ];
-
-const basePath = process.env.NODE_ENV === "production" ? "/lkz-site" : "";
 
 export const products: ProductItem[] = [
   {
-    id: "emalyer-enamel-universal-base-a",
-    slug: "emalyer-universal-base-a",
+    id: "emalyer-enamel-matte-base-a",
+    slug: "emalyer-enamel-matte-base-a",
     categoryId: "enamels",
     lineId: "emalyer",
-    title: "Универсальная",
-    subtitle: "эмаль матовая база А",
-    description: "Базовая матовая эмаль для универсального применения.",
-    packagings: ["0,4 кг", "0,9 кг"],
-    applicationAreas: ["внутренние работы", "универсальные покрытия", "металл"],
+    title: "Эмаль матовая база A",
+    subtitle: "универсальная",
+    description:
+      "Матовая водно-дисперсионная эмаль для интерьерных и универсальных задач с дальнейшей колеровкой.",
     image: `${basePath}/images/sections/catalog/products/product-enamel-matte-base-a.webp`,
-    isArchived: true,
+    packagings: [
+      createPackaging("0,9 кг", 0.9, "kg", 1),
+      createPackaging("2,5 кг", 2.5, "kg", 2),
+      createPackaging("12 кг", 12, "kg", 3),
+    ],
+    applicationAreas: ["интерьер", "внутренние работы", "универсальные поверхности"],
     characteristics: {
       commercial: [
         { label: "Категория", value: "Эмали" },
         { label: "Линейка", value: "Эмальер" },
-        { label: "Статус", value: "Архивная позиция" },
+        { label: "Фасовки", value: "0,9 кг / 2,5 кг / 12 кг" },
       ],
-      technical: [{ label: "Тип", value: "Матовая база А" }],
-      scenario: [{ label: "Подходит для", value: "Универсальные покрытия по металлу" }],
+      technical: [
+        { label: "Финиш", value: "Матовый" },
+        { label: "Основа", value: "Водно-дисперсионная" },
+        { label: "База", value: "A" },
+      ],
     },
   },
   {
@@ -151,42 +123,24 @@ export const products: ProductItem[] = [
     lineId: "emalyer",
     title: "Для радиаторов",
     subtitle: "эмаль белоснежная",
-    description: "Эмаль для окраски радиаторов и нагревающихся поверхностей.",
-    packagings: ["0,4 кг", "0,9 кг"],
+    description:
+      "Эмаль для окраски радиаторов и нагревающихся металлических поверхностей внутри помещений.",
+    packagings: [
+      createPackaging("0,4 кг", 0.4, "kg", 1),
+      createPackaging("0,9 кг", 0.9, "kg", 2),
+    ],
     applicationAreas: ["радиаторы", "металл", "внутренние работы"],
-    isArchived: true,
     characteristics: {
       commercial: [
         { label: "Категория", value: "Эмали" },
         { label: "Линейка", value: "Эмальер" },
-        { label: "Статус", value: "Архивная позиция" },
-      ],
-      technical: [{ label: "Назначение", value: "Для радиаторов" }],
-      scenario: [{ label: "Подходит для", value: "Радиаторы и нагревающиеся металлические поверхности" }],
-    },
-  },
-  {
-    id: "emalyer-enamel-radiator-base-a",
-    slug: "emalyer-radiator-base-a",
-    categoryId: "enamels",
-    lineId: "emalyer",
-    title: "Для радиаторов",
-    subtitle: "эмаль база А",
-    description: "База А для колеровки эмали по радиаторам.",
-    packagings: ["0,4 кг", "0,9 кг"],
-    applicationAreas: ["радиаторы", "металл", "внутренние работы"],
-    isArchived: true,
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Эмали" },
-        { label: "Линейка", value: "Эмальер" },
-        { label: "Статус", value: "Архивная позиция" },
+        { label: "Фасовки", value: "0,4 кг / 0,9 кг" },
       ],
       technical: [
-        { label: "Тип", value: "База А" },
         { label: "Назначение", value: "Для радиаторов" },
+        { label: "Цвет", value: "Белоснежный" },
+        { label: "Основа", value: "Водно-дисперсионная" },
       ],
-      scenario: [{ label: "Подходит для", value: "Колеровка эмали для радиаторов" }],
     },
   },
   {
@@ -196,10 +150,17 @@ export const products: ProductItem[] = [
     lineId: "emalyer",
     title: "Для стен и потолков",
     subtitle: "краска акриловая",
-    description: "Влагостойкая белоснежная краска для внутренних работ.",
-    packagings: ["1,4 кг", "3 кг", "7 кг", "14 кг", "40 кг"],
-    applicationAreas: ["интерьер", "стены", "потолки", "внутренние работы"],
+    description:
+      "Влагостойкая белоснежная краска для внутренних работ по стенам и потолкам.",
     image: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
+    packagings: [
+      createPackaging("1,4 кг", 1.4, "kg", 1),
+      createPackaging("3 кг", 3, "kg", 2),
+      createPackaging("7 кг", 7, "kg", 3),
+      createPackaging("14 кг", 14, "kg", 4),
+      createPackaging("40 кг", 40, "kg", 5),
+    ],
+    applicationAreas: ["интерьер", "стены", "потолки", "внутренние работы"],
     characteristics: {
       commercial: [
         { label: "Категория", value: "Краски" },
@@ -211,33 +172,6 @@ export const products: ProductItem[] = [
         { label: "Тип", value: "Водно-дисперсионная" },
         { label: "Назначение", value: "Для внутренних работ" },
       ],
-      scenario: [
-        { label: "Подходит для", value: "Стены и потолки" },
-        { label: "Тип объекта", value: "Интерьер" },
-      ],
-    },
-  },
-  {
-    id: "emalyer-paint-washable",
-    slug: "emalyer-paint-washable",
-    categoryId: "paints",
-    lineId: "emalyer",
-    title: "Моющаяся",
-    subtitle: "краска акриловая",
-    description: "Моющаяся белоснежная краска для интерьеров.",
-    packagings: ["1,4 кг", "3 кг", "7 кг", "14 кг", "40 кг"],
-    applicationAreas: ["интерьер", "стены", "внутренние работы"],
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Краски" },
-        { label: "Линейка", value: "Эмальер" },
-        { label: "Фасовки", value: "1,4 кг / 3 кг / 7 кг / 14 кг / 40 кг" },
-      ],
-      technical: [
-        { label: "Тип", value: "Моющаяся" },
-        { label: "Основа", value: "Акриловая" },
-      ],
-      scenario: [{ label: "Подходит для", value: "Интерьерные стены с повышенной эксплуатацией" }],
     },
   },
   {
@@ -247,8 +181,15 @@ export const products: ProductItem[] = [
     lineId: "emalyer",
     title: "Фасадная",
     subtitle: "краска акриловая",
-    description: "Белоснежная фасадная краска для наружных работ.",
-    packagings: ["1,4 кг", "3 кг", "7 кг", "14 кг", "40 кг"],
+    description:
+      "Белоснежная фасадная краска для наружных работ по минеральным основаниям.",
+    packagings: [
+      createPackaging("1,4 кг", 1.4, "kg", 1),
+      createPackaging("3 кг", 3, "kg", 2),
+      createPackaging("7 кг", 7, "kg", 3),
+      createPackaging("14 кг", 14, "kg", 4),
+      createPackaging("40 кг", 40, "kg", 5),
+    ],
     applicationAreas: ["фасад", "наружные работы", "минеральные основания"],
     characteristics: {
       commercial: [
@@ -257,94 +198,39 @@ export const products: ProductItem[] = [
         { label: "Фасовки", value: "1,4 кг / 3 кг / 7 кг / 14 кг / 40 кг" },
       ],
       technical: [
-        { label: "Тип", value: "Фасадная" },
         { label: "Основа", value: "Акриловая" },
+        { label: "Тип", value: "Фасадная" },
         { label: "Назначение", value: "Для наружных работ" },
       ],
-      scenario: [
-        { label: "Подходит для", value: "Фасады и наружные поверхности" },
-        { label: "Тип основания", value: "Минеральные поверхности" },
-      ],
     },
   },
   {
-    id: "narodnaya-paint-interior",
-    slug: "narodnaya-paint-interior",
-    categoryId: "paints",
-    lineId: "narodnaya",
-    title: "Интерьерная",
-    subtitle: "краска ВД",
-    description: "Интерьерная водно-дисперсионная краска для сухих помещений.",
-    packagings: ["2,5 кг", "6 кг", "13 кг"],
-    applicationAreas: ["интерьер", "стены", "потолки", "внутренние работы"],
+    id: "emalyer-wood-paint",
+    slug: "emalyer-wood-paint",
+    categoryId: "special-paints",
+    lineId: "emalyer",
+    title: "Краска для дерева",
+    subtitle: "универсальная",
+    description:
+      "Укрывная краска для деревянных оснований с хорошей адгезией и стабильным финишем.",
+    image: `${basePath}/images/sections/catalog/products/product-wood-paint.webp`,
+    packagings: [
+      createPackaging("0,9 кг", 0.9, "kg", 1),
+      createPackaging("2,5 кг", 2.5, "kg", 2),
+      createPackaging("9 кг", 9, "kg", 3),
+    ],
+    applicationAreas: ["дерево", "внутренние работы", "наружные работы"],
     characteristics: {
       commercial: [
-        { label: "Категория", value: "Краски" },
-        { label: "Линейка", value: "Народная" },
-        { label: "Фасовки", value: "2,5 кг / 6 кг / 13 кг" },
+        { label: "Категория", value: "Специальные краски" },
+        { label: "Линейка", value: "Эмальер" },
+        { label: "Фасовки", value: "0,9 кг / 2,5 кг / 9 кг" },
       ],
-      technical: [{ label: "Тип", value: "Интерьерная водно-дисперсионная" }],
-      scenario: [{ label: "Подходит для", value: "Сухие помещения, стены и потолки" }],
-    },
-  },
-  {
-    id: "narodnaya-paint-ceiling",
-    slug: "narodnaya-paint-ceiling",
-    categoryId: "paints",
-    lineId: "narodnaya",
-    title: "Для потолков",
-    subtitle: "краска ВД",
-    description: "Матовая краска для потолков и верхних панелей стен.",
-    packagings: ["2,5 кг", "6 кг", "13 кг"],
-    applicationAreas: ["интерьер", "потолки", "внутренние работы"],
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Краски" },
-        { label: "Линейка", value: "Народная" },
-        { label: "Фасовки", value: "2,5 кг / 6 кг / 13 кг" },
+      technical: [
+        { label: "Назначение", value: "Для дерева" },
+        { label: "Тип", value: "Укрывная" },
+        { label: "Основа", value: "Водно-дисперсионная" },
       ],
-      technical: [{ label: "Назначение", value: "Для потолков" }],
-      scenario: [{ label: "Подходит для", value: "Потолки и верхние панели стен" }],
-    },
-  },
-  {
-    id: "narodnaya-paint-trees",
-    slug: "narodnaya-paint-trees",
-    categoryId: "paints",
-    lineId: "narodnaya",
-    title: "Краска для деревьев",
-    subtitle: "водно-дисперсионная полиакриловая",
-    description: "Состав для защиты садовых деревьев и закрашивания спилов.",
-    packagings: ["1,3 кг", "2,8 кг"],
-    applicationAreas: ["дерево", "наружные работы", "садовые работы"],
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Краски" },
-        { label: "Линейка", value: "Народная" },
-        { label: "Фасовки", value: "1,3 кг / 2,8 кг" },
-      ],
-      technical: [{ label: "Назначение", value: "Для деревьев" }],
-      scenario: [{ label: "Подходит для", value: "Садовые деревья и закрашивание спилов" }],
-    },
-  },
-  {
-    id: "narodnaya-paint-stoves-fireplaces",
-    slug: "narodnaya-paint-stoves-fireplaces",
-    categoryId: "paints",
-    lineId: "narodnaya",
-    title: "Краска для печей и каминов",
-    subtitle: "термостойкая",
-    description: "Краска для минеральных нагревающихся поверхностей.",
-    packagings: ["0,9 кг", "2,5 кг"],
-    applicationAreas: ["печи и камины", "минеральные основания", "внутренние работы"],
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Краски" },
-        { label: "Линейка", value: "Народная" },
-        { label: "Фасовки", value: "0,9 кг / 2,5 кг" },
-      ],
-      technical: [{ label: "Тип", value: "Термостойкая" }],
-      scenario: [{ label: "Подходит для", value: "Печи, камины и нагревающиеся минеральные поверхности" }],
     },
   },
   {
@@ -354,8 +240,13 @@ export const products: ProductItem[] = [
     lineId: "emalyer",
     title: "Краска-грунт 2 в 1",
     subtitle: "по OSB",
-    description: "Состав 2 в 1 для OSB, SIP, ДСП, ДВП и смежных оснований.",
-    packagings: ["1,4 кг", "3 кг", "7 кг"],
+    description:
+      "Состав 2 в 1 для OSB, SIP, ДСП, ДВП и смежных оснований с функцией укрепления и окраски.",
+    packagings: [
+      createPackaging("1,4 кг", 1.4, "kg", 1),
+      createPackaging("3 кг", 3, "kg", 2),
+      createPackaging("7 кг", 7, "kg", 3),
+    ],
     applicationAreas: ["osb", "sip", "дсп", "двп", "дерево"],
     characteristics: {
       commercial: [
@@ -363,152 +254,11 @@ export const products: ProductItem[] = [
         { label: "Линейка", value: "Эмальер" },
         { label: "Фасовки", value: "1,4 кг / 3 кг / 7 кг" },
       ],
-      technical: [{ label: "Назначение", value: "OSB / SIP / ДСП / ДВП" }],
-      scenario: [{ label: "Подходит для", value: "Плитные и древесные основания" }],
-    },
-  },
-  {
-    id: "emalyer-rubber-paint",
-    slug: "emalyer-rubber-paint",
-    categoryId: "special-paints",
-    lineId: "emalyer",
-    title: "Краска резиновая",
-    subtitle: "эластичная акриловая",
-    description: "Эластичная краска для фасадов, OSB, дерева и минеральных оснований.",
-    packagings: ["1,2 кг", "3 кг"],
-    applicationAreas: ["фасад", "osb", "дерево", "минеральные основания", "наружные работы"],
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Специальные краски" },
-        { label: "Линейка", value: "Эмальер" },
-        { label: "Фасовки", value: "1,2 кг / 3 кг" },
+      technical: [
+        { label: "Формат", value: "2 в 1" },
+        { label: "Назначение", value: "OSB / SIP / ДСП / ДВП" },
+        { label: "Основа", value: "Водно-дисперсионная" },
       ],
-      technical: [{ label: "Тип", value: "Эластичная акриловая" }],
-      scenario: [{ label: "Подходит для", value: "Фасады, OSB, дерево и минеральные поверхности" }],
-    },
-  },
-  {
-    id: "emalyer-primer-concrete-contact",
-    slug: "emalyer-primer-concrete-contact",
-    categoryId: "primers",
-    lineId: "emalyer",
-    title: "Бетонконтакт",
-    subtitle: "грунт акриловый",
-    description: "Адгезионный грунт для подготовки плотных оснований.",
-    packagings: ["3 кг", "6 кг", "12 кг"],
-    applicationAreas: ["минеральные основания", "внутренние работы", "наружные работы"],
-    image: `${basePath}/images/sections/catalog/products/product-primer-deep.webp`,
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Грунтовки" },
-        { label: "Линейка", value: "Эмальер" },
-        { label: "Фасовки", value: "3 кг / 6 кг / 12 кг" },
-      ],
-      technical: [{ label: "Тип", value: "Бетонконтакт" }],
-      scenario: [{ label: "Подходит для", value: "Подготовка плотных и гладких оснований" }],
-    },
-  },
-  {
-    id: "narodnaya-primer-concrete-contact",
-    slug: "narodnaya-primer-concrete-contact",
-    categoryId: "primers",
-    lineId: "narodnaya",
-    title: "Бетонконтакт",
-    subtitle: "грунт акриловый",
-    description: "Бетонконтакт для подготовки гладких поверхностей.",
-    packagings: ["3 кг", "6 кг", "12 кг"],
-    applicationAreas: ["минеральные основания", "внутренние работы", "наружные работы"],
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Грунтовки" },
-        { label: "Линейка", value: "Народная" },
-        { label: "Фасовки", value: "3 кг / 6 кг / 12 кг" },
-      ],
-      technical: [{ label: "Тип", value: "Бетонконтакт" }],
-      scenario: [{ label: "Подходит для", value: "Подготовка гладких поверхностей" }],
-    },
-  },
-  {
-    id: "narodnaya-primer-deep-penetration",
-    slug: "narodnaya-primer-deep-penetration",
-    categoryId: "primers",
-    lineId: "narodnaya",
-    title: "Народная",
-    subtitle: "грунт глубокого проникновения",
-    description: "Грунтовка для укрепления и подготовки впитывающих оснований.",
-    packagings: ["3 кг", "5 кг", "10 кг"],
-    applicationAreas: ["минеральные основания", "внутренние работы", "наружные работы"],
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Грунтовки" },
-        { label: "Линейка", value: "Народная" },
-        { label: "Фасовки", value: "3 кг / 5 кг / 10 кг" },
-      ],
-      technical: [{ label: "Тип", value: "Глубокого проникновения" }],
-      scenario: [{ label: "Подходит для", value: "Укрепление впитывающих оснований" }],
-    },
-  },
-  {
-    id: "baustoffe-primer-deep-penetration",
-    slug: "baustoffe-primer-deep-penetration",
-    categoryId: "primers",
-    lineId: "baustoffe",
-    title: "BauStoffe",
-    subtitle: "грунт глубокого проникновения",
-    description: "Архивная грунтовка глубокого проникновения.",
-    packagings: ["1 кг", "5 кг", "10 кг"],
-    applicationAreas: ["минеральные основания", "внутренние работы", "наружные работы"],
-    isArchived: true,
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Грунтовки" },
-        { label: "Линейка", value: "BauStoffe" },
-        { label: "Статус", value: "Архивная позиция" },
-      ],
-      technical: [{ label: "Тип", value: "Глубокого проникновения" }],
-      scenario: [{ label: "Подходит для", value: "Укрепление и подготовка оснований" }],
-    },
-  },
-  {
-    id: "emalyer-primer-deep-penetration",
-    slug: "emalyer-primer-deep-penetration",
-    categoryId: "primers",
-    lineId: "emalyer",
-    title: "Эмальер",
-    subtitle: "грунт глубокого проникновения",
-    description: "Архивная грунтовка глубокого проникновения.",
-    packagings: ["1 кг", "5 кг", "10 кг"],
-    applicationAreas: ["минеральные основания", "внутренние работы", "наружные работы"],
-    isArchived: true,
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Грунтовки" },
-        { label: "Линейка", value: "Эмальер" },
-        { label: "Статус", value: "Архивная позиция" },
-      ],
-      technical: [{ label: "Тип", value: "Глубокого проникновения" }],
-      scenario: [{ label: "Подходит для", value: "Укрепление и подготовка оснований" }],
-    },
-  },
-  {
-    id: "narodnaya-primer-deep-penetration-archived",
-    slug: "narodnaya-primer-deep-penetration-archived",
-    categoryId: "primers",
-    lineId: "narodnaya",
-    title: "Народная",
-    subtitle: "грунт глубокого проникновения",
-    description: "Архивная версия грунтовки глубокого проникновения.",
-    packagings: ["3 кг", "5 кг", "10 кг"],
-    applicationAreas: ["минеральные основания", "внутренние работы", "наружные работы"],
-    isArchived: true,
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Грунтовки" },
-        { label: "Линейка", value: "Народная" },
-        { label: "Статус", value: "Архивная позиция" },
-      ],
-      technical: [{ label: "Тип", value: "Глубокого проникновения" }],
-      scenario: [{ label: "Подходит для", value: "Укрепление и подготовка оснований" }],
     },
   },
   {
@@ -516,42 +266,28 @@ export const products: ProductItem[] = [
     slug: "emalyer-varnish-gloss",
     categoryId: "varnishes",
     lineId: "emalyer",
-    title: "Глянцевый",
-    subtitle: "лак универсальный",
-    description: "Архивный универсальный акриловый лак с глянцевым финишем.",
-    packagings: ["0,3 кг", "2,2 кг", "10 кг"],
-    applicationAreas: ["дерево", "внутренние работы", "универсальные покрытия"],
+    title: "ВД лак глянцевый",
+    subtitle: "универсальный",
+    description:
+      "Глянцевый водно-дисперсионный лак для декоративной и защитной отделки поверхностей.",
     image: `${basePath}/images/sections/catalog/products/product-lacquer-gloss.webp`,
-    isArchived: true,
+    packagings: [
+      createPackaging("0,9 кг", 0.9, "kg", 1),
+      createPackaging("2,2 кг", 2.2, "kg", 2),
+      createPackaging("9 кг", 9, "kg", 3),
+    ],
+    applicationAreas: ["интерьер", "дерево", "внутренние работы"],
     characteristics: {
       commercial: [
         { label: "Категория", value: "Лаки" },
         { label: "Линейка", value: "Эмальер" },
-        { label: "Статус", value: "Архивная позиция" },
+        { label: "Фасовки", value: "0,9 кг / 2,2 кг / 9 кг" },
       ],
-      technical: [{ label: "Финиш", value: "Глянцевый" }],
-      scenario: [{ label: "Подходит для", value: "Универсальная защита и декоративная отделка дерева" }],
-    },
-  },
-  {
-    id: "emalyer-varnish-matte",
-    slug: "emalyer-varnish-matte",
-    categoryId: "varnishes",
-    lineId: "emalyer",
-    title: "Матовый",
-    subtitle: "лак универсальный",
-    description: "Архивный универсальный акриловый лак с матовым финишем.",
-    packagings: ["0,5 кг", "2,5 кг", "10 кг"],
-    applicationAreas: ["дерево", "внутренние работы", "универсальные покрытия"],
-    isArchived: true,
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Лаки" },
-        { label: "Линейка", value: "Эмальер" },
-        { label: "Статус", value: "Архивная позиция" },
+      technical: [
+        { label: "Финиш", value: "Глянцевый" },
+        { label: "Основа", value: "Водно-дисперсионная" },
+        { label: "Назначение", value: "Защитно-декоративное покрытие" },
       ],
-      technical: [{ label: "Финиш", value: "Матовый" }],
-      scenario: [{ label: "Подходит для", value: "Универсальная защита и декоративная отделка дерева" }],
     },
   },
   {
@@ -561,8 +297,12 @@ export const products: ProductItem[] = [
     lineId: "emalyer",
     title: "Лак для бань и саун",
     subtitle: "матовый",
-    description: "Влагостойкий защитный лак для деревянных поверхностей внутри бань и саун.",
-    packagings: ["0,9 кг", "2,2 кг"],
+    description:
+      "Влагостойкий защитный лак для деревянных поверхностей внутри бань и саун.",
+    packagings: [
+      createPackaging("0,9 кг", 0.9, "kg", 1),
+      createPackaging("2,2 кг", 2.2, "kg", 2),
+    ],
     applicationAreas: ["бани и сауны", "дерево", "внутренние работы"],
     characteristics: {
       commercial: [
@@ -571,119 +311,39 @@ export const products: ProductItem[] = [
         { label: "Фасовки", value: "0,9 кг / 2,2 кг" },
       ],
       technical: [
-        { label: "Назначение", value: "Для бань и саун" },
         { label: "Финиш", value: "Матовый" },
+        { label: "Назначение", value: "Для бань и саун" },
         { label: "Основа", value: "Водно-дисперсионная" },
       ],
-      scenario: [
-        { label: "Подходит для", value: "Деревянные поверхности внутри влажных помещений" },
-        { label: "Тип объекта", value: "Баня / сауна" },
-      ],
     },
   },
   {
-    id: "emalyer-varnish-sauna-gloss",
-    slug: "emalyer-varnish-sauna-gloss",
-    categoryId: "varnishes",
+    id: "emalyer-primer-deep-penetration",
+    slug: "emalyer-primer-deep-penetration",
+    categoryId: "primers",
     lineId: "emalyer",
-    title: "Лак для бань и саун",
-    subtitle: "глянцевый",
-    description: "Глянцевый защитный лак для деревянных поверхностей внутри бань и саун.",
-    packagings: ["0,9 кг", "2,2 кг"],
-    applicationAreas: ["бани и сауны", "дерево", "внутренние работы"],
+    title: "Грунт глубокого проникновения",
+    subtitle: "эмальер",
+    description:
+      "Грунт для подготовки минеральных оснований перед дальнейшей отделкой и окраской.",
+    image: `${basePath}/images/sections/catalog/products/product-primer-deep.webp`,
+    packagings: [
+      createPackaging("1 кг", 1, "kg", 1),
+      createPackaging("5 кг", 5, "kg", 2),
+      createPackaging("10 кг", 10, "kg", 3),
+    ],
+    applicationAreas: ["минеральные основания", "внутренние работы", "наружные работы"],
     characteristics: {
       commercial: [
-        { label: "Категория", value: "Лаки" },
+        { label: "Категория", value: "Грунты" },
         { label: "Линейка", value: "Эмальер" },
-        { label: "Фасовки", value: "0,9 кг / 2,2 кг" },
+        { label: "Фасовки", value: "1 кг / 5 кг / 10 кг" },
       ],
       technical: [
-        { label: "Назначение", value: "Для бань и саун" },
-        { label: "Финиш", value: "Глянцевый" },
+        { label: "Тип", value: "Глубокого проникновения" },
+        { label: "Назначение", value: "Подготовка основания" },
+        { label: "Основа", value: "Водно-дисперсионная" },
       ],
-      scenario: [{ label: "Подходит для", value: "Деревянные поверхности внутри бань и саун" }],
-    },
-  },
-  {
-    id: "emalyer-pva-universal",
-    slug: "emalyer-pva-universal",
-    categoryId: "adhesives-glass",
-    lineId: "emalyer",
-    title: "Универсальный",
-    subtitle: "клей ПВА",
-    description: "Универсальный ПВА для бытовых и строительных задач.",
-    packagings: ["1 кг", "2,5 кг", "10 кг"],
-    applicationAreas: ["склеивание", "строительные работы", "внутренние работы"],
-    image: `${basePath}/images/sections/catalog/products/product-liquid-glass.webp`,
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Клей и жидкое стекло" },
-        { label: "Линейка", value: "Эмальер" },
-        { label: "Фасовки", value: "1 кг / 2,5 кг / 10 кг" },
-      ],
-      technical: [{ label: "Тип", value: "Клей ПВА" }],
-      scenario: [{ label: "Подходит для", value: "Бытовые и строительные задачи по склеиванию" }],
-    },
-  },
-  {
-    id: "emalyer-pva-construction",
-    slug: "emalyer-pva-construction",
-    categoryId: "adhesives-glass",
-    lineId: "emalyer",
-    title: "Строительный",
-    subtitle: "клей ПВА",
-    description: "Строительный ПВА для ремонтных и отделочных работ.",
-    packagings: ["1 кг", "2,5 кг", "10 кг"],
-    applicationAreas: ["склеивание", "строительные работы", "отделочные работы"],
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Клей и жидкое стекло" },
-        { label: "Линейка", value: "Эмальер" },
-        { label: "Фасовки", value: "1 кг / 2,5 кг / 10 кг" },
-      ],
-      technical: [{ label: "Тип", value: "Клей ПВА строительный" }],
-      scenario: [{ label: "Подходит для", value: "Ремонтные и отделочные работы" }],
-    },
-  },
-  {
-    id: "emalyer-liquid-glass",
-    slug: "emalyer-liquid-glass",
-    categoryId: "adhesives-glass",
-    lineId: "emalyer",
-    title: "Жидкое стекло",
-    subtitle: "силикатный состав",
-    description: "Жидкое стекло для клеевых, строительных и укрепляющих задач.",
-    packagings: ["1,4 кг", "4 кг", "6 кг", "15 кг"],
-    applicationAreas: ["строительные смеси", "укрепление оснований", "минеральные основания"],
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Клей и жидкое стекло" },
-        { label: "Линейка", value: "Эмальер" },
-        { label: "Фасовки", value: "1,4 кг / 4 кг / 6 кг / 15 кг" },
-      ],
-      technical: [{ label: "Тип", value: "Силикатный состав" }],
-      scenario: [{ label: "Подходит для", value: "Строительные смеси и укрепление минеральных оснований" }],
-    },
-  },
-  {
-    id: "emalyer-antiseptic",
-    slug: "emalyer-antiseptic",
-    categoryId: "protective",
-    lineId: "emalyer",
-    title: "Антисептик",
-    subtitle: "защитный состав",
-    description: "Состав для защиты древесины от биопоражений.",
-    packagings: ["5 кг", "10 кг"],
-    applicationAreas: ["дерево", "защита древесины", "наружные работы", "внутренние работы"],
-    image: `${basePath}/images/sections/catalog/products/product-antiseptic.webp`,
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Защитные материалы" },
-        { label: "Линейка", value: "Эмальер" },
-        { label: "Фасовки", value: "5 кг / 10 кг" },
-      ],
-      technical: [{ label: "Назначение", value: "Защита древесины от биопоражений" }],
-      scenario: [{ label: "Подходит для", value: "Обработка деревянных поверхностей" }],
     },
   },
   {
@@ -693,8 +353,13 @@ export const products: ProductItem[] = [
     lineId: "emalyer",
     title: "Антисептик универсальный",
     subtitle: "защитный состав",
-    description: "Универсальный антисептик для обработки древесины.",
-    packagings: ["5 кг", "20 кг"],
+    description:
+      "Универсальный антисептик для обработки древесины и профилактической защиты от внешних факторов.",
+    image: `${basePath}/images/sections/catalog/products/product-antiseptic.webp`,
+    packagings: [
+      createPackaging("5 кг", 5, "kg", 1),
+      createPackaging("20 кг", 20, "kg", 2),
+    ],
     applicationAreas: ["дерево", "защита древесины", "наружные работы", "внутренние работы"],
     characteristics: {
       commercial: [
@@ -702,71 +367,81 @@ export const products: ProductItem[] = [
         { label: "Линейка", value: "Эмальер" },
         { label: "Фасовки", value: "5 кг / 20 кг" },
       ],
-      technical: [{ label: "Назначение", value: "Универсальная защита древесины" }],
-      scenario: [{ label: "Подходит для", value: "Комплексная обработка древесины" }],
+      technical: [
+        { label: "Назначение", value: "Универсальная защита древесины" },
+        { label: "Тип", value: "Антисептический состав" },
+        { label: "Основа", value: "Водно-дисперсионная" },
+      ],
     },
   },
   {
-    id: "emalyer-antizhuk",
-    slug: "emalyer-antizhuk",
-    categoryId: "protective",
+    id: "emalyer-liquid-glass",
+    slug: "emalyer-liquid-glass",
+    categoryId: "adhesives-glass",
     lineId: "emalyer",
-    title: "Антижук",
-    subtitle: "состав для древесины",
-    description: "Защитный состав против насекомых-вредителей древесины.",
-    packagings: ["5 кг", "10 кг"],
-    applicationAreas: ["дерево", "защита древесины", "наружные работы"],
+    title: "Жидкое стекло",
+    subtitle: "натриевое",
+    description:
+      "Силикатный состав для строительных, клеевых и укрепляющих задач.",
+    image: `${basePath}/images/sections/catalog/products/product-liquid-glass.webp`,
+    packagings: [
+      createPackaging("1,4 кг", 1.4, "kg", 1),
+      createPackaging("4 кг", 4, "kg", 2),
+      createPackaging("6 кг", 6, "kg", 3),
+      createPackaging("15 кг", 15, "kg", 4),
+    ],
+    applicationAreas: ["строительные смеси", "укрепление оснований", "минеральные основания"],
     characteristics: {
       commercial: [
-        { label: "Категория", value: "Защитные материалы" },
+        { label: "Категория", value: "Клей и жидкое стекло" },
         { label: "Линейка", value: "Эмальер" },
-        { label: "Фасовки", value: "5 кг / 10 кг" },
+        { label: "Фасовки", value: "1,4 кг / 4 кг / 6 кг / 15 кг" },
       ],
-      technical: [{ label: "Назначение", value: "Против насекомых-вредителей" }],
-      scenario: [{ label: "Подходит для", value: "Защита деревянных конструкций от насекомых" }],
+      technical: [
+        { label: "Тип", value: "Силикатный состав" },
+        { label: "Основа", value: "Натриевое жидкое стекло" },
+        { label: "Назначение", value: "Строительные и укрепляющие задачи" },
+      ],
     },
   },
   {
-    id: "emalyer-antifreeze-additive",
-    slug: "emalyer-antifreeze-additive",
-    categoryId: "special-products",
+    id: "emalyer-pva-glue",
+    slug: "emalyer-pva-glue",
+    categoryId: "adhesives-glass",
     lineId: "emalyer",
-    title: "Противоморозная добавка",
-    subtitle: "для бетонных смесей",
-    description: "Добавка для работы с растворами и смесями при пониженных температурах.",
-    packagings: ["5 кг", "10 кг"],
-    applicationAreas: ["строительные смеси", "бетонные работы", "наружные работы"],
+    title: "Клей ПВА",
+    subtitle: "универсальный",
+    description:
+      "Универсальный ПВА-клей для бытовых, столярных и строительных задач.",
+    image: `${basePath}/images/sections/catalog/products/product-pva-glue.webp`,
+    packagings: [
+      createPackaging("0,9 кг", 0.9, "kg", 1),
+      createPackaging("2,5 кг", 2.5, "kg", 2),
+      createPackaging("10 кг", 10, "kg", 3),
+    ],
+    applicationAreas: ["дерево", "внутренние работы", "столярные работы"],
     characteristics: {
       commercial: [
-        { label: "Категория", value: "Специальные позиции" },
+        { label: "Категория", value: "Клей и жидкое стекло" },
         { label: "Линейка", value: "Эмальер" },
-        { label: "Фасовки", value: "5 кг / 10 кг" },
+        { label: "Фасовки", value: "0,9 кг / 2,5 кг / 10 кг" },
       ],
-      technical: [{ label: "Назначение", value: "Для бетонных смесей" }],
-      scenario: [{ label: "Подходит для", value: "Работы с растворами при пониженных температурах" }],
-    },
-  },
-  {
-    id: "emalyer-acrylic-putty",
-    slug: "emalyer-acrylic-putty",
-    categoryId: "special-products",
-    lineId: "emalyer",
-    title: "Акриловая шпаклевка",
-    subtitle: "для внутренних работ",
-    description: "Акриловая шпаклевка для выравнивания и подготовки поверхностей.",
-    packagings: ["1,5 кг", "5 кг", "14 кг"],
-    applicationAreas: ["интерьер", "стены", "внутренние работы", "минеральные основания"],
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Специальные позиции" },
-        { label: "Линейка", value: "Эмальер" },
-        { label: "Фасовки", value: "1,5 кг / 5 кг / 14 кг" },
+      technical: [
+        { label: "Тип", value: "ПВА" },
+        { label: "Назначение", value: "Универсальное склеивание" },
+        { label: "Основа", value: "Поливинилацетатная" },
       ],
-      technical: [{ label: "Назначение", value: "Для внутренних работ" }],
-      scenario: [{ label: "Подходит для", value: "Выравнивание и подготовка интерьерных поверхностей" }],
     },
   },
 ];
+
+export function getProductBySlug(slug: string) {
+  return products.find((product) => product.slug === slug);
+}
+
+export function getProductById(id: string) {
+  return products.find((product) => product.id === id);
+}
 
 export function getProductCategoryById(id: ProductCategoryId) {
   return productCategories.find((category) => category.id === id);
@@ -776,18 +451,28 @@ export function getProductLineById(id: ProductLineId) {
   return productLines.find((line) => line.id === id);
 }
 
-export function getProductsByCategory(categoryId: ProductCategoryId) {
-  return products.filter((product) => product.categoryId === categoryId);
-}
-
-export function getProductBySlug(slug: string) {
-  return products.find((product) => product.slug === slug);
-}
-
 export function getAllPackagings() {
-  return Array.from(
-    new Set(products.flatMap((product) => product.packagings)),
-  ).sort((a, b) => a.localeCompare(b, "ru"));
+  const map = new Map<string, ProductPackaging>();
+
+  products.forEach((product) => {
+    product.packagings.forEach((packaging) => {
+      map.set(packaging.label, packaging);
+    });
+  });
+
+  return Array.from(map.values())
+    .sort((a, b) => {
+      if (a.unit !== b.unit) {
+        return a.unit.localeCompare(b.unit);
+      }
+
+      if (a.value !== b.value) {
+        return a.value - b.value;
+      }
+
+      return a.sortOrder - b.sortOrder;
+    })
+    .map((item) => item.label);
 }
 
 export function getAllApplicationAreas() {
@@ -829,7 +514,7 @@ export function getFilteredProducts({
     const matchesPackaging =
       !packagings || packagings.length === 0
         ? true
-        : product.packagings.some((item) => packagings.includes(item));
+        : product.packagings.some((item) => packagings.includes(item.label));
 
     const matchesApplicationArea =
       !applicationAreas || applicationAreas.length === 0
@@ -847,6 +532,7 @@ export function getFilteredProducts({
       getProductLineById(product.lineId)?.title,
       getProductCategoryById(product.categoryId)?.title,
       ...(product.applicationAreas ?? []),
+      ...product.packagings.map((item) => item.label),
       ...[
         ...(product.characteristics?.commercial ?? []),
         ...(product.characteristics?.technical ?? []),
@@ -874,10 +560,8 @@ export function getFilteredProducts({
   switch (sort) {
     case "name-asc":
       return [...filtered].sort((a, b) => a.title.localeCompare(b.title, "ru"));
-
     case "name-desc":
       return [...filtered].sort((a, b) => b.title.localeCompare(a.title, "ru"));
-
     default:
       return filtered;
   }
@@ -903,8 +587,9 @@ export function getRelatedProducts(
       if (item.lineId === currentProduct.lineId) score += 3;
       if (!!item.isArchived === !!currentProduct.isArchived) score += 1;
 
+      const currentLabels = currentProduct.packagings.map((pack) => pack.label);
       const sharedPackagingCount = item.packagings.filter((pack) =>
-        currentProduct.packagings.includes(pack),
+        currentLabels.includes(pack.label),
       ).length;
 
       score += Math.min(sharedPackagingCount, 2);
@@ -926,4 +611,3 @@ export function getProductApplicationAreas(productId: string) {
   const product = products.find((item) => item.id === productId);
   return product?.applicationAreas ?? [];
 }
-
