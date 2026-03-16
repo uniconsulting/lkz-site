@@ -932,3 +932,4 @@ export function getProductApplicationAreas(productId: string) {
   const product = products.find((item) => item.id === productId);
   return product?.applicationAreas ?? [];
 }
+
