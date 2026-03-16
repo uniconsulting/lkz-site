@@ -9,8 +9,6 @@ const SORT_OPTIONS: Array<{ value: ProductsSortValue; label: string }> = [
   { value: "default", label: "по умолчанию" },
   { value: "name-asc", label: "название А-Я" },
   { value: "name-desc", label: "название Я-А" },
-  { value: "active-first", label: "сначала актуальные" },
-  { value: "archived-first", label: "сначала архивные" },
 ];
 
 export function ProductsSortDropdown({
@@ -46,9 +44,7 @@ export function ProductsSortDropdown({
         className={cn(
           "flex h-11 w-full items-center justify-between rounded-[16px] bg-[var(--color-bg)] px-4 text-left text-[14px] font-medium text-[var(--color-text)] transition duration-300",
           "hover:-translate-y-[1px] hover:shadow-[0_8px_18px_rgba(43,47,51,0.05)]",
-          isOpen
-            ? "shadow-[0_0_0_1px_var(--color-accent-1)]"
-            : "",
+          isOpen ? "shadow-[0_0_0_1px_var(--color-accent-1)]" : "",
         )}
       >
         <span>{activeOption.label}</span>
@@ -67,8 +63,8 @@ export function ProductsSortDropdown({
         className={cn(
           "absolute right-0 top-[calc(100%+8px)] z-30 w-full overflow-hidden rounded-[20px] bg-[var(--color-bg)] shadow-[0_18px_42px_rgba(43,47,51,0.12)] transition duration-200",
           isOpen
-            ? "translate-y-0 opacity-100 pointer-events-auto"
-            : "-translate-y-1 opacity-0 pointer-events-none",
+            ? "pointer-events-auto translate-y-0 opacity-100"
+            : "pointer-events-none -translate-y-1 opacity-0",
         )}
       >
         <div className="p-2">
