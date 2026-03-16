@@ -91,7 +91,7 @@ function FilterChip({
         "inline-flex h-10 items-center justify-center rounded-[16px] px-4 text-[13px] font-medium transition duration-300",
         active
           ? "bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)]"
-          : "bg-white/10 text-[var(--color-accent-2-foreground)] hover:bg-white/14 dark:bg-[var(--color-surface)] dark:text-[var(--color-text)] dark:hover:bg-[var(--color-surface)]/80",
+          : "catalog-filter-panel-soft text-[var(--color-accent-2-foreground)] dark:text-[var(--color-text)]",
       )}
     >
       {label}
@@ -112,7 +112,7 @@ function CheckboxRow({
     <button
       type="button"
       onClick={onToggle}
-      className="flex w-full items-center justify-between gap-3 rounded-[16px] bg-white/8 px-4 py-3 text-left transition duration-300 hover:bg-white/12 dark:bg-[var(--color-surface)] dark:hover:bg-[var(--color-surface)]/80"
+      className="catalog-filter-panel-soft flex w-full items-center justify-between gap-3 rounded-[16px] px-4 py-3 text-left transition duration-300"
     >
       <span className="text-[14px] leading-[1.3] text-[var(--color-accent-2-foreground)] dark:text-[var(--color-text)]">
         {label}
@@ -391,7 +391,7 @@ export function ProductsPage() {
               animate="visible"
               className="xl:sticky xl:top-[112px]"
             >
-              <div className="rounded-[28px] bg-[var(--color-accent-2)] text-[var(--color-accent-2-foreground)] dark:bg-[var(--color-bg)] dark:text-[var(--color-text)]">
+              <div className="catalog-filter-panel rounded-[28px]">
                 <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-4 dark:border-[var(--color-border)] md:px-5">
                   <div className="flex items-center gap-2">
                     <SlidersHorizontal
@@ -399,16 +399,14 @@ export function ProductsPage() {
                       strokeWidth={2.1}
                       className="text-[var(--color-accent-1)]"
                     />
-                    <span className="text-[14px] font-semibold">
-                      фильтры
-                    </span>
+                    <span className="text-[14px] font-semibold">фильтры</span>
                   </div>
 
                   {hasActiveFilters ? (
                     <button
                       type="button"
                       onClick={resetFilters}
-                      className="inline-flex h-9 items-center justify-center gap-1 rounded-[14px] bg-white/10 px-3 text-[12px] font-medium transition duration-300 hover:bg-white/14 dark:bg-[var(--color-surface)] dark:hover:bg-[var(--color-surface)]/80"
+                      className="catalog-filter-panel-reset inline-flex h-9 items-center justify-center gap-1 rounded-[14px] px-3 text-[12px] font-medium transition duration-300"
                     >
                       <X size={14} strokeWidth={2.1} />
                       <span>сбросить</span>
@@ -416,18 +414,7 @@ export function ProductsPage() {
                   ) : null}
                 </div>
 
-                <div
-                  className={cn(
-                    "max-h-[calc(100svh-188px)] overflow-y-auto px-4 py-4 md:px-5",
-                    "scrollbar-thin",
-                    "[scrollbar-color:rgba(255,255,255,0.22)_transparent] dark:[scrollbar-color:rgba(43,47,51,0.22)_transparent]",
-                    "[&::-webkit-scrollbar]:w-[10px]",
-                    "[&::-webkit-scrollbar-track]:bg-transparent",
-                    "[&::-webkit-scrollbar-thumb]:rounded-full",
-                    "[&::-webkit-scrollbar-thumb]:bg-white/20",
-                    "dark:[&::-webkit-scrollbar-thumb]:bg-[var(--color-text)]/18",
-                  )}
-                >
+                <div className="catalog-filter-scroll max-h-[calc(100svh-188px)] overflow-y-auto px-4 py-4 md:px-5">
                   <div className="relative">
                     <Search
                       size={16}
@@ -439,13 +426,13 @@ export function ProductsPage() {
                       onChange={(event) => setSearch(event.target.value)}
                       type="text"
                       placeholder="поиск по каталогу"
-                      className="h-11 w-full rounded-[16px] border border-transparent bg-white/8 pl-11 pr-4 text-[14px] text-[var(--color-accent-2-foreground)] outline-none transition duration-300 placeholder:text-white/55 focus:border-[var(--color-accent-1)] dark:bg-[var(--color-surface)] dark:text-[var(--color-text)] dark:placeholder:text-[var(--color-text-muted)]"
+                      className="catalog-filter-panel-search h-11 w-full rounded-[16px] border border-transparent pl-11 pr-4 text-[14px] outline-none transition duration-300 focus:border-[var(--color-accent-1)]"
                     />
                   </div>
 
                   <div className="mt-5 space-y-5">
                     <div>
-                      <div className="mb-3 text-[12px] font-semibold uppercase tracking-[0.08em] text-white/62 dark:text-[var(--color-text-muted)]">
+                      <div className="catalog-filter-panel-muted mb-3 text-[12px] font-semibold uppercase tracking-[0.08em]">
                         категории
                       </div>
                       <div className="space-y-2">
@@ -461,7 +448,7 @@ export function ProductsPage() {
                     </div>
 
                     <div>
-                      <div className="mb-3 text-[12px] font-semibold uppercase tracking-[0.08em] text-white/62 dark:text-[var(--color-text-muted)]">
+                      <div className="catalog-filter-panel-muted mb-3 text-[12px] font-semibold uppercase tracking-[0.08em]">
                         линейка
                       </div>
                       <div className="space-y-2">
@@ -477,7 +464,7 @@ export function ProductsPage() {
                     </div>
 
                     <div>
-                      <div className="mb-3 text-[12px] font-semibold uppercase tracking-[0.08em] text-white/62 dark:text-[var(--color-text-muted)]">
+                      <div className="catalog-filter-panel-muted mb-3 text-[12px] font-semibold uppercase tracking-[0.08em]">
                         фасовка
                       </div>
                       <div className="flex flex-wrap gap-2">
@@ -493,7 +480,7 @@ export function ProductsPage() {
                     </div>
 
                     <div>
-                      <div className="mb-3 text-[12px] font-semibold uppercase tracking-[0.08em] text-white/62 dark:text-[var(--color-text-muted)]">
+                      <div className="catalog-filter-panel-muted mb-3 text-[12px] font-semibold uppercase tracking-[0.08em]">
                         статус
                       </div>
                       <CheckboxRow
