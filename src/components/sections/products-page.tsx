@@ -308,24 +308,21 @@ export function ProductsPage() {
     setSort(parsedState.sort);
   }, [parsedState]);
 
-  const updateUrlState = useCallback(
-    (nextState: {
-      search: string;
-      categoryIds: typeof selectedCategories;
-      lineIds: typeof selectedLines;
-      packagings: typeof selectedPackagings;
-      applicationAreas: typeof selectedApplicationAreas;
-      sort: ProductsSortValue;
-    }) => {
-      const params = buildSearchParamsFromFilterState({
-        ...nextState,
-        includeArchived: false,
-      });
-      const query = params.toString();
-      router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
-    },
-    [pathname, router],
-  );
+const updateUrlState = useCallback(
+  (nextState: {
+    search: string;
+    categoryIds: typeof selectedCategories;
+    lineIds: typeof selectedLines;
+    packagings: typeof selectedPackagings;
+    applicationAreas: typeof selectedApplicationAreas;
+    sort: ProductsSortValue;
+  }) => {
+    const params = buildSearchParamsFromFilterState(nextState);
+    const query = params.toString();
+    router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
+  },
+  [pathname, router],
+);
 
   const filteredProducts = useMemo(
     () =>
