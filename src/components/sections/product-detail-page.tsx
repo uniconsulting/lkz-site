@@ -146,7 +146,6 @@ export function ProductDetailPage({ product }: { product: ProductItem }) {
 
   const commercialCharacteristics = product.characteristics?.commercial ?? [];
   const technicalCharacteristics = product.characteristics?.technical ?? [];
-  const scenarioCharacteristics = product.characteristics?.scenario ?? [];
 
   return (
     <div className="pt-[92px] pb-6 md:pt-[104px] md:pb-8 xl:pb-10">
@@ -191,12 +190,6 @@ export function ProductDetailPage({ product }: { product: ProductItem }) {
                     <PackageSearch size={38} strokeWidth={1.9} />
                   </div>
                 )}
-
-                {product.isArchived ? (
-                  <div className="absolute left-4 top-4 inline-flex h-9 items-center rounded-[999px] bg-[var(--color-surface)] px-4 text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
-                    архивная позиция
-                  </div>
-                ) : null}
               </div>
             </div>
 
@@ -293,12 +286,6 @@ export function ProductDetailPage({ product }: { product: ProductItem }) {
         eyebrow="технические параметры"
         title="Технические свойства"
         items={technicalCharacteristics}
-      />
-
-      <CharacteristicsSection
-        eyebrow="сценарные параметры"
-        title="Прикладное применение"
-        items={scenarioCharacteristics}
       />
 
       {applicationAreas.length > 0 ? (
