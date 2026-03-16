@@ -248,9 +248,9 @@ export function ProductDetailPage({ product }: { product: ProductItem }) {
                   доступные фасовки
                 </div>
                 <div className="mt-4 flex flex-wrap gap-2">
-                  {product.packagings.map((item) => (
-                    <PackagingBadge key={item} value={item} />
-                  ))}
+                {product.packagings.map((item) => (
+  <PackagingBadge key={item.label} value={item.label} />
+))}
                 </div>
               </div>
 
