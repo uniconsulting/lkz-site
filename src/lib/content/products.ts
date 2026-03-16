@@ -477,3 +477,41 @@ export function getFilteredProducts({
   }
 }
 
+export function getRelatedProducts(
+  productId: string,
+  options?: {
+    limit?: number;
+  },
+) {
+  const limit = options?.limit ?? 3;
+  const currentProduct = products.find((item) => item.id === productId);
+
+  if (!currentProduct) return [];
+
+  const scored = products
+    .filter((item) => item.id !== productId)
+    .map((item) => {
+      let score = 0;
+
+      if (item.categoryId === currentProduct.categoryId) score += 5;
+      if (item.lineId === currentProduct.lineId) score += 3;
+      if (!!item.isArchived === !!currentProduct.isArchived) score += 1;
+
+      const sharedPackagingCount = item.packagings.filter((pack) =>
+        currentProduct.packagings.includes(pack),
+      ).length;
+
+      score += Math.min(sharedPackagingCount, 2);
+
+      return {
+        product: item,
+        score,
+      };
+    })
+    .sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score;
+      return a.product.title.localeCompare(b.product.title, "ru");
+    });
+
+  return scored.slice(0, limit).map((item) => item.product);
+}
