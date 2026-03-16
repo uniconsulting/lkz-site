@@ -154,6 +154,100 @@ html.dark .footer-uni-logo-on-dark {
   display: block;
 }
 
+.catalog-filter-panel {
+  background: var(--color-accent-2);
+  color: var(--color-accent-2-foreground);
+}
+
+.dark .catalog-filter-panel {
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.catalog-filter-panel-muted {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.dark .catalog-filter-panel-muted {
+  color: var(--color-text-muted);
+}
+
+.catalog-filter-panel-soft {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.catalog-filter-panel-soft:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.dark .catalog-filter-panel-soft {
+  background: var(--color-surface);
+}
+
+.dark .catalog-filter-panel-soft:hover {
+  background: color-mix(in srgb, var(--color-surface) 82%, transparent);
+}
+
+.catalog-filter-panel-search {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--color-accent-2-foreground);
+}
+
+.catalog-filter-panel-search::placeholder {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.dark .catalog-filter-panel-search {
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.dark .catalog-filter-panel-search::placeholder {
+  color: var(--color-text-muted);
+}
+
+.catalog-filter-panel-reset {
+  background: rgba(255, 255, 255, 0.10);
+}
+
+.catalog-filter-panel-reset:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.dark .catalog-filter-panel-reset {
+  background: var(--color-surface);
+}
+
+.dark .catalog-filter-panel-reset:hover {
+  background: color-mix(in srgb, var(--color-surface) 82%, transparent);
+}
+
+.catalog-filter-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+}
+
+.dark .catalog-filter-scroll {
+  scrollbar-color: rgba(43, 47, 51, 0.22) transparent;
+}
+
+.catalog-filter-scroll::-webkit-scrollbar {
+  width: 10px;
+}
+
+.catalog-filter-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.catalog-filter-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.20);
+  border-radius: 999px;
+}
+
+.dark .catalog-filter-scroll::-webkit-scrollbar-thumb {
+  background: rgba(43, 47, 51, 0.18);
+}
+
 @media (hover: hover) and (pointer: fine) {
   .interactive-lift-accent {
     transition:
