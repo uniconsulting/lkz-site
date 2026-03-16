@@ -152,22 +152,22 @@ export function ProductDetailPage({ product }: { product: ProductItem }) {
       <Section className="pt-8 md:pt-10 xl:pt-12">
         <Container>
           <motion.div variants={sectionMotion} initial="hidden" animate="visible">
+            <div className="text-[15px] tracking-[-0.02em] text-[var(--color-text-muted)]">
+              главная / продукция / {product.title}
+            </div>
+
             <Link
               href="/products"
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-surface)] px-4 text-[14px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
+              className="mt-4 inline-flex h-11 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-surface)] px-4 text-[14px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
             >
               <ArrowLeft size={16} strokeWidth={2.2} />
               <span>назад в каталог</span>
             </Link>
-
-            <div className="mt-6 text-[15px] tracking-[-0.02em] text-[var(--color-text-muted)]">
-              главная / продукция / {product.title}
-            </div>
           </motion.div>
         </Container>
       </Section>
 
-      <Section className="pt-6 md:pt-8 xl:pt-10">
+      <Section className="pt-4 md:pt-6 xl:pt-8">
         <Container>
           <motion.div
             variants={sectionMotion}
