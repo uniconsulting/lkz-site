@@ -451,15 +451,14 @@ const updateUrlState = useCallback(
     });
   }
 
-  const hasActiveFilters = hasActiveProductsFilters({
-    search,
-    categoryIds: selectedCategories,
-    lineIds: selectedLines,
-    packagings: selectedPackagings,
-    applicationAreas: selectedApplicationAreas,
-    includeArchived: false,
-    sort,
-  });
+const hasActiveFilters = hasActiveProductsFilters({
+  search,
+  categoryIds: selectedCategories,
+  lineIds: selectedLines,
+  packagings: selectedPackagings,
+  applicationAreas: selectedApplicationAreas,
+  sort,
+});
 
   return (
     <div className="pt-[92px] pb-6 md:pt-[104px] md:pb-8 xl:pb-10">
