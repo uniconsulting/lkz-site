@@ -10,7 +10,13 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
-import { type ProductItem, getProductCategoryById, getProductLineById } from "@/lib/content/products";
+import {
+  type ProductItem,
+  getProductCategoryById,
+  getProductLineById,
+  getRelatedProducts,
+} from "@/lib/content/products";
+import { RelatedProductsGrid } from "@/components/catalog/related-products-grid";
 
 const sectionMotion = {
   hidden: { opacity: 0, y: 28 },
@@ -54,6 +60,7 @@ function CharacteristicCard({
 export function ProductDetailPage({ product }: { product: ProductItem }) {
   const category = getProductCategoryById(product.categoryId);
   const line = getProductLineById(product.lineId);
+  const relatedProducts = getRelatedProducts(product.id, { limit: 3 });
   const contactHref = `/contacts?product=${encodeURIComponent(product.slug)}`;
 
   return (
@@ -197,6 +204,29 @@ export function ProductDetailPage({ product }: { product: ProductItem }) {
                   />
                 ))}
               </div>
+            </motion.div>
+          </Container>
+        </Section>
+      ) : null}
+
+      {relatedProducts.length > 0 ? (
+        <Section className="pt-8 md:pt-10 xl:pt-12">
+          <Container>
+            <motion.div
+              variants={sectionMotion}
+              initial="hidden"
+              animate="visible"
+            >
+              <div className="mb-6">
+                <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
+                  похожие позиции
+                </div>
+                <h2 className="mt-4 font-heading text-[28px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[36px]">
+                  Вам также может подойти
+                </h2>
+              </div>
+
+              <RelatedProductsGrid products={relatedProducts} />
             </motion.div>
           </Container>
         </Section>
