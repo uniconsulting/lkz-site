@@ -243,3 +243,4 @@ export function ProductsFiltersPanel({
 
   return <div className="catalog-filter-panel rounded-[28px]">{content}</div>;
 }
+
