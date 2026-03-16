@@ -5,7 +5,11 @@ import { useState, type MouseEvent } from "react";
 import { motion } from "motion/react";
 import { ArrowRight, PackageSearch } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
-import { getProductLineById, type ProductItem } from "@/lib/content/products";
+import {
+  getProductLineById,
+  getProductPreviewImage,
+  type ProductItem,
+} from "@/lib/content/products";
 
 const gridVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -49,6 +53,7 @@ function RelatedProductCard({ product }: { product: ProductItem }) {
   });
 
   const lineTitle = getProductLineById(product.lineId)?.title ?? "";
+  const previewImage = getProductPreviewImage(product);
 
   function handleMouseMove(event: MouseEvent<HTMLDivElement>) {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -128,9 +133,9 @@ function RelatedProductCard({ product }: { product: ProductItem }) {
                   }}
                 />
 
-                {product.image ? (
+                {previewImage ? (
                   <img
-                    src={product.image}
+                    src={previewImage}
                     alt={product.title}
                     className="h-full w-full scale-[1.28] object-contain p-2 transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.34]"
                   />
@@ -141,12 +146,6 @@ function RelatedProductCard({ product }: { product: ProductItem }) {
                     </div>
                   </div>
                 )}
-
-                {product.isArchived ? (
-                  <div className="absolute left-3 top-3 inline-flex h-8 items-center rounded-[999px] bg-[var(--color-surface)] px-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
-                    архив
-                  </div>
-                ) : null}
               </div>
 
               <div
