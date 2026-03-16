@@ -15,7 +15,7 @@ export function getProductPrefillBySlug(slug: string | null) {
     extendedText: [
       `Интересует товар: ${titleParts.join(" · ")}`,
       product.packagings.length > 0
-        ? `Доступные фасовки: ${product.packagings.join(", ")}`
+        ? `Доступные фасовки: ${product.packagings.map((item) => item.label).join(", ")}`
         : null,
     ]
       .filter(Boolean)
