@@ -29,6 +29,7 @@ import {
   buildSearchParamsFromFilterState,
   hasActiveProductsFilters,
   parseFilterStateFromSearchParams,
+  type ProductsFilterState,
   type ProductsSortValue,
 } from "@/lib/products-filters";
 import { ProductsFiltersPanel } from "@/components/catalog/products-filters-panel";
@@ -314,15 +315,7 @@ export function ProductsPage() {
   }, [parsedState]);
 
   const updateUrlState = useCallback(
-    (nextState: {
-      search: string;
-      categoryIds: typeof selectedCategories;
-      lineIds: typeof selectedLines;
-      packagings: typeof selectedPackagings;
-      applicationAreas: typeof selectedApplicationAreas;
-      includeArchived: boolean;
-      sort: ProductsSortValue;
-    }) => {
+    (nextState: ProductsFilterState) => {
       const params = buildSearchParamsFromFilterState(nextState);
       const query = params.toString();
       router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
