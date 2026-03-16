@@ -10,7 +10,13 @@ import {
 } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { motion } from "motion/react";
-import { ArrowRight, PackageSearch, SlidersHorizontal, X } from "lucide-react";
+import {
+  ArrowRight,
+  PackageSearch,
+  SlidersHorizontal,
+  Sparkles,
+  X,
+} from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import {
@@ -78,6 +84,40 @@ const productsPageContent = {
   ],
   cta: "запросить КП",
 };
+
+const quickUseCases = [
+  "интерьер",
+  "фасад",
+  "дерево",
+  "радиаторы",
+  "бани и сауны",
+  "osb",
+];
+
+function QuickUseCaseButton({
+  label,
+  active,
+  onClick,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "inline-flex h-11 items-center justify-center rounded-[16px] px-4 text-[14px] font-medium transition duration-300",
+        active
+          ? "bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)]"
+          : "bg-[var(--color-bg)] text-[var(--color-text)] hover:-translate-y-[1px] hover:shadow-[0_6px_16px_rgba(43,47,51,0.05)]",
+      )}
+    >
+      {label}
+    </button>
+  );
+}
 
 function ProductMarketplaceCard({
   href,
@@ -254,6 +294,9 @@ export function ProductsPage() {
   const [selectedCategories, setSelectedCategories] = useState(parsedState.categoryIds);
   const [selectedLines, setSelectedLines] = useState(parsedState.lineIds);
   const [selectedPackagings, setSelectedPackagings] = useState(parsedState.packagings);
+  const [selectedApplicationAreas, setSelectedApplicationAreas] = useState(
+    parsedState.applicationAreas,
+  );
   const [includeArchived, setIncludeArchived] = useState(parsedState.includeArchived);
   const [sort, setSort] = useState<ProductsSortValue>(parsedState.sort);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
@@ -265,6 +308,7 @@ export function ProductsPage() {
     setSelectedCategories(parsedState.categoryIds);
     setSelectedLines(parsedState.lineIds);
     setSelectedPackagings(parsedState.packagings);
+    setSelectedApplicationAreas(parsedState.applicationAreas);
     setIncludeArchived(parsedState.includeArchived);
     setSort(parsedState.sort);
   }, [parsedState]);
@@ -275,6 +319,7 @@ export function ProductsPage() {
       categoryIds: typeof selectedCategories;
       lineIds: typeof selectedLines;
       packagings: typeof selectedPackagings;
+      applicationAreas: typeof selectedApplicationAreas;
       includeArchived: boolean;
       sort: ProductsSortValue;
     }) => {
@@ -291,11 +336,20 @@ export function ProductsPage() {
         categoryIds: selectedCategories,
         lineIds: selectedLines,
         packagings: selectedPackagings,
+        applicationAreas: selectedApplicationAreas,
         includeArchived,
         search,
         sort,
       }),
-    [selectedCategories, selectedLines, selectedPackagings, includeArchived, search, sort],
+    [
+      selectedCategories,
+      selectedLines,
+      selectedPackagings,
+      selectedApplicationAreas,
+      includeArchived,
+      search,
+      sort,
+    ],
   );
 
   function toggleCategory(id: (typeof selectedCategories)[number]) {
@@ -309,6 +363,7 @@ export function ProductsPage() {
       categoryIds: next,
       lineIds: selectedLines,
       packagings: selectedPackagings,
+      applicationAreas: selectedApplicationAreas,
       includeArchived,
       sort,
     });
@@ -325,6 +380,7 @@ export function ProductsPage() {
       categoryIds: selectedCategories,
       lineIds: next,
       packagings: selectedPackagings,
+      applicationAreas: selectedApplicationAreas,
       includeArchived,
       sort,
     });
@@ -341,6 +397,24 @@ export function ProductsPage() {
       categoryIds: selectedCategories,
       lineIds: selectedLines,
       packagings: next,
+      applicationAreas: selectedApplicationAreas,
+      includeArchived,
+      sort,
+    });
+  }
+
+  function toggleApplicationArea(value: string) {
+    const next = selectedApplicationAreas.includes(value)
+      ? selectedApplicationAreas.filter((item) => item !== value)
+      : [...selectedApplicationAreas, value];
+
+    setSelectedApplicationAreas(next);
+    updateUrlState({
+      search,
+      categoryIds: selectedCategories,
+      lineIds: selectedLines,
+      packagings: selectedPackagings,
+      applicationAreas: next,
       includeArchived,
       sort,
     });
@@ -353,6 +427,7 @@ export function ProductsPage() {
       categoryIds: selectedCategories,
       lineIds: selectedLines,
       packagings: selectedPackagings,
+      applicationAreas: selectedApplicationAreas,
       includeArchived,
       sort,
     });
@@ -365,6 +440,7 @@ export function ProductsPage() {
       categoryIds: selectedCategories,
       lineIds: selectedLines,
       packagings: selectedPackagings,
+      applicationAreas: selectedApplicationAreas,
       includeArchived,
       sort: value,
     });
@@ -378,6 +454,7 @@ export function ProductsPage() {
       categoryIds: selectedCategories,
       lineIds: selectedLines,
       packagings: selectedPackagings,
+      applicationAreas: selectedApplicationAreas,
       includeArchived: next,
       sort,
     });
@@ -388,6 +465,7 @@ export function ProductsPage() {
     setSelectedCategories([]);
     setSelectedLines([]);
     setSelectedPackagings([]);
+    setSelectedApplicationAreas([]);
     setIncludeArchived(false);
     setSort("default");
 
@@ -396,6 +474,7 @@ export function ProductsPage() {
       categoryIds: [],
       lineIds: [],
       packagings: [],
+      applicationAreas: [],
       includeArchived: false,
       sort: "default",
     });
@@ -406,6 +485,7 @@ export function ProductsPage() {
     categoryIds: selectedCategories,
     lineIds: selectedLines,
     packagings: selectedPackagings,
+    applicationAreas: selectedApplicationAreas,
     includeArchived,
     sort,
   });
@@ -445,6 +525,39 @@ export function ProductsPage() {
         </Container>
       </Section>
 
+      <Section className="pt-6 md:pt-8 xl:pt-10">
+        <Container>
+          <motion.div
+            variants={sectionMotion}
+            initial="hidden"
+            animate="visible"
+            className="rounded-[28px] bg-[var(--color-surface)] p-4 md:p-5"
+          >
+            <div className="mb-3 flex items-center gap-2">
+              <Sparkles
+                size={16}
+                strokeWidth={2.2}
+                className="text-[var(--color-accent-1)]"
+              />
+              <span className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
+                подбор по задаче
+              </span>
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              {quickUseCases.map((item) => (
+                <QuickUseCaseButton
+                  key={item}
+                  label={item}
+                  active={selectedApplicationAreas.includes(item)}
+                  onClick={() => toggleApplicationArea(item)}
+                />
+              ))}
+            </div>
+          </motion.div>
+        </Container>
+      </Section>
+
       <Section className="pt-8 md:pt-10 xl:pt-12">
         <Container>
           <div className="grid gap-4 xl:grid-cols-[320px_minmax(0,1fr)] xl:items-start">
@@ -464,6 +577,8 @@ export function ProductsPage() {
                 selectedPackagings={selectedPackagings}
                 onTogglePackaging={togglePackaging}
                 allPackagings={allPackagings}
+                selectedApplicationAreas={selectedApplicationAreas}
+                onToggleApplicationArea={toggleApplicationArea}
                 includeArchived={includeArchived}
                 onToggleArchived={handleToggleArchived}
                 onReset={resetFilters}
@@ -508,6 +623,18 @@ export function ProductsPage() {
                   </div>
 
                   <div className="flex flex-wrap gap-2">
+                    {selectedApplicationAreas.map((item) => (
+                      <button
+                        key={item}
+                        type="button"
+                        onClick={() => toggleApplicationArea(item)}
+                        className="inline-flex h-10 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
+                      >
+                        <span>{item}</span>
+                        <X size={14} strokeWidth={2.2} />
+                      </button>
+                    ))}
+
                     {selectedCategories.map((id) => (
                       <button
                         key={id}
@@ -619,6 +746,8 @@ export function ProductsPage() {
         selectedPackagings={selectedPackagings}
         onTogglePackaging={togglePackaging}
         allPackagings={allPackagings}
+        selectedApplicationAreas={selectedApplicationAreas}
+        onToggleApplicationArea={toggleApplicationArea}
         includeArchived={includeArchived}
         onToggleArchived={handleToggleArchived}
         onReset={resetFilters}
