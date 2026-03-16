@@ -6,11 +6,13 @@ import {
   useState,
   useEffect,
   useCallback,
+  useRef,
   type MouseEvent,
 } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { motion } from "motion/react";
 import {
+  ArrowLeft,
   ArrowRight,
   PackageSearch,
   SlidersHorizontal,
@@ -281,6 +283,7 @@ export function ProductsPage() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const quickUseCasesRef = useRef<HTMLDivElement | null>(null);
 
   const parsedState = useMemo(
     () => parseFilterStateFromSearchParams(searchParams),
@@ -308,21 +311,21 @@ export function ProductsPage() {
     setSort(parsedState.sort);
   }, [parsedState]);
 
-const updateUrlState = useCallback(
-  (nextState: {
-    search: string;
-    categoryIds: typeof selectedCategories;
-    lineIds: typeof selectedLines;
-    packagings: typeof selectedPackagings;
-    applicationAreas: typeof selectedApplicationAreas;
-    sort: ProductsSortValue;
-  }) => {
-    const params = buildSearchParamsFromFilterState(nextState);
-    const query = params.toString();
-    router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
-  },
-  [pathname, router],
-);
+  const updateUrlState = useCallback(
+    (nextState: {
+      search: string;
+      categoryIds: typeof selectedCategories;
+      lineIds: typeof selectedLines;
+      packagings: typeof selectedPackagings;
+      applicationAreas: typeof selectedApplicationAreas;
+      sort: ProductsSortValue;
+    }) => {
+      const params = buildSearchParamsFromFilterState(nextState);
+      const query = params.toString();
+      router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
+    },
+    [pathname, router],
+  );
 
   const filteredProducts = useMemo(
     () =>
@@ -344,6 +347,15 @@ const updateUrlState = useCallback(
       sort,
     ],
   );
+
+  function scrollQuickUseCases(direction: "left" | "right") {
+    if (!quickUseCasesRef.current) return;
+
+    quickUseCasesRef.current.scrollBy({
+      left: direction === "left" ? -240 : 240,
+      behavior: "smooth",
+    });
+  }
 
   function toggleCategory(id: (typeof selectedCategories)[number]) {
     const next = selectedCategories.includes(id)
@@ -451,14 +463,14 @@ const updateUrlState = useCallback(
     });
   }
 
-const hasActiveFilters = hasActiveProductsFilters({
-  search,
-  categoryIds: selectedCategories,
-  lineIds: selectedLines,
-  packagings: selectedPackagings,
-  applicationAreas: selectedApplicationAreas,
-  sort,
-});
+  const hasActiveFilters = hasActiveProductsFilters({
+    search,
+    categoryIds: selectedCategories,
+    lineIds: selectedLines,
+    packagings: selectedPackagings,
+    applicationAreas: selectedApplicationAreas,
+    sort,
+  });
 
   return (
     <div className="pt-[92px] pb-6 md:pt-[104px] md:pb-8 xl:pb-10">
@@ -514,11 +526,20 @@ const hasActiveFilters = hasActiveProductsFilters({
               </span>
             </div>
 
-            <div className="relative">
-              <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-[linear-gradient(90deg,var(--color-surface)_0%,rgba(0,0,0,0)_100%)]" />
-              <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-8 bg-[linear-gradient(270deg,var(--color-surface)_0%,rgba(0,0,0,0)_100%)]" />
+            <div className="grid grid-cols-[28px_minmax(0,1fr)_28px] items-center gap-2">
+              <button
+                type="button"
+                onClick={() => scrollQuickUseCases("left")}
+                className="inline-flex h-9 w-7 items-center justify-center rounded-[12px] bg-[var(--color-bg)] text-[var(--color-text-muted)] transition duration-300 hover:text-[var(--color-text)]"
+                aria-label="Прокрутить влево"
+              >
+                <ArrowLeft size={14} strokeWidth={2.4} />
+              </button>
 
-              <div className="-mx-1 overflow-x-auto px-1 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <div
+                ref={quickUseCasesRef}
+                className="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              >
                 <div className="flex w-max gap-2">
                   {quickUseCases.map((item) => (
                     <QuickUseCaseButton
@@ -530,6 +551,15 @@ const hasActiveFilters = hasActiveProductsFilters({
                   ))}
                 </div>
               </div>
+
+              <button
+                type="button"
+                onClick={() => scrollQuickUseCases("right")}
+                className="inline-flex h-9 w-7 items-center justify-center rounded-[12px] bg-[var(--color-bg)] text-[var(--color-text-muted)] transition duration-300 hover:text-[var(--color-text)]"
+                aria-label="Прокрутить вправо"
+              >
+                <ArrowRight size={14} strokeWidth={2.4} />
+              </button>
             </div>
           </motion.div>
         </Container>
