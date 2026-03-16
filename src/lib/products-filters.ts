@@ -14,7 +14,6 @@ export type ProductsFilterState = {
   lineIds: ProductLineId[];
   packagings: string[];
   applicationAreas: string[];
-  includeArchived: boolean;
   sort: ProductsSortValue;
 };
 
@@ -24,7 +23,6 @@ export const DEFAULT_PRODUCTS_FILTER_STATE: ProductsFilterState = {
   lineIds: [],
   packagings: [],
   applicationAreas: [],
-  includeArchived: false,
   sort: "default",
 };
 
@@ -40,10 +38,6 @@ function normalizeArrayParam(values: string[] | null | undefined) {
   );
 }
 
-function parseBooleanParam(value: string | null) {
-  return value === "1" || value === "true";
-}
-
 export function parseFilterStateFromSearchParams(
   searchParams: ReadonlyURLSearchParams,
 ): ProductsFilterState {
@@ -52,7 +46,6 @@ export function parseFilterStateFromSearchParams(
   const lineIds = normalizeArrayParam(searchParams.getAll("line")) as ProductLineId[];
   const packagings = normalizeArrayParam(searchParams.getAll("pack"));
   const applicationAreas = normalizeArrayParam(searchParams.getAll("use"));
-  const includeArchived = parseBooleanParam(searchParams.get("archived"));
   const sort = (searchParams.get("sort") as ProductsSortValue | null) ?? "default";
 
   return {
@@ -61,7 +54,6 @@ export function parseFilterStateFromSearchParams(
     lineIds,
     packagings,
     applicationAreas,
-    includeArchived,
     sort,
   };
 }
@@ -89,10 +81,6 @@ export function buildSearchParamsFromFilterState(state: ProductsFilterState) {
     params.append("use", value);
   });
 
-  if (state.includeArchived) {
-    params.set("archived", "1");
-  }
-
   if (state.sort !== "default") {
     params.set("sort", state.sort);
   }
@@ -107,8 +95,6 @@ export function hasActiveProductsFilters(state: ProductsFilterState) {
     state.lineIds.length > 0 ||
     state.packagings.length > 0 ||
     state.applicationAreas.length > 0 ||
-    state.includeArchived ||
     state.sort !== "default"
   );
 }
-
