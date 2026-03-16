@@ -811,7 +811,7 @@ export function getFilteredProducts({
   applicationAreas?: string[];
   includeArchived?: boolean;
   search?: string;
-  sort?: "default" | "name-asc" | "name-desc" | "active-first" | "archived-first";
+  sort?: "default" | "name-asc" | "name-desc";
 }) {
   const normalizedSearch = search?.trim().toLowerCase() ?? "";
 
