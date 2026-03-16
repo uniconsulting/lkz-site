@@ -172,6 +172,22 @@ html.dark .footer-uni-logo-on-dark {
   color: var(--color-text-muted);
 }
 
+.catalog-filter-panel-text {
+  color: var(--color-accent-2-foreground);
+}
+
+.dark .catalog-filter-panel-text {
+  color: var(--color-text);
+}
+
+.catalog-filter-panel-icon {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.dark .catalog-filter-panel-icon {
+  color: var(--color-text-muted);
+}
+
 .catalog-filter-panel-soft {
   background: rgba(255, 255, 255, 0.08);
 }
@@ -208,6 +224,7 @@ html.dark .footer-uni-logo-on-dark {
 
 .catalog-filter-panel-reset {
   background: rgba(255, 255, 255, 0.10);
+  color: var(--color-accent-2-foreground);
 }
 
 .catalog-filter-panel-reset:hover {
@@ -216,6 +233,7 @@ html.dark .footer-uni-logo-on-dark {
 
 .dark .catalog-filter-panel-reset {
   background: var(--color-surface);
+  color: var(--color-text);
 }
 
 .dark .catalog-filter-panel-reset:hover {
