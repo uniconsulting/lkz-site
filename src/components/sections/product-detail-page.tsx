@@ -10,12 +10,7 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
-import { cn } from "@/lib/utils/cn";
-import {
-  getProductCategoryById,
-  getProductLineById,
-  type ProductItem,
-} from "@/lib/content/products";
+import { type ProductItem, getProductCategoryById, getProductLineById } from "@/lib/content/products";
 
 const sectionMotion = {
   hidden: { opacity: 0, y: 28 },
@@ -59,6 +54,7 @@ function CharacteristicCard({
 export function ProductDetailPage({ product }: { product: ProductItem }) {
   const category = getProductCategoryById(product.categoryId);
   const line = getProductLineById(product.lineId);
+  const contactHref = `/contacts?product=${encodeURIComponent(product.slug)}`;
 
   return (
     <div className="pt-[92px] pb-6 md:pt-[104px] md:pb-8 xl:pb-10">
@@ -154,7 +150,7 @@ export function ProductDetailPage({ product }: { product: ProductItem }) {
 
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link
-                  href="/contacts"
+                  href={contactHref}
                   className="inline-flex h-12 items-center justify-center gap-2 rounded-[18px] bg-[var(--color-accent-1)] px-6 text-[15px] font-semibold text-[var(--color-accent-1-foreground)] transition duration-300 hover:-translate-y-[1px]"
                 >
                   <ShoppingBag size={16} strokeWidth={2.2} />
@@ -162,7 +158,7 @@ export function ProductDetailPage({ product }: { product: ProductItem }) {
                 </Link>
 
                 <Link
-                  href="/contacts"
+                  href={contactHref}
                   className="inline-flex h-12 items-center justify-center gap-2 rounded-[18px] bg-[var(--color-bg)] px-6 text-[15px] font-semibold text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
                 >
                   <BadgeCheck size={16} strokeWidth={2.2} />
@@ -229,7 +225,7 @@ export function ProductDetailPage({ product }: { product: ProductItem }) {
 
               <div className="mt-7">
                 <Link
-                  href="/contacts"
+                  href={contactHref}
                   className="inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-accent-1)] px-6 text-[15px] font-semibold text-[var(--color-accent-1-foreground)] transition duration-300 hover:-translate-y-[1px]"
                 >
                   запросить КП
