@@ -1,237 +1,816 @@
 "use client";
 
-import Link from "next/link";
-import { motion } from "motion/react";
+import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
+import { useSearchParams } from "next/navigation";
+import { AnimatePresence, motion } from "motion/react";
 import {
-  ArrowLeft,
-  BadgeCheck,
-  PackageSearch,
-  ShoppingBag,
+  Building2,
+  Check,
+  ChevronDown,
+  Copy,
+  FolderUp,
+  MapPinned,
+  MessageCircle,
+  X,
 } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
-import { type ProductItem, getProductCategoryById, getProductLineById } from "@/lib/content/products";
+import { cn } from "@/lib/utils/cn";
+import {
+  contactsHero,
+  contactsMap,
+  contactsPageContent,
+} from "@/lib/content/contacts";
+import { getProductPrefillBySlug } from "@/lib/product-prefill";
+
+const FORM_CONTENT_HEIGHT = 430;
+const UPLOAD_WINDOW_HEIGHT = 300;
 
 const sectionMotion = {
-  hidden: { opacity: 0, y: 28 },
+  hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.55,
+      duration: 0.72,
       ease: [0.22, 1, 0.36, 1] as const,
     },
   },
 };
 
-function PackagingBadge({ value }: { value: string }) {
+const cardMotion = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.56,
+      ease: [0.22, 1, 0.36, 1] as const,
+    },
+  },
+};
+
+const innerPanelMotion = {
+  initial: {
+    opacity: 0,
+    x: 18,
+    scale: 0.992,
+    filter: "blur(6px)",
+  },
+  animate: {
+    opacity: 1,
+    x: 0,
+    scale: 1,
+    filter: "blur(0px)",
+    transition: {
+      duration: 0.34,
+      ease: [0.22, 1, 0.36, 1] as const,
+    },
+  },
+  exit: {
+    opacity: 0,
+    x: -16,
+    scale: 0.992,
+    filter: "blur(6px)",
+    transition: {
+      duration: 0.2,
+      ease: [0.4, 0, 1, 1] as const,
+    },
+  },
+};
+
+type ProposalMode = "request" | "send";
+
+const interestOptions = [
+  "готовая продукция",
+  "дилерство",
+  "private label / СТМ",
+  "пока нужна консультация",
+];
+
+function ContactInput({
+  label,
+  placeholder,
+  textarea = false,
+  defaultValue,
+}: {
+  label: string;
+  placeholder: string;
+  textarea?: boolean;
+  defaultValue?: string;
+}) {
+  const baseClassName =
+    "w-full rounded-[22px] border border-transparent bg-[var(--color-bg)] px-6 text-[12px] text-[var(--color-text)] outline-none transition duration-300 placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent-1)] focus:shadow-[0_0_0_3px_rgba(30,222,123,0.10)] hover:border-[var(--color-border)]";
+
   return (
-    <span className="inline-flex h-10 items-center justify-center rounded-[14px] bg-[var(--color-bg)] px-4 text-[14px] font-medium text-[var(--color-text)]">
-      {value}
-    </span>
+    <label className="block">
+      <div className="mb-[5px] pl-[4px] text-[14px] font-semibold tracking-[-0.03em] text-[var(--color-text-muted)]">
+        {label}
+      </div>
+
+      {textarea ? (
+        <textarea
+          rows={4}
+          defaultValue={defaultValue}
+          placeholder={placeholder}
+          className={cn(baseClassName, "h-[134px] resize-none py-4")}
+        />
+      ) : (
+        <input
+          type="text"
+          defaultValue={defaultValue}
+          placeholder={placeholder}
+          className={cn(baseClassName, "h-[44px]")}
+        />
+      )}
+    </label>
   );
 }
 
-function CharacteristicCard({
+function B2BSelect({
   label,
-  value,
+  placeholder,
+  options,
 }: {
   label: string;
-  value: string;
+  placeholder: string;
+  options: string[];
 }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selected, setSelected] = useState("");
+  const rootRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    function handleOutside(event: MouseEvent) {
+      if (!rootRef.current) return;
+      if (!rootRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+
+    window.addEventListener("mousedown", handleOutside);
+    return () => window.removeEventListener("mousedown", handleOutside);
+  }, []);
+
   return (
-    <div className="rounded-[20px] bg-[var(--color-bg)] p-4">
-      <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
+    <div ref={rootRef} className="relative">
+      <div className="mb-[5px] pl-[4px] text-[14px] font-semibold tracking-[-0.03em] text-[var(--color-text-muted)]">
         {label}
       </div>
-      <div className="mt-3 text-[16px] leading-[1.35] text-[var(--color-text)]">
-        {value}
+
+      <button
+        type="button"
+        onClick={() => setIsOpen((prev) => !prev)}
+        className={cn(
+          "flex h-[44px] w-full items-center justify-between rounded-[22px] border border-transparent bg-[var(--color-bg)] px-6 text-left text-[12px] transition duration-300 hover:border-[var(--color-border)]",
+          isOpen
+            ? "border-[var(--color-accent-1)] shadow-[0_0_0_3px_rgba(30,222,123,0.10)]"
+            : "",
+        )}
+      >
+        <span
+          className={cn(
+            selected
+              ? "text-[var(--color-text)]"
+              : "text-[var(--color-text-muted)]",
+          )}
+        >
+          {selected || placeholder}
+        </span>
+
+        <ChevronDown
+          size={16}
+          strokeWidth={2.1}
+          className={cn(
+            "shrink-0 text-[var(--color-text-muted)] transition duration-300",
+            isOpen ? "rotate-180" : "",
+          )}
+        />
+      </button>
+
+      <motion.div
+        initial={false}
+        animate={{
+          opacity: isOpen ? 1 : 0,
+          y: isOpen ? 0 : -8,
+          pointerEvents: isOpen ? "auto" : "none",
+        }}
+        transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+        className="absolute left-0 right-0 top-[calc(100%+8px)] z-20 overflow-hidden rounded-[22px] bg-[var(--color-bg)] shadow-[0_16px_38px_rgba(43,47,51,0.12)]"
+      >
+        <div className="p-2">
+          {options.map((option) => {
+            const isActive = selected === option;
+
+            return (
+              <button
+                key={option}
+                type="button"
+                onClick={() => {
+                  setSelected(option);
+                  setIsOpen(false);
+                }}
+                className={cn(
+                  "flex w-full items-center rounded-[16px] px-4 py-3 text-left text-[12px] transition duration-200",
+                  isActive
+                    ? "bg-[var(--color-accent-1)]/[0.10] text-[var(--color-text)]"
+                    : "text-[var(--color-text)] hover:bg-[var(--color-surface)]",
+                )}
+              >
+                {option}
+              </button>
+            );
+          })}
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+function RequestForm({ prefillText }: { prefillText?: string }) {
+  const [step, setStep] = useState<0 | 1>(0);
+
+  return (
+    <div className="flex h-full flex-col">
+      <div className="flex items-center gap-4">
+        <div className="w-[42px] shrink-0 text-[12px] text-[var(--color-text-muted)]">
+          {step + 1}/2
+        </div>
+
+        <div className="relative h-[4px] flex-1 overflow-hidden rounded-full bg-[var(--color-border)]">
+          <motion.span
+            className="absolute inset-y-0 left-0 rounded-full bg-[var(--color-accent-1)]"
+            initial={false}
+            animate={{ width: step === 0 ? "50%" : "100%" }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+          />
+        </div>
+      </div>
+
+      <div className="mt-[54px] min-h-0 flex-1">
+        <AnimatePresence mode="wait" initial={false}>
+          {step === 0 ? (
+            <motion.div
+              key="request-step-1"
+              variants={innerPanelMotion}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="space-y-[23px]"
+            >
+              <ContactInput label="имя" placeholder="ваше имя" />
+              <ContactInput
+                label="организация"
+                placeholder="название компании"
+              />
+              <ContactInput
+                label="контакт"
+                placeholder="telegram / телефон / email"
+              />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="request-step-2"
+              variants={innerPanelMotion}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="space-y-[23px]"
+            >
+              <B2BSelect
+                label="формат интереса"
+                placeholder="выберите формат"
+                options={interestOptions}
+              />
+
+              <ContactInput
+                label="комментарий / сообщение"
+                placeholder="опишите задачу"
+                textarea
+                defaultValue={prefillText}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      <div className="mt-[54px] flex gap-5">
+        {step === 1 ? (
+          <button
+            type="button"
+            onClick={() => setStep(0)}
+            className="inline-flex h-[60px] flex-1 items-center justify-center rounded-[12px] bg-[var(--color-bg)] text-[14px] font-semibold text-[var(--color-text-muted)] transition duration-300 hover:-translate-y-[1px] hover:text-[var(--color-text)] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
+          >
+            назад
+          </button>
+        ) : null}
+
+        {step === 0 ? (
+          <button
+            type="button"
+            onClick={() => setStep(1)}
+            className="inline-flex h-[60px] flex-1 items-center justify-center rounded-[12px] bg-[var(--color-accent-2)] text-[14px] font-semibold text-[var(--color-accent-2-foreground)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(43,47,51,0.16)]"
+          >
+            далее
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="inline-flex h-[60px] flex-1 items-center justify-center rounded-[12px] bg-[var(--color-accent-2)] text-[14px] font-semibold text-[var(--color-accent-2-foreground)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(43,47,51,0.16)]"
+          >
+            отправить
+          </button>
+        )}
       </div>
     </div>
   );
 }
 
-export function ProductDetailPage({ product }: { product: ProductItem }) {
-  const category = getProductCategoryById(product.categoryId);
-  const line = getProductLineById(product.lineId);
-  const contactHref = `/contacts?product=${encodeURIComponent(product.slug)}`;
+function SendProposalForm({ prefillText }: { prefillText?: string }) {
+  const [files, setFiles] = useState<File[]>([]);
+  const [isDragging, setIsDragging] = useState(false);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  function mergeFiles(newFiles: File[]) {
+    const merged = [...files, ...newFiles].slice(0, 3);
+    setFiles(merged);
+  }
+
+  function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
+    const nextFiles = Array.from(event.target.files ?? []);
+    mergeFiles(nextFiles);
+    event.target.value = "";
+  }
+
+  function removeFile(index: number) {
+    setFiles((prev) => prev.filter((_, idx) => idx !== index));
+  }
 
   return (
-    <div className="pt-[92px] pb-6 md:pt-[104px] md:pb-8 xl:pb-10">
-      <Section className="pt-8 md:pt-10 xl:pt-12">
-        <Container>
-          <motion.div variants={sectionMotion} initial="hidden" animate="visible">
-            <Link
-              href="/products"
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-surface)] px-4 text-[14px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
-            >
-              <ArrowLeft size={16} strokeWidth={2.2} />
-              <span>назад в каталог</span>
-            </Link>
+    <div className="flex h-full flex-col">
+      <div className="pl-[4px] text-[14px] font-semibold tracking-[-0.03em] text-[var(--color-text)]">
+        загрузите Ваше КП
+      </div>
 
-            <div className="mt-6 text-[15px] tracking-[-0.02em] text-[var(--color-text-muted)]">
-              главная / продукция / {product.title}
-            </div>
-          </motion.div>
-        </Container>
-      </Section>
-
-      <Section className="pt-6 md:pt-8 xl:pt-10">
-        <Container>
-          <motion.div
-            variants={sectionMotion}
-            initial="hidden"
-            animate="visible"
-            className="grid gap-4 xl:grid-cols-[0.94fr_1.06fr] xl:items-stretch"
-          >
-            <div className="rounded-[32px] bg-[var(--color-surface)] p-4 md:p-5">
-              <div className="relative flex h-[520px] items-center justify-center overflow-hidden rounded-[24px] bg-[var(--color-bg)]">
-                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.0)_0%,rgba(255,255,255,0.05)_100%)]" />
-
-                {product.image ? (
-                  <img
-                    src={product.image}
-                    alt={product.title}
-                    className="relative z-[1] h-full w-full scale-[1.12] object-contain p-6"
-                  />
-                ) : (
-                  <div className="flex h-20 w-20 items-center justify-center rounded-[24px] bg-[var(--color-surface)] text-[var(--color-text-muted)]">
-                    <PackageSearch size={38} strokeWidth={1.9} />
-                  </div>
-                )}
-
-                {product.isArchived ? (
-                  <div className="absolute left-4 top-4 inline-flex h-9 items-center rounded-[999px] bg-[var(--color-surface)] px-4 text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
-                    архивная позиция
-                  </div>
-                ) : null}
-              </div>
-            </div>
-
-            <div className="rounded-[32px] bg-[var(--color-surface)] p-6 md:p-8">
-              <div className="flex flex-wrap gap-2">
-                {line ? (
-                  <span className="inline-flex items-center rounded-[999px] bg-[var(--color-bg)] px-3 py-1.5 text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                    {line.title}
-                  </span>
-                ) : null}
-
-                {category ? (
-                  <span className="inline-flex items-center rounded-[999px] bg-[var(--color-bg)] px-3 py-1.5 text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
-                    {category.title}
-                  </span>
-                ) : null}
-              </div>
-
-              <h1 className="mt-5 font-heading text-[34px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[46px]">
-                {product.title}
-              </h1>
-
-              {product.subtitle ? (
-                <div className="mt-3 text-[14px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)] md:text-[15px]">
-                  {product.subtitle}
-                </div>
-              ) : null}
-
-              <p className="mt-5 max-w-[760px] text-[16px] leading-[1.5] text-[var(--color-text-muted)]">
-                {product.description}
-              </p>
-
-              <div className="mt-8 rounded-[24px] bg-[var(--color-bg)] p-5">
-                <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                  доступные фасовки
-                </div>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {product.packagings.map((item) => (
-                    <PackagingBadge key={item} value={item} />
-                  ))}
-                </div>
-              </div>
-
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Link
-                  href={contactHref}
-                  className="inline-flex h-12 items-center justify-center gap-2 rounded-[18px] bg-[var(--color-accent-1)] px-6 text-[15px] font-semibold text-[var(--color-accent-1-foreground)] transition duration-300 hover:-translate-y-[1px]"
-                >
-                  <ShoppingBag size={16} strokeWidth={2.2} />
-                  <span>запросить КП</span>
-                </Link>
-
-                <Link
-                  href={contactHref}
-                  className="inline-flex h-12 items-center justify-center gap-2 rounded-[18px] bg-[var(--color-bg)] px-6 text-[15px] font-semibold text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
-                >
-                  <BadgeCheck size={16} strokeWidth={2.2} />
-                  <span>уточнить параметры</span>
-                </Link>
-              </div>
-            </div>
-          </motion.div>
-        </Container>
-      </Section>
-
-      {product.characteristics && product.characteristics.length > 0 ? (
-        <Section className="pt-8 md:pt-10 xl:pt-12">
-          <Container>
-            <motion.div
-              variants={sectionMotion}
-              initial="hidden"
-              animate="visible"
-              className="rounded-[32px] bg-[var(--color-surface)] p-6 md:p-8"
-            >
-              <div className="mb-6">
-                <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                  характеристики
-                </div>
-                <h2 className="mt-4 font-heading text-[28px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[36px]">
-                  Параметры товара
-                </h2>
-              </div>
-
-              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-                {product.characteristics.map((item) => (
-                  <CharacteristicCard
-                    key={`${item.label}-${item.value}`}
-                    label={item.label}
-                    value={item.value}
-                  />
-                ))}
-              </div>
-            </motion.div>
-          </Container>
-        </Section>
+      {prefillText ? (
+        <div className="mt-4 rounded-[18px] bg-[var(--color-bg)] px-4 py-3 text-[13px] leading-[1.4] text-[var(--color-text-muted)]">
+          {prefillText}
+        </div>
       ) : null}
 
+      <div
+        onDragOver={(event) => {
+          event.preventDefault();
+          setIsDragging(true);
+        }}
+        onDragLeave={() => setIsDragging(false)}
+        onDrop={(event) => {
+          event.preventDefault();
+          setIsDragging(false);
+          const dropped = Array.from(event.dataTransfer.files ?? []);
+          mergeFiles(dropped);
+        }}
+        className={cn(
+          "flex flex-col rounded-[24px] border-2 border-dashed bg-[var(--color-bg)] p-5 transition duration-300",
+          prefillText ? "mt-[18px]" : "mt-[23px]",
+          isDragging
+            ? "border-[var(--color-accent-1)] bg-[var(--color-accent-1)]/[0.06]"
+            : "border-[var(--color-accent-2)]",
+        )}
+        style={{ height: `${UPLOAD_WINDOW_HEIGHT}px` }}
+      >
+        {files.length === 0 ? (
+          <div className="flex h-full flex-col items-center justify-center text-center">
+            <div className="mb-4 flex h-11 w-11 items-center justify-center text-[var(--color-accent-1)]">
+              <FolderUp size={34} strokeWidth={2.1} />
+            </div>
+
+            <button
+              type="button"
+              onClick={() => inputRef.current?.click()}
+              className="rounded-[12px] text-[14px] text-[var(--color-text)] transition duration-300 hover:text-[var(--color-accent-2)]"
+            >
+              выбрать файлы
+            </button>
+
+            <div className="mt-[52px] max-w-[520px] text-[12px] leading-[1.42] text-[var(--color-text-muted)]">
+              <span className="block">
+                pdf, doc, docx, xls, xlsx, ppt, pptx или архив
+              </span>
+              <span className="block">до 3 файлов в одном запросе</span>
+            </div>
+          </div>
+        ) : (
+          <div className="flex h-full min-h-0 flex-col">
+            <div className="min-h-0 flex-1 space-y-2 overflow-y-auto pr-1">
+              {files.map((file, index) => (
+                <div
+                  key={`${file.name}-${index}`}
+                  className="flex items-center justify-between gap-3 rounded-[16px] bg-[var(--color-surface)] px-4 py-3"
+                >
+                  <div className="min-w-0 truncate text-[12px] text-[var(--color-text)]">
+                    {file.name}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => removeFile(index)}
+                    className="shrink-0 text-[var(--color-text-muted)] transition duration-200 hover:text-[var(--color-text)]"
+                  >
+                    <X size={14} strokeWidth={2.2} />
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => inputRef.current?.click()}
+              disabled={files.length >= 3}
+              className={cn(
+                "mt-4 inline-flex h-[44px] items-center justify-center self-start rounded-[12px] px-5 text-[12px] font-medium transition duration-300",
+                files.length >= 3
+                  ? "cursor-not-allowed bg-[var(--color-border)] text-[var(--color-text-muted)]"
+                  : "bg-[var(--color-accent-1)] text-[var(--color-bg)] hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]",
+              )}
+            >
+              добавить файлы
+            </button>
+          </div>
+        )}
+
+        <input
+          ref={inputRef}
+          type="file"
+          multiple
+          className="hidden"
+          onChange={handleInputChange}
+        />
+      </div>
+
+      <button
+        type="button"
+        disabled={files.length === 0}
+        className={cn(
+          "mt-[54px] inline-flex h-[60px] w-full items-center justify-center rounded-[12px] text-[14px] font-semibold transition duration-300",
+          files.length === 0
+            ? "cursor-not-allowed bg-[var(--color-border)] text-[var(--color-text-muted)]"
+            : "bg-[var(--color-accent-2)] text-[var(--color-accent-2-foreground)] hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(43,47,51,0.16)]",
+        )}
+      >
+        отправить
+      </button>
+    </div>
+  );
+}
+
+function CopyValueButton({ value }: { value: string }) {
+  const [copied, setCopied] = useState(false);
+
+  async function handleCopy() {
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1400);
+    } catch {
+      setCopied(false);
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handleCopy}
+      className={cn(
+        "absolute right-4 top-4 inline-flex h-8 w-8 items-center justify-center rounded-[10px] bg-[var(--color-surface)] transition duration-300 hover:shadow-[0_6px_14px_rgba(43,47,51,0.08)]",
+        copied
+          ? "text-[var(--color-accent-1)]"
+          : "text-[var(--color-text-muted)] hover:text-[var(--color-text)]",
+      )}
+      aria-label="Скопировать"
+      title={copied ? "Скопировано" : "Скопировать"}
+    >
+      {copied ? (
+        <Check size={15} strokeWidth={2.4} />
+      ) : (
+        <Copy size={15} strokeWidth={2.2} />
+      )}
+    </button>
+  );
+}
+
+function MessengerPrimaryButton({
+  href,
+  label,
+}: {
+  href: string;
+  label: string;
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className="inline-flex h-12 items-center justify-center gap-2 rounded-[18px] bg-[var(--color-accent-1)] px-6 text-[15px] font-semibold text-[var(--color-accent-1-foreground)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
+    >
+      <MessageCircle size={17} strokeWidth={2.2} />
+      <span>{label}</span>
+    </a>
+  );
+}
+
+function MessengerSecondaryButton({
+  href,
+  label,
+}: {
+  href: string;
+  label: string;
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className="inline-flex h-12 items-center justify-center gap-2 rounded-[18px] bg-[var(--color-bg)] px-6 text-[15px] font-semibold text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
+    >
+      <MessageCircle size={17} strokeWidth={2.2} />
+      <span>{label}</span>
+    </a>
+  );
+}
+
+export function ContactsPage() {
+  const [mode, setMode] = useState<ProposalMode>("request");
+  const searchParams = useSearchParams();
+
+  const productPrefill = useMemo(() => {
+    return getProductPrefillBySlug(searchParams.get("product"));
+  }, [searchParams]);
+
+  const maxLink = contactsHero.messengers.find((item) => item.id === "max");
+  const telegramLink = contactsHero.messengers.find(
+    (item) => item.id === "telegram",
+  );
+
+  return (
+    <div className="pt-[92px] pb-2 md:pt-[104px] md:pb-4 xl:pb-6">
       <Section className="pt-8 md:pt-10 xl:pt-12">
         <Container>
           <motion.div
             variants={sectionMotion}
             initial="hidden"
             animate="visible"
-            className="rounded-[32px] bg-[var(--color-surface)] p-6 md:p-8 xl:p-10"
+            className="grid gap-5 xl:grid-cols-[1.02fr_0.98fr] xl:items-center"
           >
             <div className="max-w-[860px]">
-              <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                нужен подбор
+              <div className="mb-5 text-[15px] tracking-[-0.02em] text-[var(--color-text-muted)]">
+                главная / {contactsHero.eyebrow}
               </div>
 
-              <h2 className="mt-4 font-heading text-[30px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[40px] xl:text-[46px]">
-                Подберём подходящий продукт под вашу задачу
-              </h2>
+              <h1 className="font-heading text-[34px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[48px] xl:text-[58px]">
+                {contactsHero.title}
+              </h1>
 
-              <p className="mt-5 max-w-[760px] text-[15px] leading-[1.48] text-[var(--color-text-muted)] md:text-[17px]">
-                Если нужна помощь с выбором позиции, фасовки, аналогов или формата поставки, отправьте запрос и мы подготовим коммерческое предложение.
+              <p className="mt-5 max-w-[760px] text-[16px] leading-[1.46] text-[var(--color-text-muted)] md:text-[18px]">
+                <span className="block">
+                  свяжитесь с нами по телефону, почте, в мессенджерах,
+                </span>
+                <span className="block">или отправьте запрос через форму</span>
               </p>
 
-              <div className="mt-7">
-                <Link
-                  href={contactHref}
-                  className="inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-accent-1)] px-6 text-[15px] font-semibold text-[var(--color-accent-1-foreground)] transition duration-300 hover:-translate-y-[1px]"
+              <div className="mt-8 flex flex-wrap items-center gap-4 text-[20px] leading-none tracking-[-0.03em] text-[var(--color-text)] md:text-[24px]">
+                <a
+                  href="tel:+79648589910"
+                  className="font-medium transition duration-300 hover:text-[var(--color-accent-1)]"
                 >
-                  запросить КП
-                </Link>
+                  +7 (964) 858-99-10
+                </a>
+
+                <span className="hidden h-6 w-px bg-[var(--color-border)] md:block" />
+
+                <a
+                  href="mailto:simkraski@bk.ru"
+                  className="font-medium transition duration-300 hover:text-[var(--color-accent-1)]"
+                >
+                  simkraski@bk.ru
+                </a>
               </div>
             </div>
+
+            <div className="rounded-[28px] bg-[var(--color-surface)] p-5 md:p-6 xl:p-7">
+              <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
+                мессенджеры
+              </div>
+
+              <h2 className="mt-4 font-heading text-[26px] leading-[0.96] tracking-[-0.04em] text-[var(--color-text)] md:text-[30px]">
+                <span className="block">напишите нам</span>
+                <span className="block">удобным способом</span>
+              </h2>
+
+              <p className="mt-4 max-w-[520px] text-[15px] leading-[1.48] text-[var(--color-text-muted)] md:text-[16px]">
+                <span className="block">
+                  для быстрого контакта используйте MAX или Telegram,
+                </span>
+                <span className="block">
+                  по рабочим вопросам также доступны телефон и электронная почта
+                </span>
+              </p>
+
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                {maxLink ? (
+                  <MessengerPrimaryButton
+                    href={maxLink.href}
+                    label="написать в MAX"
+                  />
+                ) : null}
+
+                {telegramLink ? (
+                  <MessengerSecondaryButton
+                    href={telegramLink.href}
+                    label="написать в Telegram"
+                  />
+                ) : null}
+              </div>
+            </div>
+          </motion.div>
+        </Container>
+      </Section>
+
+      <Section className="pt-8 md:pt-10 xl:pt-12">
+        <Container>
+          <motion.div
+            variants={sectionMotion}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.14 }}
+            className="grid gap-4 xl:grid-cols-[1.08fr_0.92fr] xl:items-stretch"
+          >
+            <div className="grid gap-4 xl:grid-rows-[1fr_auto]">
+              <motion.div
+                variants={cardMotion}
+                className="relative overflow-hidden rounded-[32px] bg-[var(--color-surface)] min-h-[360px] xl:min-h-[396px]"
+              >
+                <iframe
+                  src={contactsMap.embedUrl}
+                  title="Карта"
+                  className="h-full w-full border-0"
+                  loading="lazy"
+                />
+
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-x-0 top-0 h-[180px] bg-[linear-gradient(180deg,rgba(255,255,255,0.82)_0%,rgba(255,255,255,0.46)_48%,rgba(255,255,255,0)_100%)] dark:bg-[linear-gradient(180deg,rgba(20,24,28,0.58)_0%,rgba(20,24,28,0.34)_48%,rgba(20,24,28,0)_100%)]"
+                />
+
+                <div className="absolute left-5 top-5 z-10 max-w-[420px] text-[var(--color-text)] dark:text-white md:left-6 md:top-6">
+                  <div className="mb-3 flex items-center gap-3">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-white/50 text-[var(--color-text)] backdrop-blur-sm dark:bg-white/14 dark:text-white">
+                      <MapPinned size={20} strokeWidth={2.1} />
+                    </div>
+
+                    <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text)]/78 dark:text-white/88">
+                      офис и производство
+                    </div>
+                  </div>
+
+                  <div className="text-[24px] leading-[1.08] tracking-[-0.03em] md:text-[30px]">
+                    г. Ульяновск,
+                    <br />
+                    Московское шоссе, 42Е
+                  </div>
+
+                  <div className="mt-4 text-[15px] leading-[1.4] text-[var(--color-text)]/72 dark:text-white/84 md:text-[16px]">
+                    Пн-Пт: 8:00 – 18:00
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                variants={cardMotion}
+                className="rounded-[32px] bg-[var(--color-surface)] p-5 md:p-6 xl:p-7"
+              >
+                <div className="mb-4 flex items-center gap-3">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)]">
+                    <Building2 size={20} strokeWidth={2.1} />
+                  </div>
+
+                  <div>
+                    <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
+                      юридическое лицо
+                    </div>
+                    <div className="mt-1 text-[18px] leading-[1.25] text-[var(--color-text)] md:text-[20px]">
+                      ООО "ЛКЗ"
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                  <div className="relative rounded-[26px] bg-[var(--color-bg)] px-5 py-6">
+                    <CopyValueButton value="7327093976" />
+                    <div className="text-[14px] font-semibold uppercase tracking-[0.06em] text-[var(--color-text-muted)]">
+                      ИНН
+                    </div>
+                    <div className="mt-6 font-heading text-[22px] leading-none tracking-[-0.04em] text-[var(--color-text)] md:text-[24px]">
+                      7327093976
+                    </div>
+                  </div>
+
+                  <div className="relative rounded-[26px] bg-[var(--color-bg)] px-5 py-6">
+                    <CopyValueButton value="1207300001963" />
+                    <div className="text-[14px] font-semibold uppercase tracking-[0.06em] text-[var(--color-text-muted)]">
+                      ОГРН
+                    </div>
+                    <div className="mt-6 font-heading text-[22px] leading-none tracking-[-0.04em] text-[var(--color-text)] md:text-[24px]">
+                      1207300001963
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+
+            <motion.div
+              variants={cardMotion}
+              className="rounded-[32px] bg-[var(--color-surface)] p-[20px] xl:min-h-[620px]"
+            >
+              <div className="mb-6 max-w-[760px]">
+                <h2 className="font-heading text-[30px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[40px]">
+                  {contactsPageContent.formTitle}
+                </h2>
+
+                <p className="mt-4 text-[15px] leading-[1.46] text-[var(--color-text-muted)] md:text-[16px]">
+                  {contactsPageContent.formDescription.join(" ")}
+                </p>
+
+                {productPrefill ? (
+                  <div className="mt-4 rounded-[18px] bg-[var(--color-bg)] px-4 py-3 text-[13px] leading-[1.42] text-[var(--color-text-muted)]">
+                    {productPrefill.shortText}
+                  </div>
+                ) : null}
+              </div>
+
+              <div className="flex h-full flex-col">
+                <div className="grid h-[60px] grid-cols-[1fr_1px_1fr] items-center gap-[18px]">
+                  <button
+                    type="button"
+                    onClick={() => setMode("request")}
+                    className={cn(
+                      "h-full rounded-[12px] text-[14px] font-semibold transition duration-300",
+                      mode === "request"
+                        ? "bg-[var(--color-accent-1)] text-[var(--color-bg)]"
+                        : "bg-[var(--color-bg)] text-[var(--color-text)]",
+                    )}
+                  >
+                    запросить КП
+                  </button>
+
+                  <div className="mx-auto h-[44px] w-px bg-[var(--color-accent-2)]/10" />
+
+                  <button
+                    type="button"
+                    onClick={() => setMode("send")}
+                    className={cn(
+                      "h-full rounded-[12px] text-[14px] font-semibold transition duration-300",
+                      mode === "send"
+                        ? "bg-[var(--color-accent-1)] text-[var(--color-bg)]"
+                        : "bg-[var(--color-bg)] text-[var(--color-text)]",
+                    )}
+                  >
+                    отправить КП
+                  </button>
+                </div>
+
+                <div
+                  className="mt-[54px]"
+                  style={{ height: `${FORM_CONTENT_HEIGHT}px` }}
+                >
+                  <AnimatePresence mode="wait" initial={false}>
+                    {mode === "request" ? (
+                      <motion.div
+                        key="request-mode"
+                        variants={innerPanelMotion}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
+                        className="h-full"
+                      >
+                        <RequestForm prefillText={productPrefill?.extendedText} />
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="send-mode"
+                        variants={innerPanelMotion}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
+                        className="h-full"
+                      >
+                        <SendProposalForm prefillText={productPrefill?.shortText} />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </div>
+            </motion.div>
           </motion.div>
         </Container>
       </Section>
