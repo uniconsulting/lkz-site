@@ -100,3 +100,4 @@ export function hasActiveProductsFilters(state: ProductsFilterState) {
     state.sort !== "default"
   );
 }
+
