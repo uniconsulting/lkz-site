@@ -4,9 +4,7 @@ import type { ProductCategoryId, ProductLineId } from "@/lib/content/products";
 export type ProductsSortValue =
   | "default"
   | "name-asc"
-  | "name-desc"
-  | "active-first"
-  | "archived-first";
+  | "name-desc";
 
 export type ProductsFilterState = {
   search: string;
@@ -42,8 +40,12 @@ export function parseFilterStateFromSearchParams(
   searchParams: ReadonlyURLSearchParams,
 ): ProductsFilterState {
   const search = searchParams.get("search")?.trim() ?? "";
-  const categoryIds = normalizeArrayParam(searchParams.getAll("category")) as ProductCategoryId[];
-  const lineIds = normalizeArrayParam(searchParams.getAll("line")) as ProductLineId[];
+  const categoryIds = normalizeArrayParam(
+    searchParams.getAll("category"),
+  ) as ProductCategoryId[];
+  const lineIds = normalizeArrayParam(
+    searchParams.getAll("line"),
+  ) as ProductLineId[];
   const packagings = normalizeArrayParam(searchParams.getAll("pack"));
   const applicationAreas = normalizeArrayParam(searchParams.getAll("use"));
   const sort = (searchParams.get("sort") as ProductsSortValue | null) ?? "default";
@@ -98,4 +100,3 @@ export function hasActiveProductsFilters(state: ProductsFilterState) {
     state.sort !== "default"
   );
 }
-
