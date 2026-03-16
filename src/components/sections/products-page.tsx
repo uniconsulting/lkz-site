@@ -91,7 +91,7 @@ function FilterChip({
         "inline-flex h-10 items-center justify-center rounded-[16px] px-4 text-[13px] font-medium transition duration-300",
         active
           ? "bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)]"
-          : "catalog-filter-panel-soft text-[var(--color-accent-2-foreground)] dark:text-[var(--color-text)]",
+          : "catalog-filter-panel-soft catalog-filter-panel-text",
       )}
     >
       {label}
@@ -114,7 +114,7 @@ function CheckboxRow({
       onClick={onToggle}
       className="catalog-filter-panel-soft flex w-full items-center justify-between gap-3 rounded-[16px] px-4 py-3 text-left transition duration-300"
     >
-      <span className="text-[14px] leading-[1.3] text-[var(--color-accent-2-foreground)] dark:text-[var(--color-text)]">
+      <span className="catalog-filter-panel-text text-[14px] leading-[1.3]">
         {label}
       </span>
 
@@ -399,7 +399,9 @@ export function ProductsPage() {
                       strokeWidth={2.1}
                       className="text-[var(--color-accent-1)]"
                     />
-                    <span className="text-[14px] font-semibold">фильтры</span>
+                    <span className="catalog-filter-panel-text text-[14px] font-semibold">
+                      фильтры
+                    </span>
                   </div>
 
                   {hasActiveFilters ? (
@@ -419,7 +421,7 @@ export function ProductsPage() {
                     <Search
                       size={16}
                       strokeWidth={2.1}
-                      className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-white/55 dark:text-[var(--color-text-muted)]"
+                      className="catalog-filter-panel-icon pointer-events-none absolute left-4 top-1/2 -translate-y-1/2"
                     />
                     <input
                       value={search}
@@ -590,7 +592,7 @@ export function ProductsPage() {
                   variants={gridVariants}
                   initial="hidden"
                   animate="visible"
-                  className="grid gap-4 md:grid-cols-2 xl:grid-cols-4"
+                  className="grid gap-4 md:grid-cols-2 xl:grid-cols-3"
                 >
                   {filteredProducts.map((product) => (
                     <ProductMarketplaceCard
