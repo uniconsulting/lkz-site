@@ -26,6 +26,7 @@ import {
   getFilteredProducts,
   getProductCategoryById,
   getProductLineById,
+  getProductPreviewImage,
 } from "@/lib/content/products";
 import {
   buildSearchParamsFromFilterState,
@@ -291,9 +292,13 @@ export function ProductsPage() {
   );
 
   const [search, setSearch] = useState(parsedState.search);
-  const [selectedCategories, setSelectedCategories] = useState(parsedState.categoryIds);
+  const [selectedCategories, setSelectedCategories] = useState(
+    parsedState.categoryIds,
+  );
   const [selectedLines, setSelectedLines] = useState(parsedState.lineIds);
-  const [selectedPackagings, setSelectedPackagings] = useState(parsedState.packagings);
+  const [selectedPackagings, setSelectedPackagings] = useState(
+    parsedState.packagings,
+  );
   const [selectedApplicationAreas, setSelectedApplicationAreas] = useState(
     parsedState.applicationAreas,
   );
@@ -322,7 +327,9 @@ export function ProductsPage() {
     }) => {
       const params = buildSearchParamsFromFilterState(nextState);
       const query = params.toString();
-      router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
+      router.replace(query ? `${pathname}?${query}` : pathname, {
+        scroll: false,
+      });
     },
     [pathname, router],
   );
@@ -606,7 +613,10 @@ export function ProductsPage() {
                   </div>
 
                   <div className="hidden md:block">
-                    <ProductsSortDropdown value={sort} onChange={handleSortChange} />
+                    <ProductsSortDropdown
+                      value={sort}
+                      onChange={handleSortChange}
+                    />
                   </div>
                 </div>
 
@@ -620,7 +630,10 @@ export function ProductsPage() {
                     <span>фильтры</span>
                   </button>
 
-                  <ProductsSortDropdown value={sort} onChange={handleSortChange} />
+                  <ProductsSortDropdown
+                    value={sort}
+                    onChange={handleSortChange}
+                  />
                 </div>
 
                 <div className="mt-4 flex flex-wrap gap-2">
@@ -689,7 +702,8 @@ export function ProductsPage() {
                       Попробуйте изменить параметры фильтрации
                     </h2>
                     <p className="mt-4 text-[15px] leading-[1.46] text-[var(--color-text-muted)]">
-                      Снимите часть фильтров или отправьте запрос, если нужен подбор продукции под конкретную задачу.
+                      Снимите часть фильтров или отправьте запрос, если нужен
+                      подбор продукции под конкретную задачу.
                     </p>
                     <div className="mt-6 flex flex-wrap gap-3">
                       <button
@@ -722,7 +736,7 @@ export function ProductsPage() {
                       title={product.title}
                       subtitle={product.subtitle}
                       lineTitle={getProductLineById(product.lineId)?.title ?? ""}
-                      image={product.image}
+                      image={getProductPreviewImage(product)}
                     />
                   ))}
                 </motion.div>
