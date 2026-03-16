@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
+import { useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import {
   Building2,
@@ -538,16 +539,13 @@ function MessengerSecondaryButton({
   );
 }
 
-export function ContactsPage({
-  productSlug = null,
-}: {
-  productSlug?: string | null;
-}) {
+export function ContactsPage() {
   const [mode, setMode] = useState<ProposalMode>("request");
+  const searchParams = useSearchParams();
 
   const productPrefill = useMemo(() => {
-    return getProductPrefillBySlug(productSlug);
-  }, [productSlug]);
+    return getProductPrefillBySlug(searchParams.get("product"));
+  }, [searchParams]);
 
   const maxLink = contactsHero.messengers.find((item) => item.id === "max");
   const telegramLink = contactsHero.messengers.find(
