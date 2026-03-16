@@ -784,3 +784,14 @@ export function getProductApplicationAreas(productId: string) {
   const product = products.find((item) => item.id === productId);
   return product?.applicationAreas ?? [];
 }
+
+export type ProductCharacteristic = {
+  label: string;
+  value: string;
+};
+
+export type ProductCharacteristicsGroup = {
+  commercial?: ProductCharacteristic[];
+  technical?: ProductCharacteristic[];
+  scenario?: ProductCharacteristic[];
+};
