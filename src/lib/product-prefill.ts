@@ -22,3 +22,4 @@ export function getProductPrefillBySlug(slug: string | null) {
       .join("\n"),
   };
 }
+
