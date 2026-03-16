@@ -67,6 +67,23 @@ function CheckboxRow({
   );
 }
 
+type ProductsFiltersPanelProps = {
+  search: string;
+  onSearchChange: (value: string) => void;
+  selectedCategories: ProductCategoryId[];
+  onToggleCategory: (value: ProductCategoryId) => void;
+  selectedLines: ProductLineId[];
+  onToggleLine: (value: ProductLineId) => void;
+  selectedPackagings: string[];
+  onTogglePackaging: (value: string) => void;
+  allPackagings: string[];
+  includeArchived: boolean;
+  onToggleArchived: () => void;
+  onReset: () => void;
+  hasActiveFilters: boolean;
+  embedded?: boolean;
+};
+
 export function ProductsFiltersPanel({
   search,
   onSearchChange,
@@ -81,48 +98,43 @@ export function ProductsFiltersPanel({
   onToggleArchived,
   onReset,
   hasActiveFilters,
-}: {
-  search: string;
-  onSearchChange: (value: string) => void;
-  selectedCategories: ProductCategoryId[];
-  onToggleCategory: (value: ProductCategoryId) => void;
-  selectedLines: ProductLineId[];
-  onToggleLine: (value: ProductLineId) => void;
-  selectedPackagings: string[];
-  onTogglePackaging: (value: string) => void;
-  allPackagings: string[];
-  includeArchived: boolean;
-  onToggleArchived: () => void;
-  onReset: () => void;
-  hasActiveFilters: boolean;
-}) {
-  return (
-    <div className="catalog-filter-panel rounded-[28px]">
-      <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-4 dark:border-[var(--color-border)] md:px-5">
-        <div className="flex items-center gap-2">
-          <SlidersHorizontal
-            size={18}
-            strokeWidth={2.1}
-            className="text-[var(--color-accent-1)]"
-          />
-          <span className="catalog-filter-panel-text text-[14px] font-semibold">
-            фильтры
-          </span>
+  embedded = false,
+}: ProductsFiltersPanelProps) {
+  const body = (
+    <>
+      {!embedded ? (
+        <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-4 dark:border-[var(--color-border)] md:px-5">
+          <div className="flex items-center gap-2">
+            <SlidersHorizontal
+              size={18}
+              strokeWidth={2.1}
+              className="text-[var(--color-accent-1)]"
+            />
+            <span className="catalog-filter-panel-text text-[14px] font-semibold">
+              фильтры
+            </span>
+          </div>
+
+          {hasActiveFilters ? (
+            <button
+              type="button"
+              onClick={onReset}
+              className="catalog-filter-panel-reset inline-flex h-9 items-center justify-center gap-1 rounded-[14px] px-3 text-[12px] font-medium transition duration-300"
+            >
+              <X size={14} strokeWidth={2.1} />
+              <span>сбросить</span>
+            </button>
+          ) : null}
         </div>
+      ) : null}
 
-        {hasActiveFilters ? (
-          <button
-            type="button"
-            onClick={onReset}
-            className="catalog-filter-panel-reset inline-flex h-9 items-center justify-center gap-1 rounded-[14px] px-3 text-[12px] font-medium transition duration-300"
-          >
-            <X size={14} strokeWidth={2.1} />
-            <span>сбросить</span>
-          </button>
-        ) : null}
-      </div>
-
-      <div className="catalog-filter-scroll max-h-[calc(100svh-188px)] overflow-y-auto px-4 py-4 md:px-5">
+      <div
+        className={cn(
+          embedded
+            ? "space-y-5"
+            : "catalog-filter-scroll max-h-[calc(100svh-188px)] overflow-y-auto px-4 py-4 md:px-5",
+        )}
+      >
         <div className="relative">
           <Search
             size={16}
@@ -138,7 +150,7 @@ export function ProductsFiltersPanel({
           />
         </div>
 
-        <div className="mt-5 space-y-5">
+        <div className="space-y-5">
           <div>
             <div className="catalog-filter-panel-muted mb-3 text-[12px] font-semibold uppercase tracking-[0.08em]">
               категории
@@ -199,6 +211,12 @@ export function ProductsFiltersPanel({
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
+
+  if (embedded) {
+    return <div>{body}</div>;
+  }
+
+  return <div className="catalog-filter-panel rounded-[28px]">{body}</div>;
 }
