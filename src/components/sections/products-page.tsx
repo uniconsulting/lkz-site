@@ -1,29 +1,28 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState, type MouseEvent } from "react";
-import { motion } from "motion/react";
 import {
-  ArrowRight,
-  Check,
-  PackageSearch,
-  Search,
-  SlidersHorizontal,
-  X,
-} from "lucide-react";
+  useMemo,
+  useState,
+  useEffect,
+  useCallback,
+  type MouseEvent,
+} from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { motion } from "motion/react";
+import { ArrowRight, PackageSearch, X } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
-import { cn } from "@/lib/utils/cn";
+import { getAllPackagings, getFilteredProducts, getProductCategoryById, getProductLineById } from "@/lib/content/products";
 import {
-  getAllPackagings,
-  getFilteredProducts,
-  getProductCategoryById,
-  getProductLineById,
-  productCategories,
-  productLines,
-  type ProductCategoryId,
-  type ProductLineId,
-} from "@/lib/content/products";
+  buildSearchParamsFromFilterState,
+  hasActiveProductsFilters,
+  parseFilterStateFromSearchParams,
+  type ProductsSortValue,
+} from "@/lib/products-filters";
+import { ProductsFiltersPanel } from "@/components/catalog/products-filters-panel";
+import { ProductsSortSelect } from "@/components/catalog/products-sort-select";
+import { cn } from "@/lib/utils/cn";
 
 const sectionMotion = {
   hidden: { opacity: 0, y: 32 },
@@ -73,64 +72,6 @@ const productsPageContent = {
   ],
   cta: "запросить КП",
 };
-
-function FilterChip({
-  label,
-  active,
-  onClick,
-}: {
-  label: string;
-  active: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={cn(
-        "inline-flex h-10 items-center justify-center rounded-[16px] px-4 text-[13px] font-medium transition duration-300",
-        active
-          ? "bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)]"
-          : "catalog-filter-panel-soft catalog-filter-panel-text",
-      )}
-    >
-      {label}
-    </button>
-  );
-}
-
-function CheckboxRow({
-  label,
-  checked,
-  onToggle,
-}: {
-  label: string;
-  checked: boolean;
-  onToggle: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onToggle}
-      className="catalog-filter-panel-soft flex w-full items-center justify-between gap-3 rounded-[16px] px-4 py-3 text-left transition duration-300"
-    >
-      <span className="catalog-filter-panel-text text-[14px] leading-[1.3]">
-        {label}
-      </span>
-
-      <span
-        className={cn(
-          "flex h-5 w-5 shrink-0 items-center justify-center rounded-[6px] border transition duration-300",
-          checked
-            ? "border-[var(--color-accent-1)] bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)]"
-            : "border-white/18 bg-transparent text-transparent dark:border-[var(--color-border)]",
-        )}
-      >
-        <Check size={12} strokeWidth={2.6} />
-      </span>
-    </button>
-  );
-}
 
 function ProductMarketplaceCard({
   href,
@@ -294,13 +235,48 @@ function ProductMarketplaceCard({
 }
 
 export function ProductsPage() {
-  const [search, setSearch] = useState("");
-  const [selectedCategories, setSelectedCategories] = useState<ProductCategoryId[]>([]);
-  const [selectedLines, setSelectedLines] = useState<ProductLineId[]>([]);
-  const [selectedPackagings, setSelectedPackagings] = useState<string[]>([]);
-  const [includeArchived, setIncludeArchived] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const parsedState = useMemo(
+    () => parseFilterStateFromSearchParams(searchParams),
+    [searchParams],
+  );
+
+  const [search, setSearch] = useState(parsedState.search);
+  const [selectedCategories, setSelectedCategories] = useState(parsedState.categoryIds);
+  const [selectedLines, setSelectedLines] = useState(parsedState.lineIds);
+  const [selectedPackagings, setSelectedPackagings] = useState(parsedState.packagings);
+  const [includeArchived, setIncludeArchived] = useState(parsedState.includeArchived);
+  const [sort, setSort] = useState<ProductsSortValue>(parsedState.sort);
 
   const allPackagings = useMemo(() => getAllPackagings(), []);
+
+  useEffect(() => {
+    setSearch(parsedState.search);
+    setSelectedCategories(parsedState.categoryIds);
+    setSelectedLines(parsedState.lineIds);
+    setSelectedPackagings(parsedState.packagings);
+    setIncludeArchived(parsedState.includeArchived);
+    setSort(parsedState.sort);
+  }, [parsedState]);
+
+  const updateUrlState = useCallback(
+    (nextState: {
+      search: string;
+      categoryIds: ProductCategoryId[];
+      lineIds: ProductLineId[];
+      packagings: string[];
+      includeArchived: boolean;
+      sort: ProductsSortValue;
+    }) => {
+      const params = buildSearchParamsFromFilterState(nextState);
+      const query = params.toString();
+      router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
+    },
+    [pathname, router],
+  );
 
   const filteredProducts = useMemo(
     () =>
@@ -310,26 +286,94 @@ export function ProductsPage() {
         packagings: selectedPackagings,
         includeArchived,
         search,
+        sort,
       }),
-    [selectedCategories, selectedLines, selectedPackagings, includeArchived, search],
+    [selectedCategories, selectedLines, selectedPackagings, includeArchived, search, sort],
   );
 
   function toggleCategory(id: ProductCategoryId) {
-    setSelectedCategories((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
-    );
+    const next = selectedCategories.includes(id)
+      ? selectedCategories.filter((item) => item !== id)
+      : [...selectedCategories, id];
+
+    setSelectedCategories(next);
+    updateUrlState({
+      search,
+      categoryIds: next,
+      lineIds: selectedLines,
+      packagings: selectedPackagings,
+      includeArchived,
+      sort,
+    });
   }
 
   function toggleLine(id: ProductLineId) {
-    setSelectedLines((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
-    );
+    const next = selectedLines.includes(id)
+      ? selectedLines.filter((item) => item !== id)
+      : [...selectedLines, id];
+
+    setSelectedLines(next);
+    updateUrlState({
+      search,
+      categoryIds: selectedCategories,
+      lineIds: next,
+      packagings: selectedPackagings,
+      includeArchived,
+      sort,
+    });
   }
 
   function togglePackaging(value: string) {
-    setSelectedPackagings((prev) =>
-      prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value],
-    );
+    const next = selectedPackagings.includes(value)
+      ? selectedPackagings.filter((item) => item !== value)
+      : [...selectedPackagings, value];
+
+    setSelectedPackagings(next);
+    updateUrlState({
+      search,
+      categoryIds: selectedCategories,
+      lineIds: selectedLines,
+      packagings: next,
+      includeArchived,
+      sort,
+    });
+  }
+
+  function handleSearchChange(value: string) {
+    setSearch(value);
+    updateUrlState({
+      search: value,
+      categoryIds: selectedCategories,
+      lineIds: selectedLines,
+      packagings: selectedPackagings,
+      includeArchived,
+      sort,
+    });
+  }
+
+  function handleSortChange(value: ProductsSortValue) {
+    setSort(value);
+    updateUrlState({
+      search,
+      categoryIds: selectedCategories,
+      lineIds: selectedLines,
+      packagings: selectedPackagings,
+      includeArchived,
+      sort: value,
+    });
+  }
+
+  function handleToggleArchived() {
+    const next = !includeArchived;
+    setIncludeArchived(next);
+    updateUrlState({
+      search,
+      categoryIds: selectedCategories,
+      lineIds: selectedLines,
+      packagings: selectedPackagings,
+      includeArchived: next,
+      sort,
+    });
   }
 
   function resetFilters() {
@@ -338,14 +382,26 @@ export function ProductsPage() {
     setSelectedLines([]);
     setSelectedPackagings([]);
     setIncludeArchived(false);
+    setSort("default");
+
+    updateUrlState({
+      search: "",
+      categoryIds: [],
+      lineIds: [],
+      packagings: [],
+      includeArchived: false,
+      sort: "default",
+    });
   }
 
-  const hasActiveFilters =
-    search.trim().length > 0 ||
-    selectedCategories.length > 0 ||
-    selectedLines.length > 0 ||
-    selectedPackagings.length > 0 ||
-    includeArchived;
+  const hasActiveFilters = hasActiveProductsFilters({
+    search,
+    categoryIds: selectedCategories,
+    lineIds: selectedLines,
+    packagings: selectedPackagings,
+    includeArchived,
+    sort,
+  });
 
   return (
     <div className="pt-[92px] pb-6 md:pt-[104px] md:pb-8 xl:pb-10">
@@ -391,109 +447,21 @@ export function ProductsPage() {
               animate="visible"
               className="xl:sticky xl:top-[112px]"
             >
-              <div className="catalog-filter-panel rounded-[28px]">
-                <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-4 dark:border-[var(--color-border)] md:px-5">
-                  <div className="flex items-center gap-2">
-                    <SlidersHorizontal
-                      size={18}
-                      strokeWidth={2.1}
-                      className="text-[var(--color-accent-1)]"
-                    />
-                    <span className="catalog-filter-panel-text text-[14px] font-semibold">
-                      фильтры
-                    </span>
-                  </div>
-
-                  {hasActiveFilters ? (
-                    <button
-                      type="button"
-                      onClick={resetFilters}
-                      className="catalog-filter-panel-reset inline-flex h-9 items-center justify-center gap-1 rounded-[14px] px-3 text-[12px] font-medium transition duration-300"
-                    >
-                      <X size={14} strokeWidth={2.1} />
-                      <span>сбросить</span>
-                    </button>
-                  ) : null}
-                </div>
-
-                <div className="catalog-filter-scroll max-h-[calc(100svh-188px)] overflow-y-auto px-4 py-4 md:px-5">
-                  <div className="relative">
-                    <Search
-                      size={16}
-                      strokeWidth={2.1}
-                      className="catalog-filter-panel-icon pointer-events-none absolute left-4 top-1/2 -translate-y-1/2"
-                    />
-                    <input
-                      value={search}
-                      onChange={(event) => setSearch(event.target.value)}
-                      type="text"
-                      placeholder="поиск по каталогу"
-                      className="catalog-filter-panel-search h-11 w-full rounded-[16px] border border-transparent pl-11 pr-4 text-[14px] outline-none transition duration-300 focus:border-[var(--color-accent-1)]"
-                    />
-                  </div>
-
-                  <div className="mt-5 space-y-5">
-                    <div>
-                      <div className="catalog-filter-panel-muted mb-3 text-[12px] font-semibold uppercase tracking-[0.08em]">
-                        категории
-                      </div>
-                      <div className="space-y-2">
-                        {productCategories.map((category) => (
-                          <CheckboxRow
-                            key={category.id}
-                            label={category.title}
-                            checked={selectedCategories.includes(category.id)}
-                            onToggle={() => toggleCategory(category.id)}
-                          />
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <div className="catalog-filter-panel-muted mb-3 text-[12px] font-semibold uppercase tracking-[0.08em]">
-                        линейка
-                      </div>
-                      <div className="space-y-2">
-                        {productLines.map((line) => (
-                          <CheckboxRow
-                            key={line.id}
-                            label={line.title}
-                            checked={selectedLines.includes(line.id)}
-                            onToggle={() => toggleLine(line.id)}
-                          />
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <div className="catalog-filter-panel-muted mb-3 text-[12px] font-semibold uppercase tracking-[0.08em]">
-                        фасовка
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        {allPackagings.map((item) => (
-                          <FilterChip
-                            key={item}
-                            label={item}
-                            active={selectedPackagings.includes(item)}
-                            onClick={() => togglePackaging(item)}
-                          />
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <div className="catalog-filter-panel-muted mb-3 text-[12px] font-semibold uppercase tracking-[0.08em]">
-                        статус
-                      </div>
-                      <CheckboxRow
-                        label="показывать архивные позиции"
-                        checked={includeArchived}
-                        onToggle={() => setIncludeArchived((prev) => !prev)}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <ProductsFiltersPanel
+                search={search}
+                onSearchChange={handleSearchChange}
+                selectedCategories={selectedCategories}
+                onToggleCategory={toggleCategory}
+                selectedLines={selectedLines}
+                onToggleLine={toggleLine}
+                selectedPackagings={selectedPackagings}
+                onTogglePackaging={togglePackaging}
+                allPackagings={allPackagings}
+                includeArchived={includeArchived}
+                onToggleArchived={handleToggleArchived}
+                onReset={resetFilters}
+                hasActiveFilters={hasActiveFilters}
+              />
             </motion.aside>
 
             <div className="space-y-4">
@@ -513,42 +481,46 @@ export function ProductsPage() {
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap gap-2">
-                    {selectedCategories.map((id) => (
-                      <button
-                        key={id}
-                        type="button"
-                        onClick={() => toggleCategory(id)}
-                        className="inline-flex h-10 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
-                      >
-                        <span>{getProductCategoryById(id)?.shortTitle ?? id}</span>
-                        <X size={14} strokeWidth={2.2} />
-                      </button>
-                    ))}
+                  <div className="flex flex-col gap-3 md:items-end">
+                    <ProductsSortSelect value={sort} onChange={handleSortChange} />
 
-                    {selectedLines.map((id) => (
-                      <button
-                        key={id}
-                        type="button"
-                        onClick={() => toggleLine(id)}
-                        className="inline-flex h-10 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
-                      >
-                        <span>{getProductLineById(id)?.title ?? id}</span>
-                        <X size={14} strokeWidth={2.2} />
-                      </button>
-                    ))}
+                    <div className="flex flex-wrap gap-2">
+                      {selectedCategories.map((id) => (
+                        <button
+                          key={id}
+                          type="button"
+                          onClick={() => toggleCategory(id)}
+                          className="inline-flex h-10 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
+                        >
+                          <span>{getProductCategoryById(id)?.shortTitle ?? id}</span>
+                          <X size={14} strokeWidth={2.2} />
+                        </button>
+                      ))}
 
-                    {selectedPackagings.map((item) => (
-                      <button
-                        key={item}
-                        type="button"
-                        onClick={() => togglePackaging(item)}
-                        className="inline-flex h-10 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
-                      >
-                        <span>{item}</span>
-                        <X size={14} strokeWidth={2.2} />
-                      </button>
-                    ))}
+                      {selectedLines.map((id) => (
+                        <button
+                          key={id}
+                          type="button"
+                          onClick={() => toggleLine(id)}
+                          className="inline-flex h-10 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
+                        >
+                          <span>{getProductLineById(id)?.title ?? id}</span>
+                          <X size={14} strokeWidth={2.2} />
+                        </button>
+                      ))}
+
+                      {selectedPackagings.map((item) => (
+                        <button
+                          key={item}
+                          type="button"
+                          onClick={() => togglePackaging(item)}
+                          className="inline-flex h-10 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
+                        >
+                          <span>{item}</span>
+                          <X size={14} strokeWidth={2.2} />
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </motion.div>
