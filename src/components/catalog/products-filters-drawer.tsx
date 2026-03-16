@@ -5,27 +5,6 @@ import { SlidersHorizontal, X } from "lucide-react";
 import { ProductsFiltersPanel } from "@/components/catalog/products-filters-panel";
 import type { ProductCategoryId, ProductLineId } from "@/lib/content/products";
 
-type ProductsFiltersDrawerProps = {
-  isOpen: boolean;
-  onClose: () => void;
-  resultCount: number;
-  search: string;
-  onSearchChange: (value: string) => void;
-  selectedCategories: ProductCategoryId[];
-  onToggleCategory: (value: ProductCategoryId) => void;
-  selectedLines: ProductLineId[];
-  onToggleLine: (value: ProductLineId) => void;
-  selectedPackagings: string[];
-  onTogglePackaging: (value: string) => void;
-  allPackagings: string[];
-  selectedApplicationAreas: string[];
-  onToggleApplicationArea: (value: string) => void;
-  includeArchived: boolean;
-  onToggleArchived: () => void;
-  onReset: () => void;
-  hasActiveFilters: boolean;
-};
-
 export function ProductsFiltersDrawer({
   isOpen,
   onClose,
@@ -39,13 +18,24 @@ export function ProductsFiltersDrawer({
   selectedPackagings,
   onTogglePackaging,
   allPackagings,
-  selectedApplicationAreas,
-  onToggleApplicationArea,
-  includeArchived,
-  onToggleArchived,
   onReset,
   hasActiveFilters,
-}: ProductsFiltersDrawerProps) {
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  resultCount: number;
+  search: string;
+  onSearchChange: (value: string) => void;
+  selectedCategories: ProductCategoryId[];
+  onToggleCategory: (value: ProductCategoryId) => void;
+  selectedLines: ProductLineId[];
+  onToggleLine: (value: ProductLineId) => void;
+  selectedPackagings: string[];
+  onTogglePackaging: (value: string) => void;
+  allPackagings: string[];
+  onReset: () => void;
+  hasActiveFilters: boolean;
+}) {
   return (
     <AnimatePresence>
       {isOpen ? (
@@ -101,10 +91,6 @@ export function ProductsFiltersDrawer({
                 selectedPackagings={selectedPackagings}
                 onTogglePackaging={onTogglePackaging}
                 allPackagings={allPackagings}
-                selectedApplicationAreas={selectedApplicationAreas}
-                onToggleApplicationArea={onToggleApplicationArea}
-                includeArchived={includeArchived}
-                onToggleArchived={onToggleArchived}
                 onReset={onReset}
                 hasActiveFilters={hasActiveFilters}
                 embedded
