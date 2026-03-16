@@ -334,7 +334,6 @@ export function ProductsPage() {
         lineIds: selectedLines,
         packagings: selectedPackagings,
         applicationAreas: selectedApplicationAreas,
-        includeArchived: false,
         search,
         sort,
       }),
