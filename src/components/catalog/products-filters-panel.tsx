@@ -3,11 +3,31 @@
 import { Check, Search, SlidersHorizontal, X } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import {
+  getAllApplicationAreas,
   productCategories,
   productLines,
   type ProductCategoryId,
   type ProductLineId,
 } from "@/lib/content/products";
+
+type ProductsFiltersPanelProps = {
+  search: string;
+  onSearchChange: (value: string) => void;
+  selectedCategories: ProductCategoryId[];
+  onToggleCategory: (value: ProductCategoryId) => void;
+  selectedLines: ProductLineId[];
+  onToggleLine: (value: ProductLineId) => void;
+  selectedPackagings: string[];
+  onTogglePackaging: (value: string) => void;
+  allPackagings: string[];
+  selectedApplicationAreas: string[];
+  onToggleApplicationArea: (value: string) => void;
+  includeArchived: boolean;
+  onToggleArchived: () => void;
+  onReset: () => void;
+  hasActiveFilters: boolean;
+  embedded?: boolean;
+};
 
 function FilterChip({
   label,
@@ -67,23 +87,6 @@ function CheckboxRow({
   );
 }
 
-type ProductsFiltersPanelProps = {
-  search: string;
-  onSearchChange: (value: string) => void;
-  selectedCategories: ProductCategoryId[];
-  onToggleCategory: (value: ProductCategoryId) => void;
-  selectedLines: ProductLineId[];
-  onToggleLine: (value: ProductLineId) => void;
-  selectedPackagings: string[];
-  onTogglePackaging: (value: string) => void;
-  allPackagings: string[];
-  includeArchived: boolean;
-  onToggleArchived: () => void;
-  onReset: () => void;
-  hasActiveFilters: boolean;
-  embedded?: boolean;
-};
-
 export function ProductsFiltersPanel({
   search,
   onSearchChange,
@@ -94,13 +97,17 @@ export function ProductsFiltersPanel({
   selectedPackagings,
   onTogglePackaging,
   allPackagings,
+  selectedApplicationAreas,
+  onToggleApplicationArea,
   includeArchived,
   onToggleArchived,
   onReset,
   hasActiveFilters,
   embedded = false,
 }: ProductsFiltersPanelProps) {
-  const body = (
+  const applicationAreas = getAllApplicationAreas();
+
+  const content = (
     <>
       {!embedded ? (
         <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-4 dark:border-[var(--color-border)] md:px-5">
@@ -151,6 +158,22 @@ export function ProductsFiltersPanel({
         </div>
 
         <div className="space-y-5">
+          <div>
+            <div className="catalog-filter-panel-muted mb-3 text-[12px] font-semibold uppercase tracking-[0.08em]">
+              быстрый подбор по задаче
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {applicationAreas.map((item) => (
+                <FilterChip
+                  key={item}
+                  label={item}
+                  active={selectedApplicationAreas.includes(item)}
+                  onClick={() => onToggleApplicationArea(item)}
+                />
+              ))}
+            </div>
+          </div>
+
           <div>
             <div className="catalog-filter-panel-muted mb-3 text-[12px] font-semibold uppercase tracking-[0.08em]">
               категории
@@ -215,8 +238,8 @@ export function ProductsFiltersPanel({
   );
 
   if (embedded) {
-    return <div>{body}</div>;
+    return <div className="space-y-5">{content}</div>;
   }
 
-  return <div className="catalog-filter-panel rounded-[28px]">{body}</div>;
+  return <div className="catalog-filter-panel rounded-[28px]">{content}</div>;
 }
