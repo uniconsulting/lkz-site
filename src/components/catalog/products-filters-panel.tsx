@@ -144,7 +144,7 @@ export function ProductsFiltersPanel({
           />
         </div>
 
-        <div className="space-y-5">
+        <div className="space-y-5 pt-3">
           <div>
             <div className="catalog-filter-panel-muted mb-3 text-[12px] font-semibold uppercase tracking-[0.08em]">
               категории
@@ -203,4 +203,3 @@ export function ProductsFiltersPanel({
 
   return <div className="catalog-filter-panel rounded-[28px]">{content}</div>;
 }
-
