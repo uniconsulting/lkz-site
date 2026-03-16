@@ -1,24 +1,14 @@
 const basePath = process.env.NODE_ENV === "production" ? "/lkz-site" : "";
 
 export type ProductCategoryId =
-  | "enamels"
-  | "varnishes"
   | "paints"
   | "special-paints"
+  | "enamels"
+  | "varnishes"
   | "protective"
-  | "adhesives-glass"
-  | "primers";
+  | "adhesives-glass";
 
-export type ProductLineId = "emalyer" | "general";
-
-export type ProductPackagingUnit = "kg" | "l";
-
-export type ProductPackaging = {
-  label: string;
-  value: number;
-  unit: ProductPackagingUnit;
-  sortOrder: number;
-};
+export type ProductLineId = "emalyer";
 
 export type ProductCharacteristic = {
   label: string;
@@ -29,6 +19,33 @@ export type ProductCharacteristicsGroup = {
   commercial?: ProductCharacteristic[];
   technical?: ProductCharacteristic[];
   scenario?: ProductCharacteristic[];
+};
+
+export type ProductPackagingUnit = "kg" | "l";
+
+export type ProductPackaging = {
+  label: string;
+  value: number;
+  unit: ProductPackagingUnit;
+  sortOrder: number;
+};
+
+export type ProductImageSet = {
+  preview: string;
+  detail: string;
+  gallery?: string[];
+};
+
+export type ProductSeo = {
+  title?: string;
+  description?: string;
+};
+
+export type ProductAdminMeta = {
+  isPublished: boolean;
+  sortOrder: number;
+  updatedAt: string;
+  tags?: string[];
 };
 
 export type ProductCategory = {
@@ -51,10 +68,12 @@ export type ProductItem = {
   subtitle?: string;
   description: string;
   packagings: ProductPackaging[];
-  image?: string;
-  isArchived?: boolean;
   applicationAreas?: string[];
   characteristics?: ProductCharacteristicsGroup;
+  images?: ProductImageSet;
+  seo?: ProductSeo;
+  admin: ProductAdminMeta;
+  isArchived?: boolean;
 };
 
 function createPackaging(
@@ -72,77 +91,46 @@ function createPackaging(
 }
 
 export const productCategories: ProductCategory[] = [
-  { id: "enamels", title: "Эмали", shortTitle: "эмали" },
-  { id: "varnishes", title: "Лаки", shortTitle: "лаки" },
-  { id: "paints", title: "Краски", shortTitle: "краски" },
-  { id: "special-paints", title: "Специальные краски", shortTitle: "спецкраски" },
-  { id: "protective", title: "Защитные материалы", shortTitle: "защита" },
-  { id: "adhesives-glass", title: "Клей и жидкое стекло", shortTitle: "клей и стекло" },
-  { id: "primers", title: "Грунты", shortTitle: "грунты" },
+  {
+    id: "paints",
+    title: "Краски",
+    shortTitle: "краски",
+  },
+  {
+    id: "special-paints",
+    title: "Специальные краски",
+    shortTitle: "спецкраски",
+  },
+  {
+    id: "enamels",
+    title: "Эмали",
+    shortTitle: "эмали",
+  },
+  {
+    id: "varnishes",
+    title: "Лаки",
+    shortTitle: "лаки",
+  },
+  {
+    id: "protective",
+    title: "Защитные материалы",
+    shortTitle: "защитные",
+  },
+  {
+    id: "adhesives-glass",
+    title: "Клей и жидкое стекло",
+    shortTitle: "клей и стекло",
+  },
 ];
 
 export const productLines: ProductLine[] = [
-  { id: "emalyer", title: "Эмальер" },
-  { id: "general", title: "Универсальная линейка" },
+  {
+    id: "emalyer",
+    title: "Эмальер",
+  },
 ];
 
 export const products: ProductItem[] = [
-  {
-    id: "emalyer-enamel-matte-base-a",
-    slug: "emalyer-enamel-matte-base-a",
-    categoryId: "enamels",
-    lineId: "emalyer",
-    title: "Эмаль матовая база A",
-    subtitle: "универсальная",
-    description:
-      "Матовая водно-дисперсионная эмаль для интерьерных и универсальных задач с дальнейшей колеровкой.",
-    image: `${basePath}/images/sections/catalog/products/product-enamel-matte-base-a.webp`,
-    packagings: [
-      createPackaging("0,9 кг", 0.9, "kg", 1),
-      createPackaging("2,5 кг", 2.5, "kg", 2),
-      createPackaging("12 кг", 12, "kg", 3),
-    ],
-    applicationAreas: ["интерьер", "внутренние работы", "универсальные поверхности"],
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Эмали" },
-        { label: "Линейка", value: "Эмальер" },
-        { label: "Фасовки", value: "0,9 кг / 2,5 кг / 12 кг" },
-      ],
-      technical: [
-        { label: "Финиш", value: "Матовый" },
-        { label: "Основа", value: "Водно-дисперсионная" },
-        { label: "База", value: "A" },
-      ],
-    },
-  },
-  {
-    id: "emalyer-enamel-radiator-white",
-    slug: "emalyer-radiator-white",
-    categoryId: "enamels",
-    lineId: "emalyer",
-    title: "Для радиаторов",
-    subtitle: "эмаль белоснежная",
-    description:
-      "Эмаль для окраски радиаторов и нагревающихся металлических поверхностей внутри помещений.",
-    packagings: [
-      createPackaging("0,4 кг", 0.4, "kg", 1),
-      createPackaging("0,9 кг", 0.9, "kg", 2),
-    ],
-    applicationAreas: ["радиаторы", "металл", "внутренние работы"],
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Эмали" },
-        { label: "Линейка", value: "Эмальер" },
-        { label: "Фасовки", value: "0,4 кг / 0,9 кг" },
-      ],
-      technical: [
-        { label: "Назначение", value: "Для радиаторов" },
-        { label: "Цвет", value: "Белоснежный" },
-        { label: "Основа", value: "Водно-дисперсионная" },
-      ],
-    },
-  },
   {
     id: "emalyer-paint-walls-ceilings",
     slug: "emalyer-paint-walls-ceilings",
@@ -150,9 +138,7 @@ export const products: ProductItem[] = [
     lineId: "emalyer",
     title: "Для стен и потолков",
     subtitle: "краска акриловая",
-    description:
-      "Влагостойкая белоснежная краска для внутренних работ по стенам и потолкам.",
-    image: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
+    description: "Влагостойкая белоснежная краска для внутренних работ.",
     packagings: [
       createPackaging("1,4 кг", 1.4, "kg", 1),
       createPackaging("3 кг", 3, "kg", 2),
@@ -172,6 +158,26 @@ export const products: ProductItem[] = [
         { label: "Тип", value: "Водно-дисперсионная" },
         { label: "Назначение", value: "Для внутренних работ" },
       ],
+      scenario: [
+        { label: "Подходит для", value: "Стены и потолки" },
+        { label: "Тип объекта", value: "Интерьер" },
+      ],
+    },
+    images: {
+      preview: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
+      detail: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
+    },
+    seo: {
+      title:
+        "Краска для стен и потолков акриловая купить оптом | Симбирские краски",
+      description:
+        "Акриловая краска для стен и потолков. Оптовые поставки, фасовки, подбор продукции и коммерческое предложение.",
+    },
+    admin: {
+      isPublished: true,
+      sortOrder: 10,
+      updatedAt: "2026-03-16",
+      tags: ["интерьер", "стены", "потолки", "акриловая"],
     },
   },
   {
@@ -181,8 +187,7 @@ export const products: ProductItem[] = [
     lineId: "emalyer",
     title: "Фасадная",
     subtitle: "краска акриловая",
-    description:
-      "Белоснежная фасадная краска для наружных работ по минеральным основаниям.",
+    description: "Белоснежная фасадная краска для наружных работ.",
     packagings: [
       createPackaging("1,4 кг", 1.4, "kg", 1),
       createPackaging("3 кг", 3, "kg", 2),
@@ -202,35 +207,25 @@ export const products: ProductItem[] = [
         { label: "Тип", value: "Фасадная" },
         { label: "Назначение", value: "Для наружных работ" },
       ],
+      scenario: [
+        { label: "Подходит для", value: "Фасады и наружные поверхности" },
+        { label: "Тип основания", value: "Минеральные поверхности" },
+      ],
     },
-  },
-  {
-    id: "emalyer-wood-paint",
-    slug: "emalyer-wood-paint",
-    categoryId: "special-paints",
-    lineId: "emalyer",
-    title: "Краска для дерева",
-    subtitle: "универсальная",
-    description:
-      "Укрывная краска для деревянных оснований с хорошей адгезией и стабильным финишем.",
-    image: `${basePath}/images/sections/catalog/products/product-wood-paint.webp`,
-    packagings: [
-      createPackaging("0,9 кг", 0.9, "kg", 1),
-      createPackaging("2,5 кг", 2.5, "kg", 2),
-      createPackaging("9 кг", 9, "kg", 3),
-    ],
-    applicationAreas: ["дерево", "внутренние работы", "наружные работы"],
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Специальные краски" },
-        { label: "Линейка", value: "Эмальер" },
-        { label: "Фасовки", value: "0,9 кг / 2,5 кг / 9 кг" },
-      ],
-      technical: [
-        { label: "Назначение", value: "Для дерева" },
-        { label: "Тип", value: "Укрывная" },
-        { label: "Основа", value: "Водно-дисперсионная" },
-      ],
+    images: {
+      preview: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
+      detail: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
+    },
+    seo: {
+      title: "Фасадная акриловая краска купить оптом | Симбирские краски",
+      description:
+        "Фасадная акриловая краска для наружных работ. Оптовые поставки, доступные фасовки и подбор продукции.",
+    },
+    admin: {
+      isPublished: true,
+      sortOrder: 20,
+      updatedAt: "2026-03-16",
+      tags: ["фасад", "наружные работы", "акриловая"],
     },
   },
   {
@@ -241,7 +236,7 @@ export const products: ProductItem[] = [
     title: "Краска-грунт 2 в 1",
     subtitle: "по OSB",
     description:
-      "Состав 2 в 1 для OSB, SIP, ДСП, ДВП и смежных оснований с функцией укрепления и окраски.",
+      "Состав 2 в 1 для OSB, SIP, ДСП, ДВП и смежных оснований.",
     packagings: [
       createPackaging("1,4 кг", 1.4, "kg", 1),
       createPackaging("3 кг", 3, "kg", 2),
@@ -255,39 +250,70 @@ export const products: ProductItem[] = [
         { label: "Фасовки", value: "1,4 кг / 3 кг / 7 кг" },
       ],
       technical: [
-        { label: "Формат", value: "2 в 1" },
+        { label: "Тип", value: "Краска-грунт 2 в 1" },
         { label: "Назначение", value: "OSB / SIP / ДСП / ДВП" },
-        { label: "Основа", value: "Водно-дисперсионная" },
       ],
+      scenario: [
+        { label: "Подходит для", value: "Плитные и древесные основания" },
+      ],
+    },
+    images: {
+      preview: `${basePath}/images/sections/catalog/products/product-primer-deep.webp`,
+      detail: `${basePath}/images/sections/catalog/products/product-primer-deep.webp`,
+    },
+    seo: {
+      title: "Краска-грунт 2 в 1 по OSB купить оптом | Симбирские краски",
+      description:
+        "Краска-грунт 2 в 1 для OSB, SIP, ДСП и ДВП. Оптовые поставки и подбор продукции под задачу.",
+    },
+    admin: {
+      isPublished: true,
+      sortOrder: 30,
+      updatedAt: "2026-03-16",
+      tags: ["osb", "sip", "дсп", "двп", "грунт"],
     },
   },
   {
-    id: "emalyer-varnish-gloss",
-    slug: "emalyer-varnish-gloss",
-    categoryId: "varnishes",
+    id: "emalyer-enamel-radiator-white",
+    slug: "emalyer-radiator-white",
+    categoryId: "enamels",
     lineId: "emalyer",
-    title: "ВД лак глянцевый",
-    subtitle: "универсальный",
-    description:
-      "Глянцевый водно-дисперсионный лак для декоративной и защитной отделки поверхностей.",
-    image: `${basePath}/images/sections/catalog/products/product-lacquer-gloss.webp`,
+    title: "Для радиаторов",
+    subtitle: "эмаль белоснежная",
+    description: "Эмаль для окраски радиаторов и нагревающихся поверхностей.",
     packagings: [
-      createPackaging("0,9 кг", 0.9, "kg", 1),
-      createPackaging("2,2 кг", 2.2, "kg", 2),
-      createPackaging("9 кг", 9, "kg", 3),
+      createPackaging("0,4 кг", 0.4, "kg", 1),
+      createPackaging("0,9 кг", 0.9, "kg", 2),
     ],
-    applicationAreas: ["интерьер", "дерево", "внутренние работы"],
+    applicationAreas: ["радиаторы", "металл", "внутренние работы"],
     characteristics: {
       commercial: [
-        { label: "Категория", value: "Лаки" },
+        { label: "Категория", value: "Эмали" },
         { label: "Линейка", value: "Эмальер" },
-        { label: "Фасовки", value: "0,9 кг / 2,2 кг / 9 кг" },
+        { label: "Фасовки", value: "0,4 кг / 0,9 кг" },
       ],
       technical: [
-        { label: "Финиш", value: "Глянцевый" },
-        { label: "Основа", value: "Водно-дисперсионная" },
-        { label: "Назначение", value: "Защитно-декоративное покрытие" },
+        { label: "Назначение", value: "Для радиаторов" },
+        { label: "Тип поверхности", value: "Металл" },
       ],
+      scenario: [
+        { label: "Подходит для", value: "Радиаторы и нагревающиеся поверхности" },
+      ],
+    },
+    images: {
+      preview: `${basePath}/images/sections/catalog/products/product-enamel-matte-base-a.webp`,
+      detail: `${basePath}/images/sections/catalog/products/product-enamel-matte-base-a.webp`,
+    },
+    seo: {
+      title: "Эмаль для радиаторов купить оптом | Симбирские краски",
+      description:
+        "Белоснежная эмаль для радиаторов и нагревающихся поверхностей. Доступные фасовки и оптовые поставки.",
+    },
+    admin: {
+      isPublished: true,
+      sortOrder: 40,
+      updatedAt: "2026-03-16",
+      tags: ["радиаторы", "эмаль", "металл"],
     },
   },
   {
@@ -315,35 +341,27 @@ export const products: ProductItem[] = [
         { label: "Назначение", value: "Для бань и саун" },
         { label: "Основа", value: "Водно-дисперсионная" },
       ],
+      scenario: [
+        {
+          label: "Подходит для",
+          value: "Деревянные поверхности внутри влажных помещений",
+        },
+      ],
     },
-  },
-  {
-    id: "emalyer-primer-deep-penetration",
-    slug: "emalyer-primer-deep-penetration",
-    categoryId: "primers",
-    lineId: "emalyer",
-    title: "Грунт глубокого проникновения",
-    subtitle: "эмальер",
-    description:
-      "Грунт для подготовки минеральных оснований перед дальнейшей отделкой и окраской.",
-    image: `${basePath}/images/sections/catalog/products/product-primer-deep.webp`,
-    packagings: [
-      createPackaging("1 кг", 1, "kg", 1),
-      createPackaging("5 кг", 5, "kg", 2),
-      createPackaging("10 кг", 10, "kg", 3),
-    ],
-    applicationAreas: ["минеральные основания", "внутренние работы", "наружные работы"],
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Грунты" },
-        { label: "Линейка", value: "Эмальер" },
-        { label: "Фасовки", value: "1 кг / 5 кг / 10 кг" },
-      ],
-      technical: [
-        { label: "Тип", value: "Глубокого проникновения" },
-        { label: "Назначение", value: "Подготовка основания" },
-        { label: "Основа", value: "Водно-дисперсионная" },
-      ],
+    images: {
+      preview: `${basePath}/images/sections/catalog/products/product-lacquer-gloss.webp`,
+      detail: `${basePath}/images/sections/catalog/products/product-lacquer-gloss.webp`,
+    },
+    seo: {
+      title: "Лак для бань и саун матовый купить оптом | Симбирские краски",
+      description:
+        "Матовый лак для бань и саун, для деревянных поверхностей. Оптовые поставки и доступные фасовки.",
+    },
+    admin: {
+      isPublished: true,
+      sortOrder: 50,
+      updatedAt: "2026-03-16",
+      tags: ["лак", "бани и сауны", "дерево", "матовый"],
     },
   },
   {
@@ -353,14 +371,17 @@ export const products: ProductItem[] = [
     lineId: "emalyer",
     title: "Антисептик универсальный",
     subtitle: "защитный состав",
-    description:
-      "Универсальный антисептик для обработки древесины и профилактической защиты от внешних факторов.",
-    image: `${basePath}/images/sections/catalog/products/product-antiseptic.webp`,
+    description: "Универсальный антисептик для обработки древесины.",
     packagings: [
       createPackaging("5 кг", 5, "kg", 1),
       createPackaging("20 кг", 20, "kg", 2),
     ],
-    applicationAreas: ["дерево", "защита древесины", "наружные работы", "внутренние работы"],
+    applicationAreas: [
+      "дерево",
+      "защита древесины",
+      "наружные работы",
+      "внутренние работы",
+    ],
     characteristics: {
       commercial: [
         { label: "Категория", value: "Защитные материалы" },
@@ -368,10 +389,27 @@ export const products: ProductItem[] = [
         { label: "Фасовки", value: "5 кг / 20 кг" },
       ],
       technical: [
+        { label: "Тип", value: "Антисептик" },
         { label: "Назначение", value: "Универсальная защита древесины" },
-        { label: "Тип", value: "Антисептический состав" },
-        { label: "Основа", value: "Водно-дисперсионная" },
       ],
+      scenario: [
+        { label: "Подходит для", value: "Обработка деревянных поверхностей" },
+      ],
+    },
+    images: {
+      preview: `${basePath}/images/sections/catalog/products/product-antiseptic.webp`,
+      detail: `${basePath}/images/sections/catalog/products/product-antiseptic.webp`,
+    },
+    seo: {
+      title: "Антисептик универсальный для древесины купить оптом | Симбирские краски",
+      description:
+        "Универсальный антисептик для защиты древесины. Оптовые поставки, подбор фасовки и коммерческое предложение.",
+    },
+    admin: {
+      isPublished: true,
+      sortOrder: 60,
+      updatedAt: "2026-03-16",
+      tags: ["антисептик", "дерево", "защита древесины"],
     },
   },
   {
@@ -380,17 +418,20 @@ export const products: ProductItem[] = [
     categoryId: "adhesives-glass",
     lineId: "emalyer",
     title: "Жидкое стекло",
-    subtitle: "натриевое",
+    subtitle: "силикатный состав",
     description:
-      "Силикатный состав для строительных, клеевых и укрепляющих задач.",
-    image: `${basePath}/images/sections/catalog/products/product-liquid-glass.webp`,
+      "Жидкое стекло для клеевых, строительных и укрепляющих задач.",
     packagings: [
       createPackaging("1,4 кг", 1.4, "kg", 1),
       createPackaging("4 кг", 4, "kg", 2),
       createPackaging("6 кг", 6, "kg", 3),
       createPackaging("15 кг", 15, "kg", 4),
     ],
-    applicationAreas: ["строительные смеси", "укрепление оснований", "минеральные основания"],
+    applicationAreas: [
+      "строительные смеси",
+      "укрепление оснований",
+      "минеральные основания",
+    ],
     characteristics: {
       commercial: [
         { label: "Категория", value: "Клей и жидкое стекло" },
@@ -399,56 +440,79 @@ export const products: ProductItem[] = [
       ],
       technical: [
         { label: "Тип", value: "Силикатный состав" },
-        { label: "Основа", value: "Натриевое жидкое стекло" },
-        { label: "Назначение", value: "Строительные и укрепляющие задачи" },
+      ],
+      scenario: [
+        {
+          label: "Подходит для",
+          value: "Строительные и укрепляющие задачи",
+        },
       ],
     },
-  },
-  {
-    id: "emalyer-pva-glue",
-    slug: "emalyer-pva-glue",
-    categoryId: "adhesives-glass",
-    lineId: "emalyer",
-    title: "Клей ПВА",
-    subtitle: "универсальный",
-    description:
-      "Универсальный ПВА-клей для бытовых, столярных и строительных задач.",
-    image: `${basePath}/images/sections/catalog/products/product-pva-glue.webp`,
-    packagings: [
-      createPackaging("0,9 кг", 0.9, "kg", 1),
-      createPackaging("2,5 кг", 2.5, "kg", 2),
-      createPackaging("10 кг", 10, "kg", 3),
-    ],
-    applicationAreas: ["дерево", "внутренние работы", "столярные работы"],
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Клей и жидкое стекло" },
-        { label: "Линейка", value: "Эмальер" },
-        { label: "Фасовки", value: "0,9 кг / 2,5 кг / 10 кг" },
-      ],
-      technical: [
-        { label: "Тип", value: "ПВА" },
-        { label: "Назначение", value: "Универсальное склеивание" },
-        { label: "Основа", value: "Поливинилацетатная" },
-      ],
+    images: {
+      preview: `${basePath}/images/sections/catalog/products/product-liquid-glass.webp`,
+      detail: `${basePath}/images/sections/catalog/products/product-liquid-glass.webp`,
+    },
+    seo: {
+      title: "Жидкое стекло купить оптом | Симбирские краски",
+      description:
+        "Жидкое стекло для строительных и укрепляющих задач. Оптовые поставки и доступные фасовки.",
+    },
+    admin: {
+      isPublished: true,
+      sortOrder: 70,
+      updatedAt: "2026-03-16",
+      tags: ["жидкое стекло", "силикатный состав", "строительные смеси"],
     },
   },
+
+  /*
+    Ниже переведи остальные ваши позиции в этот же формат.
+    Логика для каждой позиции уже готова:
+    - packagings только через createPackaging(...)
+    - image -> images.preview / images.detail
+    - admin обязателен
+    - seo желательно заполнить
+  */
 ];
+
+export function getProductCategoryById(id: ProductCategoryId) {
+  return productCategories.find((item) => item.id === id);
+}
+
+export function getProductLineById(id: ProductLineId) {
+  return productLines.find((item) => item.id === id);
+}
+
+export function getPublishedProducts() {
+  return products
+    .filter((product) => product.admin.isPublished)
+    .sort((a, b) => a.admin.sortOrder - b.admin.sortOrder);
+}
 
 export function getProductBySlug(slug: string) {
   return products.find((product) => product.slug === slug);
 }
 
-export function getProductById(id: string) {
-  return products.find((product) => product.id === id);
+export function getPublishedProductBySlug(slug: string) {
+  return getPublishedProducts().find((product) => product.slug === slug);
 }
 
-export function getProductCategoryById(id: ProductCategoryId) {
-  return productCategories.find((category) => category.id === id);
+export function getPublishedProductSlugs() {
+  return getPublishedProducts().map((product) => product.slug);
 }
 
-export function getProductLineById(id: ProductLineId) {
-  return productLines.find((line) => line.id === id);
+export function getProductPreviewImage(product: ProductItem) {
+  return product.images?.preview;
+}
+
+export function getProductDetailImage(product: ProductItem) {
+  return product.images?.detail ?? product.images?.preview;
+}
+
+export function getAllApplicationAreas() {
+  return Array.from(
+    new Set(products.flatMap((product) => product.applicationAreas ?? [])),
+  ).sort((a, b) => a.localeCompare(b, "ru"));
 }
 
 export function getAllPackagings() {
@@ -475,12 +539,6 @@ export function getAllPackagings() {
     .map((item) => item.label);
 }
 
-export function getAllApplicationAreas() {
-  return Array.from(
-    new Set(products.flatMap((product) => product.applicationAreas ?? [])),
-  ).sort((a, b) => a.localeCompare(b, "ru"));
-}
-
 export function getFilteredProducts({
   categoryIds,
   lineIds,
@@ -500,7 +558,7 @@ export function getFilteredProducts({
 }) {
   const normalizedSearch = search?.trim().toLowerCase() ?? "";
 
-  const filtered = products.filter((product) => {
+  const filtered = getPublishedProducts().filter((product) => {
     const matchesCategory =
       !categoryIds || categoryIds.length === 0
         ? true
@@ -538,6 +596,7 @@ export function getFilteredProducts({
         ...(product.characteristics?.technical ?? []),
         ...(product.characteristics?.scenario ?? []),
       ].map((item) => `${item.label} ${item.value}`),
+      ...(product.admin.tags ?? []),
     ]
       .filter(Boolean)
       .join(" ")
@@ -574,22 +633,23 @@ export function getRelatedProducts(
   },
 ) {
   const limit = options?.limit ?? 3;
-  const currentProduct = products.find((item) => item.id === productId);
+  const publicProducts = getPublishedProducts();
+  const currentProduct = publicProducts.find((item) => item.id === productId);
 
   if (!currentProduct) return [];
 
-  const scored = products
+  const scored = publicProducts
     .filter((item) => item.id !== productId)
     .map((item) => {
       let score = 0;
 
       if (item.categoryId === currentProduct.categoryId) score += 5;
       if (item.lineId === currentProduct.lineId) score += 3;
-      if (!!item.isArchived === !!currentProduct.isArchived) score += 1;
 
-      const currentLabels = currentProduct.packagings.map((pack) => pack.label);
       const sharedPackagingCount = item.packagings.filter((pack) =>
-        currentLabels.includes(pack.label),
+        currentProduct.packagings.some(
+          (currentPack) => currentPack.label === pack.label,
+        ),
       ).length;
 
       score += Math.min(sharedPackagingCount, 2);
@@ -611,4 +671,3 @@ export function getProductApplicationAreas(productId: string) {
   const product = products.find((item) => item.id === productId);
   return product?.applicationAreas ?? [];
 }
-
