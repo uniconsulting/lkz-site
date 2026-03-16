@@ -44,7 +44,7 @@ export type ProductItem = {
   applicationAreas?: string[];
   image?: string;
   isArchived?: boolean;
-  characteristics?: ProductCharacteristic[];
+  characteristics?: ProductCharacteristicsGroup;
 };
 
 export const productCategories: ProductCategory[] = [
