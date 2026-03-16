@@ -7,6 +7,7 @@ import {
   BadgeCheck,
   PackageSearch,
   ShoppingBag,
+  Sparkles,
 } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
@@ -57,11 +58,46 @@ function CharacteristicCard({
   );
 }
 
+function ApplicationAreaChip({ value }: { value: string }) {
+  return (
+    <Link
+      href={`/products?use=${encodeURIComponent(value)}`}
+      className="inline-flex h-11 items-center justify-center rounded-[16px] bg-[var(--color-bg)] px-4 text-[14px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:text-[var(--color-accent-1)] hover:shadow-[0_8px_18px_rgba(43,47,51,0.06)]"
+    >
+      {value}
+    </Link>
+  );
+}
+
+function ApplicationScenarioCard({ value }: { value: string }) {
+  return (
+    <div className="rounded-[22px] bg-[var(--color-bg)] p-5">
+      <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
+        сценарий
+      </div>
+
+      <div className="mt-4 text-[18px] leading-[1.18] tracking-[-0.03em] text-[var(--color-text)]">
+        {value}
+      </div>
+
+      <div className="mt-4">
+        <Link
+          href={`/products?use=${encodeURIComponent(value)}`}
+          className="inline-flex h-10 items-center justify-center rounded-[14px] bg-[var(--color-surface)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:text-[var(--color-accent-1)]"
+        >
+          смотреть похожие
+        </Link>
+      </div>
+    </div>
+  );
+}
+
 export function ProductDetailPage({ product }: { product: ProductItem }) {
   const category = getProductCategoryById(product.categoryId);
   const line = getProductLineById(product.lineId);
   const relatedProducts = getRelatedProducts(product.id, { limit: 3 });
   const contactHref = `/contacts?product=${encodeURIComponent(product.slug)}`;
+  const applicationAreas = product.applicationAreas ?? [];
 
   return (
     <div className="pt-[92px] pb-6 md:pt-[104px] md:pb-8 xl:pb-10">
@@ -144,6 +180,27 @@ export function ProductDetailPage({ product }: { product: ProductItem }) {
                 {product.description}
               </p>
 
+              {applicationAreas.length > 0 ? (
+                <div className="mt-8 rounded-[24px] bg-[var(--color-bg)] p-5">
+                  <div className="mb-4 flex items-center gap-2">
+                    <Sparkles
+                      size={16}
+                      strokeWidth={2.2}
+                      className="text-[var(--color-accent-1)]"
+                    />
+                    <span className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
+                      подходит для задач
+                    </span>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    {applicationAreas.map((item) => (
+                      <ApplicationAreaChip key={item} value={item} />
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+
               <div className="mt-8 rounded-[24px] bg-[var(--color-bg)] p-5">
                 <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
                   доступные фасовки
@@ -202,6 +259,37 @@ export function ProductDetailPage({ product }: { product: ProductItem }) {
                     label={item.label}
                     value={item.value}
                   />
+                ))}
+              </div>
+            </motion.div>
+          </Container>
+        </Section>
+      ) : null}
+
+      {applicationAreas.length > 0 ? (
+        <Section className="pt-8 md:pt-10 xl:pt-12">
+          <Container>
+            <motion.div
+              variants={sectionMotion}
+              initial="hidden"
+              animate="visible"
+              className="rounded-[32px] bg-[var(--color-surface)] p-6 md:p-8"
+            >
+              <div className="mb-6">
+                <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
+                  где применяется
+                </div>
+                <h2 className="mt-4 font-heading text-[28px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[36px]">
+                  Сценарии использования
+                </h2>
+                <p className="mt-4 max-w-[760px] text-[15px] leading-[1.48] text-[var(--color-text-muted)] md:text-[16px]">
+                  Ниже показаны типовые задачи, для которых рассматривают эту позицию. Нажмите на нужный сценарий, чтобы посмотреть похожие товары в каталоге.
+                </p>
+              </div>
+
+              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                {applicationAreas.map((item) => (
+                  <ApplicationScenarioCard key={item} value={item} />
                 ))}
               </div>
             </motion.div>
