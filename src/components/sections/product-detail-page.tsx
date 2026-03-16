@@ -15,6 +15,7 @@ import {
   type ProductCharacteristic,
   type ProductItem,
   getProductCategoryById,
+  getProductDetailImage,
   getProductLineById,
   getRelatedProducts,
 } from "@/lib/content/products";
@@ -143,6 +144,7 @@ export function ProductDetailPage({ product }: { product: ProductItem }) {
   const relatedProducts = getRelatedProducts(product.id, { limit: 3 });
   const contactHref = `/contacts?product=${encodeURIComponent(product.slug)}`;
   const applicationAreas = product.applicationAreas ?? [];
+  const detailImage = getProductDetailImage(product);
 
   const commercialCharacteristics = product.characteristics?.commercial ?? [];
   const technicalCharacteristics = product.characteristics?.technical ?? [];
@@ -179,9 +181,9 @@ export function ProductDetailPage({ product }: { product: ProductItem }) {
               <div className="relative flex h-[520px] items-center justify-center overflow-hidden rounded-[24px] bg-[var(--color-bg)]">
                 <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.0)_0%,rgba(255,255,255,0.05)_100%)]" />
 
-                {product.image ? (
+                {detailImage ? (
                   <img
-                    src={product.image}
+                    src={detailImage}
                     alt={product.title}
                     className="relative z-[1] h-full w-full scale-[1.12] object-contain p-6"
                   />
@@ -248,9 +250,9 @@ export function ProductDetailPage({ product }: { product: ProductItem }) {
                   доступные фасовки
                 </div>
                 <div className="mt-4 flex flex-wrap gap-2">
-                {product.packagings.map((item) => (
-  <PackagingBadge key={item.label} value={item.label} />
-))}
+                  {product.packagings.map((item) => (
+                    <PackagingBadge key={item.label} value={item.label} />
+                  ))}
                 </div>
               </div>
 
