@@ -266,18 +266,18 @@ export function ProductFormV2({
       <AdminFormSection
         eyebrow="изображения"
         title="Изображения товара"
-        description="Подготовь два отдельных изображения: превью для каталога и detail для страницы товара."
+        description="Отдельно загружаются изображение каталога и изображение расширенной карточки."
       >
         <div className="grid gap-4 xl:grid-cols-2">
           <AdminFilePlaceholder
             title="Preview image"
-            description="Изображение для карточки товара в каталоге."
+            description={"изображение для карточки\nтовара в каталоге"}
             kind="image"
           />
 
           <AdminFilePlaceholder
             title="Detail image"
-            description="Основное изображение для расширенной страницы товара."
+            description={"основное изображение для\nрасширенной страницы товара"}
             kind="image"
           />
         </div>
@@ -290,7 +290,7 @@ export function ProductFormV2({
       >
         <AdminRepeater
           title="Список документов"
-          description="Для каждого документа задаётся название и тип. Подключение реального файла добавим следующим шагом вместе с upload."
+          description="Для каждого документа задаются название, тип и файл."
           addLabel="добавить документ"
           onAdd={() =>
             setDocuments((prev) => [...prev, { title: "", kind: "сертификат" }])
@@ -324,7 +324,7 @@ export function ProductFormV2({
               <div className="mt-4">
                 <AdminFilePlaceholder
                   title="Файл документа"
-                  description="Физическое подключение файла добавим следующим шагом вместе с upload."
+                  description="прикрепите документ к карточке товара"
                   kind="document"
                 />
               </div>
