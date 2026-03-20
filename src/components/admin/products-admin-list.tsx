@@ -49,7 +49,7 @@ export function ProductsAdminList({
   return (
     <div className="space-y-4">
       <div className="rounded-[28px] bg-[var(--color-surface)] p-4 md:p-5">
-        <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_220px_auto]">
+        <div className="grid gap-3 md:grid-cols-[minmax(0,0.92fr)_240px_180px]">
           <AdminSearchInput
             value={search}
             onChange={setSearch}
