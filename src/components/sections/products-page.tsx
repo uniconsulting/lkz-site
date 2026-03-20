@@ -781,7 +781,7 @@ export function ProductsPage() {
               главная / {productsPageContent.eyebrow}
             </div>
 
-            <h1 className="font-heading text-[34px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[48px] xl:text-[58px]">
+            <h1 className="relative -left-[2px] font-heading text-[34px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[48px] xl:text-[58px]">
               {productsPageContent.title}
             </h1>
 
