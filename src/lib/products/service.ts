@@ -1,4 +1,13 @@
-import type { ProductItem } from "@/lib/content/products";
+import type {
+  ProductCategoryId,
+  ProductItem,
+  ProductLineId,
+  ProductPackaging,
+} from "@/lib/content/products";
+import {
+  getProductCategoryById,
+  getProductLineById,
+} from "@/lib/content/products";
 import { memoryProductsRepository } from "@/lib/products/repository-memory";
 
 const repository = memoryProductsRepository;
