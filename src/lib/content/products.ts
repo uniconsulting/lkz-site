@@ -6,9 +6,10 @@ export type ProductCategoryId =
   | "enamels"
   | "varnishes"
   | "protective"
-  | "adhesives-glass";
+  | "adhesives-glass"
+  | "solvents";
 
-export type ProductLineId = "emalyer";
+export type ProductLineId = "emalyer" | "narodnaya" | "ladya";
 
 export type ProductCharacteristic = {
   label: string;
@@ -57,6 +58,8 @@ export type ProductCategory = {
 export type ProductLine = {
   id: ProductLineId;
   title: string;
+  shortTitle: string;
+  description?: string;
 };
 
 export type ProductItem = {
@@ -69,6 +72,8 @@ export type ProductItem = {
   description: string;
   packagings: ProductPackaging[];
   applicationAreas?: string[];
+  workTypes?: string[];
+  materialTypes?: string[];
   characteristics?: ProductCharacteristicsGroup;
   images?: ProductImageSet;
   seo?: ProductSeo;
@@ -121,12 +126,31 @@ export const productCategories: ProductCategory[] = [
     title: "Клей и жидкое стекло",
     shortTitle: "клей и стекло",
   },
+  {
+    id: "solvents",
+    title: "Растворители",
+    shortTitle: "растворители",
+  },
 ];
 
 export const productLines: ProductLine[] = [
   {
     id: "emalyer",
-    title: "Эмальер",
+    title: "ЭМАЛЬЕР",
+    shortTitle: "Эмальер",
+    description: "Основная линейка лакокрасочной продукции",
+  },
+  {
+    id: "narodnaya",
+    title: "НАРОДНАЯ",
+    shortTitle: "Народная",
+    description: "Базовая доступная линейка продукции",
+  },
+  {
+    id: "ladya",
+    title: "ЛАДЬЯ",
+    shortTitle: "Ладья",
+    description: "Суб-бренд растворителей",
   },
 ];
 
@@ -146,11 +170,13 @@ export const products: ProductItem[] = [
       createPackaging("14 кг", 14, "kg", 4),
       createPackaging("40 кг", 40, "kg", 5),
     ],
-    applicationAreas: ["интерьер", "стены", "потолки", "внутренние работы"],
+    applicationAreas: ["интерьер", "стены", "потолки"],
+    workTypes: ["внутренние работы"],
+    materialTypes: ["стены", "потолки", "минеральные поверхности"],
     characteristics: {
       commercial: [
         { label: "Категория", value: "Краски" },
-        { label: "Линейка", value: "Эмальер" },
+        { label: "Линейка", value: "ЭМАЛЬЕР" },
         { label: "Фасовки", value: "1,4 кг / 3 кг / 7 кг / 14 кг / 40 кг" },
       ],
       technical: [
@@ -195,11 +221,13 @@ export const products: ProductItem[] = [
       createPackaging("14 кг", 14, "kg", 4),
       createPackaging("40 кг", 40, "kg", 5),
     ],
-    applicationAreas: ["фасад", "наружные работы", "минеральные основания"],
+    applicationAreas: ["фасад"],
+    workTypes: ["наружные работы"],
+    materialTypes: ["минеральные поверхности", "фасады"],
     characteristics: {
       commercial: [
         { label: "Категория", value: "Краски" },
-        { label: "Линейка", value: "Эмальер" },
+        { label: "Линейка", value: "ЭМАЛЬЕР" },
         { label: "Фасовки", value: "1,4 кг / 3 кг / 7 кг / 14 кг / 40 кг" },
       ],
       technical: [
@@ -242,11 +270,13 @@ export const products: ProductItem[] = [
       createPackaging("3 кг", 3, "kg", 2),
       createPackaging("7 кг", 7, "kg", 3),
     ],
-    applicationAreas: ["osb", "sip", "дсп", "двп", "дерево"],
+    applicationAreas: ["osb", "sip", "дсп", "двп"],
+    workTypes: ["внутренние работы", "наружные работы"],
+    materialTypes: ["osb", "sip", "дсп", "двп", "дерево"],
     characteristics: {
       commercial: [
         { label: "Категория", value: "Специальные краски" },
-        { label: "Линейка", value: "Эмальер" },
+        { label: "Линейка", value: "ЭМАЛЬЕР" },
         { label: "Фасовки", value: "1,4 кг / 3 кг / 7 кг" },
       ],
       technical: [
@@ -285,11 +315,13 @@ export const products: ProductItem[] = [
       createPackaging("0,4 кг", 0.4, "kg", 1),
       createPackaging("0,9 кг", 0.9, "kg", 2),
     ],
-    applicationAreas: ["радиаторы", "металл", "внутренние работы"],
+    applicationAreas: ["радиаторы"],
+    workTypes: ["внутренние работы"],
+    materialTypes: ["металл", "радиаторы"],
     characteristics: {
       commercial: [
         { label: "Категория", value: "Эмали" },
-        { label: "Линейка", value: "Эмальер" },
+        { label: "Линейка", value: "ЭМАЛЬЕР" },
         { label: "Фасовки", value: "0,4 кг / 0,9 кг" },
       ],
       technical: [
@@ -297,7 +329,10 @@ export const products: ProductItem[] = [
         { label: "Тип поверхности", value: "Металл" },
       ],
       scenario: [
-        { label: "Подходит для", value: "Радиаторы и нагревающиеся поверхности" },
+        {
+          label: "Подходит для",
+          value: "Радиаторы и нагревающиеся поверхности",
+        },
       ],
     },
     images: {
@@ -329,11 +364,13 @@ export const products: ProductItem[] = [
       createPackaging("0,9 кг", 0.9, "kg", 1),
       createPackaging("2,2 кг", 2.2, "kg", 2),
     ],
-    applicationAreas: ["бани и сауны", "дерево", "внутренние работы"],
+    applicationAreas: ["бани и сауны"],
+    workTypes: ["внутренние работы"],
+    materialTypes: ["дерево"],
     characteristics: {
       commercial: [
         { label: "Категория", value: "Лаки" },
-        { label: "Линейка", value: "Эмальер" },
+        { label: "Линейка", value: "ЭМАЛЬЕР" },
         { label: "Фасовки", value: "0,9 кг / 2,2 кг" },
       ],
       technical: [
@@ -376,16 +413,13 @@ export const products: ProductItem[] = [
       createPackaging("5 кг", 5, "kg", 1),
       createPackaging("20 кг", 20, "kg", 2),
     ],
-    applicationAreas: [
-      "дерево",
-      "защита древесины",
-      "наружные работы",
-      "внутренние работы",
-    ],
+    applicationAreas: ["защита древесины"],
+    workTypes: ["внутренние работы", "наружные работы"],
+    materialTypes: ["дерево"],
     characteristics: {
       commercial: [
         { label: "Категория", value: "Защитные материалы" },
-        { label: "Линейка", value: "Эмальер" },
+        { label: "Линейка", value: "ЭМАЛЬЕР" },
         { label: "Фасовки", value: "5 кг / 20 кг" },
       ],
       technical: [
@@ -401,7 +435,8 @@ export const products: ProductItem[] = [
       detail: `${basePath}/images/sections/catalog/products/product-antiseptic.webp`,
     },
     seo: {
-      title: "Антисептик универсальный для древесины купить оптом | Симбирские краски",
+      title:
+        "Антисептик универсальный для древесины купить оптом | Симбирские краски",
       description:
         "Универсальный антисептик для защиты древесины. Оптовые поставки, подбор фасовки и коммерческое предложение.",
     },
@@ -427,20 +462,16 @@ export const products: ProductItem[] = [
       createPackaging("6 кг", 6, "kg", 3),
       createPackaging("15 кг", 15, "kg", 4),
     ],
-    applicationAreas: [
-      "строительные смеси",
-      "укрепление оснований",
-      "минеральные основания",
-    ],
+    applicationAreas: ["строительные смеси", "укрепление оснований"],
+    workTypes: ["внутренние работы", "наружные работы"],
+    materialTypes: ["минеральные поверхности"],
     characteristics: {
       commercial: [
         { label: "Категория", value: "Клей и жидкое стекло" },
-        { label: "Линейка", value: "Эмальер" },
+        { label: "Линейка", value: "ЭМАЛЬЕР" },
         { label: "Фасовки", value: "1,4 кг / 4 кг / 6 кг / 15 кг" },
       ],
-      technical: [
-        { label: "Тип", value: "Силикатный состав" },
-      ],
+      technical: [{ label: "Тип", value: "Силикатный состав" }],
       scenario: [
         {
           label: "Подходит для",
@@ -466,12 +497,10 @@ export const products: ProductItem[] = [
   },
 
   /*
-    Ниже переведи остальные ваши позиции в этот же формат.
-    Логика для каждой позиции уже готова:
-    - packagings только через createPackaging(...)
-    - image -> images.preview / images.detail
-    - admin обязателен
-    - seo желательно заполнить
+    Далее:
+    - добавляешь позиции линейки НАРОДНАЯ с lineId: "narodnaya"
+    - добавляешь позиции линейки ЛАДЬЯ с lineId: "ladya"
+    - для растворителей используешь categoryId: "solvents"
   */
 ];
 
@@ -511,14 +540,30 @@ export function getProductDetailImage(product: ProductItem) {
 
 export function getAllApplicationAreas() {
   return Array.from(
-    new Set(products.flatMap((product) => product.applicationAreas ?? [])),
+    new Set(
+      getPublishedProducts().flatMap((product) => product.applicationAreas ?? []),
+    ),
+  ).sort((a, b) => a.localeCompare(b, "ru"));
+}
+
+export function getAllWorkTypes() {
+  return Array.from(
+    new Set(getPublishedProducts().flatMap((product) => product.workTypes ?? [])),
+  ).sort((a, b) => a.localeCompare(b, "ru"));
+}
+
+export function getAllMaterialTypes() {
+  return Array.from(
+    new Set(
+      getPublishedProducts().flatMap((product) => product.materialTypes ?? []),
+    ),
   ).sort((a, b) => a.localeCompare(b, "ru"));
 }
 
 export function getAllPackagings() {
   const map = new Map<string, ProductPackaging>();
 
-  products.forEach((product) => {
+  getPublishedProducts().forEach((product) => {
     product.packagings.forEach((packaging) => {
       map.set(packaging.label, packaging);
     });
@@ -544,6 +589,8 @@ export function getFilteredProducts({
   lineIds,
   packagings,
   applicationAreas,
+  workTypes,
+  materialTypes,
   includeArchived,
   search,
   sort = "default",
@@ -552,6 +599,8 @@ export function getFilteredProducts({
   lineIds?: ProductLineId[];
   packagings?: string[];
   applicationAreas?: string[];
+  workTypes?: string[];
+  materialTypes?: string[];
   includeArchived?: boolean;
   search?: string;
   sort?: "default" | "name-asc" | "name-desc";
@@ -581,6 +630,18 @@ export function getFilteredProducts({
             applicationAreas.includes(item),
           );
 
+    const matchesWorkType =
+      !workTypes || workTypes.length === 0
+        ? true
+        : (product.workTypes ?? []).some((item) => workTypes.includes(item));
+
+    const matchesMaterialType =
+      !materialTypes || materialTypes.length === 0
+        ? true
+        : (product.materialTypes ?? []).some((item) =>
+            materialTypes.includes(item),
+          );
+
     const matchesArchived = includeArchived ? true : !product.isArchived;
 
     const haystack = [
@@ -590,6 +651,8 @@ export function getFilteredProducts({
       getProductLineById(product.lineId)?.title,
       getProductCategoryById(product.categoryId)?.title,
       ...(product.applicationAreas ?? []),
+      ...(product.workTypes ?? []),
+      ...(product.materialTypes ?? []),
       ...product.packagings.map((item) => item.label),
       ...[
         ...(product.characteristics?.commercial ?? []),
@@ -611,6 +674,8 @@ export function getFilteredProducts({
       matchesLine &&
       matchesPackaging &&
       matchesApplicationArea &&
+      matchesWorkType &&
+      matchesMaterialType &&
       matchesArchived &&
       matchesSearch
     );
@@ -652,7 +717,18 @@ export function getRelatedProducts(
         ),
       ).length;
 
+      const sharedWorkTypeCount = (item.workTypes ?? []).filter((workType) =>
+        (currentProduct.workTypes ?? []).includes(workType),
+      ).length;
+
+      const sharedMaterialTypeCount = (item.materialTypes ?? []).filter(
+        (materialType) =>
+          (currentProduct.materialTypes ?? []).includes(materialType),
+      ).length;
+
       score += Math.min(sharedPackagingCount, 2);
+      score += Math.min(sharedWorkTypeCount, 2);
+      score += Math.min(sharedMaterialTypeCount, 2);
 
       return {
         product: item,
@@ -671,4 +747,3 @@ export function getProductApplicationAreas(productId: string) {
   const product = products.find((item) => item.id === productId);
   return product?.applicationAreas ?? [];
 }
-
