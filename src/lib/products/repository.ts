@@ -12,3 +12,4 @@ export type ProductsRepository = {
   getProductById(id: string): ProductItem | null;
   getProductBySlug(slug: string): ProductItem | null;
 };
+
