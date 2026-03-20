@@ -12,6 +12,7 @@ import type {
 import { AdminDropdown } from "@/components/admin/admin-dropdown";
 import { AdminFilePlaceholder } from "@/components/admin/admin-file-placeholder";
 import { AdminFormSection } from "@/components/admin/admin-form-section";
+import { AdminImageUploadField } from "@/components/admin/admin-image-upload-field";
 import {
   AdminRepeater,
   AdminRepeaterItem,
@@ -123,6 +124,9 @@ export function ProductFormV2({
   const [isPublished, setIsPublished] = useState(
     initialProduct?.admin.isPublished ?? true,
   );
+
+  const [previewImageFile, setPreviewImageFile] = useState<File | null>(null);
+  const [detailImageFile, setDetailImageFile] = useState<File | null>(null);
 
   const [applicationAreas, setApplicationAreas] = useState<string[]>(
     buildInitialApplicationAreas(initialProduct),
@@ -337,18 +341,27 @@ export function ProductFormV2({
         description="Отдельно загружаются изображение каталога и изображение расширенной карточки."
       >
         <div className="grid gap-4 xl:grid-cols-2">
-          <AdminFilePlaceholder
+          <AdminImageUploadField
             title="Preview image"
             description={"изображение для карточки\nтовара в каталоге"}
-            kind="image"
+            initialImageUrl={initialProduct?.images?.preview}
+            onFileChange={setPreviewImageFile}
           />
 
-          <AdminFilePlaceholder
+          <AdminImageUploadField
             title="Detail image"
             description={"основное изображение для\nрасширенной страницы товара"}
-            kind="image"
+            initialImageUrl={initialProduct?.images?.detail}
+            onFileChange={setDetailImageFile}
           />
         </div>
+
+        {(previewImageFile || detailImageFile) ? (
+          <div className="mt-4 text-[12px] text-[var(--color-text-muted)]">
+            Выбранные изображения пока используются локально для preview. На
+            следующем шаге подключим реальное сохранение.
+          </div>
+        ) : null}
       </AdminFormSection>
 
       <AdminFormSection
@@ -625,4 +638,3 @@ export function ProductFormV2({
     </form>
   );
 }
-
