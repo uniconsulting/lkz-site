@@ -19,7 +19,6 @@ import {
   ChevronDown,
   PackageSearch,
   Search,
-  SlidersHorizontal,
   Sparkles,
   X,
 } from "lucide-react";
@@ -44,6 +43,11 @@ import {
   parseFilterStateFromSearchParams,
 } from "@/lib/products-filters";
 import { cn } from "@/lib/utils/cn";
+
+const basePath = process.env.NODE_ENV === "production" ? "/lkz-site" : "";
+
+const catalogHeroBannerLight = `${basePath}/images/sections/products/hero/catalog-hero-banner-light.webp`;
+const catalogHeroBannerDark = `${basePath}/images/sections/products/hero/catalog-hero-banner-dark.webp`;
 
 const sectionMotion = {
   hidden: { opacity: 0, y: 32 },
@@ -448,12 +452,7 @@ function FilterDropdown({
   );
 }
 
-type OpenFilterKey =
-  | null
-  | "line"
-  | "work"
-  | "material"
-  | "category";
+type OpenFilterKey = null | "line" | "work" | "material" | "category";
 
 export function ProductsPage() {
   const router = useRouter();
@@ -771,24 +770,45 @@ export function ProductsPage() {
     <div className="pt-[92px] pb-6 md:pt-[104px] md:pb-8 xl:pb-10">
       <Section className="pt-8 md:pt-10 xl:pt-12">
         <Container>
-          <motion.div
-            variants={sectionMotion}
-            initial="hidden"
-            animate="visible"
-            className="max-w-[1180px]"
-          >
-            <div className="mb-5 text-[15px] tracking-[-0.02em] text-[var(--color-text-muted)]">
-              главная / {productsPageContent.eyebrow}
+          <motion.div variants={sectionMotion} initial="hidden" animate="visible">
+            <div className="relative min-h-[300px] overflow-hidden rounded-[32px] md:min-h-[340px] xl:min-h-[360px]">
+              <img
+                src={catalogHeroBannerLight}
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 h-full w-full object-cover dark:hidden"
+              />
+
+              <img
+                src={catalogHeroBannerDark}
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 hidden h-full w-full object-cover dark:block"
+              />
+
+              <div className="absolute inset-0 z-[1] bg-[linear-gradient(90deg,rgba(248,249,250,0.94)_0%,rgba(248,249,250,0.82)_26%,rgba(248,249,250,0.30)_52%,rgba(248,249,250,0)_78%)] dark:bg-[linear-gradient(90deg,rgba(24,27,30,0.86)_0%,rgba(24,27,30,0.70)_26%,rgba(24,27,30,0.26)_52%,rgba(24,27,30,0)_78%)]" />
+
+              <div className="relative z-[2] flex min-h-[300px] items-center px-6 py-8 md:min-h-[340px] md:px-8 xl:min-h-[360px] xl:px-10">
+                <div className="max-w-[760px]">
+                  <div className="mb-5 text-[15px] tracking-[-0.02em] text-[var(--color-text-muted)] dark:text-white/70">
+                    главная / {productsPageContent.eyebrow}
+                  </div>
+
+                  <h1 className="relative -left-[3px] font-heading text-[34px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] dark:text-white md:text-[48px] xl:text-[58px]">
+                    {productsPageContent.title}
+                  </h1>
+
+                  <p className="mt-5 max-w-[980px] text-[16px] leading-[1.46] text-[var(--color-text-muted)] dark:text-white/78 md:text-[18px]">
+                    <span className="block">
+                      {productsPageContent.description[0]}
+                    </span>
+                    <span className="block">
+                      {productsPageContent.description[1]}
+                    </span>
+                  </p>
+                </div>
+              </div>
             </div>
-
-            <h1 className="relative -left-[3px] font-heading text-[34px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[48px] xl:text-[58px]">
-              {productsPageContent.title}
-            </h1>
-
-            <p className="mt-5 max-w-[980px] text-[16px] leading-[1.46] text-[var(--color-text-muted)] md:text-[18px]">
-              <span className="block">{productsPageContent.description[0]}</span>
-              <span className="block">{productsPageContent.description[1]}</span>
-            </p>
           </motion.div>
         </Container>
       </Section>
@@ -851,232 +871,234 @@ export function ProductsPage() {
       <Section className="pt-5 md:pt-6 xl:pt-6">
         <Container>
           <div className="space-y-4" id={filtersRootId}>
-<motion.div
-  variants={sectionMotion}
-  initial="hidden"
-  animate="visible"
-  className="catalog-control-shell rounded-[28px] p-4 md:p-5"
->
-  <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-    <div className="flex flex-wrap gap-4">
-      <FilterPill
-        label="все фильтры"
-        active={isAllFiltersOpen}
-        count={
-          selectedLines.length +
-          selectedWorkTypes.length +
-          selectedMaterialTypes.length +
-          selectedCategories.length +
-          selectedPackagings.length
-        }
-        onClick={() => {
-          setOpenFilter(null);
-          setIsAllFiltersOpen(true);
-        }}
-      />
+            <motion.div
+              variants={sectionMotion}
+              initial="hidden"
+              animate="visible"
+              className="catalog-control-shell rounded-[28px] p-4 md:p-5"
+            >
+              <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+                <div className="flex flex-wrap gap-4">
+                  <FilterPill
+                    label="все фильтры"
+                    active={isAllFiltersOpen}
+                    count={
+                      selectedLines.length +
+                      selectedWorkTypes.length +
+                      selectedMaterialTypes.length +
+                      selectedCategories.length +
+                      selectedPackagings.length
+                    }
+                    onClick={() => {
+                      setOpenFilter(null);
+                      setIsAllFiltersOpen(true);
+                    }}
+                  />
 
-      <div className="relative">
-        <FilterPill
-          label="линейка"
-          active={openFilter === "line" || selectedLines.length > 0}
-          count={selectedLines.length}
-          onClick={() =>
-            setOpenFilter((prev) => (prev === "line" ? null : "line"))
-          }
-        />
-        {openFilter === "line" ? (
-          <FilterDropdown
-            title="линейка"
-            items={productLines.map((item) => ({
-              value: item.id,
-              label: item.shortTitle,
-            }))}
-            selectedValues={selectedLines}
-            onToggle={(value) => toggleLine(value as ProductLineId)}
-            onClose={() => setOpenFilter(null)}
-          />
-        ) : null}
-      </div>
+                  <div className="relative">
+                    <FilterPill
+                      label="линейка"
+                      active={openFilter === "line" || selectedLines.length > 0}
+                      count={selectedLines.length}
+                      onClick={() =>
+                        setOpenFilter((prev) => (prev === "line" ? null : "line"))
+                      }
+                    />
+                    {openFilter === "line" ? (
+                      <FilterDropdown
+                        title="линейка"
+                        items={productLines.map((item) => ({
+                          value: item.id,
+                          label: item.shortTitle,
+                        }))}
+                        selectedValues={selectedLines}
+                        onToggle={(value) => toggleLine(value as ProductLineId)}
+                        onClose={() => setOpenFilter(null)}
+                      />
+                    ) : null}
+                  </div>
 
-      <div className="relative">
-        <FilterPill
-          label="вид работ"
-          active={openFilter === "work" || selectedWorkTypes.length > 0}
-          count={selectedWorkTypes.length}
-          onClick={() =>
-            setOpenFilter((prev) => (prev === "work" ? null : "work"))
-          }
-        />
-        {openFilter === "work" ? (
-          <FilterDropdown
-            title="вид работ"
-            items={allWorkTypes.map((item) => ({
-              value: item,
-              label: item,
-            }))}
-            selectedValues={selectedWorkTypes}
-            onToggle={toggleWorkType}
-            onClose={() => setOpenFilter(null)}
-          />
-        ) : null}
-      </div>
+                  <div className="relative">
+                    <FilterPill
+                      label="вид работ"
+                      active={openFilter === "work" || selectedWorkTypes.length > 0}
+                      count={selectedWorkTypes.length}
+                      onClick={() =>
+                        setOpenFilter((prev) => (prev === "work" ? null : "work"))
+                      }
+                    />
+                    {openFilter === "work" ? (
+                      <FilterDropdown
+                        title="вид работ"
+                        items={allWorkTypes.map((item) => ({
+                          value: item,
+                          label: item,
+                        }))}
+                        selectedValues={selectedWorkTypes}
+                        onToggle={toggleWorkType}
+                        onClose={() => setOpenFilter(null)}
+                      />
+                    ) : null}
+                  </div>
 
-      <div className="relative">
-        <FilterPill
-          label="материал обработки"
-          active={
-            openFilter === "material" || selectedMaterialTypes.length > 0
-          }
-          count={selectedMaterialTypes.length}
-          onClick={() =>
-            setOpenFilter((prev) =>
-              prev === "material" ? null : "material",
-            )
-          }
-        />
-{openFilter === "material" ? (
-  <FilterDropdown
-    title="материал обработки"
-    widthClassName="w-[320px]"
-    items={allMaterialTypes.map((item) => ({
-      value: item,
-      label: item,
-    }))}
-    selectedValues={selectedMaterialTypes}
-    onToggle={toggleMaterialType}
-    onClose={() => setOpenFilter(null)}
-  />
-) : null}
-      </div>
+                  <div className="relative">
+                    <FilterPill
+                      label="материал обработки"
+                      active={
+                        openFilter === "material" ||
+                        selectedMaterialTypes.length > 0
+                      }
+                      count={selectedMaterialTypes.length}
+                      onClick={() =>
+                        setOpenFilter((prev) =>
+                          prev === "material" ? null : "material",
+                        )
+                      }
+                    />
+                    {openFilter === "material" ? (
+                      <FilterDropdown
+                        title="материал обработки"
+                        widthClassName="w-[320px]"
+                        items={allMaterialTypes.map((item) => ({
+                          value: item,
+                          label: item,
+                        }))}
+                        selectedValues={selectedMaterialTypes}
+                        onToggle={toggleMaterialType}
+                        onClose={() => setOpenFilter(null)}
+                      />
+                    ) : null}
+                  </div>
 
-      <div className="relative">
-        <FilterPill
-          label="категория"
-          active={
-            openFilter === "category" || selectedCategories.length > 0
-          }
-          count={selectedCategories.length}
-          onClick={() =>
-            setOpenFilter((prev) =>
-              prev === "category" ? null : "category",
-            )
-          }
-        />
-        {openFilter === "category" ? (
-          <FilterDropdown
-            title="категория"
-            items={productCategories.map((item) => ({
-              value: item.id,
-              label: item.title,
-            }))}
-            selectedValues={selectedCategories}
-            onToggle={(value) =>
-              toggleCategory(value as ProductCategoryId)
-            }
-            onClose={() => setOpenFilter(null)}
-          />
-        ) : null}
-      </div>
-    </div>
+                  <div className="relative">
+                    <FilterPill
+                      label="категория"
+                      active={
+                        openFilter === "category" ||
+                        selectedCategories.length > 0
+                      }
+                      count={selectedCategories.length}
+                      onClick={() =>
+                        setOpenFilter((prev) =>
+                          prev === "category" ? null : "category",
+                        )
+                      }
+                    />
+                    {openFilter === "category" ? (
+                      <FilterDropdown
+                        title="категория"
+                        items={productCategories.map((item) => ({
+                          value: item.id,
+                          label: item.title,
+                        }))}
+                        selectedValues={selectedCategories}
+                        onToggle={(value) =>
+                          toggleCategory(value as ProductCategoryId)
+                        }
+                        onClose={() => setOpenFilter(null)}
+                      />
+                    ) : null}
+                  </div>
+                </div>
 
-    <div className="flex items-center gap-3">
-      <div className="text-[14px] font-medium text-white">
-        найдено товаров
-      </div>
+                <div className="flex items-center gap-3">
+                  <div className="text-[14px] font-medium text-white">
+                    найдено товаров
+                  </div>
 
-      <div className="inline-flex h-11 min-w-[52px] items-center justify-center rounded-[16px] bg-[#ffffff] px-4 text-[14px] font-semibold text-[#32373b]">
-        {filteredProducts.length}
-      </div>
-    </div>
-  </div>
+                  <div className="inline-flex h-11 min-w-[52px] items-center justify-center rounded-[16px] bg-[#ffffff] px-4 text-[14px] font-semibold text-[#32373b]">
+                    {filteredProducts.length}
+                  </div>
+                </div>
+              </div>
 
-  {(hasActiveFilters || search.trim().length > 0) && (
-    <div className="mt-4 flex flex-wrap gap-2">
-      {selectedLines.map((id) => (
-        <button
-          key={id}
-          type="button"
-          onClick={() => toggleLine(id)}
-          className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
-        >
-          <span>{getProductLineById(id)?.shortTitle ?? id}</span>
-          <X size={14} strokeWidth={2.2} />
-        </button>
-      ))}
+              {(hasActiveFilters || search.trim().length > 0) && (
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {selectedLines.map((id) => (
+                    <button
+                      key={id}
+                      type="button"
+                      onClick={() => toggleLine(id)}
+                      className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
+                    >
+                      <span>{getProductLineById(id)?.shortTitle ?? id}</span>
+                      <X size={14} strokeWidth={2.2} />
+                    </button>
+                  ))}
 
-      {selectedWorkTypes.map((item) => (
-        <button
-          key={item}
-          type="button"
-          onClick={() => toggleWorkType(item)}
-          className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
-        >
-          <span>{item}</span>
-          <X size={14} strokeWidth={2.2} />
-        </button>
-      ))}
+                  {selectedWorkTypes.map((item) => (
+                    <button
+                      key={item}
+                      type="button"
+                      onClick={() => toggleWorkType(item)}
+                      className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
+                    >
+                      <span>{item}</span>
+                      <X size={14} strokeWidth={2.2} />
+                    </button>
+                  ))}
 
-      {selectedMaterialTypes.map((item) => (
-        <button
-          key={item}
-          type="button"
-          onClick={() => toggleMaterialType(item)}
-          className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
-        >
-          <span>{item}</span>
-          <X size={14} strokeWidth={2.2} />
-        </button>
-      ))}
+                  {selectedMaterialTypes.map((item) => (
+                    <button
+                      key={item}
+                      type="button"
+                      onClick={() => toggleMaterialType(item)}
+                      className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
+                    >
+                      <span>{item}</span>
+                      <X size={14} strokeWidth={2.2} />
+                    </button>
+                  ))}
 
-      {selectedCategories.map((id) => (
-        <button
-          key={id}
-          type="button"
-          onClick={() => toggleCategory(id)}
-          className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
-        >
-          <span>{getProductCategoryById(id)?.shortTitle ?? id}</span>
-          <X size={14} strokeWidth={2.2} />
-        </button>
-      ))}
+                  {selectedCategories.map((id) => (
+                    <button
+                      key={id}
+                      type="button"
+                      onClick={() => toggleCategory(id)}
+                      className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
+                    >
+                      <span>{getProductCategoryById(id)?.shortTitle ?? id}</span>
+                      <X size={14} strokeWidth={2.2} />
+                    </button>
+                  ))}
 
-      {selectedPackagings.map((item) => (
-        <button
-          key={item}
-          type="button"
-          onClick={() => togglePackaging(item)}
-          className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
-        >
-          <span>{item}</span>
-          <X size={14} strokeWidth={2.2} />
-        </button>
-      ))}
+                  {selectedPackagings.map((item) => (
+                    <button
+                      key={item}
+                      type="button"
+                      onClick={() => togglePackaging(item)}
+                      className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
+                    >
+                      <span>{item}</span>
+                      <X size={14} strokeWidth={2.2} />
+                    </button>
+                  ))}
 
-      {selectedApplicationAreas.map((item) => (
-        <button
-          key={item}
-          type="button"
-          onClick={() => toggleApplicationArea(item)}
-          className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
-        >
-          <span>{item}</span>
-          <X size={14} strokeWidth={2.2} />
-        </button>
-      ))}
+                  {selectedApplicationAreas.map((item) => (
+                    <button
+                      key={item}
+                      type="button"
+                      onClick={() => toggleApplicationArea(item)}
+                      className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
+                    >
+                      <span>{item}</span>
+                      <X size={14} strokeWidth={2.2} />
+                    </button>
+                  ))}
 
-      {search.trim().length > 0 && (
-        <button
-          type="button"
-          onClick={() => handleSearchChange("")}
-          className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
-        >
-          <span>{search}</span>
-          <X size={14} strokeWidth={2.2} />
-        </button>
-      )}
-    </div>
-  )}
-</motion.div>
+                  {search.trim().length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => handleSearchChange("")}
+                      className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
+                    >
+                      <span>{search}</span>
+                      <X size={14} strokeWidth={2.2} />
+                    </button>
+                  )}
+                </div>
+              )}
+            </motion.div>
 
             {filteredProducts.length === 0 ? (
               <motion.div
@@ -1181,7 +1203,9 @@ export function ProductsPage() {
                       />
                       <input
                         value={search}
-                        onChange={(event) => handleSearchChange(event.target.value)}
+                        onChange={(event) =>
+                          handleSearchChange(event.target.value)
+                        }
                         type="text"
                         placeholder="поиск по каталогу"
                         className="catalog-filter-sheet-input h-11 w-full rounded-[16px] pl-11 pr-4 text-[14px] outline-none transition duration-300"
