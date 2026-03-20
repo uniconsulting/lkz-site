@@ -496,12 +496,451 @@ export const products: ProductItem[] = [
     },
   },
 
-  /*
-    Далее:
-    - добавляешь позиции линейки НАРОДНАЯ с lineId: "narodnaya"
-    - добавляешь позиции линейки ЛАДЬЯ с lineId: "ladya"
-    - для растворителей используешь categoryId: "solvents"
-  */
+    {
+    id: "emalyer-paint-washable-white",
+    slug: "emalyer-paint-washable-white",
+    categoryId: "paints",
+    lineId: "emalyer",
+    title: "Моющаяся",
+    subtitle: "краска белоснежная",
+    description:
+      "Моющаяся белоснежная краска для стен и потолков в сухих и влажных помещениях. Образует матовое покрытие, выдерживает влажную уборку.",
+    packagings: [
+      createPackaging("1,4 кг", 1.4, "kg", 1),
+      createPackaging("3 кг", 3, "kg", 2),
+      createPackaging("7 кг", 7, "kg", 3),
+      createPackaging("14 кг", 14, "kg", 4),
+      createPackaging("40 кг", 40, "kg", 5),
+    ],
+    applicationAreas: ["интерьер", "стены", "потолки", "влажные помещения"],
+    workTypes: ["внутренние работы"],
+    materialTypes: ["стены", "потолки", "минеральные поверхности", "гкл"],
+    characteristics: {
+      commercial: [
+        { label: "Категория", value: "Краски" },
+        { label: "Линейка", value: "ЭМАЛЬЕР" },
+        { label: "Фасовки", value: "1,4 кг / 3 кг / 7 кг / 14 кг / 40 кг" },
+      ],
+      technical: [
+        { label: "Основа", value: "Стирол-акриловая дисперсия" },
+        { label: "Тип", value: "Моющаяся водно-дисперсионная" },
+        { label: "Назначение", value: "Для стен и потолков" },
+      ],
+      scenario: [
+        { label: "Подходит для", value: "Кухни, ванные комнаты, жилые помещения" },
+        { label: "Особенность", value: "Выдерживает влажную уборку" },
+      ],
+    },
+    images: {
+      preview: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
+      detail: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
+    },
+    seo: {
+      title: "Моющаяся белоснежная краска Эмальер купить оптом | Симбирские краски",
+      description:
+        "Моющаяся белоснежная краска Эмальер для стен и потолков. Оптовые поставки и доступные фасовки.",
+    },
+    admin: {
+      isPublished: true,
+      sortOrder: 25,
+      updatedAt: "2026-03-20",
+      tags: ["моющаяся", "влажные помещения", "стены", "потолки"],
+    },
+  },
+  {
+    id: "emalyer-rubber-paint",
+    slug: "emalyer-rubber-paint",
+    categoryId: "special-paints",
+    lineId: "emalyer",
+    title: "Резиновая",
+    subtitle: "краска эластичная",
+    description:
+      "Эластичная резиновая краска для древесины, OSB, минеральных оснований, фасадов, заборов и кровли. Подходит для внутренних и наружных работ.",
+    packagings: [
+      createPackaging("1,2 кг", 1.2, "kg", 1),
+      createPackaging("3 кг", 3, "kg", 2),
+    ],
+    applicationAreas: ["фасад", "заборы", "кровля", "osb", "дерево"],
+    workTypes: ["внутренние работы", "наружные работы"],
+    materialTypes: [
+      "дерево",
+      "osb",
+      "минеральные поверхности",
+      "металл",
+      "гкл",
+    ],
+    characteristics: {
+      commercial: [
+        { label: "Категория", value: "Специальные краски" },
+        { label: "Линейка", value: "ЭМАЛЬЕР" },
+        { label: "Фасовки", value: "1,2 кг / 3 кг" },
+      ],
+      technical: [
+        { label: "Тип", value: "Резиновая краска" },
+        { label: "Назначение", value: "Защитно-декоративное покрытие" },
+        { label: "Свойство", value: "Высокая эластичность" },
+      ],
+      scenario: [
+        { label: "Подходит для", value: "OSB, фасады, кровля, заборы, дерево" },
+        { label: "Особенность", value: "Стойкость к влаге и УФ-излучению" },
+      ],
+    },
+    images: {
+      preview: `${basePath}/images/sections/catalog/products/product-wood-paint.webp`,
+      detail: `${basePath}/images/sections/catalog/products/product-wood-paint.webp`,
+    },
+    seo: {
+      title: "Резиновая краска Эмальер купить оптом | Симбирские краски",
+      description:
+        "Эластичная резиновая краска Эмальер для фасадов, древесины, OSB и минеральных оснований.",
+    },
+    admin: {
+      isPublished: true,
+      sortOrder: 35,
+      updatedAt: "2026-03-20",
+      tags: ["резиновая краска", "эластичная", "фасад", "osb", "дерево"],
+    },
+  },
+  {
+    id: "narodnaya-paint-ceiling",
+    slug: "narodnaya-paint-ceiling",
+    categoryId: "paints",
+    lineId: "narodnaya",
+    title: "Для потолков",
+    subtitle: "краска водно-дисперсионная",
+    description:
+      "Матовая водно-дисперсионная краска для потолков и верхних панелей стен в сухих помещениях. Обладает высокой укрывистостью и легко колеруется.",
+    packagings: [
+      createPackaging("2,5 кг", 2.5, "kg", 1),
+      createPackaging("6 кг", 6, "kg", 2),
+      createPackaging("13 кг", 13, "kg", 3),
+    ],
+    applicationAreas: ["потолки", "интерьер"],
+    workTypes: ["внутренние работы"],
+    materialTypes: ["потолки", "штукатурка", "бетон", "гипсокартон", "пенопласт"],
+    characteristics: {
+      commercial: [
+        { label: "Категория", value: "Краски" },
+        { label: "Линейка", value: "НАРОДНАЯ" },
+        { label: "Фасовки", value: "2,5 кг / 6 кг / 13 кг" },
+      ],
+      technical: [
+        { label: "Тип", value: "Потолочная водно-дисперсионная" },
+        { label: "Финиш", value: "Матовый" },
+        { label: "Назначение", value: "Для сухих помещений" },
+      ],
+      scenario: [
+        { label: "Подходит для", value: "Потолки и верхние панели стен" },
+        { label: "Особенность", value: "Высокая укрывистость" },
+      ],
+    },
+    images: {
+      preview: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
+      detail: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
+    },
+    seo: {
+      title: "Краска Народная для потолков купить оптом | Симбирские краски",
+      description:
+        "Краска Народная для потолков, матовая водно-дисперсионная. Оптовые поставки и доступные фасовки.",
+    },
+    admin: {
+      isPublished: true,
+      sortOrder: 80,
+      updatedAt: "2026-03-20",
+      tags: ["народная", "потолки", "матовая", "интерьер"],
+    },
+  },
+  {
+    id: "narodnaya-paint-interior",
+    slug: "narodnaya-paint-interior",
+    categoryId: "paints",
+    lineId: "narodnaya",
+    title: "Интерьерная",
+    subtitle: "краска водно-дисперсионная",
+    description:
+      "Интерьерная краска для потолков и верхних панелей стен в сухих помещениях. Матовая, паропроницаемая, легко колеруется.",
+    packagings: [
+      createPackaging("2,5 кг", 2.5, "kg", 1),
+      createPackaging("6 кг", 6, "kg", 2),
+      createPackaging("13 кг", 13, "kg", 3),
+    ],
+    applicationAreas: ["интерьер", "стены", "потолки"],
+    workTypes: ["внутренние работы"],
+    materialTypes: ["стены", "потолки", "штукатурка", "бетон", "гипсокартон"],
+    characteristics: {
+      commercial: [
+        { label: "Категория", value: "Краски" },
+        { label: "Линейка", value: "НАРОДНАЯ" },
+        { label: "Фасовки", value: "2,5 кг / 6 кг / 13 кг" },
+      ],
+      technical: [
+        { label: "Тип", value: "Интерьерная водно-дисперсионная" },
+        { label: "Финиш", value: "Матовый" },
+        { label: "Назначение", value: "Для сухих помещений" },
+      ],
+      scenario: [
+        { label: "Подходит для", value: "Интерьерные стены и потолки" },
+        { label: "Особенность", value: "Легко колеруется" },
+      ],
+    },
+    images: {
+      preview: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
+      detail: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
+    },
+    seo: {
+      title: "Интерьерная краска Народная купить оптом | Симбирские краски",
+      description:
+        "Интерьерная краска Народная для стен и потолков. Оптовые поставки и доступные фасовки.",
+    },
+    admin: {
+      isPublished: true,
+      sortOrder: 90,
+      updatedAt: "2026-03-20",
+      tags: ["народная", "интерьерная", "стены", "потолки"],
+    },
+  },
+  {
+    id: "narodnaya-paint-garden-trees",
+    slug: "narodnaya-paint-garden-trees",
+    categoryId: "special-paints",
+    lineId: "narodnaya",
+    title: "Для садовых деревьев",
+    subtitle: "краска полиакриловая",
+    description:
+      "Краска для стволов плодовых и декоративных деревьев и кустарников. Повышает стойкость к перепадам температур, защищает от солнечных ожогов и вредителей.",
+    packagings: [
+      createPackaging("1,3 кг", 1.3, "kg", 1),
+      createPackaging("2,8 кг", 2.8, "kg", 2),
+    ],
+    applicationAreas: ["садовые деревья", "кустарники", "стволы деревьев"],
+    workTypes: ["наружные работы"],
+    materialTypes: ["дерево"],
+    characteristics: {
+      commercial: [
+        { label: "Категория", value: "Специальные краски" },
+        { label: "Линейка", value: "НАРОДНАЯ" },
+        { label: "Фасовки", value: "1,3 кг / 2,8 кг" },
+      ],
+      technical: [
+        { label: "Тип", value: "Полиакриловая краска для садовых деревьев" },
+        { label: "Назначение", value: "Защита стволов и спилов" },
+        { label: "Срок годности", value: "24 месяца" },
+      ],
+      scenario: [
+        { label: "Подходит для", value: "Плодовые и декоративные деревья" },
+        { label: "Особенность", value: "Защита от ожогов, морозобоин и вредителей" },
+      ],
+    },
+    images: {
+      preview: `${basePath}/images/sections/catalog/products/product-antiseptic.webp`,
+      detail: `${basePath}/images/sections/catalog/products/product-antiseptic.webp`,
+    },
+    seo: {
+      title: "Краска Народная для садовых деревьев купить оптом | Симбирские краски",
+      description:
+        "Краска Народная для садовых деревьев и кустарников. Оптовые поставки и доступные фасовки.",
+    },
+    admin: {
+      isPublished: true,
+      sortOrder: 100,
+      updatedAt: "2026-03-20",
+      tags: ["садовые деревья", "народная", "дерево", "наружные работы"],
+    },
+  },
+  {
+    id: "narodnaya-paint-stoves-fireplaces",
+    slug: "narodnaya-paint-stoves-fireplaces",
+    categoryId: "special-paints",
+    lineId: "narodnaya",
+    title: "Для печей и каминов",
+    subtitle: "краска термостойкая",
+    description:
+      "Термостойкая краска для внешних стенок печей, каминов и дымоходов из минеральных материалов. Образует прочное покрытие и не растрескивается.",
+    packagings: [
+      createPackaging("0,9 кг", 0.9, "kg", 1),
+      createPackaging("2,5 кг", 2.5, "kg", 2),
+    ],
+    applicationAreas: ["печи", "камины", "дымоходы"],
+    workTypes: ["внутренние работы"],
+    materialTypes: ["минеральные поверхности"],
+    characteristics: {
+      commercial: [
+        { label: "Категория", value: "Специальные краски" },
+        { label: "Линейка", value: "НАРОДНАЯ" },
+        { label: "Фасовки", value: "0,9 кг / 2,5 кг" },
+      ],
+      technical: [
+        { label: "Тип", value: "Термостойкая акриловая краска" },
+        { label: "Назначение", value: "Для печей и каминов" },
+        { label: "Класс пожарной опасности", value: "КМ1" },
+      ],
+      scenario: [
+        { label: "Подходит для", value: "Печи, камины, дымоходы" },
+        { label: "Особенность", value: "Не содержит органических растворителей" },
+      ],
+    },
+    images: {
+      preview: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
+      detail: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
+    },
+    seo: {
+      title: "Краска для печей и каминов Народная купить оптом | Симбирские краски",
+      description:
+        "Термостойкая краска Народная для печей и каминов. Оптовые поставки и доступные фасовки.",
+    },
+    admin: {
+      isPublished: true,
+      sortOrder: 110,
+      updatedAt: "2026-03-20",
+      tags: ["печи", "камины", "термостойкая", "народная"],
+    },
+  },
+  {
+    id: "emalyer-varnish-universal-matte",
+    slug: "emalyer-varnish-universal-matte",
+    categoryId: "varnishes",
+    lineId: "emalyer",
+    title: "Лак универсальный",
+    subtitle: "матовый",
+    description:
+      "Универсальный матовый лак для наружных и внутренних работ. Предназначен для декоративной отделки и защиты деревянных и минеральных поверхностей.",
+    packagings: [
+      createPackaging("0,9 кг", 0.9, "kg", 1),
+      createPackaging("2,2 кг", 2.2, "kg", 2),
+      createPackaging("10 кг", 10, "kg", 3),
+    ],
+    applicationAreas: ["дерево", "кирпич", "бетон", "камень"],
+    workTypes: ["внутренние работы", "наружные работы"],
+    materialTypes: ["дерево", "кирпич", "бетон", "минеральные поверхности"],
+    characteristics: {
+      commercial: [
+        { label: "Категория", value: "Лаки" },
+        { label: "Линейка", value: "ЭМАЛЬЕР" },
+        { label: "Фасовки", value: "0,9 кг / 2,2 кг / 10 кг" },
+      ],
+      technical: [
+        { label: "Финиш", value: "Матовый" },
+        { label: "Назначение", value: "Универсальный лак для наружных и внутренних работ" },
+        { label: "Срок годности", value: "24 месяца" },
+      ],
+      scenario: [
+        { label: "Подходит для", value: "Дерево, кирпич, бетон, камень" },
+        { label: "Особенность", value: "Декоративная отделка и защита" },
+      ],
+    },
+    images: {
+      preview: `${basePath}/images/sections/catalog/products/product-lacquer-gloss.webp`,
+      detail: `${basePath}/images/sections/catalog/products/product-lacquer-gloss.webp`,
+    },
+    seo: {
+      title: "Универсальный матовый лак Эмальер купить оптом | Симбирские краски",
+      description:
+        "Универсальный матовый лак Эмальер для дерева и минеральных поверхностей. Оптовые поставки и доступные фасовки.",
+    },
+    admin: {
+      isPublished: true,
+      sortOrder: 120,
+      updatedAt: "2026-03-20",
+      tags: ["лак", "универсальный", "матовый", "эмальер"],
+    },
+  },
+  {
+    id: "emalyer-varnish-universal-gloss",
+    slug: "emalyer-varnish-universal-gloss",
+    categoryId: "varnishes",
+    lineId: "emalyer",
+    title: "Лак универсальный",
+    subtitle: "глянцевый",
+    description:
+      "Универсальный глянцевый лак для наружных и внутренних работ. Подходит для декоративной отделки и защиты деревянных и минеральных поверхностей.",
+    packagings: [
+      createPackaging("0,9 кг", 0.9, "kg", 1),
+      createPackaging("2,2 кг", 2.2, "kg", 2),
+      createPackaging("10 кг", 10, "kg", 3),
+    ],
+    applicationAreas: ["дерево", "кирпич", "бетон", "камень"],
+    workTypes: ["внутренние работы", "наружные работы"],
+    materialTypes: ["дерево", "кирпич", "бетон", "минеральные поверхности"],
+    characteristics: {
+      commercial: [
+        { label: "Категория", value: "Лаки" },
+        { label: "Линейка", value: "ЭМАЛЬЕР" },
+        { label: "Фасовки", value: "0,9 кг / 2,2 кг / 10 кг" },
+      ],
+      technical: [
+        { label: "Финиш", value: "Глянцевый" },
+        { label: "Назначение", value: "Универсальный лак для наружных и внутренних работ" },
+        { label: "Срок годности", value: "24 месяца" },
+      ],
+      scenario: [
+        { label: "Подходит для", value: "Дерево, кирпич, бетон, камень" },
+        { label: "Особенность", value: "Глянцевое декоративное покрытие" },
+      ],
+    },
+    images: {
+      preview: `${basePath}/images/sections/catalog/products/product-lacquer-gloss.webp`,
+      detail: `${basePath}/images/sections/catalog/products/product-lacquer-gloss.webp`,
+    },
+    seo: {
+      title: "Универсальный глянцевый лак Эмальер купить оптом | Симбирские краски",
+      description:
+        "Универсальный глянцевый лак Эмальер для дерева и минеральных поверхностей. Оптовые поставки и доступные фасовки.",
+    },
+    admin: {
+      isPublished: true,
+      sortOrder: 130,
+      updatedAt: "2026-03-20",
+      tags: ["лак", "универсальный", "глянцевый", "эмальер"],
+    },
+  },
+  {
+    id: "emalyer-varnish-sauna-gloss",
+    slug: "emalyer-varnish-sauna-gloss",
+    categoryId: "varnishes",
+    lineId: "emalyer",
+    title: "Лак для бань и саун",
+    subtitle: "глянцевый",
+    description:
+      "Глянцевый лак для декоративной отделки и защиты деревянных поверхностей внутри бань и саун в условиях высокой влажности и температуры.",
+    packagings: [
+      createPackaging("0,9 кг", 0.9, "kg", 1),
+      createPackaging("2,2 кг", 2.2, "kg", 2),
+    ],
+    applicationAreas: ["бани и сауны", "влажные помещения"],
+    workTypes: ["внутренние работы"],
+    materialTypes: ["дерево"],
+    characteristics: {
+      commercial: [
+        { label: "Категория", value: "Лаки" },
+        { label: "Линейка", value: "ЭМАЛЬЕР" },
+        { label: "Фасовки", value: "0,9 кг / 2,2 кг" },
+      ],
+      technical: [
+        { label: "Финиш", value: "Глянцевый" },
+        { label: "Назначение", value: "Для бань и саун" },
+        { label: "Состав", value: "Стирол-акриловый сополимер, антисептик, восковые добавки" },
+      ],
+      scenario: [
+        { label: "Подходит для", value: "Стены, потолки, двери, перегородки в банях и саунах" },
+        { label: "Особенность", value: "Водо- и грязеотталкивающее покрытие" },
+      ],
+    },
+    images: {
+      preview: `${basePath}/images/sections/catalog/products/product-lacquer-gloss.webp`,
+      detail: `${basePath}/images/sections/catalog/products/product-lacquer-gloss.webp`,
+    },
+    seo: {
+      title: "Глянцевый лак для бань и саун Эмальер купить оптом | Симбирские краски",
+      description:
+        "Глянцевый лак Эмальер для бань и саун. Оптовые поставки и доступные фасовки.",
+    },
+    admin: {
+      isPublished: true,
+      sortOrder: 140,
+      updatedAt: "2026-03-20",
+      tags: ["лак", "бани и сауны", "глянцевый", "эмальер"],
+    },
+  },
 ];
 
 export function getProductCategoryById(id: ProductCategoryId) {
