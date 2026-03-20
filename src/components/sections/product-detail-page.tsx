@@ -15,10 +15,12 @@ import {
   type ProductCharacteristic,
   type ProductItem,
   getProductCategoryById,
-  getProductDetailImage,
   getProductLineById,
-  getRelatedProducts,
 } from "@/lib/content/products";
+import {
+  getCatalogProductDetailImage,
+  getCatalogRelatedProducts,
+} from "@/lib/products/service";
 import { RelatedProductsGrid } from "@/components/catalog/related-products-grid";
 
 const sectionMotion = {
@@ -141,10 +143,10 @@ function ApplicationScenarioCard({ value }: { value: string }) {
 export function ProductDetailPage({ product }: { product: ProductItem }) {
   const category = getProductCategoryById(product.categoryId);
   const line = getProductLineById(product.lineId);
-  const relatedProducts = getRelatedProducts(product.id, { limit: 3 });
+  const relatedProducts = getCatalogRelatedProducts(product.id, { limit: 3 });
   const contactHref = `/contacts?product=${encodeURIComponent(product.slug)}`;
   const applicationAreas = product.applicationAreas ?? [];
-  const detailImage = getProductDetailImage(product);
+  const detailImage = getCatalogProductDetailImage(product);
 
   const commercialCharacteristics = product.characteristics?.commercial ?? [];
   const technicalCharacteristics = product.characteristics?.technical ?? [];
@@ -307,7 +309,9 @@ export function ProductDetailPage({ product }: { product: ProductItem }) {
                   Сценарии использования
                 </h2>
                 <p className="mt-4 max-w-[760px] text-[15px] leading-[1.48] text-[var(--color-text-muted)] md:text-[16px]">
-                  Ниже показаны типовые задачи, для которых рассматривают эту позицию. Нажмите на нужный сценарий, чтобы посмотреть похожие товары в каталоге.
+                  Ниже показаны типовые задачи, для которых рассматривают эту
+                  позицию. Нажмите на нужный сценарий, чтобы посмотреть похожие
+                  товары в каталоге.
                 </p>
               </div>
 
@@ -362,7 +366,9 @@ export function ProductDetailPage({ product }: { product: ProductItem }) {
               </h2>
 
               <p className="mt-5 max-w-[760px] text-[15px] leading-[1.48] text-[var(--color-text-muted)] md:text-[17px]">
-                Если нужна помощь с выбором позиции, фасовки, аналогов или формата поставки, отправьте запрос и мы подготовим коммерческое предложение.
+                Если нужна помощь с выбором позиции, фасовки, аналогов или
+                формата поставки, отправьте запрос и мы подготовим коммерческое
+                предложение.
               </p>
 
               <div className="mt-7">
