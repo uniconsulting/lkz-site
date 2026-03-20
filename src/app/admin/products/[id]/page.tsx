@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { ProductFormV2 } from "@/components/admin/product-form-v2";
 import {
+  getCatalogAllProducts,
   getCatalogCategories,
   getCatalogLines,
   getCatalogProductById,
@@ -12,6 +13,12 @@ type PageProps = {
     id: string;
   }>;
 };
+
+export function generateStaticParams() {
+  return getCatalogAllProducts().map((product) => ({
+    id: product.id,
+  }));
+}
 
 export default async function AdminProductEditPage({ params }: PageProps) {
   const { id } = await params;
