@@ -92,13 +92,26 @@ const productsPageContent = {
   ],
 };
 
-const catalogQueryPresets = [
+type CatalogQueryPreset = {
+  id: string;
+  label: string;
+  filters: {
+    categoryIds?: ProductCategoryId[];
+    lineIds?: ProductLineId[];
+    workTypes?: string[];
+    materialTypes?: string[];
+    packagings?: string[];
+    applicationAreas?: string[];
+  };
+};
+
+const catalogQueryPresets: CatalogQueryPreset[] = [
   {
     id: "facade-paint-14kg",
     label: "фасадная краска для наружных работ 14 кг",
     filters: {
-      categoryIds: ["paints"] as ProductCategoryId[],
-      lineIds: ["emalyer"] as ProductLineId[],
+      categoryIds: ["paints"],
+      lineIds: ["emalyer"],
       workTypes: ["наружные работы"],
       materialTypes: ["фасады", "минеральные поверхности"],
       packagings: ["14 кг"],
@@ -108,8 +121,8 @@ const catalogQueryPresets = [
     id: "walls-white",
     label: "краска для стен и потолков белая",
     filters: {
-      categoryIds: ["paints"] as ProductCategoryId[],
-      lineIds: ["emalyer"] as ProductLineId[],
+      categoryIds: ["paints"],
+      lineIds: ["emalyer"],
       workTypes: ["внутренние работы"],
       materialTypes: ["стены", "потолки"],
     },
@@ -118,8 +131,8 @@ const catalogQueryPresets = [
     id: "radiator-enamel",
     label: "эмаль для радиаторов белоснежная",
     filters: {
-      categoryIds: ["enamels"] as ProductCategoryId[],
-      lineIds: ["emalyer"] as ProductLineId[],
+      categoryIds: ["enamels"],
+      lineIds: ["emalyer"],
       materialTypes: ["металл", "радиаторы"],
     },
   },
@@ -127,8 +140,8 @@ const catalogQueryPresets = [
     id: "osb-2in1",
     label: "краска-грунт 2 в 1 по osb для наружных работ",
     filters: {
-      categoryIds: ["special-paints"] as ProductCategoryId[],
-      lineIds: ["emalyer"] as ProductLineId[],
+      categoryIds: ["special-paints"],
+      lineIds: ["emalyer"],
       workTypes: ["наружные работы"],
       materialTypes: ["osb"],
     },
@@ -137,8 +150,8 @@ const catalogQueryPresets = [
     id: "sauna-varnish",
     label: "матовый лак для бань и саун",
     filters: {
-      categoryIds: ["varnishes"] as ProductCategoryId[],
-      lineIds: ["emalyer"] as ProductLineId[],
+      categoryIds: ["varnishes"],
+      lineIds: ["emalyer"],
       materialTypes: ["дерево"],
     },
   },
@@ -146,12 +159,12 @@ const catalogQueryPresets = [
     id: "wood-antiseptic",
     label: "универсальный антисептик для древесины",
     filters: {
-      categoryIds: ["protective"] as ProductCategoryId[],
-      lineIds: ["emalyer"] as ProductLineId[],
+      categoryIds: ["protective"],
+      lineIds: ["emalyer"],
       materialTypes: ["дерево"],
     },
   },
-] as const;
+];
 
 function PresetQueryButton({
   label,
@@ -716,7 +729,7 @@ export function ProductsPage() {
     });
   }
 
-  function applyPreset(preset: (typeof catalogQueryPresets)[number]) {
+  function applyPreset(preset: CatalogQueryPreset) {
     const nextSearch = preset.label;
 
     setSearch(nextSearch);
