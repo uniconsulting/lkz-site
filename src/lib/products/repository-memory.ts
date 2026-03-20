@@ -7,27 +7,27 @@ import {
 } from "@/lib/content/products";
 
 export const memoryProductsRepository: ProductsRepository = {
-  async getCategories() {
+  getCategories() {
     return productCategories;
   },
 
-  async getLines() {
+  getLines() {
     return productLines;
   },
 
-  async getAllProducts() {
+  getAllProducts() {
     return products;
   },
 
-  async getPublishedProducts() {
+  getPublishedProducts() {
     return getPublishedProducts();
   },
 
-  async getProductById(id: string) {
+  getProductById(id: string) {
     return products.find((item) => item.id === id) ?? null;
   },
 
-  async getProductBySlug(slug: string) {
+  getProductBySlug(slug: string) {
     return products.find((item) => item.slug === slug) ?? null;
   },
 };
