@@ -1,5 +1,5 @@
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
-import { ProductForm } from "@/components/admin/product-form";
+import { ProductFormV2 } from "@/components/admin/product-form-v2";
 import { getCatalogCategories, getCatalogLines } from "@/lib/products/service";
 
 export default function NewAdminProductPage() {
@@ -11,14 +11,10 @@ export default function NewAdminProductPage() {
       <AdminPageHeader
         eyebrow="админ-панель"
         title="Новый товар"
-        description="Создание базовой карточки товара для каталога."
+        description="Создание карточки товара с изображениями, документацией, фасовками и характеристиками."
       />
 
-      <ProductForm
-        mode="create"
-        categories={categories}
-        lines={lines}
-      />
+      <ProductFormV2 categories={categories} lines={lines} mode="create" />
     </div>
   );
 }
