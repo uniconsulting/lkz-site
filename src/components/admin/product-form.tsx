@@ -89,7 +89,7 @@ export function ProductForm({
             </div>
             <select
               value={categoryId}
-              onChange={(event) => setCategoryId(event.target.value)}
+              onChange={(event) => setCategoryId(event.target.value as typeof categoryId)}
               className="h-12 w-full rounded-[16px] bg-[var(--color-bg)] px-4 text-[14px] text-[var(--color-text)] outline-none"
             >
               {categories.map((item) => (
@@ -106,7 +106,7 @@ export function ProductForm({
             </div>
             <select
               value={lineId}
-              onChange={(event) => setLineId(event.target.value)}
+              onChange={(event) => setLineId(event.target.value as typeof lineId)}
               className="h-12 w-full rounded-[16px] bg-[var(--color-bg)] px-4 text-[14px] text-[var(--color-text)] outline-none"
             >
               {lines.map((item) => (
