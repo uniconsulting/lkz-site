@@ -184,7 +184,7 @@ function PresetQueryButton({
         "inline-flex h-11 shrink-0 items-center justify-center rounded-[16px] px-4 text-[14px] font-medium transition duration-300",
         active
           ? "bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)]"
-          : "bg-[var(--color-bg)] text-[var(--color-text)] hover:-translate-y-[1px] hover:shadow-[0_6px_16px_rgba(43,47,51,0.08)]",
+          : "bg-[var(--color-bg)] text-[var(--color-text)] hover:-translate-y-[1px] hover:bg-[var(--color-surface)]",
       )}
     >
       {label}
@@ -844,227 +844,231 @@ export function ProductsPage() {
       <Section className="pt-5 md:pt-6 xl:pt-6">
         <Container>
           <div className="space-y-4" id={filtersRootId}>
-            <motion.div
-              variants={sectionMotion}
-              initial="hidden"
-              animate="visible"
-              className="catalog-control-shell rounded-[28px] p-4 md:p-5"
-            >
-              <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-                <div className="flex flex-wrap gap-2">
-                  <FilterPill
-                    label="все фильтры"
-                    active={isAllFiltersOpen}
-                    count={
-                      selectedLines.length +
-                      selectedWorkTypes.length +
-                      selectedMaterialTypes.length +
-                      selectedCategories.length +
-                      selectedPackagings.length
-                    }
-                    onClick={() => {
-                      setOpenFilter(null);
-                      setIsAllFiltersOpen(true);
-                    }}
-                  />
+<motion.div
+  variants={sectionMotion}
+  initial="hidden"
+  animate="visible"
+  className="catalog-control-shell rounded-[28px] p-4 md:p-5"
+>
+  <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+    <div className="flex flex-wrap gap-4">
+      <FilterPill
+        label="все фильтры"
+        active={isAllFiltersOpen}
+        count={
+          selectedLines.length +
+          selectedWorkTypes.length +
+          selectedMaterialTypes.length +
+          selectedCategories.length +
+          selectedPackagings.length
+        }
+        onClick={() => {
+          setOpenFilter(null);
+          setIsAllFiltersOpen(true);
+        }}
+      />
 
-                  <div className="relative">
-                    <FilterPill
-                      label="линейка"
-                      active={openFilter === "line" || selectedLines.length > 0}
-                      count={selectedLines.length}
-                      onClick={() =>
-                        setOpenFilter((prev) => (prev === "line" ? null : "line"))
-                      }
-                    />
-                    {openFilter === "line" ? (
-                      <FilterDropdown
-                        title="линейка"
-                        items={productLines.map((item) => ({
-                          value: item.id,
-                          label: item.shortTitle,
-                        }))}
-                        selectedValues={selectedLines}
-                        onToggle={(value) => toggleLine(value as ProductLineId)}
-                        onClose={() => setOpenFilter(null)}
-                      />
-                    ) : null}
-                  </div>
+      <div className="relative">
+        <FilterPill
+          label="линейка"
+          active={openFilter === "line" || selectedLines.length > 0}
+          count={selectedLines.length}
+          onClick={() =>
+            setOpenFilter((prev) => (prev === "line" ? null : "line"))
+          }
+        />
+        {openFilter === "line" ? (
+          <FilterDropdown
+            title="линейка"
+            items={productLines.map((item) => ({
+              value: item.id,
+              label: item.shortTitle,
+            }))}
+            selectedValues={selectedLines}
+            onToggle={(value) => toggleLine(value as ProductLineId)}
+            onClose={() => setOpenFilter(null)}
+          />
+        ) : null}
+      </div>
 
-                  <div className="relative">
-                    <FilterPill
-                      label="вид работ"
-                      active={openFilter === "work" || selectedWorkTypes.length > 0}
-                      count={selectedWorkTypes.length}
-                      onClick={() =>
-                        setOpenFilter((prev) => (prev === "work" ? null : "work"))
-                      }
-                    />
-                    {openFilter === "work" ? (
-                      <FilterDropdown
-                        title="вид работ"
-                        items={allWorkTypes.map((item) => ({
-                          value: item,
-                          label: item,
-                        }))}
-                        selectedValues={selectedWorkTypes}
-                        onToggle={toggleWorkType}
-                        onClose={() => setOpenFilter(null)}
-                      />
-                    ) : null}
-                  </div>
+      <div className="relative">
+        <FilterPill
+          label="вид работ"
+          active={openFilter === "work" || selectedWorkTypes.length > 0}
+          count={selectedWorkTypes.length}
+          onClick={() =>
+            setOpenFilter((prev) => (prev === "work" ? null : "work"))
+          }
+        />
+        {openFilter === "work" ? (
+          <FilterDropdown
+            title="вид работ"
+            items={allWorkTypes.map((item) => ({
+              value: item,
+              label: item,
+            }))}
+            selectedValues={selectedWorkTypes}
+            onToggle={toggleWorkType}
+            onClose={() => setOpenFilter(null)}
+          />
+        ) : null}
+      </div>
 
-                  <div className="relative">
-                    <FilterPill
-                      label="материал обработки"
-                      active={
-                        openFilter === "material" ||
-                        selectedMaterialTypes.length > 0
-                      }
-                      count={selectedMaterialTypes.length}
-                      onClick={() =>
-                        setOpenFilter((prev) =>
-                          prev === "material" ? null : "material",
-                        )
-                      }
-                    />
-                    {openFilter === "material" ? (
-                      <FilterDropdown
-                        title="материал обработки"
-                        items={allMaterialTypes.map((item) => ({
-                          value: item,
-                          label: item,
-                        }))}
-                        selectedValues={selectedMaterialTypes}
-                        onToggle={toggleMaterialType}
-                        onClose={() => setOpenFilter(null)}
-                      />
-                    ) : null}
-                  </div>
+      <div className="relative">
+        <FilterPill
+          label="материал обработки"
+          active={
+            openFilter === "material" || selectedMaterialTypes.length > 0
+          }
+          count={selectedMaterialTypes.length}
+          onClick={() =>
+            setOpenFilter((prev) =>
+              prev === "material" ? null : "material",
+            )
+          }
+        />
+        {openFilter === "material" ? (
+          <FilterDropdown
+            title="материал обработки"
+            items={allMaterialTypes.map((item) => ({
+              value: item,
+              label: item,
+            }))}
+            selectedValues={selectedMaterialTypes}
+            onToggle={toggleMaterialType}
+            onClose={() => setOpenFilter(null)}
+          />
+        ) : null}
+      </div>
 
-                  <div className="relative">
-                    <FilterPill
-                      label="категория"
-                      active={
-                        openFilter === "category" ||
-                        selectedCategories.length > 0
-                      }
-                      count={selectedCategories.length}
-                      onClick={() =>
-                        setOpenFilter((prev) =>
-                          prev === "category" ? null : "category",
-                        )
-                      }
-                    />
-                    {openFilter === "category" ? (
-                      <FilterDropdown
-                        title="категория"
-                        items={productCategories.map((item) => ({
-                          value: item.id,
-                          label: item.title,
-                        }))}
-                        selectedValues={selectedCategories}
-                        onToggle={(value) =>
-                          toggleCategory(value as ProductCategoryId)
-                        }
-                        onClose={() => setOpenFilter(null)}
-                      />
-                    ) : null}
-                  </div>
-                </div>
+      <div className="relative">
+        <FilterPill
+          label="категория"
+          active={
+            openFilter === "category" || selectedCategories.length > 0
+          }
+          count={selectedCategories.length}
+          onClick={() =>
+            setOpenFilter((prev) =>
+              prev === "category" ? null : "category",
+            )
+          }
+        />
+        {openFilter === "category" ? (
+          <FilterDropdown
+            title="категория"
+            items={productCategories.map((item) => ({
+              value: item.id,
+              label: item.title,
+            }))}
+            selectedValues={selectedCategories}
+            onToggle={(value) =>
+              toggleCategory(value as ProductCategoryId)
+            }
+            onClose={() => setOpenFilter(null)}
+          />
+        ) : null}
+      </div>
+    </div>
 
-                <div className="catalog-control-counter text-[15px] font-medium">
-                  найдено товаров: {filteredProducts.length}
-                </div>
-              </div>
+    <div className="flex items-center gap-3">
+      <div className="text-[14px] font-medium text-white">
+        найдено товаров
+      </div>
 
-              {(hasActiveFilters || search.trim().length > 0) && (
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {selectedLines.map((id) => (
-                    <button
-                      key={id}
-                      type="button"
-                      onClick={() => toggleLine(id)}
-                      className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
-                    >
-                      <span>{getProductLineById(id)?.shortTitle ?? id}</span>
-                      <X size={14} strokeWidth={2.2} />
-                    </button>
-                  ))}
+      <div className="inline-flex h-11 min-w-[52px] items-center justify-center rounded-[16px] bg-[#ffffff] px-4 text-[14px] font-semibold text-[#32373b]">
+        {filteredProducts.length}
+      </div>
+    </div>
+  </div>
 
-                  {selectedWorkTypes.map((item) => (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() => toggleWorkType(item)}
-                      className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
-                    >
-                      <span>{item}</span>
-                      <X size={14} strokeWidth={2.2} />
-                    </button>
-                  ))}
+  {(hasActiveFilters || search.trim().length > 0) && (
+    <div className="mt-4 flex flex-wrap gap-2">
+      {selectedLines.map((id) => (
+        <button
+          key={id}
+          type="button"
+          onClick={() => toggleLine(id)}
+          className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
+        >
+          <span>{getProductLineById(id)?.shortTitle ?? id}</span>
+          <X size={14} strokeWidth={2.2} />
+        </button>
+      ))}
 
-                  {selectedMaterialTypes.map((item) => (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() => toggleMaterialType(item)}
-                      className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
-                    >
-                      <span>{item}</span>
-                      <X size={14} strokeWidth={2.2} />
-                    </button>
-                  ))}
+      {selectedWorkTypes.map((item) => (
+        <button
+          key={item}
+          type="button"
+          onClick={() => toggleWorkType(item)}
+          className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
+        >
+          <span>{item}</span>
+          <X size={14} strokeWidth={2.2} />
+        </button>
+      ))}
 
-                  {selectedCategories.map((id) => (
-                    <button
-                      key={id}
-                      type="button"
-                      onClick={() => toggleCategory(id)}
-                      className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
-                    >
-                      <span>{getProductCategoryById(id)?.shortTitle ?? id}</span>
-                      <X size={14} strokeWidth={2.2} />
-                    </button>
-                  ))}
+      {selectedMaterialTypes.map((item) => (
+        <button
+          key={item}
+          type="button"
+          onClick={() => toggleMaterialType(item)}
+          className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
+        >
+          <span>{item}</span>
+          <X size={14} strokeWidth={2.2} />
+        </button>
+      ))}
 
-                  {selectedPackagings.map((item) => (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() => togglePackaging(item)}
-                      className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
-                    >
-                      <span>{item}</span>
-                      <X size={14} strokeWidth={2.2} />
-                    </button>
-                  ))}
+      {selectedCategories.map((id) => (
+        <button
+          key={id}
+          type="button"
+          onClick={() => toggleCategory(id)}
+          className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
+        >
+          <span>{getProductCategoryById(id)?.shortTitle ?? id}</span>
+          <X size={14} strokeWidth={2.2} />
+        </button>
+      ))}
 
-                  {selectedApplicationAreas.map((item) => (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() => toggleApplicationArea(item)}
-                      className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
-                    >
-                      <span>{item}</span>
-                      <X size={14} strokeWidth={2.2} />
-                    </button>
-                  ))}
+      {selectedPackagings.map((item) => (
+        <button
+          key={item}
+          type="button"
+          onClick={() => togglePackaging(item)}
+          className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
+        >
+          <span>{item}</span>
+          <X size={14} strokeWidth={2.2} />
+        </button>
+      ))}
 
-                  {search.trim().length > 0 && (
-                    <button
-                      type="button"
-                      onClick={() => handleSearchChange("")}
-                      className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
-                    >
-                      <span>{search}</span>
-                      <X size={14} strokeWidth={2.2} />
-                    </button>
-                  )}
-                </div>
-              )}
-            </motion.div>
+      {selectedApplicationAreas.map((item) => (
+        <button
+          key={item}
+          type="button"
+          onClick={() => toggleApplicationArea(item)}
+          className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
+        >
+          <span>{item}</span>
+          <X size={14} strokeWidth={2.2} />
+        </button>
+      ))}
+
+      {search.trim().length > 0 && (
+        <button
+          type="button"
+          onClick={() => handleSearchChange("")}
+          className="catalog-control-chip inline-flex h-10 items-center justify-center gap-2 rounded-[16px] px-4 text-[13px] font-medium transition duration-300"
+        >
+          <span>{search}</span>
+          <X size={14} strokeWidth={2.2} />
+        </button>
+      )}
+    </div>
+  )}
+</motion.div>
 
             {filteredProducts.length === 0 ? (
               <motion.div
