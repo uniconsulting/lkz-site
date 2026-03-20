@@ -60,9 +60,6 @@ export function ProductsAdminTable({
                         {product.subtitle}
                       </div>
                     ) : null}
-                    <div className="mt-2 text-[12px] text-[var(--color-text-muted)]">
-                      /{product.slug}
-                    </div>
                   </td>
 
                   <td className="px-5 py-4 align-top text-[14px] text-[var(--color-text)]">
@@ -106,4 +103,3 @@ export function ProductsAdminTable({
     </div>
   );
 }
-
