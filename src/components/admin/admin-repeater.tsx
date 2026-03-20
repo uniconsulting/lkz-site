@@ -19,12 +19,13 @@ export function AdminRepeater({
   return (
     <div className="rounded-[22px] bg-[var(--color-bg)] p-4 md:p-5">
       <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-        <div>
+        <div className="min-w-0">
           <div className="text-[15px] font-semibold text-[var(--color-text)]">
             {title}
           </div>
+
           {description ? (
-            <div className="mt-1 text-[13px] leading-[1.5] text-[var(--color-text-muted)]">
+            <div className="mt-1 max-w-[720px] text-[13px] leading-[1.5] text-[var(--color-text-muted)]">
               {description}
             </div>
           ) : null}
@@ -33,10 +34,10 @@ export function AdminRepeater({
         <button
           type="button"
           onClick={onAdd}
-          className="inline-flex h-10 items-center justify-center gap-2 rounded-[14px] bg-[var(--color-surface)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
+          className="inline-flex h-10 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-[14px] bg-[var(--color-surface)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
         >
           <Plus size={14} strokeWidth={2.2} />
-          <span>{addLabel}</span>
+          <span className="whitespace-nowrap">{addLabel}</span>
         </button>
       </div>
 
@@ -69,4 +70,3 @@ export function AdminRepeaterItem({
     </div>
   );
 }
-
