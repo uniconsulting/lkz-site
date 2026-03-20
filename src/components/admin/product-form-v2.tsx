@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import type {
   ProductCategory,
   ProductCategoryId,
+  ProductItem,
   ProductLine,
   ProductLineId,
   ProductPackagingUnit,
@@ -36,41 +37,108 @@ type DocumentRow = {
   kind: string;
 };
 
+function buildInitialCommercialCharacteristics(
+  product?: ProductItem,
+): CharacteristicRow[] {
+  const items = product?.characteristics?.commercial ?? [];
+  return items.length > 0 ? items : [{ label: "", value: "" }];
+}
+
+function buildInitialTechnicalCharacteristics(
+  product?: ProductItem,
+): CharacteristicRow[] {
+  const items = product?.characteristics?.technical ?? [];
+  return items.length > 0 ? items : [{ label: "", value: "" }];
+}
+
+function buildInitialApplicationAreas(product?: ProductItem): string[] {
+  const items = product?.applicationAreas ?? [];
+  return items.length > 0 ? items : [""];
+}
+
+function buildInitialPackagings(product?: ProductItem): PackagingRow[] {
+  const items = product?.packagings ?? [];
+
+  if (items.length === 0) {
+    return [{ label: "", value: "", unit: "kg", sortOrder: "1" }];
+  }
+
+  return items.map((item) => ({
+    label: item.label,
+    value: String(item.value),
+    unit: item.unit,
+    sortOrder: String(item.sortOrder),
+  }));
+}
+
+function buildInitialDocuments(product?: ProductItem): DocumentRow[] {
+  const tags = product?.admin.tags ?? [];
+
+  const supportedKinds = [
+    "сертификат",
+    "декларация",
+    "сгр",
+    "техлист",
+    "инструкция",
+  ];
+
+  const guessedDocs = tags
+    .filter((tag) => supportedKinds.includes(tag.toLowerCase()))
+    .map((tag) => ({
+      title: tag,
+      kind: tag.toLowerCase(),
+    }));
+
+  return guessedDocs.length > 0
+    ? guessedDocs
+    : [{ title: "", kind: "сертификат" }];
+}
+
 export function ProductFormV2({
   mode,
   categories,
   lines,
+  initialProduct,
 }: {
   mode: "create" | "edit";
   categories: ProductCategory[];
   lines: ProductLine[];
+  initialProduct?: ProductItem;
 }) {
-  const [title, setTitle] = useState("");
-  const [subtitle, setSubtitle] = useState("");
-  const [slug, setSlug] = useState("");
+  const [title, setTitle] = useState(initialProduct?.title ?? "");
+  const [subtitle, setSubtitle] = useState(initialProduct?.subtitle ?? "");
+  const [slug, setSlug] = useState(initialProduct?.slug ?? "");
   const [categoryId, setCategoryId] = useState<ProductCategoryId>(
-    categories[0]?.id ?? "paints",
+    initialProduct?.categoryId ?? categories[0]?.id ?? "paints",
   );
   const [lineId, setLineId] = useState<ProductLineId>(
-    lines[0]?.id ?? "emalyer",
+    initialProduct?.lineId ?? lines[0]?.id ?? "emalyer",
   );
-  const [description, setDescription] = useState("");
-  const [sortOrder, setSortOrder] = useState("100");
-  const [isPublished, setIsPublished] = useState(true);
+  const [description, setDescription] = useState(
+    initialProduct?.description ?? "",
+  );
+  const [sortOrder, setSortOrder] = useState(
+    String(initialProduct?.admin.sortOrder ?? 100),
+  );
+  const [isPublished, setIsPublished] = useState(
+    initialProduct?.admin.isPublished ?? true,
+  );
 
-  const [applicationAreas, setApplicationAreas] = useState<string[]>([""]);
-  const [packagings, setPackagings] = useState<PackagingRow[]>([
-    { label: "", value: "", unit: "kg", sortOrder: "1" },
-  ]);
-  const [documents, setDocuments] = useState<DocumentRow[]>([
-    { title: "", kind: "сертификат" },
-  ]);
+  const [applicationAreas, setApplicationAreas] = useState<string[]>(
+    buildInitialApplicationAreas(initialProduct),
+  );
+  const [packagings, setPackagings] = useState<PackagingRow[]>(
+    buildInitialPackagings(initialProduct),
+  );
+  const [documents, setDocuments] = useState<DocumentRow[]>(
+    buildInitialDocuments(initialProduct),
+  );
   const [commercialCharacteristics, setCommercialCharacteristics] = useState<
     CharacteristicRow[]
-  >([{ label: "", value: "" }]);
+  >(buildInitialCommercialCharacteristics(initialProduct));
   const [technicalCharacteristics, setTechnicalCharacteristics] = useState<
     CharacteristicRow[]
-  >([{ label: "", value: "" }]);
+  >(buildInitialTechnicalCharacteristics(initialProduct));
 
   const categoryOptions = useMemo(
     () => categories.map((item) => ({ value: item.id, label: item.title })),
@@ -370,7 +438,12 @@ export function ProductFormV2({
           onAdd={() =>
             setPackagings((prev) => [
               ...prev,
-              { label: "", value: "", unit: "kg", sortOrder: `${prev.length + 1}` },
+              {
+                label: "",
+                value: "",
+                unit: "kg",
+                sortOrder: `${prev.length + 1}`,
+              },
             ])
           }
         >
