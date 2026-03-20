@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import type {
   ProductCategory,
   ProductCategoryId,
@@ -10,7 +11,7 @@ import type {
   ProductPackagingUnit,
 } from "@/lib/content/products";
 import { AdminDropdown } from "@/components/admin/admin-dropdown";
-import { AdminFilePlaceholder } from "@/components/admin/admin-file-placeholder";
+import { AdminDocumentUploadField } from "@/components/admin/admin-document-upload-field";
 import { AdminFormSection } from "@/components/admin/admin-form-section";
 import { AdminImageUploadField } from "@/components/admin/admin-image-upload-field";
 import {
@@ -20,6 +21,11 @@ import {
 import { AdminSwitch } from "@/components/admin/admin-switch";
 import { AdminTextInput } from "@/components/admin/admin-text-input";
 import { AdminTextarea } from "@/components/admin/admin-textarea";
+import {
+  createProductAction,
+  updateProductAction,
+  type ProductFormPayload,
+} from "@/app/admin/products/actions";
 
 type CharacteristicRow = {
   label: string;
@@ -36,6 +42,7 @@ type PackagingRow = {
 type DocumentRow = {
   title: string;
   kind: string;
+  file?: File | null;
 };
 
 function buildInitialCommercialCharacteristics(
@@ -88,11 +95,12 @@ function buildInitialDocuments(product?: ProductItem): DocumentRow[] {
     .map((tag) => ({
       title: tag,
       kind: tag.toLowerCase(),
+      file: null,
     }));
 
   return guessedDocs.length > 0
     ? guessedDocs
-    : [{ title: "", kind: "сертификат" }];
+    : [{ title: "", kind: "сертификат", file: null }];
 }
 
 export function ProductFormV2({
@@ -106,6 +114,9 @@ export function ProductFormV2({
   lines: ProductLine[];
   initialProduct?: ProductItem;
 }) {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
   const [title, setTitle] = useState(initialProduct?.title ?? "");
   const [subtitle, setSubtitle] = useState(initialProduct?.subtitle ?? "");
   const [slug, setSlug] = useState(initialProduct?.slug ?? "");
@@ -256,6 +267,52 @@ export function ProductFormV2({
     );
   }
 
+  function handleSubmit() {
+    const payload: ProductFormPayload = {
+      id: initialProduct?.id,
+      title,
+      subtitle,
+      slug,
+      categoryId,
+      lineId,
+      description,
+      sortOrder,
+      isPublished,
+      applicationAreas,
+      packagings,
+      documents: documents.map((item) => ({
+        title: item.title,
+        kind: item.kind,
+        fileName: item.file?.name,
+      })),
+      commercialCharacteristics,
+      technicalCharacteristics,
+      previewImageUrl:
+        previewImageFile != null
+          ? URL.createObjectURL(previewImageFile)
+          : initialProduct?.images?.preview,
+      detailImageUrl:
+        detailImageFile != null
+          ? URL.createObjectURL(detailImageFile)
+          : initialProduct?.images?.detail,
+    };
+
+    startTransition(async () => {
+      if (mode === "create") {
+        await createProductAction(payload);
+        router.push("/admin/products");
+        router.refresh();
+        return;
+      }
+
+      if (!initialProduct?.id) return;
+
+      await updateProductAction(initialProduct.id, payload);
+      router.push("/admin/products");
+      router.refresh();
+    });
+  }
+
   return (
     <form className="space-y-6">
       <AdminFormSection
@@ -356,7 +413,7 @@ export function ProductFormV2({
           />
         </div>
 
-        {(previewImageFile || detailImageFile) ? (
+        {previewImageFile || detailImageFile ? (
           <div className="mt-4 text-[12px] text-[var(--color-text-muted)]">
             Выбранные изображения пока используются локально для preview. На
             следующем шаге подключим реальное сохранение.
@@ -374,7 +431,10 @@ export function ProductFormV2({
           description="Для каждого документа задаются название, тип и файл."
           addLabel="добавить документ"
           onAdd={() =>
-            setDocuments((prev) => [...prev, { title: "", kind: "сертификат" }])
+            setDocuments((prev) => [
+              ...prev,
+              { title: "", kind: "сертификат", file: null },
+            ])
           }
         >
           {documents.map((item, index) => (
@@ -403,10 +463,10 @@ export function ProductFormV2({
               </div>
 
               <div className="mt-4">
-                <AdminFilePlaceholder
+                <AdminDocumentUploadField
                   title="Файл документа"
                   description="прикрепите документ к карточке товара"
-                  kind="document"
+                  onFileChange={(file) => updateDocument(index, "file", file)}
                 />
               </div>
             </AdminRepeaterItem>
@@ -622,14 +682,22 @@ export function ProductFormV2({
       <div className="flex flex-wrap gap-3">
         <button
           type="button"
-          disabled={!isValid}
+          disabled={!isValid || isPending}
+          onClick={handleSubmit}
           className="inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-accent-1)] px-6 text-[14px] font-semibold text-[var(--color-accent-1-foreground)] transition duration-300 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {mode === "create" ? "создать товар" : "сохранить изменения"}
+          {isPending
+            ? mode === "create"
+              ? "создание..."
+              : "сохранение..."
+            : mode === "create"
+              ? "создать товар"
+              : "сохранить изменения"}
         </button>
 
         <button
           type="button"
+          onClick={() => router.push("/admin/products")}
           className="inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-surface)] px-6 text-[14px] font-semibold text-[var(--color-text)] transition duration-300"
         >
           отмена
