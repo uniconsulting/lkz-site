@@ -2,7 +2,12 @@
 
 import Link from "next/link";
 import type { ProductItem } from "@/lib/content/products";
-import { getProductCategoryById, getProductLineById } from "@/lib/content/products";
+import {
+  getProductCategoryById,
+  getProductLineById,
+} from "@/lib/content/products";
+
+const basePath = process.env.NODE_ENV === "production" ? "/lkz-site" : "";
 
 export function ProductsAdminTable({
   products,
@@ -55,6 +60,9 @@ export function ProductsAdminTable({
                         {product.subtitle}
                       </div>
                     ) : null}
+                    <div className="mt-2 text-[12px] text-[var(--color-text-muted)]">
+                      /{product.slug}
+                    </div>
                   </td>
 
                   <td className="px-5 py-4 align-top text-[14px] text-[var(--color-text)]">
@@ -83,7 +91,7 @@ export function ProductsAdminTable({
 
                   <td className="px-5 py-4 align-top text-right">
                     <Link
-                      href={`/admin/products/${product.id}`}
+                      href={`${basePath}/admin/products/${product.id}`}
                       className="inline-flex h-10 items-center justify-center rounded-[14px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
                     >
                       редактировать
