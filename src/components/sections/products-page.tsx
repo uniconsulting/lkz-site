@@ -25,20 +25,18 @@ import {
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import {
+  getAllMaterialTypes,
+  getAllPackagings,
+  getAllWorkTypes,
+  getFilteredProducts,
   getProductCategoryById,
   getProductLineById,
+  getProductPreviewImage,
+  productCategories,
+  productLines,
   type ProductCategoryId,
   type ProductLineId,
 } from "@/lib/content/products";
-import {
-  getCatalogAllMaterialTypes,
-  getCatalogAllPackagings,
-  getCatalogAllWorkTypes,
-  getCatalogCategories,
-  getCatalogFilteredProducts,
-  getCatalogLines,
-  getCatalogProductPreviewImage,
-} from "@/lib/products/service";
 import {
   buildSearchParamsFromFilterState,
   hasActiveProductsFilters,
@@ -489,11 +487,9 @@ export function ProductsPage() {
   const [isAllFiltersOpen, setIsAllFiltersOpen] = useState(false);
   const [openFilter, setOpenFilter] = useState<OpenFilterKey>(null);
 
-  const productCategories = useMemo(() => getCatalogCategories(), []);
-  const productLines = useMemo(() => getCatalogLines(), []);
-  const allPackagings = useMemo(() => getCatalogAllPackagings(), []);
-  const allWorkTypes = useMemo(() => getCatalogAllWorkTypes(), []);
-  const allMaterialTypes = useMemo(() => getCatalogAllMaterialTypes(), []);
+  const allPackagings = useMemo(() => getAllPackagings(), []);
+  const allWorkTypes = useMemo(() => getAllWorkTypes(), []);
+  const allMaterialTypes = useMemo(() => getAllMaterialTypes(), []);
 
   useEffect(() => {
     setSearch(parsedState.search);
@@ -586,7 +582,7 @@ export function ProductsPage() {
 
   const filteredProducts = useMemo(
     () =>
-      getCatalogFilteredProducts({
+      getFilteredProducts({
         categoryIds: selectedCategories,
         lineIds: selectedLines,
         workTypes: selectedWorkTypes,
@@ -1162,7 +1158,7 @@ export function ProductsPage() {
                       title={product.title}
                       subtitle={product.subtitle}
                       lineTitle={getProductLineById(product.lineId)?.shortTitle ?? ""}
-                      image={getCatalogProductPreviewImage(product)}
+                      image={getProductPreviewImage(product)}
                     />
                   ))}
                 </motion.div>
