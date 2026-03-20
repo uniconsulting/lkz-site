@@ -452,12 +452,7 @@ function FilterDropdown({
   );
 }
 
-type OpenFilterKey =
-  | null
-  | "line"
-  | "work"
-  | "material"
-  | "category";
+type OpenFilterKey = null | "line" | "work" | "material" | "category";
 
 export function ProductsPage() {
   const router = useRouter();
@@ -465,6 +460,7 @@ export function ProductsPage() {
   const searchParams = useSearchParams();
   const presetsRef = useRef<HTMLDivElement | null>(null);
   const filtersRootId = useId();
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
 
   const parsedState = useMemo(
     () => parseFilterStateFromSearchParams(searchParams),
@@ -504,6 +500,32 @@ export function ProductsPage() {
     setSelectedPackagings(parsedState.packagings);
     setSelectedApplicationAreas(parsedState.applicationAreas);
   }, [parsedState]);
+
+  useEffect(() => {
+    function readTheme() {
+      const root = document.documentElement;
+
+      const isDarkByClass = root.classList.contains("dark");
+      const isDarkByDataTheme =
+        root.getAttribute("data-theme") === "dark" ||
+        root.getAttribute("data-color-mode") === "dark";
+
+      setIsDarkTheme(isDarkByClass || isDarkByDataTheme);
+    }
+
+    readTheme();
+
+    const observer = new MutationObserver(() => {
+      readTheme();
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class", "data-theme", "data-color-mode"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     function handleOutside(event: MouseEvent | globalThis.MouseEvent) {
@@ -773,22 +795,13 @@ export function ProductsPage() {
 
   return (
     <div className="relative pb-6 md:pb-8 xl:pb-10">
-      <div className="absolute inset-x-0 top-0 z-0 h-[420px] md:h-[460px] xl:h-[500px] overflow-hidden">
+      <div className="absolute inset-x-0 top-0 z-0 aspect-[4/1] min-h-[320px] overflow-hidden md:min-h-[340px] xl:min-h-0">
         <img
-          src={catalogHeroBannerLight}
+          src={isDarkTheme ? catalogHeroBannerDark : catalogHeroBannerLight}
           alt=""
           aria-hidden="true"
-          className="block h-full w-full object-cover dark:hidden"
+          className="h-full w-full object-cover"
         />
-        <img
-          src={catalogHeroBannerDark}
-          alt=""
-          aria-hidden="true"
-          className="hidden h-full w-full object-cover dark:block"
-        />
-
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(247,248,249,0.92)_0%,rgba(247,248,249,0.78)_26%,rgba(247,248,249,0.22)_56%,rgba(247,248,249,0)_100%)] dark:bg-[linear-gradient(90deg,rgba(18,21,24,0.84)_0%,rgba(18,21,24,0.68)_26%,rgba(18,21,24,0.22)_56%,rgba(18,21,24,0)_100%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(247,248,249,0.12)_0%,rgba(247,248,249,0.38)_74%,var(--color-bg)_100%)] dark:bg-[linear-gradient(180deg,rgba(18,21,24,0.12)_0%,rgba(18,21,24,0.34)_74%,var(--color-bg)_100%)]" />
       </div>
 
       <div className="relative z-[1] pt-[112px] md:pt-[126px] xl:pt-[138px]">
