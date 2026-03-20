@@ -154,90 +154,87 @@ html.dark .footer-uni-logo-on-dark {
   display: block;
 }
 
-.catalog-filter-panel {
-  background: var(--color-accent-2);
-  color: var(--color-accent-2-foreground);
+/* Catalog control panel */
+.catalog-control-shell {
+  background: #32373b;
+  color: #f5f7f8;
 }
 
-.dark .catalog-filter-panel {
-  background: var(--color-bg);
-  color: var(--color-text);
+.catalog-control-muted {
+  color: rgba(255, 255, 255, 0.64);
 }
 
-.catalog-filter-panel-muted {
-  color: rgba(255, 255, 255, 0.62);
-}
-
-.dark .catalog-filter-panel-muted {
-  color: var(--color-text-muted);
-}
-
-.catalog-filter-panel-text {
-  color: var(--color-accent-2-foreground);
-}
-
-.dark .catalog-filter-panel-text {
-  color: var(--color-text);
-}
-
-.catalog-filter-panel-icon {
-  color: rgba(255, 255, 255, 0.55);
-}
-
-.dark .catalog-filter-panel-icon {
-  color: var(--color-text-muted);
-}
-
-.catalog-filter-panel-soft {
+.catalog-control-pill {
   background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
 }
 
-.catalog-filter-panel-soft:hover {
+.catalog-control-pill:hover {
   background: rgba(255, 255, 255, 0.12);
 }
 
-.dark .catalog-filter-panel-soft {
-  background: var(--color-surface);
+.catalog-control-pill-active {
+  background: var(--color-accent-1);
+  color: var(--color-accent-1-foreground);
 }
 
-.dark .catalog-filter-panel-soft:hover {
-  background: color-mix(in srgb, var(--color-surface) 82%, transparent);
+.catalog-control-counter {
+  color: rgba(255, 255, 255, 0.92);
 }
 
-.catalog-filter-panel-search {
+.catalog-control-divider {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.catalog-control-chip {
   background: rgba(255, 255, 255, 0.08);
-  color: var(--color-accent-2-foreground);
+  color: #ffffff;
 }
 
-.catalog-filter-panel-search::placeholder {
-  color: rgba(255, 255, 255, 0.55);
+.catalog-control-chip:hover {
+  background: rgba(255, 255, 255, 0.12);
 }
 
-.dark .catalog-filter-panel-search {
-  background: var(--color-surface);
-  color: var(--color-text);
+.catalog-filter-sheet-overlay {
+  background: rgba(17, 20, 23, 0.34);
+  backdrop-filter: blur(8px);
 }
 
-.dark .catalog-filter-panel-search::placeholder {
-  color: var(--color-text-muted);
+.catalog-filter-sheet {
+  background: #32373b;
+  color: #ffffff;
+  box-shadow: -24px 0 54px rgba(17, 20, 23, 0.24);
 }
 
-.catalog-filter-panel-reset {
-  background: rgba(255, 255, 255, 0.10);
-  color: var(--color-accent-2-foreground);
+.catalog-filter-sheet-soft {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
 }
 
-.catalog-filter-panel-reset:hover {
-  background: rgba(255, 255, 255, 0.14);
+.catalog-filter-sheet-soft:hover {
+  background: rgba(255, 255, 255, 0.12);
 }
 
-.dark .catalog-filter-panel-reset {
-  background: var(--color-surface);
-  color: var(--color-text);
+.catalog-filter-sheet-input {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
 }
 
-.dark .catalog-filter-panel-reset:hover {
-  background: color-mix(in srgb, var(--color-surface) 82%, transparent);
+.catalog-filter-sheet-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.catalog-filter-sheet-label {
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.catalog-filter-sheet-close {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.catalog-filter-sheet-close:hover {
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .catalog-filter-scroll {
