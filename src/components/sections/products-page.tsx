@@ -386,15 +386,22 @@ function FilterDropdown({
   selectedValues,
   onToggle,
   onClose,
+  widthClassName = "w-[280px]",
 }: {
   title: string;
   items: Array<{ value: string; label: string }>;
   selectedValues: string[];
   onToggle: (value: string) => void;
   onClose: () => void;
+  widthClassName?: string;
 }) {
   return (
-    <div className="absolute left-0 top-[calc(100%+8px)] z-30 w-[280px] overflow-hidden rounded-[20px] catalog-control-shell shadow-[0_18px_42px_rgba(17,20,23,0.18)]">
+    <div
+      className={cn(
+        "absolute left-0 top-[calc(100%+8px)] z-30 overflow-hidden rounded-[20px] catalog-control-shell shadow-[0_18px_42px_rgba(17,20,23,0.18)]",
+        widthClassName,
+      )}
+    >
       <div className="catalog-control-divider flex items-center justify-between border-b px-4 py-4">
         <div className="text-[14px] font-semibold text-white">{title}</div>
 
@@ -927,18 +934,19 @@ export function ProductsPage() {
             )
           }
         />
-        {openFilter === "material" ? (
-          <FilterDropdown
-            title="материал обработки"
-            items={allMaterialTypes.map((item) => ({
-              value: item,
-              label: item,
-            }))}
-            selectedValues={selectedMaterialTypes}
-            onToggle={toggleMaterialType}
-            onClose={() => setOpenFilter(null)}
-          />
-        ) : null}
+{openFilter === "material" ? (
+  <FilterDropdown
+    title="материал обработки"
+    widthClassName="w-[320px]"
+    items={allMaterialTypes.map((item) => ({
+      value: item,
+      label: item,
+    }))}
+    selectedValues={selectedMaterialTypes}
+    onToggle={toggleMaterialType}
+    onClose={() => setOpenFilter(null)}
+  />
+) : null}
       </div>
 
       <div className="relative">
