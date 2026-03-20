@@ -3,13 +3,18 @@
 import { useMemo, useState } from "react";
 import type {
   ProductCategory,
+  ProductCategoryId,
   ProductLine,
+  ProductLineId,
   ProductPackagingUnit,
 } from "@/lib/content/products";
 import { AdminDropdown } from "@/components/admin/admin-dropdown";
 import { AdminFilePlaceholder } from "@/components/admin/admin-file-placeholder";
 import { AdminFormSection } from "@/components/admin/admin-form-section";
-import { AdminRepeater, AdminRepeaterItem } from "@/components/admin/admin-repeater";
+import {
+  AdminRepeater,
+  AdminRepeaterItem,
+} from "@/components/admin/admin-repeater";
 import { AdminSwitch } from "@/components/admin/admin-switch";
 import { AdminTextInput } from "@/components/admin/admin-text-input";
 import { AdminTextarea } from "@/components/admin/admin-textarea";
@@ -43,8 +48,12 @@ export function ProductFormV2({
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
   const [slug, setSlug] = useState("");
-  const [categoryId, setCategoryId] = useState(categories[0]?.id ?? "");
-  const [lineId, setLineId] = useState(lines[0]?.id ?? "");
+  const [categoryId, setCategoryId] = useState<ProductCategoryId>(
+    categories[0]?.id ?? "paints",
+  );
+  const [lineId, setLineId] = useState<ProductLineId>(
+    lines[0]?.id ?? "emalyer",
+  );
   const [description, setDescription] = useState("");
   const [sortOrder, setSortOrder] = useState("100");
   const [isPublished, setIsPublished] = useState(true);
@@ -105,7 +114,9 @@ export function ProductFormV2({
 
   function removeApplicationArea(index: number) {
     setApplicationAreas((prev) =>
-      prev.length === 1 ? prev : prev.filter((_, itemIndex) => itemIndex !== index),
+      prev.length === 1
+        ? prev
+        : prev.filter((_, itemIndex) => itemIndex !== index),
     );
   }
 
@@ -123,7 +134,9 @@ export function ProductFormV2({
 
   function removePackaging(index: number) {
     setPackagings((prev) =>
-      prev.length === 1 ? prev : prev.filter((_, itemIndex) => itemIndex !== index),
+      prev.length === 1
+        ? prev
+        : prev.filter((_, itemIndex) => itemIndex !== index),
     );
   }
 
@@ -141,7 +154,9 @@ export function ProductFormV2({
 
   function removeDocument(index: number) {
     setDocuments((prev) =>
-      prev.length === 1 ? prev : prev.filter((_, itemIndex) => itemIndex !== index),
+      prev.length === 1
+        ? prev
+        : prev.filter((_, itemIndex) => itemIndex !== index),
     );
   }
 
@@ -163,7 +178,9 @@ export function ProductFormV2({
     index: number,
   ) {
     setter((prev) =>
-      prev.length === 1 ? prev : prev.filter((_, itemIndex) => itemIndex !== index),
+      prev.length === 1
+        ? prev
+        : prev.filter((_, itemIndex) => itemIndex !== index),
     );
   }
 
@@ -210,7 +227,7 @@ export function ProductFormV2({
             </div>
             <AdminDropdown
               value={categoryId}
-              onChange={setCategoryId}
+              onChange={(value) => setCategoryId(value as ProductCategoryId)}
               options={categoryOptions}
             />
           </div>
@@ -219,7 +236,11 @@ export function ProductFormV2({
             <div className="mb-2 text-[13px] font-medium text-[var(--color-text-muted)]">
               Линейка
             </div>
-            <AdminDropdown value={lineId} onChange={setLineId} options={lineOptions} />
+            <AdminDropdown
+              value={lineId}
+              onChange={(value) => setLineId(value as ProductLineId)}
+              options={lineOptions}
+            />
           </div>
         </div>
 
@@ -269,7 +290,7 @@ export function ProductFormV2({
       >
         <AdminRepeater
           title="Список документов"
-          description="Для каждого документа задаётся название и тип. Подключение реального файла добавим следующим шагом."
+          description="Для каждого документа задаётся название и тип. Подключение реального файла добавим следующим шагом вместе с upload."
           addLabel="добавить документ"
           onAdd={() =>
             setDocuments((prev) => [...prev, { title: "", kind: "сертификат" }])
@@ -409,7 +430,10 @@ export function ProductFormV2({
           title="Коммерческие характеристики"
           addLabel="добавить параметр"
           onAdd={() =>
-            setCommercialCharacteristics((prev) => [...prev, { label: "", value: "" }])
+            setCommercialCharacteristics((prev) => [
+              ...prev,
+              { label: "", value: "" },
+            ])
           }
         >
           {commercialCharacteristics.map((item, index) => (
@@ -462,7 +486,10 @@ export function ProductFormV2({
           title="Технические характеристики"
           addLabel="добавить свойство"
           onAdd={() =>
-            setTechnicalCharacteristics((prev) => [...prev, { label: "", value: "" }])
+            setTechnicalCharacteristics((prev) => [
+              ...prev,
+              { label: "", value: "" },
+            ])
           }
         >
           {technicalCharacteristics.map((item, index) => (
@@ -525,4 +552,3 @@ export function ProductFormV2({
     </form>
   );
 }
-
