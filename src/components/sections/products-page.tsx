@@ -13,6 +13,7 @@ import {
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { motion } from "motion/react";
 import {
+  ArrowLeft,
   ArrowRight,
   Check,
   ChevronDown,
