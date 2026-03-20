@@ -95,6 +95,14 @@ function createPackaging(
   };
 }
 
+function productImage(fileName: string): ProductImageSet {
+  const path = `${basePath}/images/sections/catalog/products/${fileName}`;
+  return {
+    preview: path,
+    detail: path,
+  };
+}
+
 export const productCategories: ProductCategory[] = [
   {
     id: "paints",
@@ -162,7 +170,8 @@ export const products: ProductItem[] = [
     lineId: "emalyer",
     title: "Для стен и потолков",
     subtitle: "краска акриловая",
-    description: "Влагостойкая белоснежная краска для внутренних работ.",
+    description:
+      "Влагостойкая белоснежная краска для внутренних работ по стенам и потолкам.",
     packagings: [
       createPackaging("1,4 кг", 1.4, "kg", 1),
       createPackaging("3 кг", 3, "kg", 2),
@@ -189,10 +198,7 @@ export const products: ProductItem[] = [
         { label: "Тип объекта", value: "Интерьер" },
       ],
     },
-    images: {
-      preview: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
-      detail: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
-    },
+    images: productImage("product-paint-walls-ceilings.webp"),
     seo: {
       title:
         "Краска для стен и потолков акриловая купить оптом | Симбирские краски",
@@ -202,7 +208,7 @@ export const products: ProductItem[] = [
     admin: {
       isPublished: true,
       sortOrder: 10,
-      updatedAt: "2026-03-16",
+      updatedAt: "2026-03-20",
       tags: ["интерьер", "стены", "потолки", "акриловая"],
     },
   },
@@ -240,10 +246,7 @@ export const products: ProductItem[] = [
         { label: "Тип основания", value: "Минеральные поверхности" },
       ],
     },
-    images: {
-      preview: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
-      detail: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
-    },
+    images: productImage("product-paint-facade.webp"),
     seo: {
       title: "Фасадная акриловая краска купить оптом | Симбирские краски",
       description:
@@ -252,251 +255,11 @@ export const products: ProductItem[] = [
     admin: {
       isPublished: true,
       sortOrder: 20,
-      updatedAt: "2026-03-16",
+      updatedAt: "2026-03-20",
       tags: ["фасад", "наружные работы", "акриловая"],
     },
   },
   {
-    id: "emalyer-paint-primer-osb-2in1",
-    slug: "emalyer-paint-primer-osb-2in1",
-    categoryId: "special-paints",
-    lineId: "emalyer",
-    title: "Краска-грунт 2 в 1",
-    subtitle: "по OSB",
-    description:
-      "Состав 2 в 1 для OSB, SIP, ДСП, ДВП и смежных оснований.",
-    packagings: [
-      createPackaging("1,4 кг", 1.4, "kg", 1),
-      createPackaging("3 кг", 3, "kg", 2),
-      createPackaging("7 кг", 7, "kg", 3),
-    ],
-    applicationAreas: ["osb", "sip", "дсп", "двп"],
-    workTypes: ["внутренние работы", "наружные работы"],
-    materialTypes: ["osb", "sip", "дсп", "двп", "дерево"],
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Специальные краски" },
-        { label: "Линейка", value: "ЭМАЛЬЕР" },
-        { label: "Фасовки", value: "1,4 кг / 3 кг / 7 кг" },
-      ],
-      technical: [
-        { label: "Тип", value: "Краска-грунт 2 в 1" },
-        { label: "Назначение", value: "OSB / SIP / ДСП / ДВП" },
-      ],
-      scenario: [
-        { label: "Подходит для", value: "Плитные и древесные основания" },
-      ],
-    },
-    images: {
-      preview: `${basePath}/images/sections/catalog/products/product-primer-deep.webp`,
-      detail: `${basePath}/images/sections/catalog/products/product-primer-deep.webp`,
-    },
-    seo: {
-      title: "Краска-грунт 2 в 1 по OSB купить оптом | Симбирские краски",
-      description:
-        "Краска-грунт 2 в 1 для OSB, SIP, ДСП и ДВП. Оптовые поставки и подбор продукции под задачу.",
-    },
-    admin: {
-      isPublished: true,
-      sortOrder: 30,
-      updatedAt: "2026-03-16",
-      tags: ["osb", "sip", "дсп", "двп", "грунт"],
-    },
-  },
-  {
-    id: "emalyer-enamel-radiator-white",
-    slug: "emalyer-radiator-white",
-    categoryId: "enamels",
-    lineId: "emalyer",
-    title: "Для радиаторов",
-    subtitle: "эмаль белоснежная",
-    description: "Эмаль для окраски радиаторов и нагревающихся поверхностей.",
-    packagings: [
-      createPackaging("0,4 кг", 0.4, "kg", 1),
-      createPackaging("0,9 кг", 0.9, "kg", 2),
-    ],
-    applicationAreas: ["радиаторы"],
-    workTypes: ["внутренние работы"],
-    materialTypes: ["металл", "радиаторы"],
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Эмали" },
-        { label: "Линейка", value: "ЭМАЛЬЕР" },
-        { label: "Фасовки", value: "0,4 кг / 0,9 кг" },
-      ],
-      technical: [
-        { label: "Назначение", value: "Для радиаторов" },
-        { label: "Тип поверхности", value: "Металл" },
-      ],
-      scenario: [
-        {
-          label: "Подходит для",
-          value: "Радиаторы и нагревающиеся поверхности",
-        },
-      ],
-    },
-    images: {
-      preview: `${basePath}/images/sections/catalog/products/product-enamel-matte-base-a.webp`,
-      detail: `${basePath}/images/sections/catalog/products/product-enamel-matte-base-a.webp`,
-    },
-    seo: {
-      title: "Эмаль для радиаторов купить оптом | Симбирские краски",
-      description:
-        "Белоснежная эмаль для радиаторов и нагревающихся поверхностей. Доступные фасовки и оптовые поставки.",
-    },
-    admin: {
-      isPublished: true,
-      sortOrder: 40,
-      updatedAt: "2026-03-16",
-      tags: ["радиаторы", "эмаль", "металл"],
-    },
-  },
-  {
-    id: "emalyer-varnish-sauna-matte",
-    slug: "emalyer-varnish-sauna-matte",
-    categoryId: "varnishes",
-    lineId: "emalyer",
-    title: "Лак для бань и саун",
-    subtitle: "матовый",
-    description:
-      "Влагостойкий защитный лак для деревянных поверхностей внутри бань и саун.",
-    packagings: [
-      createPackaging("0,9 кг", 0.9, "kg", 1),
-      createPackaging("2,2 кг", 2.2, "kg", 2),
-    ],
-    applicationAreas: ["бани и сауны"],
-    workTypes: ["внутренние работы"],
-    materialTypes: ["дерево"],
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Лаки" },
-        { label: "Линейка", value: "ЭМАЛЬЕР" },
-        { label: "Фасовки", value: "0,9 кг / 2,2 кг" },
-      ],
-      technical: [
-        { label: "Финиш", value: "Матовый" },
-        { label: "Назначение", value: "Для бань и саун" },
-        { label: "Основа", value: "Водно-дисперсионная" },
-      ],
-      scenario: [
-        {
-          label: "Подходит для",
-          value: "Деревянные поверхности внутри влажных помещений",
-        },
-      ],
-    },
-    images: {
-      preview: `${basePath}/images/sections/catalog/products/product-lacquer-gloss.webp`,
-      detail: `${basePath}/images/sections/catalog/products/product-lacquer-gloss.webp`,
-    },
-    seo: {
-      title: "Лак для бань и саун матовый купить оптом | Симбирские краски",
-      description:
-        "Матовый лак для бань и саун, для деревянных поверхностей. Оптовые поставки и доступные фасовки.",
-    },
-    admin: {
-      isPublished: true,
-      sortOrder: 50,
-      updatedAt: "2026-03-16",
-      tags: ["лак", "бани и сауны", "дерево", "матовый"],
-    },
-  },
-  {
-    id: "emalyer-antiseptic-universal",
-    slug: "emalyer-antiseptic-universal",
-    categoryId: "protective",
-    lineId: "emalyer",
-    title: "Антисептик универсальный",
-    subtitle: "защитный состав",
-    description: "Универсальный антисептик для обработки древесины.",
-    packagings: [
-      createPackaging("5 кг", 5, "kg", 1),
-      createPackaging("20 кг", 20, "kg", 2),
-    ],
-    applicationAreas: ["защита древесины"],
-    workTypes: ["внутренние работы", "наружные работы"],
-    materialTypes: ["дерево"],
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Защитные материалы" },
-        { label: "Линейка", value: "ЭМАЛЬЕР" },
-        { label: "Фасовки", value: "5 кг / 20 кг" },
-      ],
-      technical: [
-        { label: "Тип", value: "Антисептик" },
-        { label: "Назначение", value: "Универсальная защита древесины" },
-      ],
-      scenario: [
-        { label: "Подходит для", value: "Обработка деревянных поверхностей" },
-      ],
-    },
-    images: {
-      preview: `${basePath}/images/sections/catalog/products/product-antiseptic.webp`,
-      detail: `${basePath}/images/sections/catalog/products/product-antiseptic.webp`,
-    },
-    seo: {
-      title:
-        "Антисептик универсальный для древесины купить оптом | Симбирские краски",
-      description:
-        "Универсальный антисептик для защиты древесины. Оптовые поставки, подбор фасовки и коммерческое предложение.",
-    },
-    admin: {
-      isPublished: true,
-      sortOrder: 60,
-      updatedAt: "2026-03-16",
-      tags: ["антисептик", "дерево", "защита древесины"],
-    },
-  },
-  {
-    id: "emalyer-liquid-glass",
-    slug: "emalyer-liquid-glass",
-    categoryId: "adhesives-glass",
-    lineId: "emalyer",
-    title: "Жидкое стекло",
-    subtitle: "силикатный состав",
-    description:
-      "Жидкое стекло для клеевых, строительных и укрепляющих задач.",
-    packagings: [
-      createPackaging("1,4 кг", 1.4, "kg", 1),
-      createPackaging("4 кг", 4, "kg", 2),
-      createPackaging("6 кг", 6, "kg", 3),
-      createPackaging("15 кг", 15, "kg", 4),
-    ],
-    applicationAreas: ["строительные смеси", "укрепление оснований"],
-    workTypes: ["внутренние работы", "наружные работы"],
-    materialTypes: ["минеральные поверхности"],
-    characteristics: {
-      commercial: [
-        { label: "Категория", value: "Клей и жидкое стекло" },
-        { label: "Линейка", value: "ЭМАЛЬЕР" },
-        { label: "Фасовки", value: "1,4 кг / 4 кг / 6 кг / 15 кг" },
-      ],
-      technical: [{ label: "Тип", value: "Силикатный состав" }],
-      scenario: [
-        {
-          label: "Подходит для",
-          value: "Строительные и укрепляющие задачи",
-        },
-      ],
-    },
-    images: {
-      preview: `${basePath}/images/sections/catalog/products/product-liquid-glass.webp`,
-      detail: `${basePath}/images/sections/catalog/products/product-liquid-glass.webp`,
-    },
-    seo: {
-      title: "Жидкое стекло купить оптом | Симбирские краски",
-      description:
-        "Жидкое стекло для строительных и укрепляющих задач. Оптовые поставки и доступные фасовки.",
-    },
-    admin: {
-      isPublished: true,
-      sortOrder: 70,
-      updatedAt: "2026-03-16",
-      tags: ["жидкое стекло", "силикатный состав", "строительные смеси"],
-    },
-  },
-
-    {
     id: "emalyer-paint-washable-white",
     slug: "emalyer-paint-washable-white",
     categoryId: "paints",
@@ -531,10 +294,7 @@ export const products: ProductItem[] = [
         { label: "Особенность", value: "Выдерживает влажную уборку" },
       ],
     },
-    images: {
-      preview: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
-      detail: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
-    },
+    images: productImage("product-paint-washable.webp"),
     seo: {
       title: "Моющаяся белоснежная краска Эмальер купить оптом | Симбирские краски",
       description:
@@ -545,6 +305,50 @@ export const products: ProductItem[] = [
       sortOrder: 25,
       updatedAt: "2026-03-20",
       tags: ["моющаяся", "влажные помещения", "стены", "потолки"],
+    },
+  },
+  {
+    id: "emalyer-paint-primer-osb-2in1",
+    slug: "emalyer-paint-primer-osb-2in1",
+    categoryId: "special-paints",
+    lineId: "emalyer",
+    title: "Краска-грунт 2 в 1",
+    subtitle: "по OSB",
+    description:
+      "Состав 2 в 1 для OSB, SIP, ДСП, ДВП и смежных оснований.",
+    packagings: [
+      createPackaging("1,4 кг", 1.4, "kg", 1),
+      createPackaging("3 кг", 3, "kg", 2),
+      createPackaging("7 кг", 7, "kg", 3),
+    ],
+    applicationAreas: ["osb", "sip", "дсп", "двп"],
+    workTypes: ["внутренние работы", "наружные работы"],
+    materialTypes: ["osb", "sip", "дсп", "двп", "дерево"],
+    characteristics: {
+      commercial: [
+        { label: "Категория", value: "Специальные краски" },
+        { label: "Линейка", value: "ЭМАЛЬЕР" },
+        { label: "Фасовки", value: "1,4 кг / 3 кг / 7 кг" },
+      ],
+      technical: [
+        { label: "Тип", value: "Краска-грунт 2 в 1" },
+        { label: "Назначение", value: "OSB / SIP / ДСП / ДВП" },
+      ],
+      scenario: [
+        { label: "Подходит для", value: "Плитные и древесные основания" },
+      ],
+    },
+    images: productImage("product-primer-osb-2in1.webp"),
+    seo: {
+      title: "Краска-грунт 2 в 1 по OSB купить оптом | Симбирские краски",
+      description:
+        "Краска-грунт 2 в 1 для OSB, SIP, ДСП и ДВП. Оптовые поставки и подбор продукции под задачу.",
+    },
+    admin: {
+      isPublished: true,
+      sortOrder: 30,
+      updatedAt: "2026-03-20",
+      tags: ["osb", "sip", "дсп", "двп", "грунт"],
     },
   },
   {
@@ -585,10 +389,7 @@ export const products: ProductItem[] = [
         { label: "Особенность", value: "Стойкость к влаге и УФ-излучению" },
       ],
     },
-    images: {
-      preview: `${basePath}/images/sections/catalog/products/product-wood-paint.webp`,
-      detail: `${basePath}/images/sections/catalog/products/product-wood-paint.webp`,
-    },
+    images: productImage("product-paint-rubber.webp"),
     seo: {
       title: "Резиновая краска Эмальер купить оптом | Симбирские краски",
       description:
@@ -599,6 +400,186 @@ export const products: ProductItem[] = [
       sortOrder: 35,
       updatedAt: "2026-03-20",
       tags: ["резиновая краска", "эластичная", "фасад", "osb", "дерево"],
+    },
+  },
+  {
+    id: "emalyer-enamel-radiator-white",
+    slug: "emalyer-radiator-white",
+    categoryId: "enamels",
+    lineId: "emalyer",
+    title: "Для радиаторов",
+    subtitle: "эмаль белоснежная",
+    description: "Эмаль для окраски радиаторов и нагревающихся поверхностей.",
+    packagings: [
+      createPackaging("0,4 кг", 0.4, "kg", 1),
+      createPackaging("0,9 кг", 0.9, "kg", 2),
+    ],
+    applicationAreas: ["радиаторы"],
+    workTypes: ["внутренние работы"],
+    materialTypes: ["металл", "радиаторы"],
+    characteristics: {
+      commercial: [
+        { label: "Категория", value: "Эмали" },
+        { label: "Линейка", value: "ЭМАЛЬЕР" },
+        { label: "Фасовки", value: "0,4 кг / 0,9 кг" },
+      ],
+      technical: [
+        { label: "Назначение", value: "Для радиаторов" },
+        { label: "Тип поверхности", value: "Металл" },
+      ],
+      scenario: [
+        {
+          label: "Подходит для",
+          value: "Радиаторы и нагревающиеся поверхности",
+        },
+      ],
+    },
+    images: productImage("product-enamel-radiator.webp"),
+    seo: {
+      title: "Эмаль для радиаторов купить оптом | Симбирские краски",
+      description:
+        "Белоснежная эмаль для радиаторов и нагревающихся поверхностей. Доступные фасовки и оптовые поставки.",
+    },
+    admin: {
+      isPublished: true,
+      sortOrder: 40,
+      updatedAt: "2026-03-20",
+      tags: ["радиаторы", "эмаль", "металл"],
+    },
+  },
+  {
+    id: "emalyer-varnish-sauna-matte",
+    slug: "emalyer-varnish-sauna-matte",
+    categoryId: "varnishes",
+    lineId: "emalyer",
+    title: "Лак для бань и саун",
+    subtitle: "матовый",
+    description:
+      "Влагостойкий защитный лак для деревянных поверхностей внутри бань и саун.",
+    packagings: [
+      createPackaging("0,9 кг", 0.9, "kg", 1),
+      createPackaging("2,2 кг", 2.2, "kg", 2),
+    ],
+    applicationAreas: ["бани и сауны"],
+    workTypes: ["внутренние работы"],
+    materialTypes: ["дерево"],
+    characteristics: {
+      commercial: [
+        { label: "Категория", value: "Лаки" },
+        { label: "Линейка", value: "ЭМАЛЬЕР" },
+        { label: "Фасовки", value: "0,9 кг / 2,2 кг" },
+      ],
+      technical: [
+        { label: "Финиш", value: "Матовый" },
+        { label: "Назначение", value: "Для бань и саун" },
+        { label: "Основа", value: "Водно-дисперсионная" },
+      ],
+      scenario: [
+        {
+          label: "Подходит для",
+          value: "Деревянные поверхности внутри влажных помещений",
+        },
+      ],
+    },
+    images: productImage("product-varnish-sauna-matte.webp"),
+    seo: {
+      title: "Лак для бань и саун матовый купить оптом | Симбирские краски",
+      description:
+        "Матовый лак для бань и саун, для деревянных поверхностей. Оптовые поставки и доступные фасовки.",
+    },
+    admin: {
+      isPublished: true,
+      sortOrder: 50,
+      updatedAt: "2026-03-20",
+      tags: ["лак", "бани и сауны", "дерево", "матовый"],
+    },
+  },
+  {
+    id: "emalyer-antiseptic-universal",
+    slug: "emalyer-antiseptic-universal",
+    categoryId: "protective",
+    lineId: "emalyer",
+    title: "Антисептик универсальный",
+    subtitle: "защитный состав",
+    description: "Универсальный антисептик для обработки древесины.",
+    packagings: [
+      createPackaging("5 кг", 5, "kg", 1),
+      createPackaging("20 кг", 20, "kg", 2),
+    ],
+    applicationAreas: ["защита древесины"],
+    workTypes: ["внутренние работы", "наружные работы"],
+    materialTypes: ["дерево"],
+    characteristics: {
+      commercial: [
+        { label: "Категория", value: "Защитные материалы" },
+        { label: "Линейка", value: "ЭМАЛЬЕР" },
+        { label: "Фасовки", value: "5 кг / 20 кг" },
+      ],
+      technical: [
+        { label: "Тип", value: "Антисептик" },
+        { label: "Назначение", value: "Универсальная защита древесины" },
+      ],
+      scenario: [
+        { label: "Подходит для", value: "Обработка деревянных поверхностей" },
+      ],
+    },
+    images: productImage("product-antiseptic.webp"),
+    seo: {
+      title:
+        "Антисептик универсальный для древесины купить оптом | Симбирские краски",
+      description:
+        "Универсальный антисептик для защиты древесины. Оптовые поставки, подбор фасовки и коммерческое предложение.",
+    },
+    admin: {
+      isPublished: true,
+      sortOrder: 60,
+      updatedAt: "2026-03-20",
+      tags: ["антисептик", "дерево", "защита древесины"],
+    },
+  },
+  {
+    id: "emalyer-liquid-glass",
+    slug: "emalyer-liquid-glass",
+    categoryId: "adhesives-glass",
+    lineId: "emalyer",
+    title: "Жидкое стекло",
+    subtitle: "силикатный состав",
+    description:
+      "Жидкое стекло для клеевых, строительных и укрепляющих задач.",
+    packagings: [
+      createPackaging("1,4 кг", 1.4, "kg", 1),
+      createPackaging("4 кг", 4, "kg", 2),
+      createPackaging("6 кг", 6, "kg", 3),
+      createPackaging("15 кг", 15, "kg", 4),
+    ],
+    applicationAreas: ["строительные смеси", "укрепление оснований"],
+    workTypes: ["внутренние работы", "наружные работы"],
+    materialTypes: ["минеральные поверхности"],
+    characteristics: {
+      commercial: [
+        { label: "Категория", value: "Клей и жидкое стекло" },
+        { label: "Линейка", value: "ЭМАЛЬЕР" },
+        { label: "Фасовки", value: "1,4 кг / 4 кг / 6 кг / 15 кг" },
+      ],
+      technical: [{ label: "Тип", value: "Силикатный состав" }],
+      scenario: [
+        {
+          label: "Подходит для",
+          value: "Строительные и укрепляющие задачи",
+        },
+      ],
+    },
+    images: productImage("product-liquid-glass.webp"),
+    seo: {
+      title: "Жидкое стекло купить оптом | Симбирские краски",
+      description:
+        "Жидкое стекло для строительных и укрепляющих задач. Оптовые поставки и доступные фасовки.",
+    },
+    admin: {
+      isPublished: true,
+      sortOrder: 70,
+      updatedAt: "2026-03-20",
+      tags: ["жидкое стекло", "силикатный состав", "строительные смеси"],
     },
   },
   {
@@ -634,10 +615,7 @@ export const products: ProductItem[] = [
         { label: "Особенность", value: "Высокая укрывистость" },
       ],
     },
-    images: {
-      preview: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
-      detail: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
-    },
+    images: productImage("product-paint-narodnaya-ceiling.webp"),
     seo: {
       title: "Краска Народная для потолков купить оптом | Симбирские краски",
       description:
@@ -683,10 +661,7 @@ export const products: ProductItem[] = [
         { label: "Особенность", value: "Легко колеруется" },
       ],
     },
-    images: {
-      preview: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
-      detail: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
-    },
+    images: productImage("product-paint-narodnaya-interior.webp"),
     seo: {
       title: "Интерьерная краска Народная купить оптом | Симбирские краски",
       description:
@@ -731,10 +706,7 @@ export const products: ProductItem[] = [
         { label: "Особенность", value: "Защита от ожогов, морозобоин и вредителей" },
       ],
     },
-    images: {
-      preview: `${basePath}/images/sections/catalog/products/product-antiseptic.webp`,
-      detail: `${basePath}/images/sections/catalog/products/product-antiseptic.webp`,
-    },
+    images: productImage("product-paint-garden-trees.webp"),
     seo: {
       title: "Краска Народная для садовых деревьев купить оптом | Симбирские краски",
       description:
@@ -779,10 +751,7 @@ export const products: ProductItem[] = [
         { label: "Особенность", value: "Не содержит органических растворителей" },
       ],
     },
-    images: {
-      preview: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
-      detail: `${basePath}/images/sections/catalog/products/product-paint-white-facade.webp`,
-    },
+    images: productImage("product-paint-stoves-fireplaces.webp"),
     seo: {
       title: "Краска для печей и каминов Народная купить оптом | Симбирские краски",
       description:
@@ -828,10 +797,7 @@ export const products: ProductItem[] = [
         { label: "Особенность", value: "Декоративная отделка и защита" },
       ],
     },
-    images: {
-      preview: `${basePath}/images/sections/catalog/products/product-lacquer-gloss.webp`,
-      detail: `${basePath}/images/sections/catalog/products/product-lacquer-gloss.webp`,
-    },
+    images: productImage("product-varnish-universal-matte.webp"),
     seo: {
       title: "Универсальный матовый лак Эмальер купить оптом | Симбирские краски",
       description:
@@ -877,10 +843,7 @@ export const products: ProductItem[] = [
         { label: "Особенность", value: "Глянцевое декоративное покрытие" },
       ],
     },
-    images: {
-      preview: `${basePath}/images/sections/catalog/products/product-lacquer-gloss.webp`,
-      detail: `${basePath}/images/sections/catalog/products/product-lacquer-gloss.webp`,
-    },
+    images: productImage("product-varnish-universal-gloss.webp"),
     seo: {
       title: "Универсальный глянцевый лак Эмальер купить оптом | Симбирские краски",
       description:
@@ -925,10 +888,7 @@ export const products: ProductItem[] = [
         { label: "Особенность", value: "Водо- и грязеотталкивающее покрытие" },
       ],
     },
-    images: {
-      preview: `${basePath}/images/sections/catalog/products/product-lacquer-gloss.webp`,
-      detail: `${basePath}/images/sections/catalog/products/product-lacquer-gloss.webp`,
-    },
+    images: productImage("product-varnish-sauna-gloss.webp"),
     seo: {
       title: "Глянцевый лак для бань и саун Эмальер купить оптом | Симбирские краски",
       description:
@@ -939,6 +899,94 @@ export const products: ProductItem[] = [
       sortOrder: 140,
       updatedAt: "2026-03-20",
       tags: ["лак", "бани и сауны", "глянцевый", "эмальер"],
+    },
+  },
+  {
+    id: "ladya-solvent-white-spirit",
+    slug: "ladya-solvent-white-spirit",
+    categoryId: "solvents",
+    lineId: "ladya",
+    title: "Уайт-спирит",
+    subtitle: "растворитель",
+    description:
+      "Растворитель для разбавления лакокрасочных материалов, обезжиривания и очистки инструмента.",
+    packagings: [
+      createPackaging("0,5 л", 0.5, "l", 1),
+      createPackaging("1 л", 1, "l", 2),
+      createPackaging("5 л", 5, "l", 3),
+    ],
+    applicationAreas: ["разбавление лкм", "обезжиривание", "очистка инструмента"],
+    workTypes: ["внутренние работы", "наружные работы"],
+    materialTypes: ["металл", "дерево", "инструмент"],
+    characteristics: {
+      commercial: [
+        { label: "Категория", value: "Растворители" },
+        { label: "Линейка", value: "ЛАДЬЯ" },
+        { label: "Фасовки", value: "0,5 л / 1 л / 5 л" },
+      ],
+      technical: [
+        { label: "Тип", value: "Органический растворитель" },
+        { label: "Назначение", value: "Разбавление и обезжиривание" },
+      ],
+      scenario: [
+        { label: "Подходит для", value: "Подготовка поверхности и очистка инструмента" },
+      ],
+    },
+    images: productImage("product-solvent-white-spirit.webp"),
+    seo: {
+      title: "Уайт-спирит Ладья купить оптом | Симбирские краски",
+      description:
+        "Уайт-спирит Ладья для разбавления ЛКМ, обезжиривания и очистки инструмента.",
+    },
+    admin: {
+      isPublished: true,
+      sortOrder: 150,
+      updatedAt: "2026-03-20",
+      tags: ["ладья", "растворитель", "уайт-спирит"],
+    },
+  },
+  {
+    id: "ladya-solvent-646",
+    slug: "ladya-solvent-646",
+    categoryId: "solvents",
+    lineId: "ladya",
+    title: "Растворитель 646",
+    subtitle: "универсальный",
+    description:
+      "Универсальный растворитель для разбавления лакокрасочных материалов и очистки инструмента.",
+    packagings: [
+      createPackaging("0,5 л", 0.5, "l", 1),
+      createPackaging("1 л", 1, "l", 2),
+      createPackaging("5 л", 5, "l", 3),
+    ],
+    applicationAreas: ["разбавление лкм", "очистка инструмента"],
+    workTypes: ["внутренние работы", "наружные работы"],
+    materialTypes: ["металл", "инструмент"],
+    characteristics: {
+      commercial: [
+        { label: "Категория", value: "Растворители" },
+        { label: "Линейка", value: "ЛАДЬЯ" },
+        { label: "Фасовки", value: "0,5 л / 1 л / 5 л" },
+      ],
+      technical: [
+        { label: "Тип", value: "Растворитель 646" },
+        { label: "Назначение", value: "Разбавление и очистка" },
+      ],
+      scenario: [
+        { label: "Подходит для", value: "Разбавление эмалей, лаков и очистка инструмента" },
+      ],
+    },
+    images: productImage("product-solvent-646.webp"),
+    seo: {
+      title: "Растворитель 646 Ладья купить оптом | Симбирские краски",
+      description:
+        "Растворитель 646 Ладья для разбавления ЛКМ и очистки инструмента.",
+    },
+    admin: {
+      isPublished: true,
+      sortOrder: 160,
+      updatedAt: "2026-03-20",
+      tags: ["ладья", "растворитель 646", "растворитель"],
     },
   },
 ];
