@@ -12,45 +12,44 @@ import { memoryProductsRepository } from "@/lib/products/repository-memory";
 
 const repository = memoryProductsRepository;
 
-export async function getCatalogCategories() {
+export function getCatalogCategories() {
   return repository.getCategories();
 }
 
-export async function getCatalogLines() {
+export function getCatalogLines() {
   return repository.getLines();
 }
 
-export async function getCatalogAllProducts() {
+export function getCatalogAllProducts() {
   return repository.getAllProducts();
 }
 
-export async function getCatalogPublishedProducts() {
-  const items = await repository.getPublishedProducts();
-
+export function getCatalogPublishedProducts() {
+  const items = repository.getPublishedProducts();
   return [...items].sort((a, b) => a.admin.sortOrder - b.admin.sortOrder);
 }
 
-export async function getCatalogProductById(id: string) {
+export function getCatalogProductById(id: string) {
   return repository.getProductById(id);
 }
 
-export async function getCatalogProductBySlug(slug: string) {
+export function getCatalogProductBySlug(slug: string) {
   return repository.getProductBySlug(slug);
 }
 
-export async function getCatalogPublishedProductBySlug(slug: string) {
-  const items = await getCatalogPublishedProducts();
+export function getCatalogPublishedProductBySlug(slug: string) {
+  const items = getCatalogPublishedProducts();
   return items.find((item) => item.slug === slug) ?? null;
 }
 
-export async function getCatalogPublishedProductSlugs() {
-  const items = await getCatalogPublishedProducts();
+export function getCatalogPublishedProductSlugs() {
+  const items = getCatalogPublishedProducts();
   return items.map((item) => item.slug);
 }
 
-export async function getCatalogAllPackagings() {
+export function getCatalogAllPackagings() {
   const map = new Map<string, ProductPackaging>();
-  const items = await getCatalogPublishedProducts();
+  const items = getCatalogPublishedProducts();
 
   items.forEach((product) => {
     product.packagings.forEach((packaging) => {
@@ -73,31 +72,31 @@ export async function getCatalogAllPackagings() {
     .map((item) => item.label);
 }
 
-export async function getCatalogAllWorkTypes() {
-  const items = await getCatalogPublishedProducts();
+export function getCatalogAllWorkTypes() {
+  const items = getCatalogPublishedProducts();
 
   return Array.from(
     new Set(items.flatMap((product) => product.workTypes ?? [])),
   ).sort((a, b) => a.localeCompare(b, "ru"));
 }
 
-export async function getCatalogAllMaterialTypes() {
-  const items = await getCatalogPublishedProducts();
+export function getCatalogAllMaterialTypes() {
+  const items = getCatalogPublishedProducts();
 
   return Array.from(
     new Set(items.flatMap((product) => product.materialTypes ?? [])),
   ).sort((a, b) => a.localeCompare(b, "ru"));
 }
 
-export async function getCatalogAllApplicationAreas() {
-  const items = await getCatalogPublishedProducts();
+export function getCatalogAllApplicationAreas() {
+  const items = getCatalogPublishedProducts();
 
   return Array.from(
     new Set(items.flatMap((product) => product.applicationAreas ?? [])),
   ).sort((a, b) => a.localeCompare(b, "ru"));
 }
 
-export async function getCatalogFilteredProducts({
+export function getCatalogFilteredProducts({
   categoryIds,
   lineIds,
   packagings,
@@ -119,7 +118,7 @@ export async function getCatalogFilteredProducts({
   sort?: "default" | "name-asc" | "name-desc";
 }) {
   const normalizedSearch = search?.trim().toLowerCase() ?? "";
-  const items = await getCatalogPublishedProducts();
+  const items = getCatalogPublishedProducts();
 
   const filtered = items.filter((product) => {
     const matchesCategory =
@@ -205,14 +204,14 @@ export async function getCatalogFilteredProducts({
   }
 }
 
-export async function getCatalogRelatedProducts(
+export function getCatalogRelatedProducts(
   productId: string,
   options?: {
     limit?: number;
   },
 ) {
   const limit = options?.limit ?? 3;
-  const publicProducts = await getCatalogPublishedProducts();
+  const publicProducts = getCatalogPublishedProducts();
   const currentProduct = publicProducts.find((item) => item.id === productId);
 
   if (!currentProduct) return [];
