@@ -1,13 +1,4 @@
-import type {
-  ProductCategoryId,
-  ProductItem,
-  ProductLineId,
-  ProductPackaging,
-} from "@/lib/content/products";
-import {
-  getProductCategoryById,
-  getProductLineById,
-} from "@/lib/content/products";
+import type { ProductItem } from "@/lib/content/products";
 import { memoryProductsRepository } from "@/lib/products/repository-memory";
 
 const repository = memoryProductsRepository;
@@ -262,4 +253,12 @@ export function getCatalogProductPreviewImage(product: ProductItem) {
 
 export function getCatalogProductDetailImage(product: ProductItem) {
   return product.images?.detail ?? product.images?.preview;
+}
+
+export function createCatalogProduct(product: ProductItem) {
+  return memoryProductsRepository.createProduct(product);
+}
+
+export function updateCatalogProduct(id: string, product: ProductItem) {
+  return memoryProductsRepository.updateProduct(id, product);
 }
