@@ -7,26 +7,33 @@ import {
   useEffect,
   useCallback,
   useRef,
+  useId,
   type MouseEvent,
 } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { motion } from "motion/react";
 import {
-  ArrowLeft,
   ArrowRight,
+  Check,
+  ChevronDown,
   PackageSearch,
-  SlidersHorizontal,
   Sparkles,
   X,
 } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import {
+  getAllMaterialTypes,
   getAllPackagings,
+  getAllWorkTypes,
   getFilteredProducts,
   getProductCategoryById,
   getProductLineById,
   getProductPreviewImage,
+  productCategories,
+  productLines,
+  type ProductCategoryId,
+  type ProductLineId,
 } from "@/lib/content/products";
 import {
   buildSearchParamsFromFilterState,
@@ -34,9 +41,7 @@ import {
   parseFilterStateFromSearchParams,
   type ProductsSortValue,
 } from "@/lib/products-filters";
-import { ProductsFiltersPanel } from "@/components/catalog/products-filters-panel";
 import { ProductsSortDropdown } from "@/components/catalog/products-sort-dropdown";
-import { ProductsFiltersDrawer } from "@/components/catalog/products-filters-drawer";
 import { cn } from "@/lib/utils/cn";
 
 const sectionMotion = {
@@ -82,27 +87,73 @@ const productsPageContent = {
   eyebrow: "продукция",
   title: "Каталог продукции",
   description: [
-    "выберите категорию, фасовку и другие параметры,",
+    "выберите линейку, формат работ и материал обработки,",
     "чтобы быстро найти нужную позицию",
   ],
-  cta: "запросить КП",
 };
 
-const quickUseCases = [
-  "интерьер",
-  "стены",
-  "потолки",
-  "фасад",
-  "дерево",
-  "радиаторы",
-  "бани и сауны",
-  "osb",
-  "наружные работы",
-  "внутренние работы",
-  "минеральные основания",
-];
+const catalogQueryPresets = [
+  {
+    id: "facade-paint-14kg",
+    label: "фасадная краска для наружных работ 14 кг",
+    filters: {
+      categoryIds: ["paints"] as ProductCategoryId[],
+      lineIds: ["emalyer"] as ProductLineId[],
+      workTypes: ["наружные работы"],
+      materialTypes: ["фасады", "минеральные поверхности"],
+      packagings: ["14 кг"],
+    },
+  },
+  {
+    id: "walls-white",
+    label: "краска для стен и потолков белая",
+    filters: {
+      categoryIds: ["paints"] as ProductCategoryId[],
+      lineIds: ["emalyer"] as ProductLineId[],
+      workTypes: ["внутренние работы"],
+      materialTypes: ["стены", "потолки"],
+    },
+  },
+  {
+    id: "radiator-enamel",
+    label: "эмаль для радиаторов белоснежная",
+    filters: {
+      categoryIds: ["enamels"] as ProductCategoryId[],
+      lineIds: ["emalyer"] as ProductLineId[],
+      materialTypes: ["металл", "радиаторы"],
+    },
+  },
+  {
+    id: "osb-2in1",
+    label: "краска-грунт 2 в 1 по osb для наружных работ",
+    filters: {
+      categoryIds: ["special-paints"] as ProductCategoryId[],
+      lineIds: ["emalyer"] as ProductLineId[],
+      workTypes: ["наружные работы"],
+      materialTypes: ["osb"],
+    },
+  },
+  {
+    id: "sauna-varnish",
+    label: "матовый лак для бань и саун",
+    filters: {
+      categoryIds: ["varnishes"] as ProductCategoryId[],
+      lineIds: ["emalyer"] as ProductLineId[],
+      materialTypes: ["дерево"],
+    },
+  },
+  {
+    id: "wood-antiseptic",
+    label: "универсальный антисептик для древесины",
+    filters: {
+      categoryIds: ["protective"] as ProductCategoryId[],
+      lineIds: ["emalyer"] as ProductLineId[],
+      materialTypes: ["дерево"],
+    },
+  },
+] as const;
 
-function QuickUseCaseButton({
+function PresetQueryButton({
   label,
   active,
   onClick,
@@ -158,12 +209,9 @@ function ProductMarketplaceCard({
     const px = (event.clientX - rect.left) / rect.width;
     const py = (event.clientY - rect.top) / rect.height;
 
-    const rotateY = (px - 0.5) * 5;
-    const rotateX = (0.5 - py) * 5;
-
     setTilt({
-      rotateX,
-      rotateY,
+      rotateX: (0.5 - py) * 5,
+      rotateY: (px - 0.5) * 5,
       y: -4,
       scale: 1.007,
     });
@@ -211,18 +259,18 @@ function ProductMarketplaceCard({
           <Link
             href={href}
             className={cn(
-              "group block h-full rounded-[28px] bg-[var(--color-surface)] p-3 md:rounded-[32px]",
+              "group block h-full rounded-[28px] bg-[var(--color-surface)] p-3 md:rounded-[30px]",
               "transform-gpu transition-[box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
               "hover:shadow-[0_18px_42px_rgba(43,47,51,0.10)]",
-              "min-h-[430px]",
+              "min-h-[405px]",
             )}
           >
             <div className="flex h-full flex-col">
               <div
-                className="relative h-[348px] overflow-hidden rounded-[22px] bg-[var(--color-bg)] md:rounded-[24px]"
+                className="relative h-[308px] overflow-hidden rounded-[22px] bg-[var(--color-bg)] md:rounded-[24px]"
                 style={{ transform: "translateZ(28px)" }}
               >
-                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.0)_0%,rgba(255,255,255,0.05)_100%)]" />
+                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0)_0%,rgba(255,255,255,0.05)_100%)]" />
 
                 <motion.div
                   aria-hidden="true"
@@ -230,7 +278,7 @@ function ProductMarketplaceCard({
                   animate={{ opacity: glow.opacity }}
                   transition={{ duration: 0.3, ease: "easeOut" }}
                   style={{
-                    background: `radial-gradient(260px circle at ${glow.x}% ${glow.y}%, rgba(255,255,255,0.22), transparent 62%)`,
+                    background: `radial-gradient(240px circle at ${glow.x}% ${glow.y}%, rgba(255,255,255,0.22), transparent 62%)`,
                   }}
                 />
 
@@ -238,7 +286,7 @@ function ProductMarketplaceCard({
                   <img
                     src={image}
                     alt={title}
-                    className="h-full w-full scale-[1.3] object-contain p-2 transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.36]"
+                    className="h-full w-full scale-[1.24] object-contain p-2 transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.3]"
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center">
@@ -254,12 +302,12 @@ function ProductMarketplaceCard({
                 style={{ transform: "translateZ(22px)" }}
               >
                 <div className="min-w-0 flex-1 px-2">
-                  <div className="mb-[2px] text-[15px] leading-[1.02] tracking-[-0.02em] text-[var(--color-text-muted)] md:text-[13px] xl:text-[14px]">
+                  <div className="mb-[2px] text-[14px] leading-[1.02] tracking-[-0.02em] text-[var(--color-text-muted)]">
                     {subtitle || lineTitle}
                   </div>
 
                   <div
-                    className="truncate text-[16px] font-semibold leading-[0.96] tracking-[-0.04em] text-[var(--color-text)] md:text-[14px] xl:text-[15px]"
+                    className="truncate text-[15px] font-semibold leading-[0.96] tracking-[-0.04em] text-[var(--color-text)]"
                     title={title}
                   >
                     {title}
@@ -267,7 +315,7 @@ function ProductMarketplaceCard({
                 </div>
 
                 <div className="shrink-0 pr-0">
-                  <div className="flex h-10 w-[64px] items-center justify-center rounded-[24px] bg-[var(--color-bg)] text-[var(--color-accent-2)] transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[2px] group-hover:shadow-[0_8px_18px_rgba(43,47,51,0.06)] xl:h-10 xl:w-[72px]">
+                  <div className="flex h-10 w-[64px] items-center justify-center rounded-[24px] bg-[var(--color-bg)] text-[var(--color-accent-2)] transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[2px] group-hover:shadow-[0_8px_18px_rgba(43,47,51,0.06)]">
                     <ArrowRight size={20} strokeWidth={2.2} />
                   </div>
                 </div>
@@ -280,11 +328,125 @@ function ProductMarketplaceCard({
   );
 }
 
+function FilterPill({
+  label,
+  active,
+  count,
+  onClick,
+}: {
+  label: string;
+  active?: boolean;
+  count?: number;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "inline-flex h-11 items-center gap-2 rounded-[16px] px-4 text-[14px] font-medium transition duration-300",
+        active
+          ? "bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)]"
+          : "bg-[var(--color-bg)] text-[var(--color-text)] hover:-translate-y-[1px] hover:shadow-[0_6px_16px_rgba(43,47,51,0.05)]",
+      )}
+    >
+      <span>{label}</span>
+      {typeof count === "number" && count > 0 ? (
+        <span
+          className={cn(
+            "inline-flex min-w-[20px] items-center justify-center rounded-full px-1.5 text-[11px] font-semibold",
+            active
+              ? "bg-[var(--color-accent-1-foreground)]/18 text-[var(--color-accent-1-foreground)]"
+              : "bg-[var(--color-surface)] text-[var(--color-text-muted)]",
+          )}
+        >
+          {count}
+        </span>
+      ) : null}
+      <ChevronDown size={15} strokeWidth={2.2} />
+    </button>
+  );
+}
+
+function FilterDropdown({
+  title,
+  items,
+  selectedValues,
+  onToggle,
+  onClose,
+}: {
+  title: string;
+  items: Array<{ value: string; label: string }>;
+  selectedValues: string[];
+  onToggle: (value: string) => void;
+  onClose: () => void;
+}) {
+  return (
+    <div className="absolute left-0 top-[calc(100%+8px)] z-30 w-[280px] overflow-hidden rounded-[20px] bg-[var(--color-surface)] shadow-[0_18px_42px_rgba(43,47,51,0.12)]">
+      <div className="flex items-center justify-between border-b border-[var(--color-border)] px-4 py-4">
+        <div className="text-[14px] font-semibold text-[var(--color-text)]">
+          {title}
+        </div>
+
+        <button
+          type="button"
+          onClick={onClose}
+          className="inline-flex h-8 w-8 items-center justify-center rounded-[10px] bg-[var(--color-bg)] text-[var(--color-text-muted)]"
+        >
+          <X size={14} strokeWidth={2.2} />
+        </button>
+      </div>
+
+      <div className="max-h-[320px] overflow-y-auto p-2">
+        {items.map((item) => {
+          const isActive = selectedValues.includes(item.value);
+
+          return (
+            <button
+              key={item.value}
+              type="button"
+              onClick={() => onToggle(item.value)}
+              className={cn(
+                "flex w-full items-center justify-between rounded-[14px] px-4 py-3 text-left text-[14px] transition duration-200",
+                isActive
+                  ? "bg-[var(--color-accent-1)]/[0.10] text-[var(--color-text)]"
+                  : "text-[var(--color-text)] hover:bg-[var(--color-bg)]",
+              )}
+            >
+              <span>{item.label}</span>
+
+              <span
+                className={cn(
+                  "transition duration-200",
+                  isActive
+                    ? "text-[var(--color-accent-1)]"
+                    : "text-transparent",
+                )}
+              >
+                <Check size={15} strokeWidth={2.4} />
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+type OpenFilterKey =
+  | null
+  | "all"
+  | "line"
+  | "work"
+  | "material"
+  | "category";
+
 export function ProductsPage() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const quickUseCasesRef = useRef<HTMLDivElement | null>(null);
+  const presetsRef = useRef<HTMLDivElement | null>(null);
+  const filtersRootId = useId();
 
   const parsedState = useMemo(
     () => parseFilterStateFromSearchParams(searchParams),
@@ -296,6 +458,12 @@ export function ProductsPage() {
     parsedState.categoryIds,
   );
   const [selectedLines, setSelectedLines] = useState(parsedState.lineIds);
+  const [selectedWorkTypes, setSelectedWorkTypes] = useState(
+    parsedState.workTypes,
+  );
+  const [selectedMaterialTypes, setSelectedMaterialTypes] = useState(
+    parsedState.materialTypes,
+  );
   const [selectedPackagings, setSelectedPackagings] = useState(
     parsedState.packagings,
   );
@@ -303,24 +471,47 @@ export function ProductsPage() {
     parsedState.applicationAreas,
   );
   const [sort, setSort] = useState<ProductsSortValue>(parsedState.sort);
-  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+  const [openFilter, setOpenFilter] = useState<OpenFilterKey>(null);
 
   const allPackagings = useMemo(() => getAllPackagings(), []);
+  const allWorkTypes = useMemo(() => getAllWorkTypes(), []);
+  const allMaterialTypes = useMemo(() => getAllMaterialTypes(), []);
 
   useEffect(() => {
     setSearch(parsedState.search);
     setSelectedCategories(parsedState.categoryIds);
     setSelectedLines(parsedState.lineIds);
+    setSelectedWorkTypes(parsedState.workTypes);
+    setSelectedMaterialTypes(parsedState.materialTypes);
     setSelectedPackagings(parsedState.packagings);
     setSelectedApplicationAreas(parsedState.applicationAreas);
     setSort(parsedState.sort);
   }, [parsedState]);
+
+  useEffect(() => {
+    function handleOutside(event: MouseEvent | globalThis.MouseEvent) {
+      const target = event.target as HTMLElement | null;
+      if (!target) return;
+
+      const root = document.getElementById(filtersRootId);
+      if (!root) return;
+
+      if (!root.contains(target)) {
+        setOpenFilter(null);
+      }
+    }
+
+    window.addEventListener("mousedown", handleOutside);
+    return () => window.removeEventListener("mousedown", handleOutside);
+  }, [filtersRootId]);
 
   const updateUrlState = useCallback(
     (nextState: {
       search: string;
       categoryIds: typeof selectedCategories;
       lineIds: typeof selectedLines;
+      workTypes: typeof selectedWorkTypes;
+      materialTypes: typeof selectedMaterialTypes;
       packagings: typeof selectedPackagings;
       applicationAreas: typeof selectedApplicationAreas;
       sort: ProductsSortValue;
@@ -339,6 +530,8 @@ export function ProductsPage() {
       getFilteredProducts({
         categoryIds: selectedCategories,
         lineIds: selectedLines,
+        workTypes: selectedWorkTypes,
+        materialTypes: selectedMaterialTypes,
         packagings: selectedPackagings,
         applicationAreas: selectedApplicationAreas,
         search,
@@ -347,6 +540,8 @@ export function ProductsPage() {
     [
       selectedCategories,
       selectedLines,
+      selectedWorkTypes,
+      selectedMaterialTypes,
       selectedPackagings,
       selectedApplicationAreas,
       search,
@@ -354,16 +549,16 @@ export function ProductsPage() {
     ],
   );
 
-  function scrollQuickUseCases(direction: "left" | "right") {
-    if (!quickUseCasesRef.current) return;
+  function scrollPresets(direction: "left" | "right") {
+    if (!presetsRef.current) return;
 
-    quickUseCasesRef.current.scrollBy({
-      left: direction === "left" ? -240 : 240,
+    presetsRef.current.scrollBy({
+      left: direction === "left" ? -260 : 260,
       behavior: "smooth",
     });
   }
 
-  function toggleCategory(id: (typeof selectedCategories)[number]) {
+  function toggleCategory(id: ProductCategoryId) {
     const next = selectedCategories.includes(id)
       ? selectedCategories.filter((item) => item !== id)
       : [...selectedCategories, id];
@@ -373,13 +568,15 @@ export function ProductsPage() {
       search,
       categoryIds: next,
       lineIds: selectedLines,
+      workTypes: selectedWorkTypes,
+      materialTypes: selectedMaterialTypes,
       packagings: selectedPackagings,
       applicationAreas: selectedApplicationAreas,
       sort,
     });
   }
 
-  function toggleLine(id: (typeof selectedLines)[number]) {
+  function toggleLine(id: ProductLineId) {
     const next = selectedLines.includes(id)
       ? selectedLines.filter((item) => item !== id)
       : [...selectedLines, id];
@@ -389,6 +586,44 @@ export function ProductsPage() {
       search,
       categoryIds: selectedCategories,
       lineIds: next,
+      workTypes: selectedWorkTypes,
+      materialTypes: selectedMaterialTypes,
+      packagings: selectedPackagings,
+      applicationAreas: selectedApplicationAreas,
+      sort,
+    });
+  }
+
+  function toggleWorkType(value: string) {
+    const next = selectedWorkTypes.includes(value)
+      ? selectedWorkTypes.filter((item) => item !== value)
+      : [...selectedWorkTypes, value];
+
+    setSelectedWorkTypes(next);
+    updateUrlState({
+      search,
+      categoryIds: selectedCategories,
+      lineIds: selectedLines,
+      workTypes: next,
+      materialTypes: selectedMaterialTypes,
+      packagings: selectedPackagings,
+      applicationAreas: selectedApplicationAreas,
+      sort,
+    });
+  }
+
+  function toggleMaterialType(value: string) {
+    const next = selectedMaterialTypes.includes(value)
+      ? selectedMaterialTypes.filter((item) => item !== value)
+      : [...selectedMaterialTypes, value];
+
+    setSelectedMaterialTypes(next);
+    updateUrlState({
+      search,
+      categoryIds: selectedCategories,
+      lineIds: selectedLines,
+      workTypes: selectedWorkTypes,
+      materialTypes: next,
       packagings: selectedPackagings,
       applicationAreas: selectedApplicationAreas,
       sort,
@@ -405,6 +640,8 @@ export function ProductsPage() {
       search,
       categoryIds: selectedCategories,
       lineIds: selectedLines,
+      workTypes: selectedWorkTypes,
+      materialTypes: selectedMaterialTypes,
       packagings: next,
       applicationAreas: selectedApplicationAreas,
       sort,
@@ -421,6 +658,8 @@ export function ProductsPage() {
       search,
       categoryIds: selectedCategories,
       lineIds: selectedLines,
+      workTypes: selectedWorkTypes,
+      materialTypes: selectedMaterialTypes,
       packagings: selectedPackagings,
       applicationAreas: next,
       sort,
@@ -433,6 +672,8 @@ export function ProductsPage() {
       search: value,
       categoryIds: selectedCategories,
       lineIds: selectedLines,
+      workTypes: selectedWorkTypes,
+      materialTypes: selectedMaterialTypes,
       packagings: selectedPackagings,
       applicationAreas: selectedApplicationAreas,
       sort,
@@ -445,6 +686,8 @@ export function ProductsPage() {
       search,
       categoryIds: selectedCategories,
       lineIds: selectedLines,
+      workTypes: selectedWorkTypes,
+      materialTypes: selectedMaterialTypes,
       packagings: selectedPackagings,
       applicationAreas: selectedApplicationAreas,
       sort: value,
@@ -455,6 +698,8 @@ export function ProductsPage() {
     setSearch("");
     setSelectedCategories([]);
     setSelectedLines([]);
+    setSelectedWorkTypes([]);
+    setSelectedMaterialTypes([]);
     setSelectedPackagings([]);
     setSelectedApplicationAreas([]);
     setSort("default");
@@ -463,9 +708,34 @@ export function ProductsPage() {
       search: "",
       categoryIds: [],
       lineIds: [],
+      workTypes: [],
+      materialTypes: [],
       packagings: [],
       applicationAreas: [],
       sort: "default",
+    });
+  }
+
+  function applyPreset(preset: (typeof catalogQueryPresets)[number]) {
+    const nextSearch = preset.label;
+
+    setSearch(nextSearch);
+    setSelectedCategories([...(preset.filters.categoryIds ?? [])]);
+    setSelectedLines([...(preset.filters.lineIds ?? [])]);
+    setSelectedWorkTypes([...(preset.filters.workTypes ?? [])]);
+    setSelectedMaterialTypes([...(preset.filters.materialTypes ?? [])]);
+    setSelectedPackagings([...(preset.filters.packagings ?? [])]);
+    setSelectedApplicationAreas([]);
+
+    updateUrlState({
+      search: nextSearch,
+      categoryIds: [...(preset.filters.categoryIds ?? [])],
+      lineIds: [...(preset.filters.lineIds ?? [])],
+      workTypes: [...(preset.filters.workTypes ?? [])],
+      materialTypes: [...(preset.filters.materialTypes ?? [])],
+      packagings: [...(preset.filters.packagings ?? [])],
+      applicationAreas: [],
+      sort,
     });
   }
 
@@ -473,10 +743,16 @@ export function ProductsPage() {
     search,
     categoryIds: selectedCategories,
     lineIds: selectedLines,
+    workTypes: selectedWorkTypes,
+    materialTypes: selectedMaterialTypes,
     packagings: selectedPackagings,
     applicationAreas: selectedApplicationAreas,
     sort,
   });
+
+  const activePresetLabel = useMemo(() => {
+    return catalogQueryPresets.find((preset) => preset.label === search)?.label;
+  }, [search]);
 
   return (
     <div className="pt-[92px] pb-6 md:pt-[104px] md:pb-8 xl:pb-10">
@@ -500,27 +776,13 @@ export function ProductsPage() {
               <span className="block">{productsPageContent.description[0]}</span>
               <span className="block">{productsPageContent.description[1]}</span>
             </p>
-
-            <div className="mt-7">
-              <Link
-                href="/contacts"
-                className="inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-accent-1)] px-6 text-[15px] font-semibold text-[var(--color-accent-1-foreground)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
-              >
-                {productsPageContent.cta}
-              </Link>
-            </div>
           </motion.div>
         </Container>
       </Section>
 
       <Section className="pt-6 md:pt-8 xl:pt-10">
         <Container>
-          <motion.div
-            variants={sectionMotion}
-            initial="hidden"
-            animate="visible"
-            className="rounded-[28px] bg-[var(--color-surface)] p-4 md:p-5"
-          >
+          <motion.div variants={sectionMotion} initial="hidden" animate="visible">
             <div className="mb-3 flex items-center gap-2">
               <Sparkles
                 size={16}
@@ -535,24 +797,24 @@ export function ProductsPage() {
             <div className="grid grid-cols-[28px_minmax(0,1fr)_28px] items-center gap-2">
               <button
                 type="button"
-                onClick={() => scrollQuickUseCases("left")}
-                className="inline-flex h-9 w-7 items-center justify-center rounded-[12px] bg-[var(--color-bg)] text-[var(--color-text-muted)] transition duration-300 hover:text-[var(--color-text)]"
+                onClick={() => scrollPresets("left")}
+                className="inline-flex h-9 w-7 items-center justify-center rounded-[12px] bg-[var(--color-surface)] text-[var(--color-text-muted)] transition duration-300 hover:text-[var(--color-text)]"
                 aria-label="Прокрутить влево"
               >
                 <ArrowLeft size={14} strokeWidth={2.4} />
               </button>
 
               <div
-                ref={quickUseCasesRef}
+                ref={presetsRef}
                 className="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
               >
                 <div className="flex w-max gap-2">
-                  {quickUseCases.map((item) => (
-                    <QuickUseCaseButton
-                      key={item}
-                      label={item}
-                      active={selectedApplicationAreas.includes(item)}
-                      onClick={() => toggleApplicationArea(item)}
+                  {catalogQueryPresets.map((preset) => (
+                    <PresetQueryButton
+                      key={preset.id}
+                      label={preset.label}
+                      active={activePresetLabel === preset.label}
+                      onClick={() => applyPreset(preset)}
                     />
                   ))}
                 </div>
@@ -560,8 +822,8 @@ export function ProductsPage() {
 
               <button
                 type="button"
-                onClick={() => scrollQuickUseCases("right")}
-                className="inline-flex h-9 w-7 items-center justify-center rounded-[12px] bg-[var(--color-bg)] text-[var(--color-text-muted)] transition duration-300 hover:text-[var(--color-text)]"
+                onClick={() => scrollPresets("right")}
+                className="inline-flex h-9 w-7 items-center justify-center rounded-[12px] bg-[var(--color-surface)] text-[var(--color-text-muted)] transition duration-300 hover:text-[var(--color-text)]"
                 aria-label="Прокрутить вправо"
               >
                 <ArrowRight size={14} strokeWidth={2.4} />
@@ -573,39 +835,300 @@ export function ProductsPage() {
 
       <Section className="pt-8 md:pt-10 xl:pt-12">
         <Container>
-          <div className="grid gap-4 xl:grid-cols-[320px_minmax(0,1fr)] xl:items-start">
-            <motion.aside
+          <div className="space-y-4" id={filtersRootId}>
+            <motion.div
               variants={sectionMotion}
               initial="hidden"
               animate="visible"
-              className="hidden xl:sticky xl:top-[112px] xl:block"
+              className="rounded-[28px] bg-[var(--color-surface)] p-4 md:p-5"
             >
-              <ProductsFiltersPanel
-                search={search}
-                onSearchChange={handleSearchChange}
-                selectedCategories={selectedCategories}
-                onToggleCategory={toggleCategory}
-                selectedLines={selectedLines}
-                onToggleLine={toggleLine}
-                selectedPackagings={selectedPackagings}
-                onTogglePackaging={togglePackaging}
-                allPackagings={allPackagings}
-                onReset={resetFilters}
-                hasActiveFilters={hasActiveFilters}
-              />
-            </motion.aside>
+              <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+                <div className="flex flex-wrap gap-2">
+                  <div className="relative">
+                    <FilterPill
+                      label="все фильтры"
+                      active={openFilter === "all" || hasActiveFilters}
+                      count={
+                        selectedLines.length +
+                        selectedWorkTypes.length +
+                        selectedMaterialTypes.length +
+                        selectedCategories.length +
+                        selectedPackagings.length
+                      }
+                      onClick={() =>
+                        setOpenFilter((prev) => (prev === "all" ? null : "all"))
+                      }
+                    />
 
-            <div className="space-y-4">
-              <motion.div
-                variants={sectionMotion}
-                initial="hidden"
-                animate="visible"
-                className="rounded-[28px] bg-[var(--color-surface)] p-4 md:p-5"
-              >
-                <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-                  <div className="pt-[2px]">
+                    {openFilter === "all" ? (
+                      <div className="absolute left-0 top-[calc(100%+8px)] z-30 w-[340px] overflow-hidden rounded-[20px] bg-[var(--color-surface)] shadow-[0_18px_42px_rgba(43,47,51,0.12)]">
+                        <div className="border-b border-[var(--color-border)] px-4 py-4">
+                          <div className="text-[14px] font-semibold text-[var(--color-text)]">
+                            все фильтры
+                          </div>
+                        </div>
+
+                        <div className="max-h-[420px] overflow-y-auto p-4 space-y-5">
+                          <div>
+                            <div className="mb-2 text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
+                              поиск
+                            </div>
+                            <input
+                              value={search}
+                              onChange={(event) =>
+                                handleSearchChange(event.target.value)
+                              }
+                              type="text"
+                              placeholder="поиск по каталогу"
+                              className="h-11 w-full rounded-[16px] bg-[var(--color-bg)] px-4 text-[14px] text-[var(--color-text)] outline-none transition duration-300 placeholder:text-[var(--color-text-muted)]"
+                            />
+                          </div>
+
+                          <div>
+                            <div className="mb-2 text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
+                              линейка
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                              {productLines.map((line) => (
+                                <button
+                                  key={line.id}
+                                  type="button"
+                                  onClick={() => toggleLine(line.id)}
+                                  className={cn(
+                                    "inline-flex h-10 items-center rounded-[14px] px-4 text-[13px] font-medium transition duration-300",
+                                    selectedLines.includes(line.id)
+                                      ? "bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)]"
+                                      : "bg-[var(--color-bg)] text-[var(--color-text)]",
+                                  )}
+                                >
+                                  {line.shortTitle}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div>
+                            <div className="mb-2 text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
+                              вид работ
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                              {allWorkTypes.map((item) => (
+                                <button
+                                  key={item}
+                                  type="button"
+                                  onClick={() => toggleWorkType(item)}
+                                  className={cn(
+                                    "inline-flex h-10 items-center rounded-[14px] px-4 text-[13px] font-medium transition duration-300",
+                                    selectedWorkTypes.includes(item)
+                                      ? "bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)]"
+                                      : "bg-[var(--color-bg)] text-[var(--color-text)]",
+                                  )}
+                                >
+                                  {item}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div>
+                            <div className="mb-2 text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
+                              материал обработки
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                              {allMaterialTypes.map((item) => (
+                                <button
+                                  key={item}
+                                  type="button"
+                                  onClick={() => toggleMaterialType(item)}
+                                  className={cn(
+                                    "inline-flex h-10 items-center rounded-[14px] px-4 text-[13px] font-medium transition duration-300",
+                                    selectedMaterialTypes.includes(item)
+                                      ? "bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)]"
+                                      : "bg-[var(--color-bg)] text-[var(--color-text)]",
+                                  )}
+                                >
+                                  {item}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div>
+                            <div className="mb-2 text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
+                              категория
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                              {productCategories.map((item) => (
+                                <button
+                                  key={item.id}
+                                  type="button"
+                                  onClick={() => toggleCategory(item.id)}
+                                  className={cn(
+                                    "inline-flex h-10 items-center rounded-[14px] px-4 text-[13px] font-medium transition duration-300",
+                                    selectedCategories.includes(item.id)
+                                      ? "bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)]"
+                                      : "bg-[var(--color-bg)] text-[var(--color-text)]",
+                                  )}
+                                >
+                                  {item.shortTitle}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div>
+                            <div className="mb-2 text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)]">
+                              фасовка
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                              {allPackagings.map((item) => (
+                                <button
+                                  key={item}
+                                  type="button"
+                                  onClick={() => togglePackaging(item)}
+                                  className={cn(
+                                    "inline-flex h-10 items-center rounded-[14px] px-4 text-[13px] font-medium transition duration-300",
+                                    selectedPackagings.includes(item)
+                                      ? "bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)]"
+                                      : "bg-[var(--color-bg)] text-[var(--color-text)]",
+                                  )}
+                                >
+                                  {item}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3 border-t border-[var(--color-border)] p-4">
+                          <button
+                            type="button"
+                            onClick={resetFilters}
+                            className="inline-flex h-11 items-center justify-center rounded-[16px] bg-[var(--color-bg)] px-4 text-[14px] font-semibold text-[var(--color-text)]"
+                          >
+                            сбросить
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setOpenFilter(null)}
+                            className="inline-flex h-11 items-center justify-center rounded-[16px] bg-[var(--color-accent-1)] px-4 text-[14px] font-semibold text-[var(--color-accent-1-foreground)]"
+                          >
+                            показать
+                          </button>
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
+
+                  <div className="relative">
+                    <FilterPill
+                      label="линейка"
+                      active={openFilter === "line" || selectedLines.length > 0}
+                      count={selectedLines.length}
+                      onClick={() =>
+                        setOpenFilter((prev) => (prev === "line" ? null : "line"))
+                      }
+                    />
+                    {openFilter === "line" ? (
+                      <FilterDropdown
+                        title="линейка"
+                        items={productLines.map((item) => ({
+                          value: item.id,
+                          label: item.shortTitle,
+                        }))}
+                        selectedValues={selectedLines}
+                        onToggle={(value) => toggleLine(value as ProductLineId)}
+                        onClose={() => setOpenFilter(null)}
+                      />
+                    ) : null}
+                  </div>
+
+                  <div className="relative">
+                    <FilterPill
+                      label="вид работ"
+                      active={openFilter === "work" || selectedWorkTypes.length > 0}
+                      count={selectedWorkTypes.length}
+                      onClick={() =>
+                        setOpenFilter((prev) => (prev === "work" ? null : "work"))
+                      }
+                    />
+                    {openFilter === "work" ? (
+                      <FilterDropdown
+                        title="вид работ"
+                        items={allWorkTypes.map((item) => ({
+                          value: item,
+                          label: item,
+                        }))}
+                        selectedValues={selectedWorkTypes}
+                        onToggle={toggleWorkType}
+                        onClose={() => setOpenFilter(null)}
+                      />
+                    ) : null}
+                  </div>
+
+                  <div className="relative">
+                    <FilterPill
+                      label="материал обработки"
+                      active={
+                        openFilter === "material" ||
+                        selectedMaterialTypes.length > 0
+                      }
+                      count={selectedMaterialTypes.length}
+                      onClick={() =>
+                        setOpenFilter((prev) =>
+                          prev === "material" ? null : "material",
+                        )
+                      }
+                    />
+                    {openFilter === "material" ? (
+                      <FilterDropdown
+                        title="материал обработки"
+                        items={allMaterialTypes.map((item) => ({
+                          value: item,
+                          label: item,
+                        }))}
+                        selectedValues={selectedMaterialTypes}
+                        onToggle={toggleMaterialType}
+                        onClose={() => setOpenFilter(null)}
+                      />
+                    ) : null}
+                  </div>
+
+                  <div className="relative">
+                    <FilterPill
+                      label="категория"
+                      active={
+                        openFilter === "category" ||
+                        selectedCategories.length > 0
+                      }
+                      count={selectedCategories.length}
+                      onClick={() =>
+                        setOpenFilter((prev) =>
+                          prev === "category" ? null : "category",
+                        )
+                      }
+                    />
+                    {openFilter === "category" ? (
+                      <FilterDropdown
+                        title="категория"
+                        items={productCategories.map((item) => ({
+                          value: item.id,
+                          label: item.title,
+                        }))}
+                        selectedValues={selectedCategories}
+                        onToggle={(value) =>
+                          toggleCategory(value as ProductCategoryId)
+                        }
+                        onClose={() => setOpenFilter(null)}
+                      />
+                    ) : null}
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 xl:items-center">
+                  <div className="pt-[2px] text-right">
                     <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                      найдено позиций
+                      найдено товаров
                     </div>
                     <div className="mt-2 text-[26px] font-semibold tracking-[-0.04em] text-[var(--color-text)]">
                       {filteredProducts.length}
@@ -613,35 +1136,42 @@ export function ProductsPage() {
                   </div>
 
                   <div className="hidden md:block">
-                    <ProductsSortDropdown
-                      value={sort}
-                      onChange={handleSortChange}
-                    />
+                    <ProductsSortDropdown value={sort} onChange={handleSortChange} />
                   </div>
                 </div>
+              </div>
 
-                <div className="mt-4 flex items-center gap-3 md:hidden">
-                  <button
-                    type="button"
-                    onClick={() => setIsMobileFiltersOpen(true)}
-                    className="inline-flex h-11 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[14px] font-semibold text-[var(--color-text)]"
-                  >
-                    <SlidersHorizontal size={16} strokeWidth={2.2} />
-                    <span>фильтры</span>
-                  </button>
-
-                  <ProductsSortDropdown
-                    value={sort}
-                    onChange={handleSortChange}
-                  />
-                </div>
-
+              {(hasActiveFilters || search.trim().length > 0) && (
                 <div className="mt-4 flex flex-wrap gap-2">
-                  {selectedApplicationAreas.map((item) => (
+                  {selectedLines.map((id) => (
+                    <button
+                      key={id}
+                      type="button"
+                      onClick={() => toggleLine(id)}
+                      className="inline-flex h-10 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
+                    >
+                      <span>{getProductLineById(id)?.shortTitle ?? id}</span>
+                      <X size={14} strokeWidth={2.2} />
+                    </button>
+                  ))}
+
+                  {selectedWorkTypes.map((item) => (
                     <button
                       key={item}
                       type="button"
-                      onClick={() => toggleApplicationArea(item)}
+                      onClick={() => toggleWorkType(item)}
+                      className="inline-flex h-10 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
+                    >
+                      <span>{item}</span>
+                      <X size={14} strokeWidth={2.2} />
+                    </button>
+                  ))}
+
+                  {selectedMaterialTypes.map((item) => (
+                    <button
+                      key={item}
+                      type="button"
+                      onClick={() => toggleMaterialType(item)}
                       className="inline-flex h-10 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
                     >
                       <span>{item}</span>
@@ -661,18 +1191,6 @@ export function ProductsPage() {
                     </button>
                   ))}
 
-                  {selectedLines.map((id) => (
-                    <button
-                      key={id}
-                      type="button"
-                      onClick={() => toggleLine(id)}
-                      className="inline-flex h-10 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
-                    >
-                      <span>{getProductLineById(id)?.title ?? id}</span>
-                      <X size={14} strokeWidth={2.2} />
-                    </button>
-                  ))}
-
                   {selectedPackagings.map((item) => (
                     <button
                       key={item}
@@ -684,85 +1202,83 @@ export function ProductsPage() {
                       <X size={14} strokeWidth={2.2} />
                     </button>
                   ))}
+
+                  {selectedApplicationAreas.map((item) => (
+                    <button
+                      key={item}
+                      type="button"
+                      onClick={() => toggleApplicationArea(item)}
+                      className="inline-flex h-10 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
+                    >
+                      <span>{item}</span>
+                      <X size={14} strokeWidth={2.2} />
+                    </button>
+                  ))}
+
+                  {search.trim().length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => handleSearchChange("")}
+                      className="inline-flex h-10 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
+                    >
+                      <span>{search}</span>
+                      <X size={14} strokeWidth={2.2} />
+                    </button>
+                  )}
+                </div>
+              )}
+            </motion.div>
+
+            {filteredProducts.length === 0 ? (
+              <motion.div
+                variants={sectionMotion}
+                initial="hidden"
+                animate="visible"
+                className="rounded-[28px] bg-[var(--color-surface)] p-6 md:p-8"
+              >
+                <div className="max-w-[720px]">
+                  <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
+                    ничего не найдено
+                  </div>
+                  <h2 className="mt-4 font-heading text-[28px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[36px]">
+                    Попробуйте изменить параметры подбора
+                  </h2>
+                  <p className="mt-4 text-[15px] leading-[1.46] text-[var(--color-text-muted)]">
+                    Снимите часть фильтров или выберите другой пресет-запрос.
+                  </p>
+                  <div className="mt-6 flex flex-wrap gap-3">
+                    <button
+                      type="button"
+                      onClick={resetFilters}
+                      className="inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-bg)] px-6 text-[15px] font-semibold text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
+                    >
+                      сбросить фильтры
+                    </button>
+                  </div>
                 </div>
               </motion.div>
-
-              {filteredProducts.length === 0 ? (
-                <motion.div
-                  variants={sectionMotion}
-                  initial="hidden"
-                  animate="visible"
-                  className="rounded-[28px] bg-[var(--color-surface)] p-6 md:p-8"
-                >
-                  <div className="max-w-[720px]">
-                    <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                      ничего не найдено
-                    </div>
-                    <h2 className="mt-4 font-heading text-[28px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[36px]">
-                      Попробуйте изменить параметры фильтрации
-                    </h2>
-                    <p className="mt-4 text-[15px] leading-[1.46] text-[var(--color-text-muted)]">
-                      Снимите часть фильтров или отправьте запрос, если нужен
-                      подбор продукции под конкретную задачу.
-                    </p>
-                    <div className="mt-6 flex flex-wrap gap-3">
-                      <button
-                        type="button"
-                        onClick={resetFilters}
-                        className="inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-bg)] px-6 text-[15px] font-semibold text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
-                      >
-                        сбросить фильтры
-                      </button>
-                      <Link
-                        href="/contacts"
-                        className="inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-accent-1)] px-6 text-[15px] font-semibold text-[var(--color-accent-1-foreground)] transition duration-300 hover:-translate-y-[1px]"
-                      >
-                        запросить КП
-                      </Link>
-                    </div>
-                  </div>
-                </motion.div>
-              ) : (
-                <motion.div
-                  variants={gridVariants}
-                  initial="hidden"
-                  animate="visible"
-                  className="grid gap-4 md:grid-cols-2 xl:grid-cols-3"
-                >
-                  {filteredProducts.map((product) => (
-                    <ProductMarketplaceCard
-                      key={product.id}
-                      href={`/products/${product.slug}`}
-                      title={product.title}
-                      subtitle={product.subtitle}
-                      lineTitle={getProductLineById(product.lineId)?.title ?? ""}
-                      image={getProductPreviewImage(product)}
-                    />
-                  ))}
-                </motion.div>
-              )}
-            </div>
+            ) : (
+              <motion.div
+                variants={gridVariants}
+                initial="hidden"
+                animate="visible"
+                className="grid gap-4 md:grid-cols-2 xl:grid-cols-4"
+              >
+                {filteredProducts.map((product) => (
+                  <ProductMarketplaceCard
+                    key={product.id}
+                    href={`/products/${product.slug}`}
+                    title={product.title}
+                    subtitle={product.subtitle}
+                    lineTitle={getProductLineById(product.lineId)?.shortTitle ?? ""}
+                    image={getProductPreviewImage(product)}
+                  />
+                ))}
+              </motion.div>
+            )}
           </div>
         </Container>
       </Section>
-
-      <ProductsFiltersDrawer
-        isOpen={isMobileFiltersOpen}
-        onClose={() => setIsMobileFiltersOpen(false)}
-        resultCount={filteredProducts.length}
-        search={search}
-        onSearchChange={handleSearchChange}
-        selectedCategories={selectedCategories}
-        onToggleCategory={toggleCategory}
-        selectedLines={selectedLines}
-        onToggleLine={toggleLine}
-        selectedPackagings={selectedPackagings}
-        onTogglePackaging={togglePackaging}
-        allPackagings={allPackagings}
-        onReset={resetFilters}
-        hasActiveFilters={hasActiveFilters}
-      />
     </div>
   );
 }
-
