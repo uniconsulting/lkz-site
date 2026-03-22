@@ -279,15 +279,15 @@ function ProductMarketplaceCard({
           <Link
             href={href}
             className={cn(
-              "group block h-full rounded-[28px] bg-[var(--color-surface)] p-3 md:rounded-[30px]",
+              "group block h-full rounded-[28px] bg-[var(--color-surface)] p-3 md:rounded-[32px]",
               "transform-gpu transition-[box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
               "hover:shadow-[0_18px_42px_rgba(43,47,51,0.10)]",
-              "min-h-[405px]",
+              "min-h-[498px]",
             )}
           >
             <div className="flex h-full flex-col">
               <div
-                className="relative h-[308px] overflow-hidden rounded-[22px] bg-[var(--color-bg)] md:rounded-[24px]"
+                className="relative h-[398px] overflow-hidden rounded-[22px] bg-[var(--color-bg)] md:rounded-[24px]"
                 style={{ transform: "translateZ(28px)" }}
               >
                 <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0)_0%,rgba(255,255,255,0.05)_100%)]" />
@@ -298,7 +298,7 @@ function ProductMarketplaceCard({
                   animate={{ opacity: glow.opacity }}
                   transition={{ duration: 0.3, ease: "easeOut" }}
                   style={{
-                    background: `radial-gradient(240px circle at ${glow.x}% ${glow.y}%, rgba(255,255,255,0.22), transparent 62%)`,
+                    background: `radial-gradient(280px circle at ${glow.x}% ${glow.y}%, rgba(255,255,255,0.22), transparent 62%)`,
                   }}
                 />
 
@@ -306,7 +306,7 @@ function ProductMarketplaceCard({
                   <img
                     src={image}
                     alt={title}
-                    className="h-full w-full scale-[1.24] object-contain p-2 transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.3]"
+                    className="h-full w-full scale-[1.42] object-contain p-2 transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.5]"
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center">
@@ -318,11 +318,11 @@ function ProductMarketplaceCard({
               </div>
 
               <div
-                className="flex min-h-[48px] items-end justify-between gap-3 px-0 pb-0 pt-4"
+                className="flex min-h-[56px] items-end justify-between gap-3 px-0 pb-0 pt-4"
                 style={{ transform: "translateZ(22px)" }}
               >
                 <div className="min-w-0 flex-1 px-2">
-                  <div className="mb-[2px] text-[14px] leading-[1.02] tracking-[-0.02em] text-[var(--color-text-muted)]">
+                  <div className="mb-[3px] text-[14px] leading-[1.02] tracking-[-0.02em] text-[var(--color-text-muted)]">
                     {subtitle || lineTitle}
                   </div>
 
