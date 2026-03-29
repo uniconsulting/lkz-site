@@ -31,8 +31,6 @@ type PreviewItem = {
   icon: LucideIcon;
 };
 
-const basePath = process.env.NODE_ENV === "production" ? "/lkz-site" : "";
-
 const catalogPreviewItems: PreviewItem[] = [
   {
     id: "vd-paint",
@@ -40,7 +38,7 @@ const catalogPreviewItems: PreviewItem[] = [
     title: "ВД краска",
     description:
       "Интерьерные и фасадные решения для ровного, стойкого покрытия",
-    image: `${basePath}/images/sections/catalog/preview/catalog-preview-vd-paint.webp`,
+    image: "/images/sections/catalog/preview/catalog-preview-vd-paint.webp",
     href: "#products",
     size: "large",
     cta: "Открыть каталог",
@@ -51,7 +49,7 @@ const catalogPreviewItems: PreviewItem[] = [
     label: "Защитные покрытия",
     title: "Эмали",
     description: "Для металла, фасадов и износостойких поверхностей",
-    image: `${basePath}/images/sections/catalog/preview/catalog-preview-enamels.webp`,
+    image: "/images/sections/catalog/preview/catalog-preview-enamels.webp",
     href: "#products",
     size: "wide",
     icon: Shield,
@@ -60,7 +58,7 @@ const catalogPreviewItems: PreviewItem[] = [
     id: "varnishes",
     label: "Финишные покрытия",
     title: "Лаки",
-    image: `${basePath}/images/sections/catalog/preview/catalog-preview-varnishes.webp`,
+    image: "/images/sections/catalog/preview/catalog-preview-varnishes.webp",
     href: "#products",
     size: "small",
     icon: Sparkles,
@@ -69,7 +67,7 @@ const catalogPreviewItems: PreviewItem[] = [
     id: "primer",
     label: "Подготовка основания",
     title: "Грунт укрывной",
-    image: `${basePath}/images/sections/catalog/preview/catalog-preview-primer.webp`,
+    image: "/images/sections/catalog/preview/catalog-preview-primer.webp",
     href: "#products",
     size: "small",
     icon: Layers,
@@ -78,7 +76,7 @@ const catalogPreviewItems: PreviewItem[] = [
     id: "liquid-glass",
     label: "Минеральная защита",
     title: "Жидкое стекло",
-    image: `${basePath}/images/sections/catalog/preview/catalog-preview-liquid-glass.webp`,
+    image: "/images/sections/catalog/preview/catalog-preview-liquid-glass.webp",
     href: "#products",
     size: "small",
     icon: FlaskConical,
@@ -87,7 +85,7 @@ const catalogPreviewItems: PreviewItem[] = [
     id: "antiseptics",
     label: "Защита древесины",
     title: "Антисептики",
-    image: `${basePath}/images/sections/catalog/preview/catalog-preview-antiseptics.webp`,
+    image: "/images/sections/catalog/preview/catalog-preview-antiseptics.webp",
     href: "#products",
     size: "small",
     icon: Leaf,

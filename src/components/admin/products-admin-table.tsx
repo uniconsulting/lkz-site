@@ -6,8 +6,8 @@ import {
   getProductCategoryById,
   getProductLineById,
 } from "@/lib/content/products";
+import { deleteProductAction } from "@/app/admin/products/actions";
 
-const basePath = process.env.NODE_ENV === "production" ? "/lkz-site" : "";
 
 export function ProductsAdminTable({
   products,
@@ -87,12 +87,29 @@ export function ProductsAdminTable({
                   </td>
 
                   <td className="px-5 py-4 align-top text-right">
-                    <Link
-                      href={`${basePath}/admin/products/${product.id}`}
-                      className="inline-flex h-10 items-center justify-center rounded-[14px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
-                    >
-                      редактировать
-                    </Link>
+                    <div className="flex items-center justify-end gap-2">
+                      <Link
+                        href={`/admin/products/${product.id}`}
+                        className="inline-flex h-10 items-center justify-center rounded-[14px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
+                      >
+                        редактировать
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          if (
+                            !confirm(
+                              `Удалить товар «${product.title}»? Это действие необратимо.`,
+                            )
+                          )
+                            return;
+                          await deleteProductAction(product.id);
+                        }}
+                        className="inline-flex h-10 items-center justify-center rounded-[14px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-red-500 transition duration-300 hover:-translate-y-[1px]"
+                      >
+                        удалить
+                      </button>
+                    </div>
                   </td>
                 </tr>
               );

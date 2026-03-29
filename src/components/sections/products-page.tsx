@@ -30,12 +30,10 @@ import {
   type ProductCategoryId,
   type ProductLineId,
 } from "@/lib/content/products";
+import type { ProductItem } from "@/lib/content/products";
 import {
-  getCatalogAllMaterialTypes,
-  getCatalogAllPackagings,
-  getCatalogAllWorkTypes,
+  filterProducts,
   getCatalogCategories,
-  getCatalogFilteredProducts,
   getCatalogLines,
   getCatalogProductPreviewImage,
 } from "@/lib/products/service";
@@ -46,10 +44,8 @@ import {
 } from "@/lib/products-filters";
 import { cn } from "@/lib/utils/cn";
 
-const basePath = process.env.NODE_ENV === "production" ? "/lkz-site" : "";
-
-const catalogHeroBannerLight = `${basePath}/images/sections/products/hero/catalog-hero-banner-light.webp`;
-const catalogHeroBannerDark = `${basePath}/images/sections/products/hero/catalog-hero-banner-dark.webp`;
+const catalogHeroBannerLight = "/images/sections/products/hero/catalog-hero-banner-light.webp";
+const catalogHeroBannerDark = "/images/sections/products/hero/catalog-hero-banner-dark.webp";
 
 const sectionMotion = {
   hidden: { opacity: 0, y: 32 },
@@ -456,7 +452,17 @@ function FilterDropdown({
 
 type OpenFilterKey = null | "line" | "work" | "material" | "category";
 
-export function ProductsPage() {
+export function ProductsPage({
+  initialProducts,
+  allPackagings,
+  allWorkTypes,
+  allMaterialTypes,
+}: {
+  initialProducts: ProductItem[];
+  allPackagings: string[];
+  allWorkTypes: string[];
+  allMaterialTypes: string[];
+}) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -491,9 +497,6 @@ export function ProductsPage() {
 
   const productCategories = useMemo(() => getCatalogCategories(), []);
   const productLines = useMemo(() => getCatalogLines(), []);
-  const allPackagings = useMemo(() => getCatalogAllPackagings(), []);
-  const allWorkTypes = useMemo(() => getCatalogAllWorkTypes(), []);
-  const allMaterialTypes = useMemo(() => getCatalogAllMaterialTypes(), []);
 
   useEffect(() => {
     setSearch(parsedState.search);
@@ -586,7 +589,7 @@ export function ProductsPage() {
 
   const filteredProducts = useMemo(
     () =>
-      getCatalogFilteredProducts({
+      filterProducts(initialProducts, {
         categoryIds: selectedCategories,
         lineIds: selectedLines,
         workTypes: selectedWorkTypes,
@@ -597,6 +600,7 @@ export function ProductsPage() {
         sort: "default",
       }),
     [
+      initialProducts,
       selectedCategories,
       selectedLines,
       selectedWorkTypes,

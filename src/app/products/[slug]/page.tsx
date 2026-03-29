@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { ProductDetailPage } from "@/components/sections/product-detail-page";
 import {
   getCatalogPublishedProductBySlug,
-  getCatalogPublishedProductSlugs,
+  getCatalogRelatedProducts,
 } from "@/lib/products/service";
 
 type PageProps = {
@@ -12,17 +12,12 @@ type PageProps = {
   }>;
 };
 
-export function generateStaticParams() {
-  return getCatalogPublishedProductSlugs().map((slug) => ({
-    slug,
-  }));
-}
 
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const product = getCatalogPublishedProductBySlug(slug);
+  const product = await getCatalogPublishedProductBySlug(slug);
 
   if (!product) {
     return {
@@ -41,11 +36,15 @@ export async function generateMetadata({
 
 export default async function Page({ params }: PageProps) {
   const { slug } = await params;
-  const product = getCatalogPublishedProductBySlug(slug);
+  const product = await getCatalogPublishedProductBySlug(slug);
 
   if (!product) {
     notFound();
   }
 
-  return <ProductDetailPage product={product} />;
+  const relatedProducts = await getCatalogRelatedProducts(product.id, {
+    limit: 3,
+  });
+
+  return <ProductDetailPage product={product} relatedProducts={relatedProducts} />;
 }

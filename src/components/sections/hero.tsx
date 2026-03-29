@@ -20,20 +20,17 @@ import { Section } from "@/components/ui/section";
 import { heroSlides, type HeroSlide } from "@/lib/content/hero";
 import { cn } from "@/lib/utils/cn";
 
-const basePath = process.env.NODE_ENV === "production" ? "/lkz-site" : "";
-
 const heroBanners = [
   {
     id: "private-label",
-    src: `${basePath}/images/sections/hero/banners/hero-banner-private-label.webp`,
+    src: "/images/sections/hero/banners/hero-banner-private-label.webp",
     alt: "Private Label",
   },
   {
     id: "logistics",
-    src: `${basePath}/images/sections/hero/banners/hero-banner-logistics.webp`,
+    src: "/images/sections/hero/banners/hero-banner-logistics.webp",
     alt: "Логистика",
   },
-  
 ] as const;
 
 const indicatorMajorPositions = [0, 5, 10];

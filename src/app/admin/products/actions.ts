@@ -9,6 +9,7 @@ import type {
 } from "@/lib/content/products";
 import {
   createCatalogProduct,
+  deleteCatalogProduct,
   getCatalogProductById,
   updateCatalogProduct,
 } from "@/lib/products/service";
@@ -129,7 +130,9 @@ function buildProductFromPayload(
       isPublished: payload.isPublished,
       sortOrder: Number(payload.sortOrder) || 100,
       updatedAt: new Date().toISOString().slice(0, 10),
-      tags: Array.from(new Set([...(existing?.admin.tags ?? []), ...documentTags])),
+      tags: Array.from(
+        new Set([...(existing?.admin.tags ?? []), ...documentTags]),
+      ),
     },
     isArchived: existing?.isArchived ?? false,
     workTypes: existing?.workTypes ?? [],
@@ -139,7 +142,7 @@ function buildProductFromPayload(
 
 export async function createProductAction(payload: ProductFormPayload) {
   const product = buildProductFromPayload(payload);
-  createCatalogProduct(product);
+  await createCatalogProduct(product);
 
   revalidatePath("/admin/products");
   revalidatePath("/products");
@@ -149,17 +152,24 @@ export async function updateProductAction(
   id: string,
   payload: ProductFormPayload,
 ) {
-  const existing = getCatalogProductById(id);
+  const existing = await getCatalogProductById(id);
 
   if (!existing) {
     throw new Error("Product not found");
   }
 
   const updated = buildProductFromPayload(payload, existing);
-  updateCatalogProduct(id, updated);
+  await updateCatalogProduct(id, updated);
 
   revalidatePath("/admin/products");
   revalidatePath(`/admin/products/${id}`);
   revalidatePath("/products");
   revalidatePath(`/products/${updated.slug}`);
+}
+
+export async function deleteProductAction(id: string) {
+  await deleteCatalogProduct(id);
+
+  revalidatePath("/admin/products");
+  revalidatePath("/products");
 }

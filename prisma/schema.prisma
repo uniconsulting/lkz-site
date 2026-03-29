@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  slug        String   @unique
+  categoryId  String
+  lineId      String
+  title       String
+  subtitle    String?
+  description String
+  isPublished Boolean  @default(false)
+  isArchived  Boolean  @default(false)
+  sortOrder   Int      @default(100)
+  updatedAt   String
+  tags        String[] @default([])
+
+  packagings       Json @default("[]")
+  applicationAreas Json @default("[]")
+  workTypes        Json @default("[]")
+  materialTypes    Json @default("[]")
+  characteristics  Json @default("{}")
+  images           Json @default("{}")
+  seo              Json @default("{}")
+}

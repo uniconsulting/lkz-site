@@ -4,8 +4,6 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { LayoutGrid, Package, Plus } from "lucide-react";
 
-const basePath = process.env.NODE_ENV === "production" ? "/lkz-site" : "";
-
 export function AdminShell({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
@@ -14,7 +12,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
           <aside className="xl:sticky xl:top-[120px]">
             <div className="rounded-[30px] bg-[var(--color-surface)] p-4 md:p-5">
               <Link
-                href={`${basePath}/admin/products`}
+                href="/admin/products"
                 className="flex items-center gap-3 rounded-[20px] bg-[var(--color-bg)] p-3 transition duration-300 hover:-translate-y-[1px]"
               >
                 <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-[var(--color-surface)]">
@@ -33,7 +31,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
 
               <div className="mt-5 space-y-2">
                 <Link
-                  href={`${basePath}/admin/products`}
+                  href={"/admin/products"}
                   className="inline-flex w-full items-center gap-3 rounded-[16px] bg-[var(--color-bg)] px-4 py-3 text-[14px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
                 >
                   <LayoutGrid size={16} strokeWidth={2.1} />
@@ -41,7 +39,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
                 </Link>
 
                 <Link
-                  href={`${basePath}/admin/products/new`}
+                  href={"/admin/products/new"}
                   className="inline-flex w-full items-center gap-3 rounded-[16px] px-4 py-3 text-[14px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:bg-[var(--color-bg)]"
                 >
                   <Plus size={16} strokeWidth={2.1} />

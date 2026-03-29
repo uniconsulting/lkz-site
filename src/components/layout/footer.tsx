@@ -4,8 +4,6 @@ import { Phone, Mail, MapPin, Clock3 } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { cn } from "@/lib/utils/cn";
 
-const basePath = process.env.NODE_ENV === "production" ? "/lkz-site" : "";
-
 const companyLinks = [
   { label: "О компании", href: "#about" },
   { label: "Новости", href: "#news" },
@@ -133,13 +131,13 @@ export function Footer() {
               className="inline-flex w-fit items-start"
             >
               <img
-                src={`${basePath}/images/common/logo-dark.svg`}
+                src={"/images/common/logo-dark.svg"}
                 alt="Логотип"
                 className="footer-logo-on-dark block h-auto w-auto max-h-[136px] max-w-[270px] object-contain"
               />
 
               <img
-                src={`${basePath}/images/common/logo.svg`}
+                src={"/images/common/logo.svg"}
                 alt="Логотип"
                 className="footer-logo-on-light hidden h-auto w-auto max-h-[136px] max-w-[270px] object-contain"
               />
@@ -210,13 +208,13 @@ export function Footer() {
           >
             <span className="flex h-[14px] w-[21px] shrink-0 items-center justify-center opacity-70">
 <img
-  src={`${basePath}/images/common/logo-uni.svg`}
+  src={"/images/common/logo-uni.svg"}
   alt="ЮНИ.ai"
   className="footer-uni-logo-on-light h-full w-full object-contain"
 />
 
 <img
-  src={`${basePath}/images/common/logo-uni-dark.svg`}
+  src={"/images/common/logo-uni-dark.svg"}
   alt="ЮНИ.ai"
   className="footer-uni-logo-on-dark h-full w-full object-contain"
 />

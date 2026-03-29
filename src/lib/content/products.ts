@@ -1,5 +1,3 @@
-const basePath = process.env.NODE_ENV === "production" ? "/lkz-site" : "";
-
 export type ProductCategoryId =
   | "paints"
   | "special-paints"
@@ -96,7 +94,7 @@ function createPackaging(
 }
 
 function productImage(fileName: string): ProductImageSet {
-  const path = `${basePath}/images/sections/catalog/products/${fileName}`;
+  const path = `/images/sections/catalog/products/${fileName}`;
   return {
     preview: path,
     detail: path,

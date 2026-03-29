@@ -17,10 +17,7 @@ import {
   getProductCategoryById,
   getProductLineById,
 } from "@/lib/content/products";
-import {
-  getCatalogProductDetailImage,
-  getCatalogRelatedProducts,
-} from "@/lib/products/service";
+import { getCatalogProductDetailImage } from "@/lib/products/service";
 import { RelatedProductsGrid } from "@/components/catalog/related-products-grid";
 
 const sectionMotion = {
@@ -140,10 +137,15 @@ function ApplicationScenarioCard({ value }: { value: string }) {
   );
 }
 
-export function ProductDetailPage({ product }: { product: ProductItem }) {
+export function ProductDetailPage({
+  product,
+  relatedProducts,
+}: {
+  product: ProductItem;
+  relatedProducts: ProductItem[];
+}) {
   const category = getProductCategoryById(product.categoryId);
   const line = getProductLineById(product.lineId);
-  const relatedProducts = getCatalogRelatedProducts(product.id, { limit: 3 });
   const contactHref = `/contacts?product=${encodeURIComponent(product.slug)}`;
   const applicationAreas = product.applicationAreas ?? [];
   const detailImage = getCatalogProductDetailImage(product);

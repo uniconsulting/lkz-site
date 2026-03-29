@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import type {
   ProductCategory,
   ProductCategoryId,
@@ -9,6 +10,7 @@ import type {
   ProductLineId,
   ProductPackagingUnit,
 } from "@/lib/content/products";
+import type { ProductFormPayload } from "@/app/admin/products/actions";
 import { AdminDropdown } from "@/components/admin/admin-dropdown";
 import { AdminFilePlaceholder } from "@/components/admin/admin-file-placeholder";
 import { AdminFormSection } from "@/components/admin/admin-form-section";
@@ -100,11 +102,13 @@ export function ProductFormV2({
   categories,
   lines,
   initialProduct,
+  onSubmit,
 }: {
   mode: "create" | "edit";
   categories: ProductCategory[];
   lines: ProductLine[];
   initialProduct?: ProductItem;
+  onSubmit: (payload: ProductFormPayload) => Promise<void>;
 }) {
   const [title, setTitle] = useState(initialProduct?.title ?? "");
   const [subtitle, setSubtitle] = useState(initialProduct?.subtitle ?? "");
@@ -125,8 +129,14 @@ export function ProductFormV2({
     initialProduct?.admin.isPublished ?? true,
   );
 
-  const [previewImageFile, setPreviewImageFile] = useState<File | null>(null);
-  const [detailImageFile, setDetailImageFile] = useState<File | null>(null);
+  const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(
+    initialProduct?.images?.preview ?? null,
+  );
+  const [detailImageUrl, setDetailImageUrl] = useState<string | null>(
+    initialProduct?.images?.detail ?? null,
+  );
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const [applicationAreas, setApplicationAreas] = useState<string[]>(
     buildInitialApplicationAreas(initialProduct),
@@ -177,6 +187,31 @@ export function ProductFormV2({
         description.trim(),
     );
   }, [title, slug, categoryId, lineId, description]);
+
+  function handleSubmit() {
+    const payload: ProductFormPayload = {
+      id: initialProduct?.id,
+      title,
+      subtitle,
+      slug,
+      categoryId,
+      lineId,
+      description,
+      sortOrder,
+      isPublished,
+      applicationAreas,
+      packagings,
+      documents,
+      commercialCharacteristics,
+      technicalCharacteristics,
+      previewImageUrl: previewImageUrl ?? undefined,
+      detailImageUrl: detailImageUrl ?? undefined,
+    };
+
+    startTransition(async () => {
+      await onSubmit(payload);
+    });
+  }
 
   function updateApplicationArea(index: number, value: string) {
     setApplicationAreas((prev) =>
@@ -345,21 +380,20 @@ export function ProductFormV2({
             title="Preview image"
             description={"изображение для карточки\nтовара в каталоге"}
             initialImageUrl={initialProduct?.images?.preview}
-            onFileChange={setPreviewImageFile}
+            onUploadComplete={setPreviewImageUrl}
           />
 
           <AdminImageUploadField
             title="Detail image"
             description={"основное изображение для\nрасширенной страницы товара"}
             initialImageUrl={initialProduct?.images?.detail}
-            onFileChange={setDetailImageFile}
+            onUploadComplete={setDetailImageUrl}
           />
         </div>
 
-        {(previewImageFile || detailImageFile) ? (
+        {(previewImageUrl || detailImageUrl) ? (
           <div className="mt-4 text-[12px] text-[var(--color-text-muted)]">
-            Выбранные изображения пока используются локально для preview. На
-            следующем шаге подключим реальное сохранение.
+            Изображения загружены и будут сохранены при создании/обновлении товара.
           </div>
         ) : null}
       </AdminFormSection>
@@ -622,15 +656,22 @@ export function ProductFormV2({
       <div className="flex flex-wrap gap-3">
         <button
           type="button"
-          disabled={!isValid}
+          disabled={!isValid || isPending}
+          onClick={handleSubmit}
           className="inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-accent-1)] px-6 text-[14px] font-semibold text-[var(--color-accent-1-foreground)] transition duration-300 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {mode === "create" ? "создать товар" : "сохранить изменения"}
+          {isPending
+            ? "сохранение..."
+            : mode === "create"
+              ? "создать товар"
+              : "сохранить изменения"}
         </button>
 
         <button
           type="button"
-          className="inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-surface)] px-6 text-[14px] font-semibold text-[var(--color-text)] transition duration-300"
+          disabled={isPending}
+          onClick={() => router.back()}
+          className="inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-surface)] px-6 text-[14px] font-semibold text-[var(--color-text)] transition duration-300 disabled:opacity-50"
         >
           отмена
         </button>

@@ -18,14 +18,12 @@ type CatalogProductCardItem = {
   imageClassName?: string;
 };
 
-const basePath = process.env.NODE_ENV === "production" ? "/lkz-site" : "";
-
 const catalogProductCards: CatalogProductCardItem[] = [
   {
     id: "matte-enamel-base-a",
     subtitle: "фасадная",
     title: "Краска белоснежная",
-    image: `${basePath}/images/sections/catalog/products/1.webp`,
+    image: "/images/sections/catalog/products/1.webp",
     href: "#products",
     titleClassName: "text-[16px] md:text-[14px] xl:text-[15px]",
   },
@@ -33,7 +31,7 @@ const catalogProductCards: CatalogProductCardItem[] = [
     id: "facade-white-paint",
     subtitle: "для печей и каминов",
     title: "Краска белоснежная",
-    image: `${basePath}/images/sections/catalog/products/2.webp`,
+    image: "/images/sections/catalog/products/2.webp",
     href: "#products",
     titleClassName: "text-[16px] md:text-[14px] xl:text-[15px]",
   },
@@ -41,7 +39,7 @@ const catalogProductCards: CatalogProductCardItem[] = [
     id: "water-based-gloss-lacquer",
     subtitle: "универсальный",
     title: "Лак матовый",
-    image: `${basePath}/images/sections/catalog/products/3.webp`,
+    image: "/images/sections/catalog/products/3.webp",
     href: "#products",
     titleClassName: "text-[16px] md:text-[14px] xl:text-[15px]",
   },
@@ -49,7 +47,7 @@ const catalogProductCards: CatalogProductCardItem[] = [
     id: "wood-paint",
     subtitle: "универсальная",
     title: "Эмаль матовая",
-    image: `${basePath}/images/sections/catalog/products/4.webp`,
+    image: "/images/sections/catalog/products/4.webp",
     href: "#products",
     titleClassName: "text-[16px] md:text-[14px] xl:text-[15px]",
   },
@@ -57,7 +55,7 @@ const catalogProductCards: CatalogProductCardItem[] = [
     id: "sodium-liquid-glass",
     subtitle: "универсальный",
     title: "Лак глянцевый",
-    image: `${basePath}/images/sections/catalog/products/5.webp`,
+    image: "/images/sections/catalog/products/5.webp",
     href: "#products",
     titleClassName: "text-[16px] md:text-[14px] xl:text-[15px]",
   },
@@ -65,7 +63,7 @@ const catalogProductCards: CatalogProductCardItem[] = [
     id: "universal-antiseptic",
     subtitle: "интерьерная",
     title: "Краска белоснежная",
-    image: `${basePath}/images/sections/catalog/products/6.webp`,
+    image: "/images/sections/catalog/products/6.webp",
     href: "#products",
     titleClassName: "text-[16px] md:text-[14px] xl:text-[15px]",
   },
@@ -73,7 +71,7 @@ const catalogProductCards: CatalogProductCardItem[] = [
     id: "deep-penetration-primer",
     subtitle: "натриевое",
     title: "Жидкое стекло",
-    image: `${basePath}/images/sections/catalog/products/7.webp`,
+    image: "/images/sections/catalog/products/7.webp",
     href: "#products",
     titleClassName: "text-[16px] md:text-[14px] xl:text-[15px]",
   },
@@ -81,7 +79,7 @@ const catalogProductCards: CatalogProductCardItem[] = [
     id: "pva-glue",
     subtitle: "для бань и саун",
     title: "Лак глянцевый",
-    image: `${basePath}/images/sections/catalog/products/8.webp`,
+    image: "/images/sections/catalog/products/8.webp",
     href: "#products",
     titleClassName: "text-[16px] md:text-[14px] xl:text-[15px]",
   },

@@ -11,8 +11,6 @@ import { headerNav } from "@/lib/constants/navigation";
 import { cn } from "@/lib/utils/cn";
 import { ThemeToggle } from "./theme-toggle";
 
-const basePath = process.env.NODE_ENV === "production" ? "/lkz-site" : "";
-
 function HeaderActionButton({
   href,
   label,
@@ -270,12 +268,12 @@ export function Header() {
                     onClick={closeMenu}
                   >
                     <img
-                      src={`${basePath}/images/common/logo.svg`}
+                      src={"/images/common/logo.svg"}
                       alt="Логотип"
                       className="logo-light block h-[34px] w-auto object-contain md:relative md:-top-[2px] md:h-[36px]"
                     />
                     <img
-                      src={`${basePath}/images/common/logo-dark.svg`}
+                      src={"/images/common/logo-dark.svg"}
                       alt="Логотип"
                       className="logo-dark hidden h-[34px] w-auto object-contain md:relative md:-top-[2px] md:h-[36px]"
                     />
@@ -320,12 +318,12 @@ export function Header() {
                     )}
                   >
                     <img
-                      src={`${basePath}/images/common/logo.svg`}
+                      src={"/images/common/logo.svg"}
                       alt="Логотип"
                       className="logo-light relative -top-[2px] block h-auto max-h-[36px] w-auto max-w-[148px] object-contain"
                     />
                     <img
-                      src={`${basePath}/images/common/logo-dark.svg`}
+                      src={"/images/common/logo-dark.svg"}
                       alt="Логотип"
                       className="logo-dark relative -top-[2px] hidden h-auto max-h-[36px] w-auto max-w-[148px] object-contain"
                     />
@@ -426,12 +424,12 @@ export function Header() {
               onClick={closeMenu}
             >
               <img
-                src={`${basePath}/images/common/logo.svg`}
+                src={"/images/common/logo.svg"}
                 alt="Логотип"
                 className="logo-light block h-[34px] w-auto object-contain md:relative md:-top-[2px] md:h-[36px]"
               />
               <img
-                src={`${basePath}/images/common/logo-dark.svg`}
+                src={"/images/common/logo-dark.svg"}
                 alt="Логотип"
                 className="logo-dark hidden h-[34px] w-auto object-contain md:relative md:-top-[2px] md:h-[36px]"
               />

@@ -1,29 +1,31 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Image as ImageIcon, Trash2, Upload } from "lucide-react";
+import { Image as ImageIcon, Loader2, Trash2, Upload } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 
 type AdminImageUploadFieldProps = {
   title: string;
   description?: string;
   initialImageUrl?: string;
-  onFileChange?: (file: File | null) => void;
+  onUploadComplete?: (url: string | null) => void;
 };
 
 export function AdminImageUploadField({
   title,
   description,
   initialImageUrl,
-  onFileChange,
+  onUploadComplete,
 }: AdminImageUploadFieldProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [objectUrl, setObjectUrl] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
 
   const previewUrl = useMemo(() => {
-    return objectUrl ?? initialImageUrl ?? null;
-  }, [initialImageUrl, objectUrl]);
+    return objectUrl ?? uploadedUrl ?? initialImageUrl ?? null;
+  }, [objectUrl, uploadedUrl, initialImageUrl]);
 
   useEffect(() => {
     if (!file) {
@@ -43,15 +45,37 @@ export function AdminImageUploadField({
     inputRef.current?.click();
   }
 
-  function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+  async function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     const nextFile = event.target.files?.[0] ?? null;
     setFile(nextFile);
-    onFileChange?.(nextFile);
+
+    if (!nextFile) {
+      setUploadedUrl(null);
+      onUploadComplete?.(null);
+      return;
+    }
+
+    setIsUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", nextFile);
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      const data = await res.json();
+      const url = data.url ?? null;
+      setUploadedUrl(url);
+      onUploadComplete?.(url);
+    } catch {
+      setUploadedUrl(null);
+      onUploadComplete?.(null);
+    } finally {
+      setIsUploading(false);
+    }
   }
 
   function handleRemove() {
     setFile(null);
-    onFileChange?.(null);
+    setUploadedUrl(null);
+    onUploadComplete?.(null);
 
     if (inputRef.current) {
       inputRef.current.value = "";
@@ -95,13 +119,18 @@ export function AdminImageUploadField({
           <button
             type="button"
             onClick={handleOpenFileDialog}
-            className="inline-flex h-10 items-center justify-center gap-2 rounded-[14px] bg-[var(--color-surface)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
+            disabled={isUploading}
+            className="inline-flex h-10 items-center justify-center gap-2 rounded-[14px] bg-[var(--color-surface)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            <Upload size={14} strokeWidth={2.2} />
-            <span>{previewUrl ? "заменить" : "выбрать файл"}</span>
+            {isUploading ? (
+              <Loader2 size={14} strokeWidth={2.2} className="animate-spin" />
+            ) : (
+              <Upload size={14} strokeWidth={2.2} />
+            )}
+            <span>{isUploading ? "загрузка..." : previewUrl ? "заменить" : "выбрать файл"}</span>
           </button>
 
-          {previewUrl ? (
+          {previewUrl && !isUploading ? (
             <button
               type="button"
               onClick={handleRemove}
@@ -141,14 +170,14 @@ export function AdminImageUploadField({
             </div>
 
             <div className="mt-2 max-w-[320px] text-[13px] leading-[1.5] text-[var(--color-text-muted)]">
-              Поддерживаются PNG, JPG, WEBP, AVIF. После выбора здесь появится
-              локальный preview.
+              Поддерживаются PNG, JPG, WEBP, AVIF. Файл загружается
+              автоматически после выбора.
             </div>
           </div>
         )}
       </div>
 
-      {file ? (
+      {file && !isUploading ? (
         <div className="mt-3 text-[12px] text-[var(--color-text-muted)]">
           {file.name}
         </div>

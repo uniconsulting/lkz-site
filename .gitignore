@@ -20,6 +20,10 @@ pnpm-debug.log*
 
 # env
 .env*
+!.env.example
+
+# uploads
+/public/uploads/
 
 # typescript
 *.tsbuildinfo

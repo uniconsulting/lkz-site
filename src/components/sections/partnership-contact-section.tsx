@@ -20,8 +20,6 @@ import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { cn } from "@/lib/utils/cn";
 
-const basePath = process.env.NODE_ENV === "production" ? "/lkz-site" : "";
-
 const YANDEX_MAP_EMBED_URL =
   "https://yandex.ru/map-widget/v1/?um=constructor%3Ab9ba62ca6079292583614d568f069fd31e16362261dcb68461cc2aa7f829bdc7&source=constructor";
 
@@ -58,7 +56,7 @@ const partnershipContent = {
         text: "инфраструктура для стабильных B2B-поставок",
       },
     ],
-    image: `${basePath}/images/sections/partnership/partnership-hero.webp`,
+    image: "/images/sections/partnership/partnership-hero.webp",
   },
 
   formCard: {

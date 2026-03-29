@@ -1,3 +1,5 @@
+import { unlink } from "node:fs/promises";
+import { join } from "node:path";
 import type {
   ProductCategoryId,
   ProductItem,
@@ -8,9 +10,9 @@ import {
   getProductCategoryById,
   getProductLineById,
 } from "@/lib/content/products";
-import { memoryProductsRepository } from "@/lib/products/repository-memory";
+import { prismaProductsRepository } from "@/lib/products/repository-prisma";
 
-const repository = memoryProductsRepository;
+const repository = prismaProductsRepository;
 
 export function getCatalogCategories() {
   return repository.getCategories();
@@ -20,36 +22,36 @@ export function getCatalogLines() {
   return repository.getLines();
 }
 
-export function getCatalogAllProducts() {
+export async function getCatalogAllProducts() {
   return repository.getAllProducts();
 }
 
-export function getCatalogPublishedProducts() {
-  const items = repository.getPublishedProducts();
+export async function getCatalogPublishedProducts() {
+  const items = await repository.getPublishedProducts();
   return [...items].sort((a, b) => a.admin.sortOrder - b.admin.sortOrder);
 }
 
-export function getCatalogProductById(id: string) {
+export async function getCatalogProductById(id: string) {
   return repository.getProductById(id);
 }
 
-export function getCatalogProductBySlug(slug: string) {
+export async function getCatalogProductBySlug(slug: string) {
   return repository.getProductBySlug(slug);
 }
 
-export function getCatalogPublishedProductBySlug(slug: string) {
-  const items = getCatalogPublishedProducts();
+export async function getCatalogPublishedProductBySlug(slug: string) {
+  const items = await getCatalogPublishedProducts();
   return items.find((item) => item.slug === slug) ?? null;
 }
 
-export function getCatalogPublishedProductSlugs() {
-  const items = getCatalogPublishedProducts();
+export async function getCatalogPublishedProductSlugs() {
+  const items = await getCatalogPublishedProducts();
   return items.map((item) => item.slug);
 }
 
-export function getCatalogAllPackagings() {
+export async function getCatalogAllPackagings() {
   const map = new Map<string, ProductPackaging>();
-  const items = getCatalogPublishedProducts();
+  const items = await getCatalogPublishedProducts();
 
   items.forEach((product) => {
     product.packagings.forEach((packaging) => {
@@ -72,53 +74,55 @@ export function getCatalogAllPackagings() {
     .map((item) => item.label);
 }
 
-export function getCatalogAllWorkTypes() {
-  const items = getCatalogPublishedProducts();
+export async function getCatalogAllWorkTypes() {
+  const items = await getCatalogPublishedProducts();
 
   return Array.from(
     new Set(items.flatMap((product) => product.workTypes ?? [])),
   ).sort((a, b) => a.localeCompare(b, "ru"));
 }
 
-export function getCatalogAllMaterialTypes() {
-  const items = getCatalogPublishedProducts();
+export async function getCatalogAllMaterialTypes() {
+  const items = await getCatalogPublishedProducts();
 
   return Array.from(
     new Set(items.flatMap((product) => product.materialTypes ?? [])),
   ).sort((a, b) => a.localeCompare(b, "ru"));
 }
 
-export function getCatalogAllApplicationAreas() {
-  const items = getCatalogPublishedProducts();
+export async function getCatalogAllApplicationAreas() {
+  const items = await getCatalogPublishedProducts();
 
   return Array.from(
     new Set(items.flatMap((product) => product.applicationAreas ?? [])),
   ).sort((a, b) => a.localeCompare(b, "ru"));
 }
 
-export function getCatalogFilteredProducts({
-  categoryIds,
-  lineIds,
-  packagings,
-  applicationAreas,
-  workTypes,
-  materialTypes,
-  includeArchived,
-  search,
-  sort = "default",
-}: {
-  categoryIds?: ProductCategoryId[];
-  lineIds?: ProductLineId[];
-  packagings?: string[];
-  applicationAreas?: string[];
-  workTypes?: string[];
-  materialTypes?: string[];
-  includeArchived?: boolean;
-  search?: string;
-  sort?: "default" | "name-asc" | "name-desc";
-}) {
+export function filterProducts(
+  items: ProductItem[],
+  {
+    categoryIds,
+    lineIds,
+    packagings,
+    applicationAreas,
+    workTypes,
+    materialTypes,
+    includeArchived,
+    search,
+    sort = "default",
+  }: {
+    categoryIds?: ProductCategoryId[];
+    lineIds?: ProductLineId[];
+    packagings?: string[];
+    applicationAreas?: string[];
+    workTypes?: string[];
+    materialTypes?: string[];
+    includeArchived?: boolean;
+    search?: string;
+    sort?: "default" | "name-asc" | "name-desc";
+  },
+): ProductItem[] {
   const normalizedSearch = search?.trim().toLowerCase() ?? "";
-  const items = getCatalogPublishedProducts();
 
   const filtered = items.filter((product) => {
     const matchesCategory =
@@ -204,14 +208,21 @@ export function getCatalogFilteredProducts({
   }
 }
 
-export function getCatalogRelatedProducts(
+export async function getCatalogFilteredProducts(
+  filters: Parameters<typeof filterProducts>[1],
+) {
+  const items = await getCatalogPublishedProducts();
+  return filterProducts(items, filters);
+}
+
+export async function getCatalogRelatedProducts(
   productId: string,
   options?: {
     limit?: number;
   },
 ) {
   const limit = options?.limit ?? 3;
-  const publicProducts = getCatalogPublishedProducts();
+  const publicProducts = await getCatalogPublishedProducts();
   const currentProduct = publicProducts.find((item) => item.id === productId);
 
   if (!currentProduct) return [];
@@ -264,10 +275,37 @@ export function getCatalogProductDetailImage(product: ProductItem) {
   return product.images?.detail ?? product.images?.preview;
 }
 
-export function createCatalogProduct(product: ProductItem) {
-  return memoryProductsRepository.createProduct(product);
+export async function createCatalogProduct(product: ProductItem) {
+  return repository.createProduct(product);
 }
 
-export function updateCatalogProduct(id: string, product: ProductItem) {
-  return memoryProductsRepository.updateProduct(id, product);
+export async function updateCatalogProduct(id: string, product: ProductItem) {
+  return repository.updateProduct(id, product);
+}
+
+export async function deleteCatalogProduct(id: string): Promise<boolean> {
+  const product = await repository.getProductById(id);
+
+  if (product) {
+    const uploadsDir =
+      process.env.UPLOADS_DIR ?? join(process.cwd(), "public", "uploads");
+    const urlPrefix = process.env.UPLOADS_URL_PREFIX ?? "/uploads";
+
+    async function tryDeleteFile(url?: string) {
+      if (!url || !url.startsWith(urlPrefix)) return;
+      const filename = url.slice(urlPrefix.length).replace(/^\//, "");
+      try {
+        await unlink(join(uploadsDir, filename));
+      } catch {
+        // файл уже удалён или не существует
+      }
+    }
+
+    await tryDeleteFile(product.images?.preview);
+    if (product.images?.detail !== product.images?.preview) {
+      await tryDeleteFile(product.images?.detail);
+    }
+  }
+
+  return repository.deleteProduct(id);
 }
