@@ -3,10 +3,9 @@ module.exports = {
     {
       name: "lkz-site",
 
-      // Запускаем через pnpm start
-      script: "pnpm",
+      // Запускаем через Next.js напрямую
+      script: "node_modules/next/dist/bin/next",
       args: "start",
-      interpreter: "none",
 
       // 2 воркера — если один упал, второй продолжает отвечать
       instances: 2,
