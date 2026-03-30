@@ -12,10 +12,7 @@ import {
 
 let productsStore: ProductItem[] = [...initialProducts];
 
-export const memoryProductsRepository: ProductsRepository & {
-  createProduct(product: ProductItem): ProductItem;
-  updateProduct(id: string, updates: ProductItem): ProductItem | null;
-} = {
+export const memoryProductsRepository: ProductsRepository = {
   getCategories(): ProductCategory[] {
     return productCategories;
   },
@@ -24,30 +21,30 @@ export const memoryProductsRepository: ProductsRepository & {
     return productLines;
   },
 
-  getAllProducts(): ProductItem[] {
+  async getAllProducts(): Promise<ProductItem[]> {
     return [...productsStore];
   },
 
-  getPublishedProducts(): ProductItem[] {
+  async getPublishedProducts(): Promise<ProductItem[]> {
     return productsStore
       .filter((product) => product.admin.isPublished)
       .sort((a, b) => a.admin.sortOrder - b.admin.sortOrder);
   },
 
-  getProductById(id: string): ProductItem | null {
+  async getProductById(id: string): Promise<ProductItem | null> {
     return productsStore.find((item) => item.id === id) ?? null;
   },
 
-  getProductBySlug(slug: string): ProductItem | null {
+  async getProductBySlug(slug: string): Promise<ProductItem | null> {
     return productsStore.find((item) => item.slug === slug) ?? null;
   },
 
-  createProduct(product: ProductItem): ProductItem {
+  async createProduct(product: ProductItem): Promise<ProductItem> {
     productsStore = [...productsStore, product];
     return product;
   },
 
-  updateProduct(id: string, updates: ProductItem): ProductItem | null {
+  async updateProduct(id: string, updates: ProductItem): Promise<ProductItem | null> {
     let updated: ProductItem | null = null;
 
     productsStore = productsStore.map((item) => {
@@ -57,5 +54,11 @@ export const memoryProductsRepository: ProductsRepository & {
     });
 
     return updated;
+  },
+
+  async deleteProduct(id: string): Promise<boolean> {
+    const before = productsStore.length;
+    productsStore = productsStore.filter((item) => item.id !== id);
+    return productsStore.length < before;
   },
 };
