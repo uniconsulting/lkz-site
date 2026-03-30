@@ -405,7 +405,7 @@ function FilterDropdown({
       )}
     >
       <div className="catalog-control-divider flex items-center justify-between border-b px-4 py-4">
-        <div className="text-[14px] font-semibold text-white">{title}</div>
+        <div className="text-[14px] font-semibold text-[var(--color-text)]">{title}</div>
 
         <button
           type="button"
@@ -1026,7 +1026,7 @@ export function ProductsPage({
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <div className="text-[14px] font-medium text-white">
+                    <div className="text-[14px] font-medium text-[var(--color-text)]">
                       найдено товаров
                     </div>
 
@@ -1197,7 +1197,7 @@ export function ProductsPage({
             >
               <div className="catalog-control-divider flex items-center justify-between border-b px-5 py-5">
                 <div>
-                  <div className="text-[15px] font-semibold text-white">
+                  <div className="text-[15px] font-semibold text-[var(--color-text)]">
                     все фильтры
                   </div>
                   <div className="catalog-control-muted mt-1 text-[13px]">

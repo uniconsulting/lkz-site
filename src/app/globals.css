@@ -156,21 +156,21 @@ html.dark .footer-uni-logo-on-dark {
 
 /* Catalog control panel */
 .catalog-control-shell {
-  background: #32373b;
-  color: #f5f7f8;
+  background: var(--color-surface-strong);
+  color: var(--color-text);
 }
 
 .catalog-control-muted {
-  color: rgba(255, 255, 255, 0.64);
+  color: var(--color-text-muted);
 }
 
 .catalog-control-pill {
-  background: rgba(255, 255, 255, 0.08);
-  color: #ffffff;
+  background: var(--color-surface);
+  color: var(--color-text);
 }
 
 .catalog-control-pill:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--color-surface-strong);
 }
 
 .catalog-control-pill-active {
@@ -179,20 +179,20 @@ html.dark .footer-uni-logo-on-dark {
 }
 
 .catalog-control-counter {
-  color: rgba(255, 255, 255, 0.92);
+  color: var(--color-text);
 }
 
 .catalog-control-divider {
-  border-color: rgba(255, 255, 255, 0.1);
+  border-color: var(--color-surface-strong);
 }
 
 .catalog-control-chip {
-  background: rgba(255, 255, 255, 0.08);
-  color: #ffffff;
+  background: var(--color-surface);
+  color: var(--color-text);
 }
 
 .catalog-control-chip:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--color-surface-strong);
 }
 
 .catalog-filter-sheet-overlay {
