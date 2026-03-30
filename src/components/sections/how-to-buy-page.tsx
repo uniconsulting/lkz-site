@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { submitHowToBuyAction } from "@/app/actions/contact";
 import { AnimatePresence, motion } from "motion/react";
 import {
   BadgePercent,
@@ -263,10 +264,12 @@ function ContactInput({
   label,
   placeholder,
   textarea = false,
+  name,
 }: {
   label: string;
   placeholder: string;
   textarea?: boolean;
+  name?: string;
 }) {
   const baseClassName =
     "w-full rounded-[22px] border border-transparent bg-[var(--color-accent-1-foreground)] px-6 text-[13px] text-[var(--color-text)] outline-none transition duration-300 placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent-1)] focus:shadow-[0_0_0_3px_rgba(30,222,123,0.10)] hover:border-[var(--color-border)]";
@@ -280,12 +283,14 @@ function ContactInput({
       {textarea ? (
         <textarea
           rows={4}
+          name={name}
           placeholder={placeholder}
           className={cn(baseClassName, "h-[132px] resize-none py-4")}
         />
       ) : (
         <input
           type="text"
+          name={name}
           placeholder={placeholder}
           className={cn(baseClassName, "h-[46px]")}
         />
@@ -359,8 +364,17 @@ export function HowToBuyPage() {
     setIsSubmitted(false);
   }
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const fd = new FormData(event.currentTarget);
+    await submitHowToBuyAction({
+      name: (fd.get("name") as string) ?? "",
+      company: (fd.get("company") as string) ?? "",
+      contact: (fd.get("contact") as string) ?? "",
+      city: (fd.get("city") as string) ?? "",
+      comment: (fd.get("comment") as string) ?? "",
+      answers,
+    });
     setIsSubmitted(true);
   }
 
@@ -661,23 +675,27 @@ export function HowToBuyPage() {
                       </p>
 
                       <div className="mt-5 grid gap-4">
-                        <ContactInput label="имя" placeholder="ваше имя" />
+                        <ContactInput label="имя" placeholder="ваше имя" name="name" />
                         <ContactInput
                           label="компания"
                           placeholder="название компании"
+                          name="company"
                         />
                         <ContactInput
                           label="контакт"
                           placeholder="telegram / телефон / email"
+                          name="contact"
                         />
                         <ContactInput
                           label="город / регион"
                           placeholder="город или регион поставки"
+                          name="city"
                         />
                         <ContactInput
                           label="комментарий"
                           placeholder="кратко опишите запрос"
                           textarea
+                          name="comment"
                         />
                       </div>
 

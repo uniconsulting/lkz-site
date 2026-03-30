@@ -1,6 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState, type ChangeEvent } from "react";
+import { useEffect, useRef, useState, useTransition, type ChangeEvent } from "react";
+import {
+  submitContactRequestAction,
+  submitSendProposalAction,
+} from "@/app/actions/contact";
 import { AnimatePresence, motion } from "motion/react";
 import {
   Building2,
@@ -136,10 +140,14 @@ function ContactInput({
   label,
   placeholder,
   textarea = false,
+  value,
+  onChange,
 }: {
   label: string;
   placeholder: string;
   textarea?: boolean;
+  value: string;
+  onChange: (v: string) => void;
 }) {
   const baseClassName =
     "w-full rounded-[22px] border border-transparent bg-[var(--color-bg)] px-6 text-[12px] text-[var(--color-text)] outline-none transition duration-300 placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent-1)] focus:shadow-[0_0_0_3px_rgba(30,222,123,0.10)] hover:border-[var(--color-border)]";
@@ -153,12 +161,16 @@ function ContactInput({
       {textarea ? (
         <textarea
           rows={4}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
           className={cn(baseClassName, "h-[134px] resize-none py-4")}
         />
       ) : (
         <input
           type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
           className={cn(baseClassName, "h-[44px]")}
         />
@@ -171,13 +183,16 @@ function B2BSelect({
   label,
   placeholder,
   options,
+  value,
+  onChange,
 }: {
   label: string;
   placeholder: string;
   options: string[];
+  value: string;
+  onChange: (v: string) => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState("");
   const rootRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -210,10 +225,10 @@ function B2BSelect({
       >
         <span
           className={cn(
-            selected ? "text-[var(--color-text)]" : "text-[var(--color-text-muted)]",
+            value ? "text-[var(--color-text)]" : "text-[var(--color-text-muted)]",
           )}
         >
-          {selected || placeholder}
+          {value || placeholder}
         </span>
 
         <ChevronDown
@@ -238,14 +253,14 @@ function B2BSelect({
       >
         <div className="p-2">
           {options.map((option) => {
-            const isActive = selected === option;
+            const isActive = value === option;
 
             return (
               <button
                 key={option}
                 type="button"
                 onClick={() => {
-                  setSelected(option);
+                  onChange(option);
                   setIsOpen(false);
                 }}
                 className={cn(
@@ -267,6 +282,44 @@ function B2BSelect({
 
 function RequestForm() {
   const [step, setStep] = useState<0 | 1>(0);
+  const [isPending, startTransition] = useTransition();
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const [name, setName] = useState("");
+  const [org, setOrg] = useState("");
+  const [contact, setContact] = useState("");
+  const [interest, setInterest] = useState("");
+  const [comment, setComment] = useState("");
+
+  function handleSubmit() {
+    startTransition(async () => {
+      await submitContactRequestAction({
+        source: "partnership",
+        name,
+        organization: org,
+        contact,
+        interest,
+        comment,
+      });
+      setIsSubmitted(true);
+    });
+  }
+
+  if (isSubmitted) {
+    return (
+      <div className="flex h-full flex-col items-center justify-center text-center">
+        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[16px] bg-[var(--color-accent-1)]/[0.12] text-[var(--color-accent-1)]">
+          <Check size={22} strokeWidth={2.2} />
+        </div>
+        <div className="text-[18px] font-semibold text-[var(--color-text)]">
+          заявка отправлена
+        </div>
+        <div className="mt-2 max-w-[260px] text-[13px] leading-[1.5] text-[var(--color-text-muted)]">
+          менеджер свяжется с вами в ближайшее время
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-full flex-col">
@@ -296,11 +349,23 @@ function RequestForm() {
               exit="exit"
               className="space-y-[23px]"
             >
-              <ContactInput label="имя" placeholder="ваше имя" />
-              <ContactInput label="организация" placeholder="название компании" />
+              <ContactInput
+                label="имя"
+                placeholder="ваше имя"
+                value={name}
+                onChange={setName}
+              />
+              <ContactInput
+                label="организация"
+                placeholder="название компании"
+                value={org}
+                onChange={setOrg}
+              />
               <ContactInput
                 label="контакт"
                 placeholder="telegram / телефон / email"
+                value={contact}
+                onChange={setContact}
               />
             </motion.div>
           ) : (
@@ -316,12 +381,16 @@ function RequestForm() {
                 label="формат интереса"
                 placeholder="выберите формат"
                 options={partnershipContent.formCard.interestOptions}
+                value={interest}
+                onChange={setInterest}
               />
 
               <ContactInput
                 label="комментарий / сообщение"
                 placeholder="опишите задачу"
                 textarea
+                value={comment}
+                onChange={setComment}
               />
             </motion.div>
           )}
@@ -350,9 +419,11 @@ function RequestForm() {
         ) : (
           <button
             type="button"
-            className="inline-flex h-[60px] flex-1 items-center justify-center rounded-[12px] bg-[var(--color-accent-2)] text-[14px] font-semibold text-[var(--color-accent-2-foreground)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(43,47,51,0.16)]"
+            onClick={handleSubmit}
+            disabled={isPending}
+            className="inline-flex h-[60px] flex-1 items-center justify-center rounded-[12px] bg-[var(--color-accent-2)] text-[14px] font-semibold text-[var(--color-accent-2-foreground)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(43,47,51,0.16)] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            отправить
+            {isPending ? "отправляем..." : "отправить"}
           </button>
         )}
       </div>
@@ -363,6 +434,10 @@ function RequestForm() {
 function SendProposalForm() {
   const [files, setFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [senderName, setSenderName] = useState("");
+  const [senderContact, setSenderContact] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   function mergeFiles(newFiles: File[]) {
@@ -380,10 +455,68 @@ function SendProposalForm() {
     setFiles((prev) => prev.filter((_, idx) => idx !== index));
   }
 
+  function handleSubmit() {
+    startTransition(async () => {
+      const fileUrls: string[] = [];
+      for (const file of files) {
+        try {
+          const formData = new FormData();
+          formData.append("file", file);
+          const res = await fetch("/api/upload-document", {
+            method: "POST",
+            body: formData,
+          });
+          const data = await res.json();
+          if (data.url) fileUrls.push(data.url);
+        } catch {
+          // пропускаем файл если не загрузился
+        }
+      }
+      await submitSendProposalAction({
+        source: "partnership",
+        name: senderName,
+        contact: senderContact,
+        fileUrls,
+      });
+      setIsSubmitted(true);
+    });
+  }
+
+  if (isSubmitted) {
+    return (
+      <div className="flex h-full flex-col items-center justify-center text-center">
+        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[16px] bg-[var(--color-accent-1)]/[0.12] text-[var(--color-accent-1)]">
+          <Check size={22} strokeWidth={2.2} />
+        </div>
+        <div className="text-[18px] font-semibold text-[var(--color-text)]">
+          КП получено
+        </div>
+        <div className="mt-2 max-w-[260px] text-[13px] leading-[1.5] text-[var(--color-text-muted)]">
+          менеджер рассмотрит его и свяжется с вами
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-full flex-col">
       <div className="pl-[4px] text-[14px] font-semibold tracking-[-0.03em] text-[var(--color-text)]">
         загрузите Ваше КП
+      </div>
+
+      <div className="mt-[18px] grid gap-[14px] sm:grid-cols-2">
+        <ContactInput
+          label="имя"
+          placeholder="ваше имя"
+          value={senderName}
+          onChange={setSenderName}
+        />
+        <ContactInput
+          label="контакт"
+          placeholder="telegram / телефон / email"
+          value={senderContact}
+          onChange={setSenderContact}
+        />
       </div>
 
       <div
@@ -399,7 +532,7 @@ function SendProposalForm() {
           mergeFiles(dropped);
         }}
         className={cn(
-          "mt-[23px] flex flex-col rounded-[24px] border-2 border-dashed bg-[var(--color-bg)] p-5 transition duration-300",
+          "mt-[16px] flex flex-col rounded-[24px] border-2 border-dashed bg-[var(--color-bg)] p-5 transition duration-300",
           isDragging
             ? "border-[var(--color-accent-1)] bg-[var(--color-accent-1)]/[0.06]"
             : "border-[var(--color-accent-2)]",
@@ -477,15 +610,16 @@ function SendProposalForm() {
 
       <button
         type="button"
-        disabled={files.length === 0}
+        onClick={handleSubmit}
+        disabled={files.length === 0 || isPending}
         className={cn(
-          "mt-[54px] inline-flex h-[60px] w-full items-center justify-center rounded-[12px] text-[14px] font-semibold transition duration-300",
-          files.length === 0
+          "mt-[24px] inline-flex h-[60px] w-full items-center justify-center rounded-[12px] text-[14px] font-semibold transition duration-300",
+          files.length === 0 || isPending
             ? "cursor-not-allowed bg-[var(--color-border)] text-[var(--color-text-muted)]"
             : "bg-[var(--color-accent-2)] text-[var(--color-accent-2-foreground)] hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(43,47,51,0.16)]",
         )}
       >
-        отправить
+        {isPending ? "отправляем..." : "отправить"}
       </button>
     </div>
   );
@@ -656,7 +790,7 @@ export function PartnershipContactSection() {
                   </button>
                 </div>
 
-                <div className="mt-[54px]" style={{ height: `${FORM_CONTENT_HEIGHT}px` }}>
+                <div className="mt-[54px]" style={{ minHeight: `${FORM_CONTENT_HEIGHT}px` }}>
                   <AnimatePresence mode="wait" initial={false}>
                     {mode === "request" ? (
                       <motion.div
