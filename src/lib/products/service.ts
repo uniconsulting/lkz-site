@@ -1,5 +1,3 @@
-import { unlink } from "node:fs/promises";
-import { join } from "node:path";
 import type {
   ProductCategoryId,
   ProductItem,
@@ -287,6 +285,9 @@ export async function deleteCatalogProduct(id: string): Promise<boolean> {
   const product = await repository.getProductById(id);
 
   if (product) {
+    const { unlink } = await import("node:fs/promises");
+    const { join } = await import("node:path");
+
     const uploadsDir =
       process.env.UPLOADS_DIR ?? join(process.cwd(), "public", "uploads");
     const urlPrefix = process.env.UPLOADS_URL_PREFIX ?? "/uploads";
