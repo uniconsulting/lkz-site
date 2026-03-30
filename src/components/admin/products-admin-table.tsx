@@ -6,7 +6,7 @@ import {
   getProductCategoryById,
   getProductLineById,
 } from "@/lib/content/products";
-import { deleteProductAction } from "@/app/adpanel/products/actions";
+import { deleteProductAction } from "@/app/adpanel/(panel)/products/actions";
 
 
 export function ProductsAdminTable({

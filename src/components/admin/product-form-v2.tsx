@@ -10,7 +10,7 @@ import type {
   ProductLineId,
   ProductPackagingUnit,
 } from "@/lib/content/products";
-import type { ProductFormPayload } from "@/app/admin/products/actions";
+import type { ProductFormPayload } from "@/app/adpanel/(panel)/products/actions";
 import { AdminDropdown } from "@/components/admin/admin-dropdown";
 import { AdminFilePlaceholder } from "@/components/admin/admin-file-placeholder";
 import { AdminFormSection } from "@/components/admin/admin-form-section";

@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { Eye, EyeOff, Loader2, Lock } from "lucide-react";
-import { loginAction } from "@/app/admin/login/actions";
+import { loginAction } from "@/app/adpanel/login/actions";
 
 export function LoginForm() {
   const [state, formAction, isPending] = useActionState(loginAction, {

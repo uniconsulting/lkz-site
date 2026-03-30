@@ -9,7 +9,7 @@ import {
   saveMaxSettingsAction,
   testTelegramAction,
   testMaxAction,
-} from "@/app/admin/settings/actions";
+} from "@/app/adpanel/(panel)/settings/actions";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
