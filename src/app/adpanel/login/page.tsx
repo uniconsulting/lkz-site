@@ -1,37 +1,69 @@
+import Image from "next/image";
 import { Package } from "lucide-react";
 import { LoginForm } from "@/components/admin/login-form";
 
 export default function LoginPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[var(--color-bg)] px-4">
-      <div className="w-full max-w-[420px]">
-        <div className="rounded-[32px] bg-[var(--color-surface)] p-8">
-          {/* Бренд */}
-          <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-[var(--color-bg)]">
-              <Package size={18} strokeWidth={2.1} className="text-[var(--color-text)]" />
+    <div className="flex min-h-screen bg-[var(--color-bg)]">
+      {/* Левая часть — форма */}
+      <div className="relative z-10 flex w-full flex-col justify-between px-10 py-10 lg:w-[480px] lg:shrink-0">
+        {/* Лого */}
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-[14px] bg-[var(--color-surface)]">
+            <Package size={17} strokeWidth={2.1} className="text-[var(--color-text)]" />
+          </div>
+          <div>
+            <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-[var(--color-accent-1)]">
+              lkz
             </div>
-            <div>
-              <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                lkz
-              </div>
-              <div className="text-[15px] font-semibold tracking-[-0.03em] text-[var(--color-text)]">
-                admin panel
-              </div>
+            <div className="text-[14px] font-semibold tracking-[-0.03em] text-[var(--color-text)]">
+              admin panel
             </div>
           </div>
+        </div>
 
-          {/* Заголовок */}
+        {/* Форма — центр */}
+        <div className="mx-auto w-full max-w-[360px]">
+          <h1 className="font-heading text-[38px] leading-[0.94] tracking-[-0.05em] text-[var(--color-text)]">
+            Вход
+          </h1>
+          <p className="mt-3 text-[14px] leading-[1.5] text-[var(--color-text-muted)]">
+            Введите пароль для доступа к панели управления
+          </p>
           <div className="mt-8">
-            <h1 className="font-heading text-[30px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)]">
-              Вход
-            </h1>
-            <p className="mt-2 text-[14px] leading-[1.5] text-[var(--color-text-muted)]">
-              Введите пароль для доступа к панели управления
-            </p>
+            <LoginForm />
           </div>
+        </div>
 
-          <LoginForm />
+        {/* Подвал */}
+        <div className="text-[12px] text-[var(--color-text-muted)]">
+          © {new Date().getFullYear()} ЛКЗ. Панель управления
+        </div>
+      </div>
+
+      {/* Правая часть — фото */}
+      <div className="relative hidden flex-1 overflow-hidden lg:block">
+        {/* Фото */}
+        <Image
+          src="/images/sections/partnership/partnership-hero.webp"
+          alt=""
+          fill
+          className="object-cover"
+          priority
+        />
+        {/* Градиент слева — плавный переход от bg к прозрачности */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-bg)] via-[var(--color-bg)]/30 to-transparent" />
+        {/* Градиент снизу */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-bg)]/60 via-transparent to-transparent" />
+
+        {/* Текст поверх фото */}
+        <div className="absolute bottom-10 left-10 right-10">
+          <div className="text-[13px] font-medium uppercase tracking-[0.1em] text-[var(--color-accent-1)]">
+            Лакокрасочный завод
+          </div>
+          <div className="mt-2 font-heading text-[28px] leading-[1.1] tracking-[-0.04em] text-white">
+            13 лет производим<br />лакокрасочные материалы
+          </div>
         </div>
       </div>
     </div>
