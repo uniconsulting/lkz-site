@@ -1,8 +1,40 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
-import { LayoutGrid, Package, Plus } from "lucide-react";
+import { LayoutGrid, Package, Plus, Settings2 } from "lucide-react";
+import { cn } from "@/lib/utils/cn";
+
+function NavLink({
+  href,
+  icon,
+  label,
+  exact = false,
+}: {
+  href: string;
+  icon: ReactNode;
+  label: string;
+  exact?: boolean;
+}) {
+  const pathname = usePathname();
+  const isActive = exact ? pathname === href : pathname.startsWith(href);
+
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "inline-flex w-full items-center gap-3 rounded-[16px] px-4 py-3 text-[14px] font-medium transition duration-300 hover:-translate-y-[1px]",
+        isActive
+          ? "bg-[var(--color-bg)] text-[var(--color-text)]"
+          : "text-[var(--color-text-muted)] hover:bg-[var(--color-bg)] hover:text-[var(--color-text)]",
+      )}
+    >
+      {icon}
+      <span>{label}</span>
+    </Link>
+  );
+}
 
 export function AdminShell({ children }: { children: ReactNode }) {
   return (
@@ -29,22 +61,29 @@ export function AdminShell({ children }: { children: ReactNode }) {
                 </div>
               </Link>
 
-              <div className="mt-5 space-y-2">
-                <Link
-                  href={"/admin/products"}
-                  className="inline-flex w-full items-center gap-3 rounded-[16px] bg-[var(--color-bg)] px-4 py-3 text-[14px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
-                >
-                  <LayoutGrid size={16} strokeWidth={2.1} />
-                  <span>Товары</span>
-                </Link>
+              <div className="mt-5 space-y-1">
+                <NavLink
+                  href="/admin/products"
+                  icon={<LayoutGrid size={16} strokeWidth={2.1} />}
+                  label="Товары"
+                />
+                <NavLink
+                  href="/admin/products/new"
+                  icon={<Plus size={16} strokeWidth={2.1} />}
+                  label="Новый товар"
+                  exact
+                />
+              </div>
 
-                <Link
-                  href={"/admin/products/new"}
-                  className="inline-flex w-full items-center gap-3 rounded-[16px] px-4 py-3 text-[14px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:bg-[var(--color-bg)]"
-                >
-                  <Plus size={16} strokeWidth={2.1} />
-                  <span>Новый товар</span>
-                </Link>
+              <div className="my-4 h-px bg-[var(--color-bg)]" />
+
+              <div className="space-y-1">
+                <NavLink
+                  href="/admin/settings"
+                  icon={<Settings2 size={16} strokeWidth={2.1} />}
+                  label="Уведомления"
+                  exact
+                />
               </div>
             </div>
           </aside>
@@ -55,4 +94,3 @@ export function AdminShell({ children }: { children: ReactNode }) {
     </div>
   );
 }
-

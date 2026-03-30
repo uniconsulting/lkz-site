@@ -7,6 +7,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Settings {
+  key   String @id
+  value String
+}
+
 model Product {
   id          String   @id @default(uuid())
   slug        String   @unique

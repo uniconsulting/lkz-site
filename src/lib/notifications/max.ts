@@ -1,6 +1,10 @@
+import { getSetting } from "@/lib/settings";
+
 export async function sendMaxMessage(text: string): Promise<void> {
-  const token = process.env.MAX_BOT_TOKEN;
-  const userId = process.env.MAX_CHAT_ID;
+  const token =
+    process.env.MAX_BOT_TOKEN || (await getSetting("MAX_BOT_TOKEN"));
+  const userId =
+    process.env.MAX_CHAT_ID || (await getSetting("MAX_CHAT_ID"));
 
   if (!token || !userId) return;
 
