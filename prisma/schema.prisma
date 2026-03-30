@@ -12,6 +12,17 @@ model Settings {
   value String
 }
 
+model Lead {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  type      String
+  source    String
+  name      String
+  contact   String
+  data      Json
+  isRead    Boolean  @default(false)
+}
+
 model Product {
   id          String   @id @default(uuid())
   slug        String   @unique

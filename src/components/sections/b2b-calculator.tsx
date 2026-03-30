@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import {
   BadgePercent,
@@ -20,6 +20,7 @@ import {
   WandSparkles,
   Waypoints,
   Workflow,
+  X,
   type LucideIcon,
 } from "lucide-react";
 import { Container } from "@/components/ui/container";
@@ -31,10 +32,12 @@ import {
   resolveCalculatorResult,
   type CalculatorAnswers,
   type CalculatorOption,
+  type CalculatorResult,
   type CalculatorStep,
   type CalculatorStepId,
   type OptionIconKey,
 } from "@/lib/content/b2b-calculator";
+import { submitB2BLeadAction } from "@/app/(site)/actions/contact";
 
 const sectionMotion = {
   hidden: { opacity: 0, y: 42 },
@@ -351,10 +354,158 @@ function ResultCard({
   );
 }
 
+function B2BLeadModal({
+  answers,
+  result,
+  onClose,
+}: {
+  answers: CalculatorAnswers;
+  result: CalculatorResult;
+  onClose: () => void;
+}) {
+  const [name, setName] = useState("");
+  const [contact, setContact] = useState("");
+  const [comment, setComment] = useState("");
+  const [isDone, setIsDone] = useState(false);
+  const [isPending, startTransition] = useTransition();
+
+  const isValid = name.trim().length > 0 && contact.trim().length > 0;
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!isValid || isPending) return;
+
+    startTransition(async () => {
+      await submitB2BLeadAction({
+        name: name.trim(),
+        contact: contact.trim(),
+        comment: comment.trim(),
+        answers,
+        result: {
+          modelTitle: result.modelTitle,
+          nextStepTitle: result.nextStepTitle,
+        },
+      });
+      setIsDone(true);
+    });
+  }
+
+  // Close on Escape
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
+      {/* Overlay */}
+      <motion.div
+        className="absolute inset-0 bg-black/50 backdrop-blur-[6px]"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.22 }}
+        onClick={onClose}
+      />
+
+      {/* Modal */}
+      <motion.div
+        className="relative z-10 w-full max-w-[520px] rounded-t-[32px] bg-[var(--color-bg)] p-6 shadow-[0_24px_64px_rgba(17,20,23,0.24)] sm:rounded-[32px] sm:p-8"
+        initial={{ opacity: 0, y: 40, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 24, scale: 0.97 }}
+        transition={{ duration: 0.36, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute right-5 top-5 flex h-9 w-9 items-center justify-center rounded-full bg-[var(--color-surface)] text-[var(--color-text-muted)] transition hover:bg-[var(--color-surface-strong)] hover:text-[var(--color-text)]"
+        >
+          <X size={16} strokeWidth={2.2} />
+        </button>
+
+        {!isDone ? (
+          <>
+            <div className="mb-1 text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
+              коммерческое предложение
+            </div>
+            <h3 className="font-heading text-[24px] leading-[1] tracking-[-0.04em] text-[var(--color-text)]">
+              {result.nextStepTitle}
+            </h3>
+            <p className="mt-2 text-[14px] leading-[1.5] text-[var(--color-text-muted)]">
+              Оставьте контакт — мы подготовим предложение под вашу модель сотрудничества и свяжемся с вами в рабочее время.
+            </p>
+
+            <form onSubmit={handleSubmit} className="mt-6 space-y-3">
+              <input
+                type="text"
+                placeholder="Имя"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full rounded-[16px] border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 text-[15px] text-[var(--color-text)] outline-none placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent-1)] transition duration-200"
+              />
+              <input
+                type="text"
+                placeholder="Телефон или email"
+                value={contact}
+                onChange={(e) => setContact(e.target.value)}
+                className="w-full rounded-[16px] border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 text-[15px] text-[var(--color-text)] outline-none placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent-1)] transition duration-200"
+              />
+              <textarea
+                placeholder="Комментарий (необязательно)"
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                rows={3}
+                className="w-full resize-none rounded-[16px] border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 text-[15px] text-[var(--color-text)] outline-none placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent-1)] transition duration-200"
+              />
+
+              <button
+                type="submit"
+                disabled={!isValid || isPending}
+                className={cn(
+                  "mt-1 inline-flex h-12 w-full items-center justify-center rounded-[18px] text-[15px] font-semibold transition duration-300",
+                  !isValid || isPending
+                    ? "cursor-not-allowed bg-[var(--color-border)] text-[var(--color-text-muted)]"
+                    : "bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)] hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]",
+                )}
+              >
+                {isPending ? "отправляем..." : "отправить заявку"}
+              </button>
+            </form>
+          </>
+        ) : (
+          <div className="py-4 text-center">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-accent-1)]/[0.12]">
+              <span className="text-[28px]">✓</span>
+            </div>
+            <h3 className="font-heading text-[22px] leading-[1.1] tracking-[-0.04em] text-[var(--color-text)]">
+              Заявка принята
+            </h3>
+            <p className="mt-2 text-[14px] leading-[1.5] text-[var(--color-text-muted)]">
+              Мы свяжемся с вами в рабочее время и подготовим предложение.
+            </p>
+            <button
+              type="button"
+              onClick={onClose}
+              className="mt-6 inline-flex h-11 items-center justify-center rounded-[16px] bg-[var(--color-surface)] px-6 text-[14px] font-semibold text-[var(--color-text)] transition hover:-translate-y-[1px]"
+            >
+              закрыть
+            </button>
+          </div>
+        )}
+      </motion.div>
+    </div>
+  );
+}
+
 export function B2BCalculatorSection() {
   const [stepIndex, setStepIndex] = useState(0);
   const [answers, setAnswers] = useState<CalculatorAnswers>({});
   const [isCompleted, setIsCompleted] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const autoNextTimeoutRef = useRef<number | null>(null);
 
   const currentStep = calculatorSteps[stepIndex] as CalculatorStep;
@@ -433,177 +584,190 @@ export function B2BCalculatorSection() {
   const currentValue = answers[currentStep.id];
 
   return (
-    <Section id="calculator" className="pt-10 md:pt-12 xl:pt-14">
-      <Container>
-        <motion.div
-          variants={sectionMotion}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.14 }}
-          className="flex flex-col gap-6 md:gap-8"
-        >
-          <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between">
-            <div className="max-w-[760px]">
-              <h2 className="font-heading text-[30px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[40px] xl:text-[46px]">
-                Подберите формат сотрудничества
-              </h2>
+    <>
+      <Section id="calculator" className="pt-10 md:pt-12 xl:pt-14">
+        <Container>
+          <motion.div
+            variants={sectionMotion}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.14 }}
+            className="flex flex-col gap-6 md:gap-8"
+          >
+            <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between">
+              <div className="max-w-[760px]">
+                <h2 className="font-heading text-[30px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[40px] xl:text-[46px]">
+                  Подберите формат сотрудничества
+                </h2>
 
-              <p className="mt-5 max-w-[640px] text-[15px] leading-[1.48] text-[var(--color-text-muted)] md:text-[17px]">
-                <span className="block">для дилеров, торговых сетей</span>
-                <span className="block">
-                  и партнёров по модели Private Label
-                </span>
-              </p>
-            </div>
-
-            <FeatureStackCards />
-          </div>
-
-          <FeatureCardsMobile />
-
-          <div className="rounded-[32px] bg-[var(--color-surface)] p-4 md:p-6 xl:rounded-[36px] xl:p-8">
-            <div className="mb-6 flex flex-col gap-4">
-              <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-                <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-6">
-                  <div className="min-w-[56px] text-[16px] font-semibold text-[var(--color-text)]">
-                    {isCompleted
-                      ? "готово"
-                      : `${stepIndex + 1} / ${calculatorSteps.length}`}
-                  </div>
-
-                  <p className="max-w-[740px] text-[15px] leading-[1.4] text-[var(--color-text-muted)] md:text-[16px]">
-                    {isCompleted
-                      ? "подготовили ориентировочный сценарий сотрудничества под ваш формат запуска"
-                      : currentStep.description}
-                  </p>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={handleReset}
-                  className="inline-flex h-11 w-fit items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[14px] font-semibold text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
-                >
-                  <RotateCcw size={16} strokeWidth={2.2} />
-                  <span>сбросить</span>
-                </button>
+                <p className="mt-5 max-w-[640px] text-[15px] leading-[1.48] text-[var(--color-text-muted)] md:text-[17px]">
+                  <span className="block">для дилеров, торговых сетей</span>
+                  <span className="block">
+                    и партнёров по модели Private Label
+                  </span>
+                </p>
               </div>
 
-              <StepProgress stepIndex={stepIndex} isCompleted={isCompleted} />
+              <FeatureStackCards />
             </div>
 
-            <AnimatePresence mode="wait" initial={false}>
-              {!isCompleted ? (
-                <motion.div
-                  key={currentStep.id}
-                  variants={stepMotion}
-                  initial="initial"
-                  animate="animate"
-                  exit="exit"
-                >
-                  <div className="min-h-[420px]">
-                    <h3 className="font-heading text-[34px] leading-[0.94] tracking-[-0.05em] text-[var(--color-text)] md:text-[42px] xl:text-[48px]">
-                      {currentStep.title}
-                    </h3>
+            <FeatureCardsMobile />
 
-                    <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                      {currentStep.options.map((option) => (
-                        <OptionCard
-                          key={option.value}
-                          option={option}
-                          isSelected={currentValue === option.value}
-                          onSelect={() =>
-                            handleSelect(currentStep.id, option.value)
-                          }
-                        />
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
-                    <button
-                      type="button"
-                      onClick={handlePrev}
-                      disabled={stepIndex === 0}
-                      className={cn(
-                        "inline-flex h-12 items-center justify-center rounded-[18px] px-6 text-[15px] font-semibold transition duration-300",
-                        stepIndex === 0
-                          ? "cursor-not-allowed bg-[var(--color-border)] text-[var(--color-text-muted)]"
-                          : "bg-[var(--color-bg)] text-[var(--color-text)] hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]",
-                      )}
-                    >
-                      назад
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={handleNext}
-                      disabled={!currentValue}
-                      className={cn(
-                        "inline-flex h-12 items-center justify-center rounded-[18px] px-6 text-[15px] font-semibold transition duration-300",
-                        !currentValue
-                          ? "cursor-not-allowed bg-[var(--color-border)] text-[var(--color-text-muted)]"
-                          : "bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)] hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]",
-                      )}
-                    >
-                      далее
-                    </button>
-                  </div>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="result"
-                  variants={stepMotion}
-                  initial="initial"
-                  animate="animate"
-                  exit="exit"
-                >
-                  <div className="min-h-[520px] rounded-[24px] bg-[var(--color-bg)] p-5 md:min-h-[560px] md:p-6">
-                    <div className="inline-flex items-center rounded-[999px] bg-[var(--color-accent-1)]/[0.12] px-3 py-1.5 text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                      рекомендуемый сценарий
+            <div className="rounded-[32px] bg-[var(--color-surface)] p-4 md:p-6 xl:rounded-[36px] xl:p-8">
+              <div className="mb-6 flex flex-col gap-4">
+                <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+                  <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-6">
+                    <div className="min-w-[56px] text-[16px] font-semibold text-[var(--color-text)]">
+                      {isCompleted
+                        ? "готово"
+                        : `${stepIndex + 1} / ${calculatorSteps.length}`}
                     </div>
 
-                    <h3 className="mt-5 font-heading text-[28px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[36px]">
-                      {result?.modelTitle}
-                    </h3>
-
-                    <p className="mt-4 max-w-[760px] text-[15px] leading-[1.5] text-[var(--color-text-muted)] md:text-[16px]">
-                      {result?.modelDescription}
+                    <p className="max-w-[740px] text-[15px] leading-[1.4] text-[var(--color-text-muted)] md:text-[16px]">
+                      {isCompleted
+                        ? "подготовили ориентировочный сценарий сотрудничества под ваш формат запуска"
+                        : currentStep.description}
                     </p>
+                  </div>
 
-                    <div className="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-                      {resultCards.map((card) => (
-                        <ResultCard
-                          key={card.id}
-                          title={card.title}
-                          value={card.value}
-                          description={card.description}
-                        />
-                      ))}
+                  <button
+                    type="button"
+                    onClick={handleReset}
+                    className="inline-flex h-11 w-fit items-center justify-center gap-2 rounded-[16px] bg-[var(--color-bg)] px-4 text-[14px] font-semibold text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
+                  >
+                    <RotateCcw size={16} strokeWidth={2.2} />
+                    <span>сбросить</span>
+                  </button>
+                </div>
+
+                <StepProgress stepIndex={stepIndex} isCompleted={isCompleted} />
+              </div>
+
+              <AnimatePresence mode="wait" initial={false}>
+                {!isCompleted ? (
+                  <motion.div
+                    key={currentStep.id}
+                    variants={stepMotion}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                  >
+                    <div className="min-h-[420px]">
+                      <h3 className="font-heading text-[34px] leading-[0.94] tracking-[-0.05em] text-[var(--color-text)] md:text-[42px] xl:text-[48px]">
+                        {currentStep.title}
+                      </h3>
+
+                      <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                        {currentStep.options.map((option) => (
+                          <OptionCard
+                            key={option.value}
+                            option={option}
+                            isSelected={currentValue === option.value}
+                            onSelect={() =>
+                              handleSelect(currentStep.id, option.value)
+                            }
+                          />
+                        ))}
+                      </div>
                     </div>
 
-                    <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                      <a
-                        href="#contacts"
-                        className="inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-accent-1)] px-6 text-[15px] font-semibold text-[var(--color-accent-1-foreground)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
+                    <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
+                      <button
+                        type="button"
+                        onClick={handlePrev}
+                        disabled={stepIndex === 0}
+                        className={cn(
+                          "inline-flex h-12 items-center justify-center rounded-[18px] px-6 text-[15px] font-semibold transition duration-300",
+                          stepIndex === 0
+                            ? "cursor-not-allowed bg-[var(--color-border)] text-[var(--color-text-muted)]"
+                            : "bg-[var(--color-bg)] text-[var(--color-text)] hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]",
+                        )}
                       >
-                        получить коммерческое предложение
-                      </a>
+                        назад
+                      </button>
 
                       <button
                         type="button"
-                        onClick={handleReset}
-                        className="inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-surface)] px-6 text-[15px] font-semibold text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
+                        onClick={handleNext}
+                        disabled={!currentValue}
+                        className={cn(
+                          "inline-flex h-12 items-center justify-center rounded-[18px] px-6 text-[15px] font-semibold transition duration-300",
+                          !currentValue
+                            ? "cursor-not-allowed bg-[var(--color-border)] text-[var(--color-text-muted)]"
+                            : "bg-[var(--color-accent-1)] text-[var(--color-accent-1-foreground)] hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]",
+                        )}
                       >
-                        пройти заново
+                        далее
                       </button>
                     </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </motion.div>
-      </Container>
-    </Section>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="result"
+                    variants={stepMotion}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                  >
+                    <div className="min-h-[520px] rounded-[24px] bg-[var(--color-bg)] p-5 md:min-h-[560px] md:p-6">
+                      <div className="inline-flex items-center rounded-[999px] bg-[var(--color-accent-1)]/[0.12] px-3 py-1.5 text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
+                        рекомендуемый сценарий
+                      </div>
+
+                      <h3 className="mt-5 font-heading text-[28px] leading-[0.96] tracking-[-0.05em] text-[var(--color-text)] md:text-[36px]">
+                        {result?.modelTitle}
+                      </h3>
+
+                      <p className="mt-4 max-w-[760px] text-[15px] leading-[1.5] text-[var(--color-text-muted)] md:text-[16px]">
+                        {result?.modelDescription}
+                      </p>
+
+                      <div className="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+                        {resultCards.map((card) => (
+                          <ResultCard
+                            key={card.id}
+                            title={card.title}
+                            value={card.value}
+                            description={card.description}
+                          />
+                        ))}
+                      </div>
+
+                      <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                        <button
+                          type="button"
+                          onClick={() => setIsModalOpen(true)}
+                          className="inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-accent-1)] px-6 text-[15px] font-semibold text-[var(--color-accent-1-foreground)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(30,222,123,0.22)]"
+                        >
+                          получить коммерческое предложение
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={handleReset}
+                          className="inline-flex h-12 items-center justify-center rounded-[18px] bg-[var(--color-surface)] px-6 text-[15px] font-semibold text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(43,47,51,0.06)]"
+                        >
+                          пройти заново
+                        </button>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </motion.div>
+        </Container>
+      </Section>
+
+      <AnimatePresence>
+        {isModalOpen && result && (
+          <B2BLeadModal
+            answers={answers}
+            result={result}
+            onClose={() => setIsModalOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+    </>
   );
 }

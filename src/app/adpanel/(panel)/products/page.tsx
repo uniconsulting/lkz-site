@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { ProductsAdminList } from "@/components/admin/products-admin-list";
 import { getCatalogAllProducts } from "@/lib/products/service";

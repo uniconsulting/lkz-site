@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
-import { LayoutGrid, LogOut, Package, Plus, Settings2 } from "lucide-react";
+import { Inbox, LayoutGrid, LogOut, Package, Plus, Settings2 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { logoutAction } from "@/app/adpanel/login/actions";
 
@@ -11,11 +11,13 @@ function NavLink({
   href,
   icon,
   label,
+  badge,
   exact = false,
 }: {
   href: string;
   icon: ReactNode;
   label: string;
+  badge?: number;
   exact?: boolean;
 }) {
   const pathname = usePathname();
@@ -32,12 +34,23 @@ function NavLink({
       )}
     >
       {icon}
-      <span>{label}</span>
+      <span className="flex-1">{label}</span>
+      {badge != null && badge > 0 && (
+        <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-[var(--color-accent-1)] px-1.5 text-[11px] font-semibold text-[var(--color-accent-1-foreground)]">
+          {badge}
+        </span>
+      )}
     </Link>
   );
 }
 
-export function AdminShell({ children }: { children: ReactNode }) {
+export function AdminShell({
+  children,
+  unreadLeads = 0,
+}: {
+  children: ReactNode;
+  unreadLeads?: number;
+}) {
   return (
     <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
       <div className="mx-auto max-w-[1680px] px-4 pb-10 pt-[104px] md:px-6 md:pt-[116px] xl:px-8 xl:pt-[124px]">
@@ -78,6 +91,13 @@ export function AdminShell({ children }: { children: ReactNode }) {
               <div className="my-4 h-px bg-[var(--color-bg)]" />
 
               <div className="space-y-1">
+                <NavLink
+                  href="/adpanel/leads"
+                  icon={<Inbox size={16} strokeWidth={2.1} />}
+                  label="Заявки"
+                  badge={unreadLeads}
+                  exact
+                />
                 <NavLink
                   href="/adpanel/settings"
                   icon={<Settings2 size={16} strokeWidth={2.1} />}
