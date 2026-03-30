@@ -25,6 +25,7 @@ function toProductItem(record: any): ProductItem {
     images: record.images,
     seo: record.seo,
     isArchived: record.isArchived,
+    documents: record.documents,
     admin: {
       isPublished: record.isPublished,
       sortOrder: record.sortOrder,
@@ -56,6 +57,7 @@ function toCreateData(data: ProductItem): any {
     characteristics: data.characteristics ?? {},
     images: data.images ?? {},
     seo: data.seo ?? {},
+    documents: data.documents ?? [],
   };
 }
 

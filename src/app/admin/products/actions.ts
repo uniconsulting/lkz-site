@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import type {
   ProductCharacteristic,
+  ProductDocument,
   ProductItem,
   ProductPackaging,
   ProductPackagingUnit,
@@ -29,7 +30,7 @@ type PackagingRow = {
 type DocumentRow = {
   title: string;
   kind: string;
-  fileName?: string;
+  url: string;
 };
 
 export type ProductFormPayload = {
@@ -78,10 +79,14 @@ function normalizePackagings(items: PackagingRow[]): ProductPackaging[] {
     );
 }
 
-function buildTagsFromDocuments(documents: DocumentRow[]) {
+function normalizeDocuments(documents: DocumentRow[]): ProductDocument[] {
   return documents
-    .map((item) => item.kind.trim().toLowerCase())
-    .filter(Boolean);
+    .filter((item) => item.title.trim() && item.url)
+    .map((item) => ({
+      title: item.title.trim(),
+      kind: item.kind,
+      url: item.url,
+    }));
 }
 
 function buildProductFromPayload(
@@ -94,8 +99,7 @@ function buildProductFromPayload(
   const applicationAreas = payload.applicationAreas
     .map((item) => item.trim())
     .filter(Boolean);
-
-  const documentTags = buildTagsFromDocuments(payload.documents);
+  const documents = normalizeDocuments(payload.documents);
 
   return {
     id: existing?.id ?? payload.id ?? crypto.randomUUID(),
@@ -107,6 +111,7 @@ function buildProductFromPayload(
     description: payload.description.trim(),
     packagings,
     applicationAreas,
+    documents,
     characteristics: {
       commercial,
       technical,
@@ -130,9 +135,7 @@ function buildProductFromPayload(
       isPublished: payload.isPublished,
       sortOrder: Number(payload.sortOrder) || 100,
       updatedAt: new Date().toISOString().slice(0, 10),
-      tags: Array.from(
-        new Set([...(existing?.admin.tags ?? []), ...documentTags]),
-      ),
+      tags: existing?.admin.tags ?? [],
     },
     isArchived: existing?.isArchived ?? false,
     workTypes: existing?.workTypes ?? [],

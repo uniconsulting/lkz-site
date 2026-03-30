@@ -40,6 +40,12 @@ export type ProductSeo = {
   description?: string;
 };
 
+export type ProductDocument = {
+  title: string;
+  kind: string;
+  url: string;
+};
+
 export type ProductAdminMeta = {
   isPublished: boolean;
   sortOrder: number;
@@ -77,6 +83,7 @@ export type ProductItem = {
   seo?: ProductSeo;
   admin: ProductAdminMeta;
   isArchived?: boolean;
+  documents?: ProductDocument[];
 };
 
 function createPackaging(

@@ -28,4 +28,5 @@ model Product {
   characteristics  Json @default("{}")
   images           Json @default("{}")
   seo              Json @default("{}")
+  documents        Json @default("[]")
 }

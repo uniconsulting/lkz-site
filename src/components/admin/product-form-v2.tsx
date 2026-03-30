@@ -38,6 +38,7 @@ type PackagingRow = {
 type DocumentRow = {
   title: string;
   kind: string;
+  url: string;
 };
 
 function buildInitialCommercialCharacteristics(
@@ -75,26 +76,17 @@ function buildInitialPackagings(product?: ProductItem): PackagingRow[] {
 }
 
 function buildInitialDocuments(product?: ProductItem): DocumentRow[] {
-  const tags = product?.admin.tags ?? [];
+  const docs = product?.documents ?? [];
 
-  const supportedKinds = [
-    "сертификат",
-    "декларация",
-    "сгр",
-    "техлист",
-    "инструкция",
-  ];
-
-  const guessedDocs = tags
-    .filter((tag) => supportedKinds.includes(tag.toLowerCase()))
-    .map((tag) => ({
-      title: tag,
-      kind: tag.toLowerCase(),
+  if (docs.length > 0) {
+    return docs.map((doc) => ({
+      title: doc.title,
+      kind: doc.kind,
+      url: doc.url,
     }));
+  }
 
-  return guessedDocs.length > 0
-    ? guessedDocs
-    : [{ title: "", kind: "сертификат" }];
+  return [{ title: "", kind: "сертификат", url: "" }];
 }
 
 export function ProductFormV2({
@@ -408,7 +400,7 @@ export function ProductFormV2({
           description="Для каждого документа задаются название, тип и файл."
           addLabel="добавить документ"
           onAdd={() =>
-            setDocuments((prev) => [...prev, { title: "", kind: "сертификат" }])
+            setDocuments((prev) => [...prev, { title: "", kind: "сертификат", url: "" }])
           }
         >
           {documents.map((item, index) => (
@@ -439,8 +431,11 @@ export function ProductFormV2({
               <div className="mt-4">
                 <AdminFilePlaceholder
                   title="Файл документа"
-                  description="прикрепите документ к карточке товара"
-                  kind="document"
+                  description="прикрепите PDF или Word документ"
+                  initialFileUrl={item.url || undefined}
+                  onUploadComplete={(url) =>
+                    updateDocument(index, "url", url ?? "")
+                  }
                 />
               </div>
             </AdminRepeaterItem>
