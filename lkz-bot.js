@@ -1,8 +1,8 @@
 const https = require("https");
 const http = require("http");
 
-const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+const BOT_TOKEN = process.env.MONITOR_BOT_TOKEN;
+const CHAT_ID = process.env.MONITOR_CHAT_ID;
 const SITE_URL = "http://localhost:3000/api/health";
 
 let offset = 0;
