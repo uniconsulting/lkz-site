@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { LayoutGrid, LogOut, Package, Plus, Settings2 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
-import { logoutAction } from "@/app/admin/login/actions";
+import { logoutAction } from "@/app/adpanel/login/actions";
 
 function NavLink({
   href,
@@ -45,7 +45,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
           <aside className="xl:sticky xl:top-[120px]">
             <div className="rounded-[30px] bg-[var(--color-surface)] p-4 md:p-5">
               <Link
-                href="/admin/products"
+                href="/adpanel/products"
                 className="flex items-center gap-3 rounded-[20px] bg-[var(--color-bg)] p-3 transition duration-300 hover:-translate-y-[1px]"
               >
                 <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-[var(--color-surface)]">
@@ -63,12 +63,12 @@ export function AdminShell({ children }: { children: ReactNode }) {
 
               <div className="mt-5 space-y-1">
                 <NavLink
-                  href="/admin/products"
+                  href="/adpanel/products"
                   icon={<LayoutGrid size={16} strokeWidth={2.1} />}
                   label="Товары"
                 />
                 <NavLink
-                  href="/admin/products/new"
+                  href="/adpanel/products/new"
                   icon={<Plus size={16} strokeWidth={2.1} />}
                   label="Новый товар"
                   exact
@@ -79,7 +79,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
 
               <div className="space-y-1">
                 <NavLink
-                  href="/admin/settings"
+                  href="/adpanel/settings"
                   icon={<Settings2 size={16} strokeWidth={2.1} />}
                   label="Уведомления"
                   exact

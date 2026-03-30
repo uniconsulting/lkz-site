@@ -147,7 +147,7 @@ export async function createProductAction(payload: ProductFormPayload) {
   const product = buildProductFromPayload(payload);
   await createCatalogProduct(product);
 
-  revalidatePath("/admin/products");
+  revalidatePath("/adpanel/products");
   revalidatePath("/products");
 }
 
@@ -164,8 +164,8 @@ export async function updateProductAction(
   const updated = buildProductFromPayload(payload, existing);
   await updateCatalogProduct(id, updated);
 
-  revalidatePath("/admin/products");
-  revalidatePath(`/admin/products/${id}`);
+  revalidatePath("/adpanel/products");
+  revalidatePath(`/adpanel/products/${id}`);
   revalidatePath("/products");
   revalidatePath(`/products/${updated.slug}`);
 }
@@ -173,6 +173,6 @@ export async function updateProductAction(
 export async function deleteProductAction(id: string) {
   await deleteCatalogProduct(id);
 
-  revalidatePath("/admin/products");
+  revalidatePath("/adpanel/products");
   revalidatePath("/products");
 }

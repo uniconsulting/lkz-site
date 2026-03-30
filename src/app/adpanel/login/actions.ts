@@ -34,11 +34,11 @@ export async function loginAction(
     path: "/",
   });
 
-  redirect("/admin/products");
+  redirect("/adpanel/products");
 }
 
 export async function logoutAction(): Promise<void> {
   const cookieStore = await cookies();
   cookieStore.delete("admin_session");
-  redirect("/admin/login");
+  redirect("/adpanel/login");
 }

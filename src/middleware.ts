@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/adpanel/:path*"],
 };
 
 const SESSION_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000;
@@ -48,18 +48,18 @@ export async function middleware(request: NextRequest) {
   // Если секрет не задан — не блокируем (нет смысла без пароля)
   if (!secret) return NextResponse.next();
 
-  const isLoginPage = pathname === "/admin/login";
+  const isLoginPage = pathname === "/adpanel/login";
   const token = request.cookies.get("admin_session")?.value;
   const isValid = token ? await verifyToken(token, secret) : false;
 
   // Уже авторизован и пришёл на /login — редиректим в панель
   if (isLoginPage && isValid) {
-    return NextResponse.redirect(new URL("/admin/products", request.url));
+    return NextResponse.redirect(new URL("/adpanel/products", request.url));
   }
 
   // Не авторизован и пришёл НЕ на /login — редиректим на вход
   if (!isLoginPage && !isValid) {
-    const url = new URL("/admin/login", request.url);
+    const url = new URL("/adpanel/login", request.url);
     url.searchParams.set("from", pathname);
     return NextResponse.redirect(url);
   }

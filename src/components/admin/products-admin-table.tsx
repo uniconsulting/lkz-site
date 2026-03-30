@@ -6,7 +6,7 @@ import {
   getProductCategoryById,
   getProductLineById,
 } from "@/lib/content/products";
-import { deleteProductAction } from "@/app/admin/products/actions";
+import { deleteProductAction } from "@/app/adpanel/products/actions";
 
 
 export function ProductsAdminTable({
@@ -89,7 +89,7 @@ export function ProductsAdminTable({
                   <td className="px-5 py-4 align-top text-right">
                     <div className="flex items-center justify-end gap-2">
                       <Link
-                        href={`/admin/products/${product.id}`}
+                        href={`/adpanel/products/${product.id}`}
                         className="inline-flex h-10 items-center justify-center rounded-[14px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
                       >
                         редактировать

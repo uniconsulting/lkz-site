@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
-import { AdminPageHeader } from "@/components/admin/admin-page-header";
-import { ProductFormV2 } from "@/components/admin/product-form-v2";
+import { AdminPageHeader } from "@/components/adpanel/admin-page-header";
+import { ProductFormV2 } from "@/components/adpanel/product-form-v2";
 import { getCatalogCategories, getCatalogLines } from "@/lib/products/service";
-import type { ProductFormPayload } from "@/app/admin/products/actions";
-import { createProductAction } from "@/app/admin/products/actions";
+import type { ProductFormPayload } from "@/app/adpanel/products/actions";
+import { createProductAction } from "@/app/adpanel/products/actions";
 
 export default function NewAdminProductPage() {
   const categories = getCatalogCategories();
@@ -12,7 +12,7 @@ export default function NewAdminProductPage() {
   async function handleCreate(payload: ProductFormPayload) {
     "use server";
     await createProductAction(payload);
-    redirect("/admin/products");
+    redirect("/adpanel/products");
   }
 
   return (

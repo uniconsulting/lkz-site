@@ -1,13 +1,13 @@
 import { notFound, redirect } from "next/navigation";
-import { AdminPageHeader } from "@/components/admin/admin-page-header";
-import { ProductFormV2 } from "@/components/admin/product-form-v2";
+import { AdminPageHeader } from "@/components/adpanel/admin-page-header";
+import { ProductFormV2 } from "@/components/adpanel/product-form-v2";
 import {
   getCatalogCategories,
   getCatalogLines,
   getCatalogProductById,
 } from "@/lib/products/service";
-import type { ProductFormPayload } from "@/app/admin/products/actions";
-import { updateProductAction } from "@/app/admin/products/actions";
+import type { ProductFormPayload } from "@/app/adpanel/products/actions";
+import { updateProductAction } from "@/app/adpanel/products/actions";
 
 type PageProps = {
   params: Promise<{
@@ -29,7 +29,7 @@ export default async function AdminProductEditPage({ params }: PageProps) {
   async function handleUpdate(payload: ProductFormPayload) {
     "use server";
     await updateProductAction(id, payload);
-    redirect(`/admin/products/${id}`);
+    redirect(`/adpanel/products/${id}`);
   }
 
   return (
