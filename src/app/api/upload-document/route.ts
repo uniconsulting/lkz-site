@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { writeFile, mkdir } from "node:fs/promises";
 import { join, extname } from "node:path";
 import { randomUUID } from "node:crypto";
+import { isAdminAuthenticated } from "@/lib/auth";
 
 const ALLOWED_TYPES = [
   "application/pdf",
@@ -11,6 +12,10 @@ const ALLOWED_TYPES = [
 const MAX_SIZE_BYTES = 20 * 1024 * 1024; // 20 MB
 
 export async function POST(request: NextRequest) {
+  if (!(await isAdminAuthenticated())) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const formData = await request.formData();
   const file = formData.get("file") as File | null;
 

@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
-import { LayoutGrid, Package, Plus, Settings2 } from "lucide-react";
+import { LayoutGrid, LogOut, Package, Plus, Settings2 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
+import { logoutAction } from "@/app/admin/login/actions";
 
 function NavLink({
   href,
@@ -50,7 +51,6 @@ export function AdminShell({ children }: { children: ReactNode }) {
                 <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-[var(--color-surface)]">
                   <Package size={18} strokeWidth={2.1} />
                 </div>
-
                 <div>
                   <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
                     lkz
@@ -84,6 +84,18 @@ export function AdminShell({ children }: { children: ReactNode }) {
                   label="Уведомления"
                   exact
                 />
+              </div>
+
+              <div className="mt-4 border-t border-[var(--color-bg)] pt-4">
+                <form action={logoutAction}>
+                  <button
+                    type="submit"
+                    className="inline-flex w-full items-center gap-3 rounded-[16px] px-4 py-3 text-[14px] font-medium text-[var(--color-text-muted)] transition duration-300 hover:-translate-y-[1px] hover:bg-[var(--color-bg)] hover:text-[var(--color-text)]"
+                  >
+                    <LogOut size={16} strokeWidth={2.1} />
+                    <span>Выйти</span>
+                  </button>
+                </form>
               </div>
             </div>
           </aside>
