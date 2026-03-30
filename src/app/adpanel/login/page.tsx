@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Package } from "lucide-react";
 import { LoginForm } from "@/components/admin/login-form";
 
 export default function LoginPage() {
@@ -9,15 +8,12 @@ export default function LoginPage() {
       <div className="relative z-10 flex w-full flex-col justify-between px-10 py-10 lg:w-[480px] lg:shrink-0">
         {/* Лого */}
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-[14px] bg-[var(--color-surface)]">
-            <Package size={17} strokeWidth={2.1} className="text-[var(--color-text)]" />
-          </div>
           <div>
-            <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-[var(--color-accent-1)]">
-              lkz
+            <div className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[var(--color-accent-1)]">
+              ЛКЗ
             </div>
-            <div className="text-[14px] font-semibold tracking-[-0.03em] text-[var(--color-text)]">
-              admin panel
+            <div className="text-[16px] font-semibold tracking-[-0.03em] text-[var(--color-text)]">
+              Административная панель
             </div>
           </div>
         </div>
@@ -43,7 +39,6 @@ export default function LoginPage() {
 
       {/* Правая часть — фото */}
       <div className="relative hidden flex-1 overflow-hidden lg:block">
-        {/* Фото */}
         <Image
           src="/images/sections/partnership/partnership-hero.webp"
           alt=""
@@ -51,14 +46,10 @@ export default function LoginPage() {
           className="object-cover"
           priority
         />
-        {/* Тёмный оверлей — всегда, независимо от темы */}
         <div className="absolute inset-0 bg-black/50" />
-        {/* Градиент слева */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
-        {/* Градиент снизу */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
 
-        {/* Текст поверх фото */}
         <div className="absolute bottom-10 left-10 right-10">
           <div className="text-[13px] font-medium uppercase tracking-[0.1em] text-[var(--color-accent-1)]">
             Лакокрасочный завод

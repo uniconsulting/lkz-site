@@ -5,9 +5,9 @@ import { cookies } from "next/headers";
 import { createSessionToken } from "@/lib/auth";
 
 export async function loginAction(
-  _prevState: { error: string | null },
+  _prevState: { error: string | null; success?: boolean },
   formData: FormData,
-): Promise<{ error: string | null }> {
+): Promise<{ error: string | null; success?: boolean }> {
   const password = (formData.get("password") as string) ?? "";
 
   const adminPassword = process.env.ADMIN_PASSWORD;
@@ -34,7 +34,7 @@ export async function loginAction(
     path: "/",
   });
 
-  redirect("/adpanel/products");
+  return { error: null, success: true };
 }
 
 export async function logoutAction(): Promise<void> {
