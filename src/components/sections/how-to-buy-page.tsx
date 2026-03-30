@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { submitHowToBuyAction } from "@/app/actions/contact";
+import { submitHowToBuyAction } from "@/app/(site)/actions/contact";
 import { AnimatePresence, motion } from "motion/react";
 import {
   BadgePercent,

@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import {
   submitContactRequestAction,
   submitSendProposalAction,
-} from "@/app/actions/contact";
+} from "@/app/(site)/actions/contact";
 import { AnimatePresence, motion } from "motion/react";
 import {
   Building2,
