@@ -1,8 +1,8 @@
 const https = require("https");
 const http = require("http");
 
-const BOT_TOKEN = "8333016105:AAHj5sM10f3pG5qPVEscdd02_rojC41I6eM";
-const CHAT_ID = "-1003759263483";
+const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 const SITE_URL = "http://localhost:3000/api/health";
 
 let offset = 0;
