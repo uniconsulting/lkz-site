@@ -12,25 +12,24 @@ export function LoginTransitionOverlay() {
   useEffect(() => {
     if (!isTransitioning) return;
 
-    // Панели уезжают за 650мс — после этого начинаем гасить блюр
-    const t1 = setTimeout(() => setBlurPhase("out"), 650);
-    // Блюр гаснет ещё 400мс — итого 1050мс
-    const t2 = setTimeout(() => endTransition(), 1050);
+    // Панели начинают через 200мс, едут 900мс → готово на 1100мс
+    // Затем блюр гаснет 700мс → итого 1800мс
+    const t1 = setTimeout(() => setBlurPhase("out"), 1100);
+    const t2 = setTimeout(() => endTransition(), 1800);
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
     };
   }, [isTransitioning, endTransition]);
 
-  // Сбрасываем фазу при следующем монтировании
   useEffect(() => {
     if (!isTransitioning) setBlurPhase("in");
   }, [isTransitioning]);
 
   if (!isTransitioning) return null;
 
-  const slideEase = [0.22, 1, 0.36, 1] as const;
-  const slideDuration = 0.65;
+  // easeInOutQuart — медленный старт, ускорение в середине, мягкое торможение у края
+  const slideEase = [0.76, 0, 0.24, 1] as const;
 
   return (
     <div className="pointer-events-none fixed inset-0 z-[9999]">
@@ -39,7 +38,7 @@ export function LoginTransitionOverlay() {
         className="absolute inset-y-0 left-0 w-full bg-[var(--color-bg)] lg:w-[480px]"
         initial={{ x: 0 }}
         animate={{ x: "-110%" }}
-        transition={{ duration: slideDuration, ease: slideEase }}
+        transition={{ duration: 0.9, delay: 0.2, ease: slideEase }}
       >
         <div className="flex h-full flex-col justify-between px-10 py-10">
           <div>
@@ -67,7 +66,7 @@ export function LoginTransitionOverlay() {
         style={{ left: 480 }}
         initial={{ x: 0 }}
         animate={{ x: "110%" }}
-        transition={{ duration: slideDuration, ease: slideEase }}
+        transition={{ duration: 0.9, delay: 0.2, ease: slideEase }}
       >
         <div className="relative h-full w-full">
           <Image
@@ -92,19 +91,19 @@ export function LoginTransitionOverlay() {
         </div>
       </motion.div>
 
-      {/* Блюр-оверлей — поверх панелей, нарастает вместе с движением, затем гаснет */}
+      {/* Блюр — появляется за 1с, затем гаснет после ухода панелей */}
       <motion.div
         className="absolute inset-0"
         initial={{ opacity: 0 }}
         animate={{ opacity: blurPhase === "out" ? 0 : 1 }}
         transition={
           blurPhase === "out"
-            ? { duration: 0.4, ease: "easeOut" }
-            : { duration: slideDuration, ease: "easeIn" }
+            ? { duration: 0.7, ease: "easeOut" }
+            : { duration: 1.0, ease: "easeIn" }
         }
         style={{
-          backdropFilter: "blur(28px)",
-          WebkitBackdropFilter: "blur(28px)",
+          backdropFilter: "blur(40px)",
+          WebkitBackdropFilter: "blur(40px)",
         }}
       />
     </div>

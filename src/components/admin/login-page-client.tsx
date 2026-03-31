@@ -11,7 +11,8 @@ export function LoginPageClient() {
 
   function handleSuccess() {
     startTransition();
-    router.push("/adpanel/products");
+    // Небольшая задержка чтобы оверлей успел отрендериться до начала навигации
+    setTimeout(() => router.push("/adpanel/products"), 100);
   }
 
   return (
