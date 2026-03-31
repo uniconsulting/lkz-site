@@ -1,0 +1,112 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { motion } from "motion/react";
+import { useLoginTransition } from "@/lib/login-transition-context";
+
+export function LoginTransitionOverlay() {
+  const { isTransitioning, endTransition } = useLoginTransition();
+  const [blurPhase, setBlurPhase] = useState<"in" | "out">("in");
+
+  useEffect(() => {
+    if (!isTransitioning) return;
+
+    // Панели уезжают за 650мс — после этого начинаем гасить блюр
+    const t1 = setTimeout(() => setBlurPhase("out"), 650);
+    // Блюр гаснет ещё 400мс — итого 1050мс
+    const t2 = setTimeout(() => endTransition(), 1050);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [isTransitioning, endTransition]);
+
+  // Сбрасываем фазу при следующем монтировании
+  useEffect(() => {
+    if (!isTransitioning) setBlurPhase("in");
+  }, [isTransitioning]);
+
+  if (!isTransitioning) return null;
+
+  const slideEase = [0.22, 1, 0.36, 1] as const;
+  const slideDuration = 0.65;
+
+  return (
+    <div className="pointer-events-none fixed inset-0 z-[9999]">
+      {/* Левая панель — уходит влево */}
+      <motion.div
+        className="absolute inset-y-0 left-0 w-full bg-[var(--color-bg)] lg:w-[480px]"
+        initial={{ x: 0 }}
+        animate={{ x: "-110%" }}
+        transition={{ duration: slideDuration, ease: slideEase }}
+      >
+        <div className="flex h-full flex-col justify-between px-10 py-10">
+          <div>
+            <div className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[var(--color-accent-1)]">
+              ЛКЗ
+            </div>
+            <div className="text-[16px] font-semibold tracking-[-0.03em] text-[var(--color-text)]">
+              Административная панель
+            </div>
+          </div>
+          <div className="mx-auto w-full max-w-[360px]">
+            <h1 className="font-heading text-[38px] leading-[0.94] tracking-[-0.05em] text-[var(--color-text)]">
+              Вход
+            </h1>
+          </div>
+          <div className="text-[12px] text-[var(--color-text-muted)]">
+            © {new Date().getFullYear()} ЛКЗ. Панель управления
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Правая панель — уходит вправо (только десктоп) */}
+      <motion.div
+        className="absolute inset-y-0 right-0 hidden overflow-hidden lg:block"
+        style={{ left: 480 }}
+        initial={{ x: 0 }}
+        animate={{ x: "110%" }}
+        transition={{ duration: slideDuration, ease: slideEase }}
+      >
+        <div className="relative h-full w-full">
+          <Image
+            src="/images/sections/partnership/partnership-hero.webp"
+            alt=""
+            fill
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-black/50" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+          <div className="absolute bottom-10 left-10 right-10">
+            <div className="text-[13px] font-medium uppercase tracking-[0.1em] text-[var(--color-accent-1)]">
+              Лакокрасочный завод
+            </div>
+            <div className="mt-2 font-heading text-[28px] leading-[1.1] tracking-[-0.04em] text-white">
+              13 лет производим
+              <br />
+              лакокрасочные материалы
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Блюр-оверлей — поверх панелей, нарастает вместе с движением, затем гаснет */}
+      <motion.div
+        className="absolute inset-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: blurPhase === "out" ? 0 : 1 }}
+        transition={
+          blurPhase === "out"
+            ? { duration: 0.4, ease: "easeOut" }
+            : { duration: slideDuration, ease: "easeIn" }
+        }
+        style={{
+          backdropFilter: "blur(28px)",
+          WebkitBackdropFilter: "blur(28px)",
+        }}
+      />
+    </div>
+  );
+}
