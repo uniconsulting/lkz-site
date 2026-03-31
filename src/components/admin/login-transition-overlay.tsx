@@ -12,10 +12,10 @@ export function LoginTransitionOverlay() {
   useEffect(() => {
     if (!isTransitioning) return;
 
-    // Панели начинают через 200мс, едут 900мс → готово на 1100мс
-    // Затем блюр гаснет 700мс → итого 1800мс
-    const t1 = setTimeout(() => setBlurPhase("out"), 1100);
-    const t2 = setTimeout(() => endTransition(), 1800);
+    // Панели и блюр стартуют одновременно, панели едут 900мс
+    // После ухода панелей блюр гаснет 700мс → итого 1600мс
+    const t1 = setTimeout(() => setBlurPhase("out"), 900);
+    const t2 = setTimeout(() => endTransition(), 1600);
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
@@ -38,7 +38,7 @@ export function LoginTransitionOverlay() {
         className="absolute inset-y-0 left-0 w-full bg-[var(--color-bg)] lg:w-[480px]"
         initial={{ x: 0 }}
         animate={{ x: "-110%" }}
-        transition={{ duration: 0.9, delay: 0.2, ease: slideEase }}
+        transition={{ duration: 0.9, ease: slideEase }}
       >
         <div className="flex h-full flex-col justify-between px-10 py-10">
           <div>
@@ -66,7 +66,7 @@ export function LoginTransitionOverlay() {
         style={{ left: 480 }}
         initial={{ x: 0 }}
         animate={{ x: "110%" }}
-        transition={{ duration: 0.9, delay: 0.2, ease: slideEase }}
+        transition={{ duration: 0.9, ease: slideEase }}
       >
         <div className="relative h-full w-full">
           <Image
