@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Pencil, Trash2 } from "lucide-react";
 import type { ProductItem } from "@/lib/content/products";
 import {
   getProductCategoryById,
@@ -90,12 +91,16 @@ export function ProductsAdminTable({
                     <div className="flex items-center justify-end gap-2">
                       <Link
                         href={`/adpanel/products/${product.id}`}
-                        className="inline-flex h-10 items-center justify-center rounded-[14px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
+                        aria-label="Редактировать"
+                        title="Редактировать"
+                        className="inline-flex h-10 w-10 items-center justify-center rounded-[14px] bg-[var(--color-bg)] text-[var(--color-text)] transition duration-300 hover:-translate-y-[1px]"
                       >
-                        редактировать
+                        <Pencil size={15} strokeWidth={2} />
                       </Link>
                       <button
                         type="button"
+                        aria-label="Удалить"
+                        title="Удалить"
                         onClick={async () => {
                           if (
                             !confirm(
@@ -105,9 +110,9 @@ export function ProductsAdminTable({
                             return;
                           await deleteProductAction(product.id);
                         }}
-                        className="inline-flex h-10 items-center justify-center rounded-[14px] bg-[var(--color-bg)] px-4 text-[13px] font-medium text-red-500 transition duration-300 hover:-translate-y-[1px]"
+                        className="inline-flex h-10 w-10 items-center justify-center rounded-[14px] bg-[var(--color-bg)] text-red-500 transition duration-300 hover:-translate-y-[1px]"
                       >
-                        удалить
+                        <Trash2 size={15} strokeWidth={2} />
                       </button>
                     </div>
                   </td>

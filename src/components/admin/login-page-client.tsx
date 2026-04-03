@@ -1,9 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { LoginForm } from "./login-form";
 import { useLoginTransition } from "@/lib/login-transition-context";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 
 export function LoginPageClient() {
   const router = useRouter();
@@ -18,13 +20,22 @@ export function LoginPageClient() {
   return (
     <div className="flex min-h-screen bg-[var(--color-bg)]">
       {/* Левая часть — форма */}
-      <div className="relative z-10 flex w-full flex-col justify-between px-10 py-10 lg:w-[480px] lg:shrink-0">
-        <div>
-          <div className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[var(--color-accent-1)]">
-            ЛКЗ
-          </div>
-          <div className="text-[16px] font-semibold tracking-[-0.03em] text-[var(--color-text)]">
-            Административная панель
+      <div className="relative z-10 flex w-full flex-col justify-between px-6 py-8 lg:w-[480px] lg:shrink-0 lg:px-10 lg:py-10">
+        <div className="mx-auto w-full max-w-[360px]">
+          <div className="flex items-center justify-between">
+            <Link href="/" aria-label="На главную">
+              <img
+                src="/images/common/logo.svg"
+                alt="Логотип"
+                className="logo-light block h-[32px] w-auto object-contain"
+              />
+              <img
+                src="/images/common/logo-dark.svg"
+                alt="Логотип"
+                className="logo-dark hidden h-[32px] w-auto object-contain"
+              />
+            </Link>
+            <ThemeToggle />
           </div>
         </div>
 
@@ -40,7 +51,7 @@ export function LoginPageClient() {
           </div>
         </div>
 
-        <div className="text-[12px] text-[var(--color-text-muted)]">
+        <div className="mx-auto w-full max-w-[360px] text-[12px] text-[var(--color-text-muted)]">
           © {new Date().getFullYear()} ЛКЗ. Панель управления
         </div>
       </div>

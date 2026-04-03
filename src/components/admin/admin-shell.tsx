@@ -63,21 +63,7 @@ export function AdminShell({
         <div className="grid gap-4 xl:grid-cols-[280px_minmax(0,1fr)] xl:items-start">
           <aside className="xl:sticky xl:top-[120px]">
             <div className="rounded-[30px] bg-[var(--color-surface)] p-4 md:p-5">
-              <Link
-                href="/adpanel/products"
-                className="flex items-center gap-3 rounded-[20px] bg-[var(--color-bg)] p-3 transition duration-300 hover:-translate-y-[1px]"
-              >
-                <div>
-                  <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--color-accent-1)]">
-                    ЛКЗ
-                  </div>
-                  <div className="mt-1 text-[17px] font-semibold tracking-[-0.03em] text-[var(--color-text)]">
-                    Административная панель
-                  </div>
-                </div>
-              </Link>
-
-              <div className="mt-5 space-y-1">
+              <div className="space-y-1">
                 <NavLink
                   href="/adpanel/products"
                   icon={<LayoutGrid size={16} strokeWidth={2.1} />}

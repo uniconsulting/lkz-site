@@ -3,7 +3,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { BarChart3, Menu, Search, X } from "lucide-react";
 import { motion, useMotionValueEvent, useScroll } from "motion/react";
 import { Container } from "@/components/ui/container";
@@ -69,6 +69,7 @@ function DesktopSearch({
 }) {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -136,7 +137,14 @@ function DesktopSearch({
 
       <motion.form
         role="search"
-        onSubmit={(event) => event.preventDefault()}
+        onSubmit={(event) => {
+          event.preventDefault();
+          const q = inputRef.current?.value.trim();
+          if (q) {
+            router.push(`/products?search=${encodeURIComponent(q)}`);
+            onClose();
+          }
+        }}
         className={cn(
           "absolute inset-0 flex h-11 items-center overflow-hidden rounded-[18px] bg-[var(--color-bg)]",
           isOpen ? "pointer-events-auto" : "pointer-events-none",
@@ -168,6 +176,9 @@ function DesktopSearch({
 
 export function Header() {
   const pathname = usePathname();
+
+  const router = useRouter();
+  const mobileSearchRef = useRef<HTMLInputElement | null>(null);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -449,10 +460,18 @@ export function Header() {
 
           <form
             role="search"
-            onSubmit={(event) => event.preventDefault()}
+            onSubmit={(event) => {
+              event.preventDefault();
+              const q = mobileSearchRef.current?.value.trim();
+              if (q) {
+                router.push(`/products?search=${encodeURIComponent(q)}`);
+                closeMenu();
+              }
+            }}
             className="mt-6 flex h-12 items-center rounded-[20px] bg-[var(--color-bg)]"
           >
             <input
+              ref={mobileSearchRef}
               type="text"
               placeholder="Напишите, что хотите найти"
               className="h-full w-full bg-transparent px-5 pr-3 text-[15px] text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] outline-none"
